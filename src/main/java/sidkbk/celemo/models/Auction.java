@@ -5,8 +5,10 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
-@Document("collection = auctions")
+@Document(collection = "auctions")
 public class Auction {
     @Id
     public String id;
@@ -21,10 +23,11 @@ public class Auction {
     public double startPrice;
     public double currentPrice;
     public double endPrice;
+
     // Booleans to check if the auction is able to finish and if the time has gone out.
     public boolean isFinished;
     public boolean hasBids;
 
     // Enum List
-    //public List<Category> categoryList = new ArrayList<>();
+    public List<ECategory> categoryList = new ArrayList<>();
 }
