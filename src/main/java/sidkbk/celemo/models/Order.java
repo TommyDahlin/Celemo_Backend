@@ -6,6 +6,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Date;
+
 @Document(collection = "orders")
 public class Order {
 
@@ -18,13 +20,10 @@ public class Order {
     private String productTitle;
     @DBRef
     private int endPrice;
+    private Date endTime;
 
     //calculating total ammount for the commission of 3%
-    public double getTotalAmountCommission() {
-        double commission = 0.3 * endPrice;
-        double totalAmount = endPrice + commission;
-                return totalAmount;
-    }
+    private double commission = endPrice * 0.03;
 
 
     public Order() {
@@ -71,5 +70,11 @@ public class Order {
     }
 
 
+    public double getCommission() {
+        return commission;
+    }
 
+    public void setCommission(double commission) {
+        this.commission = commission;
+    }
 }
