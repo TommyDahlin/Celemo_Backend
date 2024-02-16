@@ -31,52 +31,32 @@ public class Order {
     public Order() {
     }
 
+
     public String getId() {
         return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getSellerId() {
         return sellerId;
     }
 
-    public void setSellerId(String sellerId) {
-        this.sellerId = sellerId;
-    }
-
     public String getBuyerId() {
         return buyerId;
-    }
-
-    public void setBuyerId(String buyerId) {
-        this.buyerId = buyerId;
     }
 
     public String getProductTitle() {
         return productTitle;
     }
 
-    public void setProductTitle(String productTitle) {
-        this.productTitle = productTitle;
-    }
-
     public int getEndPrice() {
         return endPrice;
     }
 
-    public void setEndPrice(int endPrice) {
-        this.endPrice = endPrice;
+    public String getEndDate() {
+        return endDate;
     }
-
 
     public double getCommission() {
         return commission;
-    }
-
-    public void setCommission(double commission) {
-        this.commission = commission;
     }
 }
