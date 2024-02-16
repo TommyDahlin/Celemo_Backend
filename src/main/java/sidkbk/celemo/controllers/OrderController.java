@@ -24,6 +24,19 @@ public class OrderController {
         return orderService.getAllOrders();
     }
 
+    @GetMapping("/find/{id}")
+    public Order getOneOrder(@PathVariable("id") String id ) {
+        return orderService.getOneOrder(id);
+    }
 
+    @PutMapping("/update/{id}")
+    public Order updateOrder(@RequestBody Order order, @PathVariable("id") String _id) {
+        return orderService.updateOrder(order);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public String deleteOrder(@PathVariable String id) {
+        return orderService.deleteOrder(id);
+    }
 }
 
