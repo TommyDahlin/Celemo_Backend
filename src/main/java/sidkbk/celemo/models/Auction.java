@@ -33,7 +33,7 @@ public class Auction {
     public double currentPrice;
     public double endPrice;
 
-    // Both booleans have to be true to move on to make an order
+    // Both booleans have to be true to move on to make an order.
     public boolean isFinished;
     public boolean hasBids;
 
