@@ -39,4 +39,80 @@ public class Auction {
 
     // Enum List
     public List<ECategory> categoryList = new ArrayList<>();
+
+    public Auction(){
+
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getSellerId() {
+        return sellerId;
+    }
+
+    public void setSellerId(String sellerId) {
+        this.sellerId = sellerId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getCelebrityName() {
+        return celebrityName;
+    }
+
+    public void setCelebrityName(String celebrityName) {
+        this.celebrityName = celebrityName;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
+    }
+
+    public double getCurrentPrice() {
+        return currentPrice;
+    }
+
+    public void setCurrentPrice(double currentPrice) {
+        this.currentPrice = currentPrice;
+    }
+
+    public double getEndPrice() {
+        return endPrice;
+    }
+
+    public void setEndPrice(double endPrice) {
+        this.endPrice = endPrice;
+    }
+
+    public boolean isHasBids() {
+        return hasBids;
+    }
+
+    public void setHasBids(boolean hasBids) {
+        this.hasBids = hasBids;
+    }
+
+    public List<ECategory> getCategoryList() {
+        return categoryList;
+    }
+
+    public void setCategoryList(List<ECategory> categoryList) {
+        this.categoryList = categoryList;
+    }
 }
