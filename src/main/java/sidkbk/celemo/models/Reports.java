@@ -1,5 +1,6 @@
 package sidkbk.celemo.models;
 
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -9,21 +10,39 @@ public class Reports {
     private String id;
 
 
-    /*
+    @CreatedDate
+    private String createdAt;
 
 
-    //refactor this code to User
+    private String content;
 
+    public Reports() {
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+
+/*
+
+    //Evarything from here to reference to userid and listingid,
     @DBRef
     private User user;
 
-
     @DBRef
-    listing listing
+    private listing listing;
+
+
+ */
 
 
 
-     */
+
+
+
+
+
 
 
 
