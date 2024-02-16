@@ -19,10 +19,11 @@ public class Order {
     @DBRef
     private int endPrice;
 
+    private double commission = 1.03;
+
     //calculating total ammount for the commission of 3%
     public double getTotalAmountCommission() {
-        double commission = 0.3 * endPrice;
-        double totalAmount = endPrice + commission;
+        double totalAmount = endPrice * commission;
                 return totalAmount;
     }
 
@@ -71,5 +72,11 @@ public class Order {
     }
 
 
+    public double getCommission() {
+        return commission;
+    }
 
+    public void setCommission(double commission) {
+        this.commission = commission;
+    }
 }
