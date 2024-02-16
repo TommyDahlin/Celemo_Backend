@@ -43,4 +43,8 @@ public class AuctionController {
     public String deleteAuction(@PathVariable String id) {
         return auctionService.deleteAuction(id);
     }
+    @DeleteMapping("/deleteAll")
+    public void deleteAllAuctions(){
+        auctionService.deleteAllAuctions();
+    }
 }

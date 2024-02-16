@@ -25,7 +25,8 @@ public class Auction {
     public String productPhoto;
     public String celebrityName;
     public double startPrice;
-    public LocalDate startingDate;
+
+    public LocalDate startingDate = LocalDate.now();
     public LocalDate endDate = LocalDate.now().plusDays(7);
 
     // Bids
