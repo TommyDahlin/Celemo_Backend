@@ -17,10 +17,12 @@ public class Order {
     private String sellerId;
     @DBRef
     private String buyerId;
+    @DBRef
     private String productTitle;
     @DBRef
     private int endPrice;
-    private Date endTime;
+    @DBRef
+    private String endDate;
 
     //calculating total ammount for the commission of 3%
     private double commission = endPrice * 0.03;
