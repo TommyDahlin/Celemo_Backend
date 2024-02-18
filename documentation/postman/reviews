@@ -1,5 +1,11 @@
+#######################################################################################################
+    POSTMAN REVIEWS
+#######################################################################################################
+
 // GET list all reviews
 http://localhost:8080/api/reviews/find
+
+#######################################################################################################
 
 // GET list one specific review
 http://localhost:8080/api/reviews/find/:id
@@ -9,17 +15,32 @@ Params
         Value : 65cf838f7af204a728eb2b6c
         Description : Review ID
 
+#######################################################################################################
+
 // POST add a review
 http://localhost:8080/api/reviews/post/:created-by-id/:reviewed-account-id
 Params
-    Key : created-by-id
-    Value : 65cc95f269ca29e134fe9766
-    Description : User account that creates the review
+    Path Variables
+        Key : created-by-id
+        Value : 65cc95f269ca29e134fe9766
+        Description : User account that creates the review
 
-    Key : reviewed-account-id
-    Value : 65cc95f269ca29e134fe9766
-    Description : Reviewed user account
+        Key : reviewed-account-id
+        Value : 65cc95f269ca29e134fe9766
+        Description : Reviewed user account
 Body
     {
         "grade": 4
     }
+
+#######################################################################################################
+
+// DELETE Delete a review
+http://localhost:8080/api/reviews/delete/:id
+Params
+    Path Variables
+        Key : id
+        Value : 65d242290dfabbe314edbfa4
+        Description : Review id to delete
+
+#######################################################################################################

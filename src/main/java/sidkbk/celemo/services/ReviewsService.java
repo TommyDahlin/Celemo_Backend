@@ -30,4 +30,11 @@ public class ReviewsService {
         reviewsRepo.findById(reviewedUser).orElseThrow(() -> new RuntimeException("Reviewed user not found!"));
         return reviewsRepo.save(review);
     }
+
+    // Delete a review
+    public String deleteReview(String id) {
+        reviewsRepo.findById(id).orElseThrow(() -> new RuntimeException("Review does not exists!"));
+        reviewsRepo.deleteById(id);
+        return "Review deleted!";
+    }
 }

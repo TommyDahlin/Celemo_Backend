@@ -45,4 +45,14 @@ public class ReviewsController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
+
+    // DELETE Delete a review
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteReview(@PathVariable("id") String id) {
+        try {
+            return ResponseEntity.ok(reviewsService.deleteReview(id));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
 }
