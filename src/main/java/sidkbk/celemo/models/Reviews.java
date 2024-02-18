@@ -1,5 +1,6 @@
 package sidkbk.celemo.models;
 
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -13,7 +14,8 @@ public class Reviews {
     @Id
     private String id;
 
-    private EGrade grade;
+    @NotBlank
+    private short grade; // 1-5
 
     @CreatedDate
     private Date createdAt = new Date();
@@ -31,7 +33,7 @@ public class Reviews {
         return id;
     }
 
-    public EGrade getGrade() {
+    public short getGrade() {
         return grade;
     }
 
@@ -47,7 +49,7 @@ public class Reviews {
         return reviwedUser;
     }
 
-    public void setGrade(EGrade grade) {
+    public void setGrade(short grade) {
         this.grade = grade;
     }
 

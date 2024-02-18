@@ -23,4 +23,11 @@ public class ReviewsService {
         Reviews foundReview = reviewsRepo.findById(id).orElseThrow(() -> new RuntimeException("Review not found"));
         return foundReview;
     }
+
+    // Add a review
+    public Reviews addReview(String createdBy, String reviewedUser, Reviews review) {
+        reviewsRepo.findById(createdBy).orElseThrow(() -> new RuntimeException("User not found!"));
+        reviewsRepo.findById(reviewedUser).orElseThrow(() -> new RuntimeException("Reviewed user not found!"));
+        return reviewsRepo.save(review);
+    }
 }
