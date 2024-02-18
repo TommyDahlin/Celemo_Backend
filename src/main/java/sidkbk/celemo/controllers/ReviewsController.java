@@ -55,4 +55,15 @@ public class ReviewsController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
+
+    // PUT Update a review
+    @PutMapping("/put/{id}")
+    public ResponseEntity<?> updateReview(@PathVariable("id") String reviewId,
+                                          @Valid @RequestBody Reviews updatedReview) {
+        try {
+            return ResponseEntity.ok(reviewsService.updateReview(reviewId, updatedReview));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
 }

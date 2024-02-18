@@ -1,6 +1,7 @@
 package sidkbk.celemo.models;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -11,11 +12,15 @@ import java.util.Date;
 @Document(collection = "reviews")
 public class Reviews {
 
+    // Variables
     @Id
     private String id;
 
-    @NotBlank
-    private short grade; // 1-5
+    @NotNull(message = "Field cannot be blank!")
+    private Short grade; // 1-5
+
+    @NotBlank(message = "Field cannot be blank!")
+    private String reviewText;
 
     @CreatedDate
     private Date createdAt = new Date();
@@ -26,15 +31,21 @@ public class Reviews {
     @DBRef
     private Account reviwedUser;
 
+    // Constructors
     public Reviews() {
     }
 
+    // Getters
     public String getId() {
         return id;
     }
 
-    public short getGrade() {
+    public Short getGrade() {
         return grade;
+    }
+
+    public String getReviewText() {
+        return reviewText;
     }
 
     public Date getCreatedAt() {
@@ -49,8 +60,13 @@ public class Reviews {
         return reviwedUser;
     }
 
-    public void setGrade(short grade) {
+    // Setters
+    public void setGrade(Short grade) {
         this.grade = grade;
+    }
+
+    public void setReviewText(String reviewText) {
+        this.reviewText = reviewText;
     }
 
     public void setCreatedBy(Account createdBy) {

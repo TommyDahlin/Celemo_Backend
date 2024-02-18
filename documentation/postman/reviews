@@ -28,9 +28,10 @@ Params
         Key : reviewed-account-id
         Value : 65cc95f269ca29e134fe9766
         Description : Reviewed user account
-Body
+Body - raw
     {
-        "grade": 4
+        "grade": 4,
+        "reviewText": "This is an review"
     }
 
 #######################################################################################################
@@ -42,5 +43,20 @@ Params
         Key : id
         Value : 65d242290dfabbe314edbfa4
         Description : Review id to delete
+
+#######################################################################################################
+
+// PUT Update a review
+http://localhost:8080/api/reviews/put/:id
+Params
+    Path Variables
+        Key : id
+        Value : 65cf838f7af204a728eb2b6c
+        Description : Review ID to update
+Body - raw
+    {
+        "grade": 4,
+        "reviewText": "This is a review text."
+    }
 
 #######################################################################################################
