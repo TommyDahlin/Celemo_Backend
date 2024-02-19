@@ -1,4 +1,4 @@
-package sidkbk.celemo.repository;
+package sidkbk.celemo.repositories;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import sidkbk.celemo.models.Reports;
