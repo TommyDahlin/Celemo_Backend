@@ -18,8 +18,12 @@ public class Auction {
     // sellerId is the user that makes the auction, the rest is self-explanatory.
     @Id
     public String id;
-    @DBRef
     public String sellerId;
+    public String bidId;
+    @DBRef
+    private Bids bid;
+    @DBRef
+    private Account account;
     public String title;
     public String productDescription;
     public String productPhoto;
@@ -41,7 +45,6 @@ public class Auction {
     public List<ECategory> categoryList = new ArrayList<>();
 
     public Auction(){
-
     }
 
     public String getId() {
@@ -87,6 +90,15 @@ public class Auction {
     public double getCurrentPrice() {
         return currentPrice;
     }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
 
     public void setCurrentPrice(double currentPrice) {
         this.currentPrice = currentPrice;
