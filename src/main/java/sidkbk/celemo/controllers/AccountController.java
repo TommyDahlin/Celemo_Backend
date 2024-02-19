@@ -41,14 +41,14 @@ public class AccountController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // put/update
+    // put/update // using responseEntity<?> creates a generic wildcard that can return any type of body
     @PutMapping("/{id}")
     public ResponseEntity<?> updateAccount(@PathVariable String id, @Valid @RequestBody Account accountDetails){
         try{
             Account updatedAccount = accountService.updateAccount(id, accountDetails);
             return ResponseEntity.ok(updatedAccount);
         } catch (EntityNotFoundException e){
-            return ResponseEntity.status((HttpStatus.NOT_FOUND).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
