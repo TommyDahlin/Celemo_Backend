@@ -32,7 +32,7 @@ public class Account {
     private String dateOfBirth;
     @NotBlank(message = "email cannot be blank")
     private String email;
-    @NotBlank(message = "gender cannot be blank")
+
     private Enum gender;
 
     private String photo;
@@ -40,7 +40,8 @@ public class Account {
     private String firstName;
     @NotBlank(message = "lastName cannot be blank")
     private String lastName;
-
+    //@NotEmpty(message = "gender cannot be blank")
+   // private int chooseGender;
     private Enum role;
     @NotBlank(message = "adress_street cannot be blank")
     private String adress_street;
@@ -48,22 +49,18 @@ public class Account {
     private String adress_postalCode;
     @NotBlank(message = "adress_city cannot be blank")
     private String adress_city;
-    private ArrayList<String> adressArray = new ArrayList<String>();
 
     @DBRef
     private ArrayList<String> favourites = new ArrayList<String>();
 
 
-    private int balance;
+    private double balance;
 
     public Account() {
+
     }
 
-    public void addAdressToArray (){
-        adressArray.add(adress_street);
-        adressArray.add(adress_postalCode);
-        adressArray.add(adress_city);
-    }
+
 
     public void addFavourites (String favouritesId){
         this.favourites.add(favouritesId);
@@ -71,9 +68,7 @@ public class Account {
     public void removeFavourites (String favouritesId){
         this.favourites.remove(favouritesId);
     }
-    public void clearAdressArray(){
-        adressArray.clear();
-    }
+
 
     public String getUsername() {
         return username;
@@ -155,11 +150,11 @@ public class Account {
         this.adress_city = adress_city;
     }
 
-    public int getBalance() {
+    public double getBalance() {
         return balance;
     }
 
-    public void setBalance(int balance) {
+    public void setBalance(double balance) {
         this.balance = balance;
     }
 

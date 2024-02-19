@@ -2,7 +2,9 @@ package sidkbk.celemo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sidkbk.celemo.models.Account;
 import sidkbk.celemo.models.Reviews;
+import sidkbk.celemo.repositories.AccountRepository;
 import sidkbk.celemo.repositories.ReviewsRepo;
 
 import java.util.List;
@@ -12,6 +14,8 @@ public class ReviewsService {
 
     @Autowired
     ReviewsRepo reviewsRepo;
+    @Autowired
+    AccountRepository accountRepository;
 
     // Find all reviews and return a list
     public List<Reviews> listAllReviews() {
@@ -26,8 +30,10 @@ public class ReviewsService {
 
     // Add a review
     public Reviews addReview(String createdBy, String reviewedUser, Reviews review) {
-        reviewsRepo.findById(createdBy).orElseThrow(() -> new RuntimeException("User not found!"));
-        reviewsRepo.findById(reviewedUser).orElseThrow(() -> new RuntimeException("Reviewed user not found!"));
+        Account createdByIdFound = accountRepository.findById(createdBy).orElseThrow(() -> new RuntimeException("User not found!"));
+        Account reviewedUserIdFound = accountRepository.findById(reviewedUser).orElseThrow(() -> new RuntimeException("Reviewed user not found!"));
+        review.setCreatedBy(createdByIdFound);
+        review.setReviwedUser(reviewedUserIdFound);
         return reviewsRepo.save(review);
     }
 

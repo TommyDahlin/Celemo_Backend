@@ -8,14 +8,14 @@ import sidkbk.celemo.services.BidsServices;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/bids")
+@RequestMapping(value = "/api/bids")
 public class BidsControllers {
 
     @Autowired
     BidsServices bidsServices;
 
     // Post a new book
-    @PostMapping("/add")
+    @PostMapping("/post")
     public Bids createBids(@RequestBody Bids bids){
         return bidsServices.createBids(bids);
     }
@@ -33,7 +33,7 @@ public class BidsControllers {
     }
 
     //Update by id
-    @PutMapping("/update/{id}")
+    @PutMapping("/put/{id}")
     public Bids updateBids(@RequestBody Bids bids, @PathVariable("id") String _id){
         return  bidsServices.updateBids(bids);
     }
