@@ -174,4 +174,5 @@ public class Account {
     public Enum getRole() {
         return role;
     }
+
 }
