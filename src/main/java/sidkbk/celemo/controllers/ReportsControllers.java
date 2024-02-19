@@ -14,7 +14,7 @@ public class ReportsControllers {
     ReportsServices reportsServices;
 
     //Post a new report
-    @PostMapping("/add")
+    @PostMapping("/post")
     public Reports createReport(@RequestBody Reports reports){
         return reportsServices.createReport(reports);
     }
@@ -34,7 +34,7 @@ public class ReportsControllers {
 
 
     // Update by id
-    @PutMapping("/update/{id}")
+    @PutMapping("/put/{id}")
     public Reports updateReport(@RequestBody Reports reports, @PathVariable("id") String _id){
         return reportsServices.updateReport(reports);
     }

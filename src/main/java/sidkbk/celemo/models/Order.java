@@ -13,19 +13,19 @@ public class Order {
 
     @Id
     private String id;
-    @DBRef
+    //@DBRef
     private String sellerId;
-    @DBRef
+    //@DBRef
     private String buyerId;
-    @DBRef
+    //@DBRef
     private String productTitle;
-    @DBRef
+    //@DBRef
     private int endPrice;
-    @DBRef
+    //@DBRef
     private String endDate;
 
     //calculating total ammount for the commission of 3%
-    private double commission = endPrice * 0.03;
+    //private double commission = endPrice * 0.03;
 
 
     public Order() {
@@ -56,7 +56,7 @@ public class Order {
         return endDate;
     }
 
-    public double getCommission() {
+  /*  public double getCommission() {
         return commission;
-    }
+    }*/
 }

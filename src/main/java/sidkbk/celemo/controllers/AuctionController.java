@@ -15,7 +15,7 @@ public class AuctionController {
     AuctionService auctionService;
 
     // POST create new order
-    @PostMapping("/add")
+    @PostMapping("/post")
     public Auction createAuction(@RequestBody Auction auction) {
         return auctionService.createAuction(auction);
     }
@@ -33,7 +33,7 @@ public class AuctionController {
     }
 
     // PUT update order by ID
-    @PutMapping("/update/{id}")
+    @PutMapping("/put/{id}")
     public Auction updateAuction(@RequestBody Auction auction, @PathVariable("id") String _id) {
         return auctionService.updateAuction(auction);
     }
