@@ -98,6 +98,14 @@ public class Order {
         return auctionId;
     }
 
+    public Auction getAuction() {
+        return auction;
+    }
+
+    public void setAuction(Auction auction) {
+        this.auction = auction;
+    }
+
   /*  public double getCommission() {
         return commission;
     }*/

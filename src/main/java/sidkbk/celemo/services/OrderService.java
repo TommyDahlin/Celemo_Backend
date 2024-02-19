@@ -54,8 +54,20 @@ public class OrderService {
     }
 
     // PUT update one order
-    public Order updateOrder(Order order) {
-        return orderRepository.save(order);
+    public Order updateOrder(String orderId, Order updateOrder) {
+        return orderRepository.findById(orderId)
+                .map(existingOrder -> {
+                    if (updateOrder.getBuyerAccount() != null) {
+                        existingOrder.setBuyerAccount(updateOrder.getBuyerAccount());
+                    }
+                    if (updateOrder.getSellerAccount() != null) {
+                        existingOrder.setSellerAccount(updateOrder.getSellerAccount());
+                    }
+                    if (updateOrder.getAuction() != null) {
+                        existingOrder.setAuction(updateOrder.getAuction());
+                    }
+                    return orderRepository.save(existingOrder);
+                }).orElseThrow(() -> new RuntimeException("Order was not found"));
     }
 
     // Delete one order by id

@@ -1,7 +1,12 @@
 package sidkbk.celemo.controllers;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.Order;
 import sidkbk.celemo.services.OrderService;
 
@@ -30,8 +35,13 @@ public class OrderController {
     }
 
     @PutMapping("/update/{id}")
-    public Order updateOrder(@RequestBody Order order, @PathVariable("id") String _id) {
-        return orderService.updateOrder(order);
+    public ResponseEntity<?> updateOrder(@PathVariable("id") String orderId,
+                                         @Valid @RequestBody Order updatedOrder) {
+        try {
+            return ResponseEntity.ok(orderService.updateOrder(orderId, updatedOrder));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
     @DeleteMapping("/delete/{id}")
