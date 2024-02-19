@@ -21,7 +21,7 @@ public class AccountController {
     private AccountService accountService;
 
     // post/add account
-    @PostMapping
+    @PostMapping("/post")
     public ResponseEntity<Account> addAccount(@Valid @RequestBody Account account){
         Account newAccount = accountService.addAccount(account);
         return new ResponseEntity<>(newAccount, HttpStatus.CREATED);
@@ -34,7 +34,7 @@ public class AccountController {
     }
 
     // find/get using id
-    @GetMapping ("/{id}")
+    @GetMapping ("/find/{id}")
     public ResponseEntity<Account> getAccountById(@PathVariable String id){
         Optional<Account> account = accountService.getAccountById(id);
         return account.map(ResponseEntity::ok)
@@ -42,7 +42,7 @@ public class AccountController {
     }
 
     // put/update // using responseEntity<?> creates a generic wildcard that can return any type of body
-    @PutMapping("/{id}")
+    @PutMapping("/put/{id}")
     public ResponseEntity<?> updateAccount(@PathVariable String id, @Valid @RequestBody Account accountDetails){
         try{
             Account updatedAccount = accountService.updateAccount(id, accountDetails);
@@ -53,7 +53,7 @@ public class AccountController {
     }
 
     // delete account
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteAccount(@PathVariable String id){
         accountService.deleteAccount(id);
         return ResponseEntity.ok("Recipe with id: " + id + " has been deleted!");
