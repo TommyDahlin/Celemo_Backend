@@ -32,10 +32,6 @@ public class BidsServices {
         bids.setAuction(foundAuction);
         bids.setAccount(foundUser);
 
-        if (foundAuction.hasBids = false){
-            foundAuction.hasBids = true;
-        }
-
         if (bids.getPrice() <= foundAuction.currentPrice){
             throw new RuntimeException("Your bid cannot be lower than " + foundAuction.currentPrice + " the current bid.");
         } else {
@@ -46,6 +42,10 @@ public class BidsServices {
             throw new RuntimeException("Your bid cannot be higher than your balance. Your current balance is " + foundUser.getBalance() + "Your current bid is " + bids.getPrice() + ".");
         }else {
             foundUser.setBalance(foundUser.getBalance() - bids.getPrice());
+        }
+
+        if (foundAuction.isHasBids() == false){
+            foundAuction.setHasBids(true);
         }
 
         accountRepository.save(foundUser);
