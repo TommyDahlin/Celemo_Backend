@@ -14,7 +14,7 @@ public class OrderController {
     @Autowired
     OrderService orderService;
 
-    @PostMapping("/add")
+    @PostMapping("/post")
     public Order createOrder(@RequestBody Order order) {
         return orderService.createOrder(order);
     }
@@ -29,7 +29,7 @@ public class OrderController {
         return orderService.getOneOrder(id);
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/put/{id}")
     public Order updateOrder(@RequestBody Order order, @PathVariable("id") String _id) {
         return orderService.updateOrder(order);
     }
