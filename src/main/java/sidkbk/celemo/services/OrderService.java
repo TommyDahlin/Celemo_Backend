@@ -1,6 +1,7 @@
 package sidkbk.celemo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.aggregation.BooleanOperators;
 import org.springframework.stereotype.Service;
 import sidkbk.celemo.models.Account;
 import sidkbk.celemo.models.Auction;
@@ -49,8 +50,8 @@ public class OrderService {
 
     //READ 1 ORDER
     public Order getOneOrder(String id) {
-
-        return orderRepository.findById(id).get();
+        Order foundOrder = orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Order was not found"));
+        return foundOrder;
     }
 
     // PUT update one order
