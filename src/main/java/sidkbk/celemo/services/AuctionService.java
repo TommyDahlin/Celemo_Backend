@@ -3,7 +3,7 @@ package sidkbk.celemo.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sidkbk.celemo.models.Auction;
-import sidkbk.celemo.repository.AuctionRepository;
+import sidkbk.celemo.repositories.AuctionRepository;
 
 import java.util.List;
 

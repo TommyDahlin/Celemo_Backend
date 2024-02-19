@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.Account;
-import sidkbk.celemo.repositorys.AccountRepository;
+import sidkbk.celemo.repositories.AccountRepository;
 
 import java.util.List;
 import java.util.Optional;

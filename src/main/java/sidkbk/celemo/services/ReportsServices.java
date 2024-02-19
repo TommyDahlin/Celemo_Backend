@@ -3,7 +3,7 @@ package sidkbk.celemo.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sidkbk.celemo.models.Reports;
-import sidkbk.celemo.repository.ReportsRepository;
+import sidkbk.celemo.repositories.ReportsRepository;
 
 import java.util.List;
 
