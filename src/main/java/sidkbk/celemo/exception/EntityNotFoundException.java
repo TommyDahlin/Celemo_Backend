@@ -1,7 +1,7 @@
 package sidkbk.celemo.exception;
 
-public class EntityNotFoundException {
-    public EntityNotFoundException(String message){
-        super();
+public class EntityNotFoundException extends RuntimeException {
+    public EntityNotFoundException(String message) {
+        super(message);
     }
 }
