@@ -55,6 +55,8 @@ public class AccountService {
                 existingAccount.setAdress_postalCode(updatedAccount.getAdress_postalCode());
             }if(updatedAccount.getBalance()!=0.0){
                 existingAccount.setBalance(updatedAccount.getBalance());
+            }if(updatedAccount.getPhoto()!=null){
+                existingAccount.setPhoto(updatedAccount.getPhoto());
             }
             return accountRepository.save(existingAccount);
         })
