@@ -6,6 +6,7 @@ import sidkbk.celemo.models.Account;
 import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.repositories.AccountRepository;
 import sidkbk.celemo.repositories.AuctionRepository;
+import sidkbk.celemo.repositories.BidsRepository;
 
 import java.util.List;
 
@@ -15,6 +16,8 @@ public class AuctionService {
     AuctionRepository auctionRepository;
     @Autowired
     AccountRepository accountRepository;
+    @Autowired
+    BidsRepository bidsRepository;
 
     public Auction createAuction(Auction auction) {
         Account findAccount = accountRepository.findById(auction.getSellerId())

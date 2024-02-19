@@ -8,7 +8,7 @@ import sidkbk.celemo.services.BidsServices;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/bids")
+@RequestMapping(value = "/api/bids")
 public class BidsControllers {
 
     @Autowired

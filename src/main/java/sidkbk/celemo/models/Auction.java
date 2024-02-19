@@ -1,5 +1,7 @@
 package sidkbk.celemo.models;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.cglib.core.Local;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -18,18 +20,23 @@ public class Auction {
     // sellerId is the user that makes the auction, the rest is self-explanatory.
     @Id
     public String id;
+    @NotBlank
     public String sellerId;
     public String bidId;
     @DBRef
     private Bids bid;
     @DBRef
     private Account account;
+    @NotBlank
     public String title;
+    @NotBlank
     public String productDescription;
     public String productPhoto;
     public String celebrityName;
+    @NotNull
     public double startPrice;
 
+    // Not needed for the body in postman, gets added automatically
     public LocalDate startingDate = LocalDate.now();
     public LocalDate endDate = LocalDate.now().plusDays(7);
 
