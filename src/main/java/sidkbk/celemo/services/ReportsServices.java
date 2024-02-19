@@ -51,9 +51,9 @@ public class ReportsServices {
         Auction foundAuction = auctionRepository.findById(reports.getAuctionId())
                 .orElseThrow(() -> new RuntimeException("Auction does not exist!"));
         Account foundreportinguser = accountRepository.findById(reports.getReoprtingUserId())
-                .orElseThrow(() -> new RuntimeException("User does not exist!"));
+                .orElseThrow(() -> new RuntimeException("Reportinguser does not exist!"));
         Account foundreportedUser = accountRepository.findById(reports.getReportedUserId())
-                .orElseThrow(() -> new RuntimeException("User does not exist!"));
+                .orElseThrow(() -> new RuntimeException("ReportedUser does not exist!"));
 
         reports.setAuction(foundAuction);
         reports.setAccount(foundreportedUser);
