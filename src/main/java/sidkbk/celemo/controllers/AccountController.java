@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
-import sidkbk.celemo.models.Account;
+import sidkbk.celemo.models.User;
 import sidkbk.celemo.services.AccountService;
 
 import java.util.List;
@@ -22,31 +22,31 @@ public class AccountController {
 
     // post/add account
     @PostMapping("/post")
-    public ResponseEntity<Account> addAccount(@Valid @RequestBody Account account){
-        Account newAccount = accountService.addAccount(account);
-        return new ResponseEntity<>(newAccount, HttpStatus.CREATED);
+    public ResponseEntity<User> addAccount(@Valid @RequestBody User user){
+        User newUser = accountService.addAccount(user);
+        return new ResponseEntity<>(newUser, HttpStatus.CREATED);
     }
 
     // find all/get all accounts
     @GetMapping("/find")
-    public List<Account> getAllAccounts(){
+    public List<User> getAllAccounts(){
         return accountService.getAllAccounts();
     }
 
     // find/get using id
     @GetMapping ("/find/{id}")
-    public ResponseEntity<Account> getAccountById(@PathVariable String id){
-        Optional<Account> account = accountService.getAccountById(id);
+    public ResponseEntity<User> getAccountById(@PathVariable String id){
+        Optional<User> account = accountService.getAccountById(id);
         return account.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     // put/update // using responseEntity<?> creates a generic wildcard that can return any type of body
     @PutMapping("/put/{id}")
-    public ResponseEntity<?> updateAccount(@PathVariable String id, @Valid @RequestBody Account accountDetails){
+    public ResponseEntity<?> updateAccount(@PathVariable String id, @Valid @RequestBody User userDetails){
         try{
-            Account updatedAccount = accountService.updateAccount(id, accountDetails);
-            return ResponseEntity.ok(updatedAccount);
+            User updatedUser = accountService.updateAccount(id, userDetails);
+            return ResponseEntity.ok(updatedUser);
         } catch (EntityNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }

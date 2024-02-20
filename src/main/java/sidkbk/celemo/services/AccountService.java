@@ -4,7 +4,7 @@ package sidkbk.celemo.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
-import sidkbk.celemo.models.Account;
+import sidkbk.celemo.models.User;
 import sidkbk.celemo.repositories.AccountRepository;
 
 import java.util.List;
@@ -17,46 +17,46 @@ public class AccountService {
 
 
     // create/add/post account
-    public Account addAccount(Account account){
-        return accountRepository.save(account);
+    public User addAccount(User user){
+        return accountRepository.save(user);
     }
 
     // get/find all accounts
-    public List<Account> getAllAccounts(){
+    public List<User> getAllAccounts(){
         return accountRepository.findAll();
     }
 
     // get/find account using id
-    public Optional<Account> getAccountById(String id){
+    public Optional<User> getAccountById(String id){
         return accountRepository.findById(id);
     }
 
     // PUT/update account. checks that new value isn't empty before adding. If something is empty then it will throw EntityNotFoundException
-    public Account updateAccount (String id, Account updatedAccount){
+    public User updateAccount (String id, User updatedUser){
         return accountRepository.findById(id)
         .map(existingAccount -> {
-            if(updatedAccount.getUsername()!=null){
-                existingAccount.setUsername(updatedAccount.getUsername());
-            }if(updatedAccount.getPassword()!=null){
-                existingAccount.setPassword(updatedAccount.getPassword());
-            }if(updatedAccount.getDateOfBirth()!=null){
-                existingAccount.setDateOfBirth(updatedAccount.getDateOfBirth());
-            }if(updatedAccount.getEmail()!=null){
-                existingAccount.setEmail(updatedAccount.getEmail());
-            }if(updatedAccount.getFirstName()!=null){
-                existingAccount.setFirstName(updatedAccount.getFirstName());
-            }if(updatedAccount.getLastName()!=null){
-                existingAccount.setLastName(updatedAccount.getLastName());
-            }if(updatedAccount.getAdress_street()!=null){
-                existingAccount.setAdress_street(updatedAccount.getAdress_street());
-            }if(updatedAccount.getAdress_city()!=null){
-                existingAccount.setAdress_city(updatedAccount.getAdress_city());
-            }if(updatedAccount.getAdress_postalCode()!=null){
-                existingAccount.setAdress_postalCode(updatedAccount.getAdress_postalCode());
-            }if(updatedAccount.getBalance()!=0.0){
-                existingAccount.setBalance(updatedAccount.getBalance());
-            }if(updatedAccount.getPhoto()!=null){
-                existingAccount.setPhoto(updatedAccount.getPhoto());
+            if(updatedUser.getUsername()!=null){
+                existingAccount.setUsername(updatedUser.getUsername());
+            }if(updatedUser.getPassword()!=null){
+                existingAccount.setPassword(updatedUser.getPassword());
+            }if(updatedUser.getDateOfBirth()!=null){
+                existingAccount.setDateOfBirth(updatedUser.getDateOfBirth());
+            }if(updatedUser.getEmail()!=null){
+                existingAccount.setEmail(updatedUser.getEmail());
+            }if(updatedUser.getFirstName()!=null){
+                existingAccount.setFirstName(updatedUser.getFirstName());
+            }if(updatedUser.getLastName()!=null){
+                existingAccount.setLastName(updatedUser.getLastName());
+            }if(updatedUser.getAdress_street()!=null){
+                existingAccount.setAdress_street(updatedUser.getAdress_street());
+            }if(updatedUser.getAdress_city()!=null){
+                existingAccount.setAdress_city(updatedUser.getAdress_city());
+            }if(updatedUser.getAdress_postalCode()!=null){
+                existingAccount.setAdress_postalCode(updatedUser.getAdress_postalCode());
+            }if(updatedUser.getBalance()!=0.0){
+                existingAccount.setBalance(updatedUser.getBalance());
+            }if(updatedUser.getPhoto()!=null){
+                existingAccount.setPhoto(updatedUser.getPhoto());
             }
             return accountRepository.save(existingAccount);
         })

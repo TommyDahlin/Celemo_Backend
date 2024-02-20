@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.ArrayList;
 
 @Document(collection = "account")
-public class Account {
+public class User {
 
     @Id
     private String id;
@@ -56,7 +56,7 @@ public class Account {
 
     private double balance;
 
-    public Account() {
+    public User() {
 
     }
 

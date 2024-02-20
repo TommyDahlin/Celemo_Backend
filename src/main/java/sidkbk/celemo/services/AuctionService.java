@@ -2,7 +2,7 @@ package sidkbk.celemo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sidkbk.celemo.models.Account;
+import sidkbk.celemo.models.User;
 import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.repositories.AccountRepository;
 import sidkbk.celemo.repositories.AuctionRepository;
@@ -20,9 +20,9 @@ public class AuctionService {
     BidsRepository bidsRepository;
 
     public Auction createAuction(Auction auction) {
-        Account findAccount = accountRepository.findById(auction.getSellerId())
+        User findUser = accountRepository.findById(auction.getSellerId())
                 .orElseThrow(() -> new RuntimeException("Couldn't find user."));
-        auction.setAccount(findAccount);
+        auction.setAccount(findUser);
         return auctionRepository.save(auction);
     }
     // READ ALL

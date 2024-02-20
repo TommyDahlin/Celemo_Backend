@@ -2,17 +2,13 @@ package sidkbk.celemo.models;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import org.springframework.cglib.core.Local;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 @Document(collection = "auctions")
 public class Auction {
@@ -26,7 +22,7 @@ public class Auction {
     @DBRef
     private Bids bid;
     @DBRef
-    private Account account;
+    private User user;
     @NotBlank
     public String title;
     @NotBlank
@@ -98,12 +94,12 @@ public class Auction {
         return currentPrice;
     }
 
-    public Account getAccount() {
-        return account;
+    public User getAccount() {
+        return user;
     }
 
-    public void setAccount(Account account) {
-        this.account = account;
+    public void setAccount(User user) {
+        this.user = user;
     }
 
 

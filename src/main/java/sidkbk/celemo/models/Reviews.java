@@ -26,10 +26,10 @@ public class Reviews {
     private Date createdAt = new Date();
 
     @DBRef
-    private Account createdBy;
+    private User createdBy;
 
     @DBRef
-    private Account reviwedUser;
+    private User reviwedUser;
 
     // Constructors
     public Reviews() {
@@ -52,11 +52,11 @@ public class Reviews {
         return createdAt;
     }
 
-    public Account getCreatedBy() {
+    public User getCreatedBy() {
         return createdBy;
     }
 
-    public Account getReviwedUser() {
+    public User getReviwedUser() {
         return reviwedUser;
     }
 
@@ -69,11 +69,11 @@ public class Reviews {
         this.reviewText = reviewText;
     }
 
-    public void setCreatedBy(Account createdBy) {
+    public void setCreatedBy(User createdBy) {
         this.createdBy = createdBy;
     }
 
-    public void setReviwedUser(Account reviwedUser) {
+    public void setReviwedUser(User reviwedUser) {
         this.reviwedUser = reviwedUser;
     }
 }

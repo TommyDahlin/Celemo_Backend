@@ -2,7 +2,7 @@ package sidkbk.celemo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sidkbk.celemo.models.Account;
+import sidkbk.celemo.models.User;
 import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.models.Bids;
 import sidkbk.celemo.repositories.AccountRepository;
@@ -25,7 +25,7 @@ public class BidsServices {
 
 
     public Bids createBids(Bids bids){
-        Account foundUser = accountRepository.findById(bids.getUserId())
+        User foundUser = accountRepository.findById(bids.getUserId())
                 .orElseThrow(()-> new RuntimeException("User does not exist!"));
         Auction foundAuction = auctionRepository.findById(bids.getAuctionId())
                 .orElseThrow(()-> new RuntimeException("Auction does not exist!"));
@@ -64,7 +64,7 @@ public class BidsServices {
 
 
     public Bids updateBids(Bids bids) {
-        Account foundUser = accountRepository.findById(bids.getUserId())
+        User foundUser = accountRepository.findById(bids.getUserId())
                 .orElseThrow(() -> new RuntimeException("User does not exist!"));
         Auction foundAuction = auctionRepository.findById(bids.getAuctionId())
                 .orElseThrow(() -> new RuntimeException("Auction does not exist!"));

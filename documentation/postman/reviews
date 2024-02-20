@@ -18,16 +18,16 @@ Params
 #######################################################################################################
 
 // POST add a review
-http://localhost:8080/api/reviews/post/:created-by-id/:reviewed-account-id
+http://localhost:8080/api/reviews/post/:created-by-id/:reviewed-user-id
 Params
     Path Variables
         Key : created-by-id
         Value : 65cc95f269ca29e134fe9766
-        Description : User account that creates the review
+        Description : User user that creates the review
 
-        Key : reviewed-account-id
+        Key : reviewed-user-id
         Value : 65cc95f269ca29e134fe9766
-        Description : Reviewed user account
+        Description : Reviewed user user
 Body - raw
     {
         "grade": 4,
