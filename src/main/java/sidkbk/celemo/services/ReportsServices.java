@@ -25,7 +25,7 @@ public class ReportsServices {
     public Reports createReport(Reports reports){
         Auction foundAuction = auctionRepository.findById(reports.getAuctionId())
                 .orElseThrow(()-> new RuntimeException("Auction does not exist!"));
-        Account foundreportinguser = accountRepository.findById(reports.getReoprtingUserId())
+        Account foundreportinguser = accountRepository.findById(reports.getReportingUserId())
                 .orElseThrow(()-> new RuntimeException("User does not exist!"));
         Account foundreportedUser = accountRepository.findById(reports.getReportedUserId())
                 .orElseThrow(()-> new RuntimeException("User does not exist!"));
@@ -50,7 +50,7 @@ public class ReportsServices {
     public Reports updateReport(Reports reports) {
         Auction foundAuction = auctionRepository.findById(reports.getAuctionId())
                 .orElseThrow(() -> new RuntimeException("Auction does not exist!"));
-        Account foundreportinguser = accountRepository.findById(reports.getReoprtingUserId())
+        Account foundreportinguser = accountRepository.findById(reports.getReportingUserId())
                 .orElseThrow(() -> new RuntimeException("Reportinguser does not exist!"));
         Account foundreportedUser = accountRepository.findById(reports.getReportedUserId())
                 .orElseThrow(() -> new RuntimeException("ReportedUser does not exist!"));
