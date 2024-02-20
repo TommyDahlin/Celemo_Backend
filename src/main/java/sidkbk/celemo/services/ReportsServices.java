@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import sidkbk.celemo.models.User;
 import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.models.Reports;
-import sidkbk.celemo.repositories.AccountRepository;
+import sidkbk.celemo.repositories.UserRepository;
 import sidkbk.celemo.repositories.AuctionRepository;
 import sidkbk.celemo.repositories.ReportsRepository;
 
@@ -19,15 +19,15 @@ public class ReportsServices {
     @Autowired
     AuctionRepository auctionRepository;
     @Autowired
-    AccountRepository accountRepository;
+    UserRepository userRepository;
 
 
     public Reports createReport(Reports reports){
         Auction foundAuction = auctionRepository.findById(reports.getAuctionId())
                 .orElseThrow(()-> new RuntimeException("Auction does not exist!"));
-        User foundreportinguser = accountRepository.findById(reports.getReportingUserId())
+        User foundreportinguser = userRepository.findById(reports.getReportingUserId())
                 .orElseThrow(()-> new RuntimeException("User does not exist!"));
-        User foundreportedUser = accountRepository.findById(reports.getReportedUserId())
+        User foundreportedUser = userRepository.findById(reports.getReportedUserId())
                 .orElseThrow(()-> new RuntimeException("User does not exist!"));
 
         reports.setAuction(foundAuction);
@@ -50,9 +50,9 @@ public class ReportsServices {
     public Reports updateReport(Reports reports) {
         Auction foundAuction = auctionRepository.findById(reports.getAuctionId())
                 .orElseThrow(() -> new RuntimeException("Auction does not exist!"));
-        User foundreportinguser = accountRepository.findById(reports.getReportingUserId())
+        User foundreportinguser = userRepository.findById(reports.getReportingUserId())
                 .orElseThrow(() -> new RuntimeException("Reportinguser does not exist!"));
-        User foundreportedUser = accountRepository.findById(reports.getReportedUserId())
+        User foundreportedUser = userRepository.findById(reports.getReportedUserId())
                 .orElseThrow(() -> new RuntimeException("ReportedUser does not exist!"));
 
         reports.setAuction(foundAuction);

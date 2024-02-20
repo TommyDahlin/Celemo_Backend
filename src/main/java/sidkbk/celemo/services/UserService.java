@@ -5,35 +5,35 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.User;
-import sidkbk.celemo.repositories.AccountRepository;
+import sidkbk.celemo.repositories.UserRepository;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class AccountService {
+public class UserService {
     @Autowired
-    AccountRepository accountRepository;
+    UserRepository userRepository;
 
 
     // create/add/post account
     public User addAccount(User user){
-        return accountRepository.save(user);
+        return userRepository.save(user);
     }
 
     // get/find all accounts
     public List<User> getAllAccounts(){
-        return accountRepository.findAll();
+        return userRepository.findAll();
     }
 
     // get/find account using id
     public Optional<User> getAccountById(String id){
-        return accountRepository.findById(id);
+        return userRepository.findById(id);
     }
 
     // PUT/update account. checks that new value isn't empty before adding. If something is empty then it will throw EntityNotFoundException
     public User updateAccount (String id, User updatedUser){
-        return accountRepository.findById(id)
+        return userRepository.findById(id)
         .map(existingAccount -> {
             if(updatedUser.getUsername()!=null){
                 existingAccount.setUsername(updatedUser.getUsername());
@@ -58,7 +58,7 @@ public class AccountService {
             }if(updatedUser.getPhoto()!=null){
                 existingAccount.setPhoto(updatedUser.getPhoto());
             }
-            return accountRepository.save(existingAccount);
+            return userRepository.save(existingAccount);
         })
                 .orElseThrow(() -> new EntityNotFoundException("Account with id:" + id + " was not found!"));
     }
@@ -77,6 +77,6 @@ adress_city
 
     // delete account
     public void deleteAccount(String id){
-        accountRepository.deleteById(id);
+        userRepository.deleteById(id);
     }
 }
