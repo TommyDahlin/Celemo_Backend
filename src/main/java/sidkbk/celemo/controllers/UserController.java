@@ -14,7 +14,7 @@ import java.util.Optional;
 
 
 @RestController
-@RequestMapping("/api/account")
+@RequestMapping("/api/user")
 public class UserController {
 
     @Autowired
@@ -22,30 +22,30 @@ public class UserController {
 
     // post/add account
     @PostMapping("/post")
-    public ResponseEntity<User> addAccount(@Valid @RequestBody User user){
-        User newUser = userService.addAccount(user);
+    public ResponseEntity<User> addUser(@Valid @RequestBody User user){
+        User newUser = userService.addUser(user);
         return new ResponseEntity<>(newUser, HttpStatus.CREATED);
     }
 
     // find all/get all accounts
     @GetMapping("/find")
-    public List<User> getAllAccounts(){
-        return userService.getAllAccounts();
+    public List<User> getAllUsers(){
+        return userService.getAllUsers();
     }
 
     // find/get using id
     @GetMapping ("/find/{id}")
-    public ResponseEntity<User> getAccountById(@PathVariable String id){
-        Optional<User> account = userService.getAccountById(id);
+    public ResponseEntity<User> getUserById(@PathVariable String id){
+        Optional<User> account = userService.getUserById(id);
         return account.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     // put/update // using responseEntity<?> creates a generic wildcard that can return any type of body
     @PutMapping("/put/{id}")
-    public ResponseEntity<?> updateAccount(@PathVariable String id, @Valid @RequestBody User userDetails){
+    public ResponseEntity<?> updateUser(@PathVariable String id, @Valid @RequestBody User userDetails){
         try{
-            User updatedUser = userService.updateAccount(id, userDetails);
+            User updatedUser = userService.updateUser(id, userDetails);
             return ResponseEntity.ok(updatedUser);
         } catch (EntityNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
@@ -54,8 +54,8 @@ public class UserController {
 
     // delete account
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteAccount(@PathVariable String id){
-        userService.deleteAccount(id);
+    public ResponseEntity<String> deleteUser(@PathVariable String id){
+        userService.deleteUser(id);
         return ResponseEntity.ok("Recipe with id: " + id + " has been deleted!");
     }
 }

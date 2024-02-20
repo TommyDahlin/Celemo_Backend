@@ -17,22 +17,22 @@ public class UserService {
 
 
     // create/add/post account
-    public User addAccount(User user){
+    public User addUser(User user){
         return userRepository.save(user);
     }
 
     // get/find all accounts
-    public List<User> getAllAccounts(){
+    public List<User> getAllUsers(){
         return userRepository.findAll();
     }
 
     // get/find account using id
-    public Optional<User> getAccountById(String id){
+    public Optional<User> getUserById(String id){
         return userRepository.findById(id);
     }
 
     // PUT/update account. checks that new value isn't empty before adding. If something is empty then it will throw EntityNotFoundException
-    public User updateAccount (String id, User updatedUser){
+    public User updateUser(String id, User updatedUser){
         return userRepository.findById(id)
         .map(existingAccount -> {
             if(updatedUser.getUsername()!=null){
@@ -76,7 +76,7 @@ adress_city
 
 
     // delete account
-    public void deleteAccount(String id){
+    public void deleteUser(String id){
         userRepository.deleteById(id);
     }
 }
