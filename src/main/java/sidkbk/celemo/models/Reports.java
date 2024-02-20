@@ -38,7 +38,7 @@ public class Reports {
     @DBRef
     private Auction auction;
 
-    private String reoprtingUserId;
+    private String reportingUserId;
 
     private String reportedUserId;
 
@@ -58,8 +58,8 @@ public class Reports {
         return auction;
     }
 
-    public String getReoprtingUserId() {
-        return reoprtingUserId;
+    public String getReportingUserId() {
+        return reportingUserId;
     }
 
     public String getReportedUserId() {
@@ -83,8 +83,8 @@ public class Reports {
         this.auction = auction;
     }
 
-    public void setReoprtingUserId(String reoprtingUserId) {
-        this.reoprtingUserId = reoprtingUserId;
+    public void setReportingUserId(String reportingUserId) {
+        this.reportingUserId = reportingUserId;
     }
 
     public void setReportedUserId(String reportedUserId) {
