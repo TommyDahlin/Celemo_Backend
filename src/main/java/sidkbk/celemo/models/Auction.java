@@ -94,11 +94,11 @@ public class Auction {
         return currentPrice;
     }
 
-    public User getAccount() {
+    public User getUser() {
         return user;
     }
 
-    public void setAccount(User user) {
+    public void setUser(User user) {
         this.user = user;
     }
 

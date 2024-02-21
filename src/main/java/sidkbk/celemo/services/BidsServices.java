@@ -30,7 +30,7 @@ public class BidsServices {
         Auction foundAuction = auctionRepository.findById(bids.getAuctionId())
                 .orElseThrow(()-> new RuntimeException("Auction does not exist!"));
         bids.setAuction(foundAuction);
-        bids.setAccount(foundUser);
+        bids.setUser(foundUser);
 
         if (bids.getPrice() <= foundAuction.currentPrice){
             throw new RuntimeException("Your bid cannot be lower than " + foundAuction.currentPrice + " the current bid.");
@@ -69,7 +69,7 @@ public class BidsServices {
         Auction foundAuction = auctionRepository.findById(bids.getAuctionId())
                 .orElseThrow(() -> new RuntimeException("Auction does not exist!"));
         bids.setAuction(foundAuction);
-        bids.setAccount(foundUser);
+        bids.setUser(foundUser);
         return bidsRepository.save(bids);
     }
 

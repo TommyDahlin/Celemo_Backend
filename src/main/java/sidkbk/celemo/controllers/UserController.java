@@ -20,7 +20,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    // post/add account
+    // post/add account/user
     @PostMapping("/post")
     public ResponseEntity<User> addUser(@Valid @RequestBody User user){
         User newUser = userService.addUser(user);
@@ -36,8 +36,8 @@ public class UserController {
     // find/get using id
     @GetMapping ("/find/{id}")
     public ResponseEntity<User> getUserById(@PathVariable String id){
-        Optional<User> account = userService.getUserById(id);
-        return account.map(ResponseEntity::ok)
+        Optional<User> user = userService.getUserById(id);
+        return user.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 

@@ -50,7 +50,7 @@ public class Reports {
         return createdAt;
     }
 
-    public User getAccount() {
+    public User getUser() {
         return user;
     }
 
@@ -75,7 +75,7 @@ public class Reports {
         this.content = content;
     }
 
-    public void setAccount(User user) {
+    public void setUser(User user) {
         this.user = user;
     }
 

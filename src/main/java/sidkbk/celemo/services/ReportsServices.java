@@ -31,8 +31,8 @@ public class ReportsServices {
                 .orElseThrow(()-> new RuntimeException("User does not exist!"));
 
         reports.setAuction(foundAuction);
-        reports.setAccount(foundreportedUser);
-        reports.setAccount(foundreportinguser);
+        reports.setUser(foundreportedUser);
+        reports.setUser(foundreportinguser);
         return reportsRepository.save(reports);
     }
 
@@ -56,8 +56,8 @@ public class ReportsServices {
                 .orElseThrow(() -> new RuntimeException("ReportedUser does not exist!"));
 
         reports.setAuction(foundAuction);
-        reports.setAccount(foundreportedUser);
-        reports.setAccount(foundreportinguser);
+        reports.setUser(foundreportedUser);
+        reports.setUser(foundreportinguser);
         return reportsRepository.save(reports);
     }
 

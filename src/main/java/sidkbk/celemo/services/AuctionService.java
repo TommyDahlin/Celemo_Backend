@@ -22,7 +22,7 @@ public class AuctionService {
     public Auction createAuction(Auction auction) {
         User findUser = userRepository.findById(auction.getSellerId())
                 .orElseThrow(() -> new RuntimeException("Couldn't find user."));
-        auction.setAccount(findUser);
+        auction.setUser(findUser);
         return auctionRepository.save(auction);
     }
     // READ ALL
