@@ -2,10 +2,10 @@ package sidkbk.celemo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sidkbk.celemo.models.Account;
+import sidkbk.celemo.models.User;
 import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.models.Bids;
-import sidkbk.celemo.repositories.AccountRepository;
+import sidkbk.celemo.repositories.UserRepository;
 import sidkbk.celemo.repositories.AuctionRepository;
 import sidkbk.celemo.repositories.BidsRepository;
 
@@ -21,16 +21,16 @@ public class BidsServices {
     AuctionRepository auctionRepository;
 
     @Autowired
-    AccountRepository accountRepository;
+    UserRepository userRepository;
 
 
     public Bids createBids(Bids bids){
-        Account foundUser = accountRepository.findById(bids.getUserId())
+        User foundUser = userRepository.findById(bids.getUserId())
                 .orElseThrow(()-> new RuntimeException("User does not exist!"));
         Auction foundAuction = auctionRepository.findById(bids.getAuctionId())
                 .orElseThrow(()-> new RuntimeException("Auction does not exist!"));
         bids.setAuction(foundAuction);
-        bids.setAccount(foundUser);
+        bids.setUser(foundUser);
 
         if (bids.getPrice() <= foundAuction.currentPrice){
             throw new RuntimeException("Your bid cannot be lower than " + foundAuction.currentPrice + " the current bid.");
@@ -48,7 +48,7 @@ public class BidsServices {
             foundAuction.setHasBids(true);
         }
 
-        accountRepository.save(foundUser);
+        userRepository.save(foundUser);
         auctionRepository.save(foundAuction);
         return bidsRepository.save(bids);
     }
@@ -64,12 +64,12 @@ public class BidsServices {
 
 
     public Bids updateBids(Bids bids) {
-        Account foundUser = accountRepository.findById(bids.getUserId())
+        User foundUser = userRepository.findById(bids.getUserId())
                 .orElseThrow(() -> new RuntimeException("User does not exist!"));
         Auction foundAuction = auctionRepository.findById(bids.getAuctionId())
                 .orElseThrow(() -> new RuntimeException("Auction does not exist!"));
         bids.setAuction(foundAuction);
-        bids.setAccount(foundUser);
+        bids.setUser(foundUser);
         return bidsRepository.save(bids);
     }
 

@@ -2,10 +2,10 @@ package sidkbk.celemo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sidkbk.celemo.models.Account;
+import sidkbk.celemo.models.User;
 import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.models.Reports;
-import sidkbk.celemo.repositories.AccountRepository;
+import sidkbk.celemo.repositories.UserRepository;
 import sidkbk.celemo.repositories.AuctionRepository;
 import sidkbk.celemo.repositories.ReportsRepository;
 
@@ -19,20 +19,20 @@ public class ReportsServices {
     @Autowired
     AuctionRepository auctionRepository;
     @Autowired
-    AccountRepository accountRepository;
+    UserRepository userRepository;
 
 
     public Reports createReport(Reports reports){
         Auction foundAuction = auctionRepository.findById(reports.getAuctionId())
                 .orElseThrow(()-> new RuntimeException("Auction does not exist!"));
-        Account foundreportinguser = accountRepository.findById(reports.getReportingUserId())
+        User foundreportinguser = userRepository.findById(reports.getReportingUserId())
                 .orElseThrow(()-> new RuntimeException("User does not exist!"));
-        Account foundreportedUser = accountRepository.findById(reports.getReportedUserId())
+        User foundreportedUser = userRepository.findById(reports.getReportedUserId())
                 .orElseThrow(()-> new RuntimeException("User does not exist!"));
 
         reports.setAuction(foundAuction);
-        reports.setAccount(foundreportedUser);
-        reports.setAccount(foundreportinguser);
+        reports.setUser(foundreportedUser);
+        reports.setUser(foundreportinguser);
         return reportsRepository.save(reports);
     }
 
@@ -50,14 +50,14 @@ public class ReportsServices {
     public Reports updateReport(Reports reports) {
         Auction foundAuction = auctionRepository.findById(reports.getAuctionId())
                 .orElseThrow(() -> new RuntimeException("Auction does not exist!"));
-        Account foundreportinguser = accountRepository.findById(reports.getReportingUserId())
+        User foundreportinguser = userRepository.findById(reports.getReportingUserId())
                 .orElseThrow(() -> new RuntimeException("Reportinguser does not exist!"));
-        Account foundreportedUser = accountRepository.findById(reports.getReportedUserId())
+        User foundreportedUser = userRepository.findById(reports.getReportedUserId())
                 .orElseThrow(() -> new RuntimeException("ReportedUser does not exist!"));
 
         reports.setAuction(foundAuction);
-        reports.setAccount(foundreportedUser);
-        reports.setAccount(foundreportinguser);
+        reports.setUser(foundreportedUser);
+        reports.setUser(foundreportinguser);
         return reportsRepository.save(reports);
     }
 

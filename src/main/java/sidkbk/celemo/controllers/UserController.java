@@ -6,47 +6,47 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
-import sidkbk.celemo.models.Account;
-import sidkbk.celemo.services.AccountService;
+import sidkbk.celemo.models.User;
+import sidkbk.celemo.services.UserService;
 
 import java.util.List;
 import java.util.Optional;
 
 
 @RestController
-@RequestMapping("/api/account")
-public class AccountController {
+@RequestMapping("/api/user")
+public class UserController {
 
     @Autowired
-    private AccountService accountService;
+    private UserService userService;
 
-    // post/add account
+    // post/add account/user
     @PostMapping("/post")
-    public ResponseEntity<Account> addAccount(@Valid @RequestBody Account account){
-        Account newAccount = accountService.addAccount(account);
-        return new ResponseEntity<>(newAccount, HttpStatus.CREATED);
+    public ResponseEntity<User> addUser(@Valid @RequestBody User user){
+        User newUser = userService.addUser(user);
+        return new ResponseEntity<>(newUser, HttpStatus.CREATED);
     }
 
     // find all/get all accounts
     @GetMapping("/find")
-    public List<Account> getAllAccounts(){
-        return accountService.getAllAccounts();
+    public List<User> getAllUsers(){
+        return userService.getAllUsers();
     }
 
     // find/get using id
     @GetMapping ("/find/{id}")
-    public ResponseEntity<Account> getAccountById(@PathVariable String id){
-        Optional<Account> account = accountService.getAccountById(id);
-        return account.map(ResponseEntity::ok)
+    public ResponseEntity<User> getUserById(@PathVariable String id){
+        Optional<User> user = userService.getUserById(id);
+        return user.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     // put/update // using responseEntity<?> creates a generic wildcard that can return any type of body
     @PutMapping("/put/{id}")
-    public ResponseEntity<?> updateAccount(@PathVariable String id, @Valid @RequestBody Account accountDetails){
+    public ResponseEntity<?> updateUser(@PathVariable String id, @Valid @RequestBody User userDetails){
         try{
-            Account updatedAccount = accountService.updateAccount(id, accountDetails);
-            return ResponseEntity.ok(updatedAccount);
+            User updatedUser = userService.updateUser(id, userDetails);
+            return ResponseEntity.ok(updatedUser);
         } catch (EntityNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
@@ -54,8 +54,8 @@ public class AccountController {
 
     // delete account
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteAccount(@PathVariable String id){
-        accountService.deleteAccount(id);
+    public ResponseEntity<String> deleteUser(@PathVariable String id){
+        userService.deleteUser(id);
         return ResponseEntity.ok("Recipe with id: " + id + " has been deleted!");
     }
 }

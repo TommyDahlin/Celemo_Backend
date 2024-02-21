@@ -33,7 +33,7 @@ public class Reports {
     // User reference, find a user by id,
 
     @DBRef
-    private Account account;
+    private User user;
 
     @DBRef
     private Auction auction;
@@ -50,8 +50,8 @@ public class Reports {
         return createdAt;
     }
 
-    public Account getAccount() {
-        return account;
+    public User getUser() {
+        return user;
     }
 
     public Auction getAuction() {
@@ -75,8 +75,8 @@ public class Reports {
         this.content = content;
     }
 
-    public void setAccount(Account account) {
-        this.account = account;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public void setAuction(Auction auction) {

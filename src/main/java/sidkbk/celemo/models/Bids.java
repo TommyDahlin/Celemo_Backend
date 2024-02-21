@@ -20,7 +20,7 @@ public class Bids {
 
     // User reference, find a user by id,
     @DBRef
-    private Account account;
+    private User user;
 
     @DBRef
     private Auction auction;
@@ -42,12 +42,12 @@ public class Bids {
     }
 
 
-    public Account getAccount() {
-        return account;
+    public User getUser() {
+        return user;
     }
 
-    public void setAccount(Account account) {
-        this.account = account;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Auction getAuction() {
