@@ -2,6 +2,7 @@ package sidkbk.celemo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sidkbk.celemo.models.Reviews;
 import sidkbk.celemo.models.User;
 import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.models.Bids;
@@ -44,7 +45,7 @@ public class BidsServices {
             foundUser.setBalance(foundUser.getBalance() - bids.getPrice());
         }
 
-        if (foundAuction.isHasBids() == false){
+        if (!foundAuction.isHasBids()){
             foundAuction.setHasBids(true);
         }
 
@@ -57,10 +58,10 @@ public class BidsServices {
         return bidsRepository.findAll();
     }
 
-    public Bids findOne(String id){
-        return bidsRepository.findById(id).get();
+    public Bids findOne(String id) {
+        Bids foundBid = bidsRepository.findById(id).orElseThrow(() -> new RuntimeException("Bid not found"));
+        return foundBid;
     }
-
 
 
     public Bids updateBids(Bids bids) {
@@ -74,10 +75,10 @@ public class BidsServices {
     }
 
 
-
-    public String deleteBids(String id){
+    public String deleteBids(String id) {
+        bidsRepository.findById(id).orElseThrow(() -> new RuntimeException("Bid does not exists!"));
         bidsRepository.deleteById(id);
-        return "Deleted successfully!";
+        return "Bid deleted!";
     }
 
 }
