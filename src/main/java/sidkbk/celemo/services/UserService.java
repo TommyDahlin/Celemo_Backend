@@ -34,31 +34,31 @@ public class UserService {
     // PUT/update user account. checks that new value isn't empty before adding. If something is empty then it will throw EntityNotFoundException
     public User updateUser(String id, User updatedUser){
         return userRepository.findById(id)
-        .map(existingAccount -> {
+        .map(existingUser -> {
             if(updatedUser.getUsername()!=null){
-                existingAccount.setUsername(updatedUser.getUsername());
+                existingUser.setUsername(updatedUser.getUsername());
             }if(updatedUser.getPassword()!=null){
-                existingAccount.setPassword(updatedUser.getPassword());
+                existingUser.setPassword(updatedUser.getPassword());
             }if(updatedUser.getDateOfBirth()!=null){
-                existingAccount.setDateOfBirth(updatedUser.getDateOfBirth());
+                existingUser.setDateOfBirth(updatedUser.getDateOfBirth());
             }if(updatedUser.getEmail()!=null){
-                existingAccount.setEmail(updatedUser.getEmail());
+                existingUser.setEmail(updatedUser.getEmail());
             }if(updatedUser.getFirstName()!=null){
-                existingAccount.setFirstName(updatedUser.getFirstName());
+                existingUser.setFirstName(updatedUser.getFirstName());
             }if(updatedUser.getLastName()!=null){
-                existingAccount.setLastName(updatedUser.getLastName());
+                existingUser.setLastName(updatedUser.getLastName());
             }if(updatedUser.getAdress_street()!=null){
-                existingAccount.setAdress_street(updatedUser.getAdress_street());
+                existingUser.setAdress_street(updatedUser.getAdress_street());
             }if(updatedUser.getAdress_city()!=null){
-                existingAccount.setAdress_city(updatedUser.getAdress_city());
+                existingUser.setAdress_city(updatedUser.getAdress_city());
             }if(updatedUser.getAdress_postalCode()!=null){
-                existingAccount.setAdress_postalCode(updatedUser.getAdress_postalCode());
+                existingUser.setAdress_postalCode(updatedUser.getAdress_postalCode());
             }if(updatedUser.getBalance()!=0.0){
-                existingAccount.setBalance(updatedUser.getBalance());
+                existingUser.setBalance(updatedUser.getBalance());
             }if(updatedUser.getPhoto()!=null){
-                existingAccount.setPhoto(updatedUser.getPhoto());
+                existingUser.setPhoto(updatedUser.getPhoto());
             }
-            return userRepository.save(existingAccount);
+            return userRepository.save(existingUser);
         })
                 .orElseThrow(() -> new EntityNotFoundException("Account with id:" + id + " was not found!"));
     }
