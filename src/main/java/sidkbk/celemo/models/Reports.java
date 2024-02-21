@@ -15,13 +15,16 @@ public class Reports {
 
     @Id
     private String id;
-
-
     @CreatedDate
     private String createdAt;
-
-
     private String content;
+    @DBRef
+    private User user;
+    @DBRef
+    private Auction auction;
+    private String reportingUserId;
+    private String reportedUserId;
+    private String auctionId;
 
     public Reports() {
     }
@@ -31,21 +34,6 @@ public class Reports {
     }
 
     // User reference, find a user by id,
-
-    @DBRef
-    private User user;
-
-    @DBRef
-    private Auction auction;
-
-    private String reportingUserId;
-
-    private String reportedUserId;
-
-    private String auctionId;
-
-
-
     public String getCreatedAt() {
         return createdAt;
     }

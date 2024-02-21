@@ -31,6 +31,7 @@ public class OrderService {
         Auction findAuction = auctionRepository.findById(order.getAuctionId())
                 .orElseThrow(()-> new RuntimeException("Couldn't find Auction"));
         // Finding seller from account repository
+        order.setSellerId(findAuction.getSellerId());
         User findSellerAccount = userRepository.findById(findAuction.getSellerId())
                 .orElseThrow(() -> new RuntimeException("Couldn't find seller."));
             order.setSellerAccount(findSellerAccount);
