@@ -21,8 +21,7 @@ public class OrderController {
     OrderService orderService;
 
     @PostMapping("/post")
-    public ResponseEntity<?> createOrder(
-                                        @RequestBody Order order) {
+    public ResponseEntity<?> createOrder(@Valid @RequestBody Order order) {
         try {
             return ResponseEntity.ok(orderService.createOrder(order));
         } catch (EntityNotFoundException e) {

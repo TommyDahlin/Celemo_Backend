@@ -47,7 +47,7 @@ public class ReportsServices {
 
 
 
-    public Reports updateReport(Reports reports) {
+    public Reports updateReport(Reports reports, String reportId) {
         Auction foundAuction = auctionRepository.findById(reports.getAuctionId())
                 .orElseThrow(() -> new RuntimeException("Auction does not exist!"));
         User foundreportinguser = userRepository.findById(reports.getReportingUserId())
