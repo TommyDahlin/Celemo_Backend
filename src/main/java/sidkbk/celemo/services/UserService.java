@@ -60,7 +60,7 @@ public class UserService {
             }
             return userRepository.save(existingUser);
         })
-                .orElseThrow(() -> new EntityNotFoundException("Account with id:" + id + " was not found!"));
+                .orElseThrow(() -> new EntityNotFoundException("User with id:" + id + " was not found!"));
     }
 /*
 username
