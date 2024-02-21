@@ -5,6 +5,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDate;
+
 @Document(collection = "reports")
 public class Reports {
 
@@ -12,94 +14,59 @@ public class Reports {
         return id;
     }
 
-
     @Id
     private String id;
 
 
-    @CreatedDate
-    private String createdAt;
+    public LocalDate getTimestamp() {
+        return timestamp;
+    }
 
+    @CreatedDate
+    public LocalDate timestamp = LocalDate.now();
 
     private String content;
 
     public Reports() {
     }
 
-    public String getContent() {
-        return content;
-    }
-
-    // User reference, find a user by id,
+    @DBRef
+    private User reportingUserId;
 
     @DBRef
-    private User user;
+    private User reportedUserId;
 
     @DBRef
     private Auction auction;
 
-    private String reportingUserId;
-
-    private String reportedUserId;
-
-    private String auctionId;
-
-
-
-    public String getCreatedAt() {
-        return createdAt;
+    public String getContent() {
+        return content;
     }
 
-    public User getUser() {
-        return user;
+    public User getReportingUserId() {
+        return reportingUserId;
+    }
+
+    public User getReportedUserId() {
+        return reportedUserId;
     }
 
     public Auction getAuction() {
         return auction;
     }
 
-    public String getReportingUserId() {
-        return reportingUserId;
+    public void setReportingUserId(User reportingUserId) {
+        this.reportingUserId = reportingUserId;
     }
 
-    public String getReportedUserId() {
-        return reportedUserId;
-    }
-
-    public String getAuctionId() {
-        return auctionId;
-    }
-
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
+    public void setReportedUserId(User reportedUserId) {
+        this.reportedUserId = reportedUserId;
     }
 
     public void setAuction(Auction auction) {
         this.auction = auction;
     }
 
-    public void setReportingUserId(String reportingUserId) {
-        this.reportingUserId = reportingUserId;
-    }
-
-    public void setReportedUserId(String reportedUserId) {
-        this.reportedUserId = reportedUserId;
-    }
-
-    public void setAuctionId(String auctionId) {
-        this.auctionId = auctionId;
-    }
-
-
-
-
-
-
-
+    // User reference, find a user by id,
 
 }
