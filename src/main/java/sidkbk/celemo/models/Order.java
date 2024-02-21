@@ -1,6 +1,5 @@
 package sidkbk.celemo.models;
 
-import org.apache.catalina.User;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -15,9 +14,9 @@ public class Order {
     private String id;
 
     @DBRef
-    private Account sellerAccount;
+    private User sellerAccount;
     @DBRef
-    private Account buyerAccount;
+    private User buyerAccount;
     @DBRef
     private Auction auction;
 
@@ -78,19 +77,19 @@ public class Order {
         this.productTitle = productTitle;
     }
 
-    public Account getSellerAccount() {
+    public User getSellerAccount() {
         return sellerAccount;
     }
 
-    public void setSellerAccount(Account sellerAccount) {
+    public void setSellerAccount(User sellerAccount) {
         this.sellerAccount = sellerAccount;
     }
 
-    public Account getBuyerAccount() {
+    public User getBuyerAccount() {
         return buyerAccount;
     }
 
-    public void setBuyerAccount(Account buyerAccount) {
+    public void setBuyerAccount(User buyerAccount) {
         this.buyerAccount = buyerAccount;
     }
 

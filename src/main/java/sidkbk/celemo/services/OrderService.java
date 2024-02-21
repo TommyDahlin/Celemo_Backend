@@ -3,12 +3,12 @@ package sidkbk.celemo.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.aggregation.BooleanOperators;
 import org.springframework.stereotype.Service;
-import sidkbk.celemo.models.Account;
 import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.models.Order;
-import sidkbk.celemo.repositories.AccountRepository;
+import sidkbk.celemo.models.User;
 import sidkbk.celemo.repositories.AuctionRepository;
 import sidkbk.celemo.repositories.OrderRepository;
+import sidkbk.celemo.repositories.UserRepository;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ public class OrderService {
     @Autowired
     OrderRepository orderRepository;
     @Autowired
-    AccountRepository accountRepository;
+    UserRepository userRepository;
     @Autowired
     AuctionRepository auctionRepository;
 
@@ -31,12 +31,12 @@ public class OrderService {
         Auction findAuction = auctionRepository.findById(order.getAuctionId())
                 .orElseThrow(()-> new RuntimeException("Couldn't find Auction"));
         // Finding seller from account repository
-        Account findSellerAccount = accountRepository.findById(findAuction.getSellerId())
+        User findSellerAccount = userRepository.findById(findAuction.getSellerId())
                 .orElseThrow(() -> new RuntimeException("Couldn't find seller."));
             order.setSellerAccount(findSellerAccount);
         // Finding buyer from account repository
         // NEEDS BIDS TO BE FINISHED TO PROCEED WITH BUYERACCOUNTID
-        Account findBuyerAccount = accountRepository.findById(order.getBuyerId())
+        User findBuyerAccount = userRepository.findById(order.getBuyerId())
                 .orElseThrow(() -> new RuntimeException("Couldn't find buyer."));
             order.setBuyerAccount(findBuyerAccount);
 
