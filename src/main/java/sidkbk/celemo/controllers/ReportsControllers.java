@@ -36,24 +36,16 @@ public class ReportsControllers {
         return reportsServices.findOne(id);
     }
 
-
     // Find all reports
     @GetMapping("/find")
     public List<Reports> findAllReports(){
         return reportsServices.findAllReports();
     }
 
-
-
-
-    @PutMapping("/update/{id}")
+    @PutMapping("/put/{id}")
     public Reports updateReport(@RequestBody Reports reports, @PathVariable("id") String _id){
         return reportsServices.updateReport(reports);
     }
-
-
-
-
 
     // Delete by id
     @DeleteMapping("/delete/{id}")

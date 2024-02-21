@@ -40,17 +40,13 @@ public class ReportsServices {
         return reportsRepository.findAll();
     }
 
-
     public Reports findOne(String id){
         return reportsRepository.findById(id).get();
     }
 
-
-
     public Reports updateReport( Reports reportst){
        return reportsRepository.save(reportst);
     }
-
 
     public String deleteReport(String id){
         reportsRepository.deleteById(id);

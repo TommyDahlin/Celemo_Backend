@@ -14,8 +14,6 @@ public class Reports {
         return id;
     }
 
-
-
     @Id
     private String id;
 
@@ -27,20 +25,13 @@ public class Reports {
     @CreatedDate
     public LocalDate timestamp = LocalDate.now();
 
-
-
     private String content;
-
-
-
 
     public Reports() {
     }
 
-
     @DBRef
     private User reportingUserId;
-
 
     @DBRef
     private User reportedUserId;
@@ -48,14 +39,9 @@ public class Reports {
     @DBRef
     private Auction auction;
 
-
-
-
     public String getContent() {
         return content;
     }
-
-
 
     public User getReportingUserId() {
         return reportingUserId;
@@ -69,7 +55,6 @@ public class Reports {
         return auction;
     }
 
-
     public void setReportingUserId(User reportingUserId) {
         this.reportingUserId = reportingUserId;
     }
@@ -82,19 +67,6 @@ public class Reports {
         this.auction = auction;
     }
 
-
-
-
-
-
     // User reference, find a user by id,
-
-
-
-
-
-
-
-
 
 }
