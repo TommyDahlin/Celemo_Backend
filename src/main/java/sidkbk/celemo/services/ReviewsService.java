@@ -48,13 +48,13 @@ public class ReviewsService {
     public Reviews updateReview(String reviewId, Reviews updatedReview) {
         return reviewsRepo.findById(reviewId)
                 .map(existingReview -> {
-            if (updatedReview.getGrade() != null) {
-                existingReview.setGrade(updatedReview.getGrade());
-            }
-            if (updatedReview.getReviewText() != null) {
-                existingReview.setReviewText(updatedReview.getReviewText());
-            }
-            return reviewsRepo.save(existingReview);
-        }).orElseThrow(() -> new RuntimeException("Review not found!"));
+                    if (updatedReview.getGrade() != null) {
+                        existingReview.setGrade(updatedReview.getGrade());
+                    }
+                    if (updatedReview.getReviewText() != null) {
+                        existingReview.setReviewText(updatedReview.getReviewText());
+                    }
+                    return reviewsRepo.save(existingReview);
+                }).orElseThrow(() -> new RuntimeException("Review not found!"));
     }
 }

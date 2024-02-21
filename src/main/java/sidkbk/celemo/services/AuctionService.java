@@ -2,6 +2,7 @@ package sidkbk.celemo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sidkbk.celemo.models.Reviews;
 import sidkbk.celemo.models.User;
 import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.repositories.UserRepository;
@@ -20,9 +21,9 @@ public class AuctionService {
     BidsRepository bidsRepository;
 
     public Auction createAuction(Auction auction) {
-        User findUser = userRepository.findById(auction.getSellerId())
-                .orElseThrow(() -> new RuntimeException("Couldn't find user."));
-        auction.setUser(findUser);
+        User foundUser = userRepository.findById(auction.getSellerId()).orElseThrow(() -> new RuntimeException("User not found!"));
+        auction.setUser(foundUser);
+
         return auctionRepository.save(auction);
     }
     // READ ALL
@@ -31,17 +32,33 @@ public class AuctionService {
     }
 
     // READ 1
-    public Auction getOneAuction(String id){
-       return auctionRepository.findById(id).get();
+
+    public Auction getOneAuction(String id) {
+        Auction foundAuction = auctionRepository.findById(id).orElseThrow(() -> new RuntimeException("Auction not found"));
+        return foundAuction;
     }
     // PUT
-    public Auction updateAuction(Auction auction){
-        return auctionRepository.save(auction);
+    public Auction updateAuction(String reviewId, Auction updatedAuction) {
+        return auctionRepository.findById(reviewId)
+                .map(existingAuction -> {
+                    if (updatedAuction.getTitle() != null) {
+                        existingAuction.setTitle(updatedAuction.getTitle());
+                    }
+                    if (updatedAuction.getProductDescription() != null) {
+                        existingAuction.setProductDescription(updatedAuction.getProductDescription());
+                    }
+                    if (updatedAuction.isFinished() == false) {
+                        existingAuction.setFinished(updatedAuction.isFinished());
+                    }
+                        return auctionRepository.save(existingAuction);
+                }).orElseThrow(() -> new RuntimeException("Auction not found!"));
     }
+
     // DELETE 1 by id
     public String deleteAuction(String id) {
+        auctionRepository.findById(id).orElseThrow(() -> new RuntimeException("Auction does not exists!"));
         auctionRepository.deleteById(id);
-        return "Deleted successfully!";
+        return "Auction deleted!";
     }
     // Delete all to drop clean collection remotely (only for testing don't keep to production)
     public void deleteAllAuctions(){
