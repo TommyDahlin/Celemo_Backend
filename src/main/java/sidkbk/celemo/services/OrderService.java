@@ -35,11 +35,10 @@ public class OrderService {
                 .orElseThrow(() -> new RuntimeException("Couldn't find seller."));
             order.setSellerAccount(findSellerAccount);
         // Finding buyer from account repository
-        // NEEDS BIDS TO BE FINISHED TO PROCEED WITH BUYERACCOUNTID
+        // NEEDS AUCTION TO BE FINISHED TO PROCEED WITH BUYERACCOUNTID
         User findBuyerAccount = userRepository.findById(order.getBuyerId())
                 .orElseThrow(() -> new RuntimeException("Couldn't find buyer."));
             order.setBuyerAccount(findBuyerAccount);
-
         return orderRepository.save(order);
     }
 

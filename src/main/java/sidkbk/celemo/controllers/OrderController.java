@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.Order;
+import sidkbk.celemo.models.Reviews;
 import sidkbk.celemo.services.OrderService;
 
 import java.util.List;
@@ -20,8 +21,13 @@ public class OrderController {
     OrderService orderService;
 
     @PostMapping("/post")
-    public Order createOrder(@RequestBody Order order) {
-        return orderService.createOrder(order);
+    public ResponseEntity<?> createOrder(
+                                        @RequestBody Order order) {
+        try {
+            return ResponseEntity.ok(orderService.createOrder(order));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
     @GetMapping("/find")
