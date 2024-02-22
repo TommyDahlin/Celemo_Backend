@@ -41,8 +41,7 @@ public class User {
     private String firstName;
     @NotBlank(message = "lastName cannot be blank")
     private String lastName;
-    //@NotEmpty(message = "gender cannot be blank")
-   // private int chooseGender;
+
     private ERole role;
     @NotBlank(message = "adress_street cannot be blank")
     private String adress_street;

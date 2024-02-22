@@ -53,6 +53,7 @@ public class UserController {
         return user.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
     // Lists all active listings by User
     @GetMapping("/find/{id}/activeAuction")
     public List<Auction> getActiveAuction(@PathVariable String id){
