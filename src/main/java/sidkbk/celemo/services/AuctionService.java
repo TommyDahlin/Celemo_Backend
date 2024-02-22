@@ -39,6 +39,7 @@ public class AuctionService {
     public Auction updateAuction(Auction auction){
         return auctionRepository.save(auction);
     }
+    // Takes all auctions in repository, checks for "isFinished" flag, if true skips, if false adds.
     public List<Auction> getActiveAuction(){
         List<Auction> auctionList = auctionRepository.findAll();
         List<Auction> activeAuctionList = new ArrayList<>();
