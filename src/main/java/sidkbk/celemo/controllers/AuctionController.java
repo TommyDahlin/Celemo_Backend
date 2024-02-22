@@ -48,10 +48,6 @@ public class AuctionController {
 
     // PUT update order by ID
     @PutMapping("/put/{id}")
-    public Auction updateAuction(@RequestBody Auction auction, @PathVariable("id") String _id) {
-        return auctionService.updateAuction(auction);
-    }
-    @PutMapping("/put/{id}")
     public ResponseEntity<?> updateAuction(@PathVariable("id") String auctionId,
                                           @Valid @RequestBody Auction auction) {
         try {
