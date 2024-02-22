@@ -2,11 +2,12 @@ package sidkbk.celemo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sidkbk.celemo.models.User;
 import sidkbk.celemo.models.Reviews;
-import sidkbk.celemo.repositories.UserRepository;
+import sidkbk.celemo.models.User;
 import sidkbk.celemo.repositories.ReviewsRepo;
+import sidkbk.celemo.repositories.UserRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -34,7 +35,31 @@ public class ReviewsService {
         User reviewedUserIdFound = userRepository.findById(reviewedUser).orElseThrow(() -> new RuntimeException("Reviewed user not found!"));
         review.setCreatedBy(createdByIdFound);
         review.setReviwedUser(reviewedUserIdFound);
-        return reviewsRepo.save(review);
+
+
+
+        reviewsRepo.save(review);
+        addAverageGrade(reviewedUser); //have to be before return;
+        return review;
+    }
+
+    public void addAverageGrade(String id){
+        List<Reviews> allReviews = reviewsRepo.findAll();
+        User user = userRepository.findById(id).get();
+        List<Double> reviewGrade = new ArrayList<>();
+        for (Reviews reviews : allReviews) {
+            if(reviews.getReviwedUser().equals(id)){
+                reviewGrade.add(reviews.getGrade().doubleValue());
+            }
+        }
+        double averageGrade = 0.0;
+        for(int i=0; i < reviewGrade.size(); i++){
+            averageGrade += reviewGrade.get(i);
+        }
+        averageGrade = averageGrade / reviewGrade.size();
+        user.setGrade(averageGrade);
+        userRepository.save(user);
+
     }
 
     // Delete a review

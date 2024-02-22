@@ -38,6 +38,14 @@ public class UserController {
         return userService.getAllUsers();
     }
 
+    //get average grade, find user by id
+    @GetMapping("/averageGrade/{id}")
+    public ResponseEntity<User> getUserAverageGrade(@PathVariable String id){
+        Optional<User> user = userService.getUserAverageGrade(id);
+        return user.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
     // find/get using id
     @GetMapping ("/find/{id}")
     public ResponseEntity<User> getUserById(@PathVariable String id){
@@ -46,12 +54,12 @@ public class UserController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
     // Lists all active listings by User
-    @GetMapping("/find/{id}/activeauction")
+    @GetMapping("/find/{id}/activeAuction")
     public List<Auction> getActiveAuction(@PathVariable String id){
         return auctionService.getActiveAuction(id);
     }
     // put/update // using responseEntity<?> creates a generic wildcard that can return any type of body
-    @GetMapping("/find/{id}/finishedauction")
+    @GetMapping("/find/{id}/finishedAuction")
     public List<Auction> getFinishedAuction(@PathVariable String id){return auctionService.getFinishedAuctions(id);}
     @PutMapping("/put/{id}")
     public ResponseEntity<?> updateUser(@PathVariable String id, @Valid @RequestBody User userDetails){

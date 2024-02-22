@@ -18,6 +18,10 @@ public class UserService {
     UserRepository userRepository;
 
 
+
+
+
+
     // create/add/post user account
     public User addUser(User user){
         if (user.getGender() == null){
@@ -40,6 +44,13 @@ public class UserService {
     // get/find all user accounts
     public List<User> getAllUsers(){
         return userRepository.findAll();
+    }
+
+    //find user id (average grade)
+    public Optional<User> getUserAverageGrade(String id){
+        
+
+        return userRepository.findById(id);
     }
 
     // get/find user account using id

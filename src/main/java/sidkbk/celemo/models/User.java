@@ -55,7 +55,10 @@ public class User {
     private ArrayList<String> favourites = new ArrayList<String>();
 
 
+
     private double balance;
+
+private double grade;
 
     public User() {
 
@@ -178,5 +181,13 @@ public class User {
 
     public void setRole(ERole role) {
         this.role = role;
+    }
+
+    public double getGrade() {
+        return grade;
+    }
+
+    public void setGrade(double grade) {
+        this.grade = grade;
     }
 }
