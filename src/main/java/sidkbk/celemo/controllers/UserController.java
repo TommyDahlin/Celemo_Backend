@@ -45,7 +45,7 @@ public class UserController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
     // Lists all active listings by User
-    @GetMapping("/get/{id}/activeauction")
+    @GetMapping("/find/{id}/activeauction")
     public List<Auction> getActiveAuction(@PathVariable String id){
         return auctionService.getActiveAuction(id);
     }
