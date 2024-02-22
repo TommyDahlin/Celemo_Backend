@@ -46,11 +46,11 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    //find user id (average grade)
-    public Optional<User> getUserAverageGrade(String id){
-        
+    //find user variable with filter. For example : grade
+    public String getUserFilter(String id, String filter){ //userId and filter, filter can be grade, username, firstName, lastName
+        User user = userRepository.findById(id).get();
+        return  user.getFilter(filter);
 
-        return userRepository.findById(id);
     }
 
     // get/find user account using id

@@ -35,38 +35,39 @@ public class ReviewsService {
         User reviewedUserIdFound = userRepository.findById(reviewedUser).orElseThrow(() -> new RuntimeException("Reviewed user not found!"));
         review.setCreatedBy(createdByIdFound);
         review.setReviwedUser(reviewedUserIdFound);
-
-
-
         reviewsRepo.save(review);
-        addAverageGrade(reviewedUser); //have to be before return;
+        updateAverageGrade(reviewedUser); //have to be before return; // update users average grade
         return review;
     }
 
-    public void addAverageGrade(String id){
-        List<Reviews> allReviews = reviewsRepo.findAll();
-        User user = userRepository.findById(id).get();
-        List<Double> reviewGrade = new ArrayList<>();
-        for (Reviews reviews : allReviews) {
-            if(reviews.getReviwedUser().equals(id)){
-                reviewGrade.add(reviews.getGrade().doubleValue());
+
+    public void updateAverageGrade(String id){
+        List<Reviews> allReviews = reviewsRepo.findAll(); // list all reviews
+        User user = userRepository.findById(id).get(); //get reviews with reviewedUser
+        List<Double> reviewGrade = new ArrayList<>(); //create a new list to fill with
+        for (Reviews reviews : allReviews) { //checks each review if the reviewedUserId matches with id
+            if(reviews.getReviwedUser().getId().equals(id)){
+
+                reviewGrade.add(reviews.getGrade()); //if its a match, add grade to users grade
+
             }
         }
-        double averageGrade = 0.0;
+        double averageGrade = 0.0; //local grade to fill using for-loop below
         for(int i=0; i < reviewGrade.size(); i++){
-            averageGrade += reviewGrade.get(i);
+            averageGrade += reviewGrade.get(i); //loop through reviewGrade and add to averageGrade
         }
-        averageGrade = averageGrade / reviewGrade.size();
-        user.setGrade(averageGrade);
-        userRepository.save(user);
+        averageGrade = averageGrade / reviewGrade.size(); //to calculate average number
+        user.setGrade(averageGrade); //set new average grade
+        userRepository.save(user); //save to user
 
     }
 
     // Delete a review
     public String deleteReview(String id) {
-        reviewsRepo.findById(id).orElseThrow(() -> new RuntimeException("Review does not exists!"));
+        Reviews tempSaveReviewToDelete = reviewsRepo.findById(id).orElseThrow(() -> new RuntimeException("Review does not exists!"));
         reviewsRepo.deleteById(id);
-        return "Review deleted!";
+        updateAverageGrade(tempSaveReviewToDelete.getReviwedUser().getId()); //get userId (reviewedUserId) // update new grade after previous grade from deleted review is deleted
+        return "Review deleted and user: " + tempSaveReviewToDelete.getReviwedUser().getId() + " average grade was updated!";
     }
 
     // Update

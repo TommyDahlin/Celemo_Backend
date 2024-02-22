@@ -39,11 +39,13 @@ public class UserController {
     }
 
     //get average grade, find user by id
-    @GetMapping("/averageGrade/{id}")
-    public ResponseEntity<User> getUserAverageGrade(@PathVariable String id){
-        Optional<User> user = userService.getUserAverageGrade(id);
-        return user.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    @GetMapping("/{id}/{filter}")
+    public ResponseEntity<?> getUserFilter(@PathVariable("id") String id,@PathVariable("filter")String filter){
+        try {
+            return ResponseEntity.ok(userService.getUserFilter(id, filter));
+        }catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
     // find/get using id

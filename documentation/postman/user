@@ -46,3 +46,9 @@ http://localhost:8080/api/account/delete/:id
 http://localhost:8080/api/account/put/:id
 
 ****************************************************
+
+// get filter using userId
+
+http://localhost:8080/api/user/:id/{filter}
+
+****************************************************
