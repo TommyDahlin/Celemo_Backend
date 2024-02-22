@@ -6,7 +6,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
+import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.models.User;
+import sidkbk.celemo.services.AuctionService;
 import sidkbk.celemo.services.UserService;
 
 import java.util.List;
@@ -19,6 +21,8 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private AuctionService auctionService;
 
     // post/add account/user
     @PostMapping("/post")
@@ -40,7 +44,11 @@ public class UserController {
         return user.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
-
+    // Lists all active listings by User
+    @GetMapping("/find/{id}/activeauction")
+    public List<Auction> getActiveAuction(@PathVariable String id){
+        return auctionService.getActiveAuction(id);
+    }
     // put/update // using responseEntity<?> creates a generic wildcard that can return any type of body
     @PutMapping("/put/{id}")
     public ResponseEntity<?> updateUser(@PathVariable String id, @Valid @RequestBody User userDetails){
