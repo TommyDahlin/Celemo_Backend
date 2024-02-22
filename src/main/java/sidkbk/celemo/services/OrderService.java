@@ -7,6 +7,7 @@ import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.models.Order;
 import sidkbk.celemo.models.User;
 import sidkbk.celemo.repositories.AuctionRepository;
+import sidkbk.celemo.repositories.BidsRepository;
 import sidkbk.celemo.repositories.OrderRepository;
 import sidkbk.celemo.repositories.UserRepository;
 
@@ -23,6 +24,8 @@ public class OrderService {
     UserRepository userRepository;
     @Autowired
     AuctionRepository auctionRepository;
+    @Autowired
+    BidsRepository bidsRepository;
 
 
 
@@ -75,14 +78,14 @@ public class OrderService {
 
 
     public List<Order> getPreviousPurchase(String id) {
-        List<Order> orderList = orderRepository.findAll();
-        List<Order> previousPurchaseList = new ArrayList<>();
-        for (int i = 0; i < orderList.size(); i++) {
-            if (!orderList.get(i).getAuction().isFinished && Objects.equals(orderList.get(i).getBuyerId(), id)) {
-                previousPurchaseList.add(orderList.get(i));
+        List<Order> allOrders = orderRepository.findAll();
+        List<Order> previousPurchases = new ArrayList<>();
+        for (int i = 0; i < allOrders.size(); i++) {
+            if (allOrders.get(i).getAuction() != null && !allOrders.get(i).getAuction().isFinished && Objects.equals(allOrders.get(i).getBuyerId(), id)) {      //Objects.equals(allOrders.get(i).getBuyerId(), id))
+                previousPurchases.add(allOrders.get(i));
             }
         }
-        return previousPurchaseList;
+        return previousPurchases;
     }
 
 

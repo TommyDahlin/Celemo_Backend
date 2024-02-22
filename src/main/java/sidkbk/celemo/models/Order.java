@@ -1,11 +1,10 @@
 package sidkbk.celemo.models;
 
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Date;
+import java.util.List;
 
 @Document(collection = "orders")
 public class Order {
@@ -57,7 +56,7 @@ public class Order {
         return productTitle;
     }
 
-    public int getEndPrice() {
+    public int getEndPrice(List<Order> previousPurchase) {
         return endPrice;
     }
 

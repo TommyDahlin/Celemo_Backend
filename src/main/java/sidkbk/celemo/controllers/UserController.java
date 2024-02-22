@@ -10,6 +10,7 @@ import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.models.Order;
 import sidkbk.celemo.models.User;
 import sidkbk.celemo.services.AuctionService;
+import sidkbk.celemo.services.OrderService;
 import sidkbk.celemo.services.UserService;
 
 import java.util.List;
@@ -24,6 +25,8 @@ public class UserController {
     private UserService userService;
     @Autowired
     private AuctionService auctionService;
+    @Autowired
+    private OrderService orderService;
 
     // post/add account/user
     @PostMapping("/post")
@@ -56,7 +59,7 @@ public class UserController {
     public List<Auction> getFinishedAuction(@PathVariable String id){return auctionService.getFinishedAuctions(id);}
 
     @GetMapping("/find/{id}/previouspurchase")
-    public List<Order> get
+    public List<Order> getPreviousPurchase(@PathVariable String id){return orderService.getPreviousPurchase(id);}
 
     @PutMapping("/put/{id}")
     public ResponseEntity<?> updateUser(@PathVariable String id, @Valid @RequestBody User userDetails){
