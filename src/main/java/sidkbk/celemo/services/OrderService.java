@@ -10,7 +10,9 @@ import sidkbk.celemo.repositories.AuctionRepository;
 import sidkbk.celemo.repositories.OrderRepository;
 import sidkbk.celemo.repositories.UserRepository;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class OrderService {
@@ -70,6 +72,21 @@ public class OrderService {
                     return orderRepository.save(existingOrder);
                 }).orElseThrow(() -> new RuntimeException("Order was not found"));
     }
+
+
+    public List<Order> getPreviousPurchase(String id) {
+        List<Order> orderList = orderRepository.findAll();
+        List<Order> previousPurchaseList = new ArrayList<>();
+        for (int i = 0; i < orderList.size(); i++) {
+            if (!orderList.get(i).getAuction().isFinished && Objects.equals(orderList.get(i).getBuyerId(), id)) {
+                previousPurchaseList.add(orderList.get(i));
+            }
+        }
+        return previousPurchaseList;
+    }
+
+
+
 
     // Delete one order by id
     public String deleteOrder(String id) {
