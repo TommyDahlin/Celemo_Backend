@@ -18,9 +18,9 @@ public class Auction {
     public String id;
     @NotBlank
     public String sellerId;
-    public String bidId;
     @DBRef
     private Bids bid;
+    public String bidId;
     @DBRef
     private User user;
     @NotBlank

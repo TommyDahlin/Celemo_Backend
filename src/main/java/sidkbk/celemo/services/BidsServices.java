@@ -47,7 +47,6 @@ public class BidsServices {
         if (foundAuction.isHasBids() == false){
             foundAuction.setHasBids(true);
         }
-
         userRepository.save(foundUser);
         auctionRepository.save(foundAuction);
         return bidsRepository.save(bids);
