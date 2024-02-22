@@ -9,8 +9,6 @@ import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.Reviews;
 import sidkbk.celemo.services.ReviewsService;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/reviews")
 public class ReviewsController {
@@ -20,8 +18,12 @@ public class ReviewsController {
 
     // GET all reviews
     @GetMapping("/find")
-    public List<Reviews> listAllReviews() {
-        return reviewsService.listAllReviews();
+    public ResponseEntity<?> listAllReviews() {
+        try {
+            return ResponseEntity.ok(reviewsService.listAllReviews());
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
     // GET one specific review
