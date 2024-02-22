@@ -34,7 +34,7 @@ public class User {
     @NotBlank(message = "email cannot be blank")
     private String email;
 
-    public Enum gender;
+    private EGender gender;
 
     private String photo;
     @NotBlank(message = "firstName cannot be blank")
@@ -43,7 +43,7 @@ public class User {
     private String lastName;
     //@NotEmpty(message = "gender cannot be blank")
    // private int chooseGender;
-    public Enum role;
+    private ERole role;
     @NotBlank(message = "adress_street cannot be blank")
     private String adress_street;
     @NotBlank(message = "adress_postalcode cannot be blank")
@@ -58,28 +58,7 @@ public class User {
     private double balance;
 
     public User() {
-        if (role == null){
-            role = ERole.USER;
 
-        } /*else if(role.equals("user")){
-            this.role= ERole.USER;
-        } else if(role.equals("admin")){
-            this.role= ERole.ADMIN;
-        } else {
-            throw new RuntimeException("ERROR: no role");
-        }*/
-        if (gender == null){
-            throw new RuntimeException("Error, no gender");
-        }
-        /*
-            if (gender.equals("male")) {
-                setGender(EGender.MALE);
-            }  if (gender.equals("female")) {
-                setGender(EGender.FEMALE);
-            } else {
-                setGender(EGender.OTHER);
-            }
-        */
     }
 
 
@@ -193,11 +172,11 @@ public class User {
         return role;
     }
 
-    public void setGender(Enum gender) {
+    public void setGender(EGender gender) {
         this.gender = gender;
     }
 
-    public void setRole(Enum role) {
+    public void setRole(ERole role) {
         this.role = role;
     }
 }
