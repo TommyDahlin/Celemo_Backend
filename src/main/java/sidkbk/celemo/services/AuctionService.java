@@ -8,6 +8,7 @@ import sidkbk.celemo.repositories.UserRepository;
 import sidkbk.celemo.repositories.AuctionRepository;
 import sidkbk.celemo.repositories.BidsRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -37,6 +38,16 @@ public class AuctionService {
     // PUT
     public Auction updateAuction(Auction auction){
         return auctionRepository.save(auction);
+    }
+    public List<Auction> getActiveAuction(){
+        List<Auction> auctionList = auctionRepository.findAll();
+        List<Auction> activeAuctionList = new ArrayList<>();
+        for (int i = 0; i < auctionList.size(); i++) {
+            if (!auctionList.get(i).isFinished){
+                activeAuctionList.add(auctionList.get(i));
+            }
+        }
+        return activeAuctionList;
     }
     // DELETE 1 by id
     public String deleteAuction(String id) {
