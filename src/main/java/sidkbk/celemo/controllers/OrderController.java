@@ -3,14 +3,11 @@ package sidkbk.celemo.controllers;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.Order;
 import sidkbk.celemo.services.OrderService;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/order")
@@ -20,18 +17,30 @@ public class OrderController {
     OrderService orderService;
 
     @PostMapping("/post")
-    public Order createOrder(@RequestBody Order order) {
-        return orderService.createOrder(order);
+    public ResponseEntity<?> createOrder(@RequestBody Order order) {
+        try {
+            return ResponseEntity.ok(orderService.createOrder(order));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
     @GetMapping("/find")
-    public List<Order> getAllOrders() {
-        return orderService.getAllOrders();
+    public ResponseEntity<?> getAllOrders() {
+        try {
+            return ResponseEntity.ok(orderService.getAllOrders());
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
     @GetMapping("/find/{id}")
-    public Order getOneOrder(@PathVariable("id") String id ) {
-        return orderService.getOneOrder(id);
+    public ResponseEntity<?> getOneOrder(@PathVariable("id") String id ) {
+        try {
+            return ResponseEntity.ok(orderService.getOneOrder(id));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
     @PutMapping("/put/{id}")
@@ -45,8 +54,12 @@ public class OrderController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public String deleteOrder(@PathVariable String id) {
-        return orderService.deleteOrder(id);
+    public ResponseEntity<?> deleteOrder(@PathVariable String id) {
+        try {
+            return ResponseEntity.ok(orderService.deleteOrder(id));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 }
 
