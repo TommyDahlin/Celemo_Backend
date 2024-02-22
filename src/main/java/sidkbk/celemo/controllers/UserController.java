@@ -46,8 +46,8 @@ public class UserController {
     }
     // Lists all active listings by User
     @GetMapping("/get/{id}/activeauction")
-    public List<Auction> getActiveAuction(){
-        return auctionService.getActiveAuction();
+    public List<Auction> getActiveAuction(@PathVariable String id){
+        return auctionService.getActiveAuction(id);
     }
     // put/update // using responseEntity<?> creates a generic wildcard that can return any type of body
     @PutMapping("/put/{id}")

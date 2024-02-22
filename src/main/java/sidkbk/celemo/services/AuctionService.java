@@ -10,6 +10,7 @@ import sidkbk.celemo.repositories.BidsRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class AuctionService {
@@ -40,11 +41,11 @@ public class AuctionService {
         return auctionRepository.save(auction);
     }
     // Takes all auctions in repository, checks for "isFinished" flag, if true skips, if false adds.
-    public List<Auction> getActiveAuction(){
+    public List<Auction> getActiveAuction(String id){
         List<Auction> auctionList = auctionRepository.findAll();
         List<Auction> activeAuctionList = new ArrayList<>();
         for (int i = 0; i < auctionList.size(); i++) {
-            if (!auctionList.get(i).isFinished){
+            if (!auctionList.get(i).isFinished && Objects.equals(auctionList.get(i).getSellerId(), id)){
                 activeAuctionList.add(auctionList.get(i));
             }
         }
