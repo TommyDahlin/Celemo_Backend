@@ -51,6 +51,16 @@ public class AuctionService {
         }
         return activeAuctionList;
     }
+    public List<Auction> getFinishedAuctions(String id){
+        List<Auction> auctionList = auctionRepository.findAll();
+        List<Auction> activeAuctionList = new ArrayList<>();
+        for (int i = 0; i < auctionList.size(); i++) {
+            if (auctionList.get(i).isFinished && Objects.equals(auctionList.get(i).getSellerId(), id)){
+                activeAuctionList.add(auctionList.get(i));
+            }
+        }
+        return activeAuctionList;
+    }
     // DELETE 1 by id
     public String deleteAuction(String id) {
         auctionRepository.deleteById(id);
