@@ -1,0 +1,47 @@
+//post
+
+
+http://localhost:8080/api/account/post
+
+{
+    "id": "65d33bbcf4da3a3f932fe8ec",
+    "username": "BroderJakob updated",
+    "password": "BroderJakob22",
+    "dateOfBirth": "2011-05-10",
+    "email": "BrorJ@gmail.com",
+    "gender": "MALE",
+    "photo": "brorpic.url",
+    "firstName": "proder",
+    "lastName": "jakob",
+    "role": "USER",
+    "adress_street": "peterpan gata",
+    "adress_postalCode": "44556",
+    "adress_city": "göteborg",
+    "balance": 0.0
+}
+
+****************************************************
+
+// find
+
+http://localhost:8080/api/account/find
+
+****************************************************
+
+// find/:id
+
+http://localhost:8080/api/account/find/:id
+
+****************************************************
+
+// delete/:id
+
+http://localhost:8080/api/account/delete/:id
+
+****************************************************
+
+// put/:id
+
+http://localhost:8080/api/account/put/:id
+
+****************************************************

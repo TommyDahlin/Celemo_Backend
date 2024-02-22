@@ -13,6 +13,7 @@ public class User {
     @Id
     private String id;
 
+
 /*
     @NotBlank
     //String
@@ -33,7 +34,7 @@ public class User {
     @NotBlank(message = "email cannot be blank")
     private String email;
 
-    private Enum gender;
+    private EGender gender;
 
     private String photo;
     @NotBlank(message = "firstName cannot be blank")
@@ -42,7 +43,7 @@ public class User {
     private String lastName;
     //@NotEmpty(message = "gender cannot be blank")
    // private int chooseGender;
-    private Enum role;
+    private ERole role;
     @NotBlank(message = "adress_street cannot be blank")
     private String adress_street;
     @NotBlank(message = "adress_postalcode cannot be blank")
@@ -59,6 +60,7 @@ public class User {
     public User() {
 
     }
+
 
 
 
@@ -170,4 +172,11 @@ public class User {
         return role;
     }
 
+    public void setGender(EGender gender) {
+        this.gender = gender;
+    }
+
+    public void setRole(ERole role) {
+        this.role = role;
+    }
 }

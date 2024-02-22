@@ -4,6 +4,8 @@ package sidkbk.celemo.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
+import sidkbk.celemo.models.EGender;
+import sidkbk.celemo.models.ERole;
 import sidkbk.celemo.models.User;
 import sidkbk.celemo.repositories.UserRepository;
 
@@ -18,6 +20,20 @@ public class UserService {
 
     // create/add/post user account
     public User addUser(User user){
+        if (user.getGender() == null){
+            throw new RuntimeException("ERROR: no gender");
+        } else if (user.getGender().equals("MALE")){
+            user.setGender(EGender.MALE);
+        } else if (user.getGender().equals("FEMALE")){
+            user.setGender(EGender.FEMALE);
+        }
+        if (user.getRole() == null){
+            user.setRole(ERole.USER);
+        } else if (user.getRole().equals("ADMIN")){
+            user.setRole(ERole.ADMIN);
+        }else if (user.getRole().equals("USER")){
+            user.setRole(ERole.USER);
+        }
         return userRepository.save(user);
     }
 
