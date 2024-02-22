@@ -2,6 +2,7 @@ package sidkbk.celemo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sidkbk.celemo.models.Order;
 import sidkbk.celemo.models.User;
 import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.models.Reports;
@@ -40,12 +41,25 @@ public class ReportsServices {
         return reportsRepository.findAll();
     }
 
-    public Reports findOne(String id){
-        return reportsRepository.findById(id).get();
+    public Reports findOne(String id) {
+        Reports foundReport = reportsRepository.findById(id).orElseThrow(() -> new RuntimeException("Order was not found"));
+        return foundReport;
     }
 
-    public Reports updateReport( Reports reportst){
-       return reportsRepository.save(reportst);
+    public Reports updateReport(String orderId, Reports updatedReport) {
+        return reportsRepository.findById(orderId)
+                .map(existingOrder -> {
+                    if (updatedReport.getReportingUserId() != null) {
+                        existingOrder.setReportingUserId(updatedReport.getReportingUserId());
+                    }
+                    if (updatedReport.getReportedUserId() != null) {
+                        existingOrder.setReportedUserId(updatedReport.getReportedUserId());
+                    }
+                    if (updatedReport.getAuction() != null) {
+                        existingOrder.setAuction(updatedReport.getAuction());
+                    }
+                    return reportsRepository.save(existingOrder);
+                }).orElseThrow(() -> new RuntimeException("Order was not found"));
     }
 
     public String deleteReport(String id){

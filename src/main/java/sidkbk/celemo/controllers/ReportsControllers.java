@@ -1,10 +1,12 @@
 package sidkbk.celemo.controllers;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
+import sidkbk.celemo.models.Order;
 import sidkbk.celemo.models.Reports;
 import sidkbk.celemo.services.ReportsServices;
 
@@ -32,10 +34,13 @@ public class ReportsControllers {
 
     //Find a report by id
     @GetMapping("/find/{id}")
-    public Reports findOne(@PathVariable String id){
-        return reportsServices.findOne(id);
+    public ResponseEntity<?> findOne(@PathVariable("id") String id ) {
+        try {
+            return ResponseEntity.ok(reportsServices.findOne(id));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
-
     // Find all reports
     @GetMapping("/find")
     public List<Reports> findAllReports(){
@@ -43,14 +48,21 @@ public class ReportsControllers {
     }
 
     @PutMapping("/put/{id}")
-    public Reports updateReport(@RequestBody Reports reports, @PathVariable("id") String _id){
-        return reportsServices.updateReport(reports);
+    public ResponseEntity<?> updateReport(@PathVariable("id") String reportId,
+                                         @Valid @RequestBody Reports updatedReport) {
+        try {
+            return ResponseEntity.ok(reportsServices.updateReport(reportId, updatedReport));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
-
     // Delete by id
     @DeleteMapping("/delete/{id}")
-    public String deleteReport(@PathVariable String id){
-        return reportsServices.deleteReport(id);
+    public ResponseEntity<?> deleteReport(@PathVariable String id) {
+        try {
+            return ResponseEntity.ok(reportsServices.deleteReport(id));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
-
 }
