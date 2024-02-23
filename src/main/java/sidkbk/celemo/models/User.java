@@ -41,8 +41,7 @@ public class User {
     private String firstName;
     @NotBlank(message = "lastName cannot be blank")
     private String lastName;
-    //@NotEmpty(message = "gender cannot be blank")
-   // private int chooseGender;
+
     private ERole role;
     @NotBlank(message = "adress_street cannot be blank")
     private String adress_street;
@@ -55,14 +54,38 @@ public class User {
     private ArrayList<String> favourites = new ArrayList<String>();
 
 
+
     private double balance;
+
+private double grade;
 
     public User() {
 
     }
 
+    //return variable and change to string if necessary
+    public String getFilter(String filter) {
+        filter.toLowerCase();
+        switch (filter) {
+            case "grade":
+                Double a = this.getGrade();
+                return a.toString();
 
+            case "firstname":
+                return this.getFirstName();
 
+            case "lastname":
+                return this.getLastName();
+
+            case "username":
+                return this.getUsername();
+
+            default:
+                return null;
+
+        }
+
+    }
 
     public void addFavourites (String favouritesId){
         this.favourites.add(favouritesId);
@@ -179,4 +202,14 @@ public class User {
     public void setRole(ERole role) {
         this.role = role;
     }
+
+    public double getGrade() {
+        return grade;
+    }
+
+    public void setGrade(double grade) {
+        this.grade = grade;
+    }
+
+
 }

@@ -26,6 +26,8 @@ public class ReviewsController {
         }
     }
 
+
+
     // GET one specific review
     @GetMapping("/find/{id}")
     public ResponseEntity<?> listOneSpecificReview(@PathVariable("id") String id) {
@@ -43,9 +45,11 @@ public class ReviewsController {
                                        @Valid @RequestBody Reviews review) {
         try {
             return ResponseEntity.ok(reviewsService.addReview(createdBy, reviewedUser, review));
+
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
+
     }
 
     // DELETE Delete a review

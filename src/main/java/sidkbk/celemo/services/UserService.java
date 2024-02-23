@@ -18,6 +18,10 @@ public class UserService {
     UserRepository userRepository;
 
 
+
+
+
+
     // create/add/post user account
     public User addUser(User user){
         if (user.getGender() == null){
@@ -40,6 +44,13 @@ public class UserService {
     // get/find all user accounts
     public List<User> getAllUsers(){
         return userRepository.findAll();
+    }
+
+    //find user variable with filter. For example : grade
+    public String getUserFilter(String id, String filter){ //userId and filter, filter can be grade, username, firstName, lastName
+        User user = userRepository.findById(id).get();
+        return  user.getFilter(filter);
+
     }
 
     // get/find user account using id

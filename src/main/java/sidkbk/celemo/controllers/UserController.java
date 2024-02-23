@@ -38,6 +38,16 @@ public class UserController {
         return userService.getAllUsers();
     }
 
+    //get average grade, find user by id
+    @GetMapping("/{id}/{filter}")
+    public ResponseEntity<?> getUserFilter(@PathVariable("id") String id,@PathVariable("filter")String filter){
+        try {
+            return ResponseEntity.ok(userService.getUserFilter(id, filter));
+        }catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
     // find/get using id
     @GetMapping ("/find/{id}")
     public ResponseEntity<User> getUserById(@PathVariable String id){
@@ -45,13 +55,14 @@ public class UserController {
         return user.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
     // Lists all active listings by User
-    @GetMapping("/find/{id}/activeauction")
+    @GetMapping("/find/{id}/activeAuction")
     public List<Auction> getActiveAuction(@PathVariable String id){
         return auctionService.getActiveAuction(id);
     }
     // put/update // using responseEntity<?> creates a generic wildcard that can return any type of body
-    @GetMapping("/find/{id}/finishedauction")
+    @GetMapping("/find/{id}/finishedAuction")
     public List<Auction> getFinishedAuction(@PathVariable String id){return auctionService.getFinishedAuctions(id);}
     @PutMapping("/put/{id}")
     public ResponseEntity<?> updateUser(@PathVariable String id, @Valid @RequestBody User userDetails){
