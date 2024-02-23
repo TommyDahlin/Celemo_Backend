@@ -23,7 +23,10 @@ public class UserService {
 
 
     // create/add/post user account
-    public User addUser(User user){
+    public User createUser(User user){
+        User findUser = userRepository.findById(user.getId())
+                .orElseThrow(()-> new RuntimeException("Couldn't find User"));
+
         if (user.getGender() == null){
             throw new RuntimeException("ERROR: no gender");
         } else if (user.getGender().equals("MALE")){
@@ -103,7 +106,8 @@ adress_city
 
 
     // delete user account
-    public void deleteUser(String id){
+    public String deleteUser(String id){
         userRepository.deleteById(id);
+        return "Deleted user successfully!";
     }
 }
