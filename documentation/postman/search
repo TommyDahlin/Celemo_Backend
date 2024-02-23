@@ -1,0 +1,14 @@
+#######################################################################################################
+    POSTMAN SEARCH
+#######################################################################################################
+
+// GET Search a word in an auctions title or for a category [ENUM].
+http://localhost:8080/api/search?search=test
+
+Params
+    Query Params
+        Key : search
+        Value : test
+        Description : Value takes a search term or an category Enum like "HOCKEY"
+
+#######################################################################################################
