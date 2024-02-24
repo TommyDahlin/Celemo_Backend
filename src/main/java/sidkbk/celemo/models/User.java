@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 @Document(collection = "users")
 public class User {
@@ -83,6 +84,19 @@ private double grade;
             default:
                 return null;
 
+        }
+
+    }
+
+    public void isPasswordCorrect(User user){
+
+        Pattern UpperCasePattern = Pattern.compile("[A-Z ]");
+
+        if (user.getPassword().length() < 8) {
+            throw new RuntimeException("ERROR: password lengt must be atleast 8 characters.");
+        }
+        if (!UpperCasePattern.matcher(user.getPassword()).find()) {
+            throw new RuntimeException("ERROR: password must contain atleast one upperCase.");
         }
 
     }

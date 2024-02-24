@@ -24,21 +24,23 @@ public class UserService {
 
     // create/add/post user account
     public User createUser(User user){
-        User findUser = userRepository.findById(user.getId())
-                .orElseThrow(()-> new RuntimeException("Couldn't find User"));
 
+        //checks if  password is longer than 8 chars and contains atleast one upperCase
+        user.isPasswordCorrect(user);
+
+        //checks that gender isn't null
         if (user.getGender() == null){
             throw new RuntimeException("ERROR: no gender");
-        } else if (user.getGender().equals("MALE")){
+        } else if (user.getGender().equals("MALE")){ //string to enum
             user.setGender(EGender.MALE);
-        } else if (user.getGender().equals("FEMALE")){
+        } else if (user.getGender().equals("FEMALE")){//string to enum
             user.setGender(EGender.FEMALE);
         }
-        if (user.getRole() == null){
+        if (user.getRole() == null){ //if role is empty -> user
             user.setRole(ERole.USER);
-        } else if (user.getRole().equals("ADMIN")){
+        } else if (user.getRole().equals("ADMIN")){ //string to enum
             user.setRole(ERole.ADMIN);
-        }else if (user.getRole().equals("USER")){
+        }else if (user.getRole().equals("USER")){ //string to enum
             user.setRole(ERole.USER);
         }
         return userRepository.save(user);
