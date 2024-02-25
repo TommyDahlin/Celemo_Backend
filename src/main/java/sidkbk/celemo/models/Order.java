@@ -4,8 +4,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.List;
-
 @Document(collection = "orders")
 public class Order {
 
@@ -34,13 +32,22 @@ public class Order {
     //@DBRef
     private String endDate;
 
-    //calculating total ammount for the commission of 3%
-    //private double commission = endPrice * 0.03;
+    public String celebrityName;
 
 
-    public Order() {
+
+
+
+
+
+    public Order(String id, String productTitle, String endDate, int endPrice, String celebrityName) {
+        this.id = id;
+        this.productTitle = productTitle;
+        this.endDate = endDate;
+        this.endPrice = endPrice;
+        this.celebrityName = celebrityName;
+
     }
-
 
     public String getId() {
         return id;
@@ -104,6 +111,14 @@ public class Order {
 
     public void setAuction(Auction auction) {
         this.auction = auction;
+    }
+
+    public int getEndPrice() {
+        return endPrice;
+    }
+
+    public String getCelebrityName() {
+        return celebrityName;
     }
 
   /*  public double getCommission() {

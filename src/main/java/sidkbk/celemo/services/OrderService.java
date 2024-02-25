@@ -83,22 +83,21 @@ public class OrderService {
                 .orElseThrow(() -> new EntityNotFoundException("User was not found with: " + id));// Retrieves the user by its id,// instead of .get() i cast a EntityNotFoundException to make sure the user exists and to understand what was giving error 404
         List<Order> previousPurchase = new ArrayList<>();
 
-        for (Order order : allOrders) {
+        for (Order order : allOrders) { // takes a check on each order so see if it matches with buyerID
             if (order.getBuyerId() != null && order.getBuyerId().equals(id)) {
 
-            Order orderHistory = new Order(
-                    order.getProductTitle(),
-                    order.getEndDate()
-            );
+                Auction auction = order.getAuction();
+                if (auction.getCelebrityName() != null) {
+                    Order orderHistory = new Order(order.getId(), order.getProductTitle(), order.getEndDate(), order.getEndPrice(), auction.getCelebrityName());
+                    previousPurchase.add(orderHistory);
 
-
-                previousPurchase.add(order);
-                //order.getBuyerId().equals(id);
+                }
             }
-
-        }
-        return previousPurchase;
+            }
+            return previousPurchase;
     }
+
+
 
 
 
