@@ -58,8 +58,16 @@ public class UserController {
     @GetMapping("/find/{id}/finishedauction")
     public List<Auction> getFinishedAuction(@PathVariable String id){return auctionService.getFinishedAuctions(id);}
 
+   // @GetMapping("/find/{id}/previouspurchase")
+   // public List<Order> getPreviousPurchase(@PathVariable String id){return orderService.findPreviousPurchase(getFinishedAuction().equals(getUserById(id)));}
+
     @GetMapping("/find/{id}/previouspurchase")
-    public List<Order> getPreviousPurchase(@PathVariable String id){return orderService.getPreviousPurchase(id);}
+    public List<Order> getPreviousPurchase(@PathVariable String id) {
+        return orderService.findPreviousPurchase(id);
+    }
+
+
+
 
     @PutMapping("/put/{id}")
     public ResponseEntity<?> updateUser(@PathVariable String id, @Valid @RequestBody User userDetails){

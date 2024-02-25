@@ -1,8 +1,8 @@
 package sidkbk.celemo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.aggregation.BooleanOperators;
 import org.springframework.stereotype.Service;
+import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.models.Order;
 import sidkbk.celemo.models.User;
@@ -13,7 +13,6 @@ import sidkbk.celemo.repositories.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class OrderService {
@@ -78,18 +77,21 @@ public class OrderService {
 
 
 
-    public void findPreviousPurchase(String id) {
-        List<Order> allOrders = orderRepository.findAll();
-        User user = userRepository.findById(id).get();
-        List<String> previousPurchase = new ArrayList<>();
+    public List<Order> findPreviousPurchase(String id) {
+        List<Order> allOrders = orderRepository.findAll(); //list of all orders
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User was not found with: " + id));// retrives the user by its id, instead of .get() i cast a EntityNotFoundException to make sure the user exists
+        List<Order> previousPurchase = new ArrayList<>();
 
         for (Order order : allOrders) {
-            if (order.getBuyerId().equals(id)) {
+            if (order.getBuyerId() != null && order.getBuyerId().equals(id)) {
+                previousPurchase.add(order);
 
-                findPreviousPurchase(id);
-
+               //order.getBuyerId().equals(id);
             }
+
         }
+        return previousPurchase;
     }
 
 
