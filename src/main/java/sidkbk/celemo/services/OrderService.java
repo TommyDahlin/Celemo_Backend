@@ -77,16 +77,40 @@ public class OrderService {
     }
 
 
-    public List<Order> getPreviousPurchase(String id) {
+
+    public void findPreviousPurchase(String id) {
         List<Order> allOrders = orderRepository.findAll();
-        List<Order> previousPurchases = new ArrayList<>();
-        for (int i = 0; i < allOrders.size(); i++) {
-            if (allOrders.get(i).getAuction() != null && !allOrders.get(i).getAuction().isFinished && Objects.equals(allOrders.get(i).getBuyerId(), id)) {      //Objects.equals(allOrders.get(i).getBuyerId(), id))
-                previousPurchases.add(allOrders.get(i));
+        User user = userRepository.findById(id).get();
+        List<String> previousPurchase = new ArrayList<>();
+
+        for (Order order : allOrders) {
+            if (order.getBuyerId().equals(id)) {
+
+                findPreviousPurchase(id);
+
             }
         }
-        return previousPurchases;
     }
+
+
+
+
+
+
+
+
+
+
+//    public List<Order> getPreviousPurchase(String id) {
+//        List<Order> allOrders = orderRepository.findAll();
+//        List<Order> previousPurchases = new ArrayList<>();
+//        for (int i = 0; i < allOrders.size(); i++) {
+//            if (allOrders.get(i).getAuction() != null && !allOrders.get(i).getAuction().isFinished && Objects.equals(allOrders.get(i).getBuyerId(), id)) {      //Objects.equals(allOrders.get(i).getBuyerId(), id))
+//                previousPurchases.add(allOrders.get(i));
+//            }
+//        }
+//        return previousPurchases;
+//    }
 
 
 
