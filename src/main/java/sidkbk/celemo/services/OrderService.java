@@ -80,14 +80,20 @@ public class OrderService {
     public List<Order> findPreviousPurchase(String id) {
         List<Order> allOrders = orderRepository.findAll(); //list of all orders
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("User was not found with: " + id));// retrives the user by its id, instead of .get() i cast a EntityNotFoundException to make sure the user exists
+                .orElseThrow(() -> new EntityNotFoundException("User was not found with: " + id));// Retrieves the user by its id,// instead of .get() i cast a EntityNotFoundException to make sure the user exists and to understand what was giving error 404
         List<Order> previousPurchase = new ArrayList<>();
 
         for (Order order : allOrders) {
             if (order.getBuyerId() != null && order.getBuyerId().equals(id)) {
-                previousPurchase.add(order);
 
-               //order.getBuyerId().equals(id);
+            Order orderHistory = new Order(
+                    order.getProductTitle(),
+                    order.getEndDate()
+            );
+
+
+                previousPurchase.add(order);
+                //order.getBuyerId().equals(id);
             }
 
         }

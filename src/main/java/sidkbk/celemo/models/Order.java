@@ -19,6 +19,8 @@ public class Order {
     @DBRef
     private Auction auction;
 
+    // @DBRF
+    // private String // i might need this for celeb name for findPreviousPurchase method
     private String auctionId;
 
     private String sellerId;
@@ -56,10 +58,10 @@ public class Order {
         return productTitle;
     }
 
-    public int getEndPrice(List<Order> previousPurchase) {
+  /*  public int getEndPrice(List<Order> previousPurchase) {
         return endPrice;
     }
-
+*/
     public String getEndDate() {
         return endDate;
     }
