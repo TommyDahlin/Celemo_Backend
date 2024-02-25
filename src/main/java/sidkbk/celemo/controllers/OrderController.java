@@ -56,6 +56,14 @@ public class OrderController {
         }
     }
 
+
+    @GetMapping("/find/{id}/previouspurchase")
+    public List
+
+
+
+
+
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteOrder(@PathVariable String id) {
         try {
