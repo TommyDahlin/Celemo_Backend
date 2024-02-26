@@ -1,0 +1,77 @@
+#######################################################################################################
+    POSTMAN REPORTS
+#######################################################################################################
+
+// GET list all reports
+http://localhost:8080/api/reports/find
+
+#######################################################################################################
+
+// GET list one specific report
+http://localhost:8080/api/reports/find/:id
+Params
+    Path Variables
+        Key : id
+        Value : 65cf838f7af204a728eb2b6c
+        Description : reports ID
+
+#######################################################################################################
+
+// POST add a report
+http://localhost:8080/api/reports/post/reportuser/:reportinguser/:reporteduser
+Params
+    Path Variables
+        Key : reportinguser
+        Value : 65cc95f269ca29e134fe9766
+        Description : User that creates the report
+
+        Key : reporteduser
+        Value : 65cc95f269ca29e134fe9766
+        Description : Reported user
+Body - raw
+    {
+        "content": "This is a reported user."
+    }
+#######################################################################################################
+    // POST add a report for an auction
+    http://localhost:8080/api/reports/post/reportauction/:reportinguser/:reportedauction
+    Params
+        Path Variables
+            Key : reportinguser
+            Value : 65d33bbcf4da3a3f932fe8ec
+            Description : Userthat creates the report
+
+            Key : reportedauction
+            Value : 65cf4c97f8e89b4462e5be28
+            Description : Reported auction
+    Body - raw
+        {
+            "content": "This is a reported auction."
+        }
+
+
+#######################################################################################################
+
+// DELETE Delete a report
+http://localhost:8080/api/reports/delete/:id
+Params
+    Path Variables
+        Key : id
+        Value : 65d242290dfabbe314edbfa4
+        Description : Reports id to delete
+
+#######################################################################################################
+
+// PUT Update a report
+http://localhost:8080/api/reports/put/:id
+Params
+    Path Variables
+        Key : id
+        Value : 65cf838f7af204a728eb2b6c
+        Description : Report ID to update
+Body - raw
+    {
+        "content": "updated text"
+    }
+
+#######################################################################################################
