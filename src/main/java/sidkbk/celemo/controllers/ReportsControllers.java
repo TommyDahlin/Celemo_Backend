@@ -19,17 +19,18 @@ public class ReportsControllers {
     //Post a new report for a user
     @PostMapping("/post/reportuser/{reportinguser}/{reporteduser}")
     public ResponseEntity<?> createReportUser(
-            Reports report, @PathVariable("reportinguser") String reportingUser, @PathVariable ("reporteduser") String reportedUser){
+            @RequestBody Reports report, @PathVariable("reportinguser") String reportingUser, @PathVariable ("reporteduser") String reportedUser){
         try {
             return ResponseEntity.ok(reportsServices.createReportUser(report, reportingUser, reportedUser));
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
+
     //Post a new report for an auction
     @PostMapping("/post/reportauction/{reportinguser}/{reportedauction}")
     public ResponseEntity<?> createReportAuction(
-            Reports report, @PathVariable("reportinguser") String reportingUser, @PathVariable ("reportedauction") String reportedAuction
+            @RequestBody Reports report, @PathVariable("reportinguser") String reportingUser, @PathVariable ("reportedauction") String reportedAuction
     ){
         try {
             return ResponseEntity.ok(reportsServices.createReportAuction(report, reportingUser, reportedAuction));
@@ -37,6 +38,7 @@ public class ReportsControllers {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
+
     //Find a report by id
     @GetMapping("/find/{id}")
     public ResponseEntity<?> findOne(@PathVariable("id") String id ) {
