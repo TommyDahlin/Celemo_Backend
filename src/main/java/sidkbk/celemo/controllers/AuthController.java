@@ -12,6 +12,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import sidkbk.celemo.payload.request.SigninRequest;
+import sidkbk.celemo.payload.response.JwtResponse;
+import sidkbk.celemo.payload.response.UserInfoResponse;
 import sidkbk.celemo.repositories.RoleRepository;
 import sidkbk.celemo.repositories.UserRepository;
 import sidkbk.celemo.security.jwt.JwtUtils;
@@ -55,12 +57,13 @@ public class AuthController {
         // för jwt i cookie
         ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
 
-        List<String> roles = userDetails.get
+        List<String> roles = userDetails.getAuthorities().stream()
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
 
         // jwt utan cookie
-       /* return ResponseEntity.ok(new JwtResponse(jwt,
+        /*
+        return ResponseEntity.ok(new JwtResponse(jwt,
                 userDetails.getId(),
                 userDetails.getUsername(),
                 userDetails.getEmail(),
