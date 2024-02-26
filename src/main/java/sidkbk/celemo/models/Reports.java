@@ -67,6 +67,10 @@ public class Reports {
         this.auction = auction;
     }
 
+    public void setContent(String content) {
+        this.content = content;
+    }
+
     // User reference, find a user by id,
 
 }
