@@ -1,6 +1,5 @@
 package sidkbk.celemo.models;
 
-import jakarta.validation.constraints.NotBlank;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -18,11 +17,11 @@ public class Transactions {
     @DBRef
     private User user;
 
-    @NotBlank
+    //@NotEmpty
     private Double transactionAmount;
 
     @CreatedDate
-    private Date transactionDate;
+    private Date transactionDate = new Date();
 
     // Constructors
     public Transactions() {
