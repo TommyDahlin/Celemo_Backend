@@ -1,0 +1,43 @@
+#######################################################################################################
+    POSTMAN ORDER
+#######################################################################################################
+// POST a new order
+http://localhost:8080/api/order/post
+
+Change the info inside the body to the value
+
+{
+    "auctionId": "65cf4c97f8e89b4462e5be28",
+    "sellerId": "65d33c51f4da3a3f932fe8ed",
+    "buyerId": "65d33bbcf4da3a3f932fe8ec",
+    "productTitle": "testJohn",
+    "endPrice": 100,
+    "endDate": "2024-02-29",
+    "celebrityName": "testjohn"
+}
+
+
+#######################################################################################################
+
+// GET previousPurchase from User by BuyerID
+
+http://localhost:8080/api/user/find/65d33bbcf4da3a3f932fe8ec/previouspurchase
+
+#######################################################################################################
+
+// GET--list of all orders
+http://localhost:8080/api/order/find
+
+#######################################################################################################
+// GET--one specific order
+http://localhost:8080/api/order/find/:id
+
+#######################################################################################################
+// PUT--update one specific order
+http://localhost:8080/api/order/put/:id
+
+#######################################################################################################
+// delete/:id
+http://localhost:8080/api/order/delete/:id
+
+#######################################################################################################

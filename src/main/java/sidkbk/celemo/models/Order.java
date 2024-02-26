@@ -1,11 +1,8 @@
 package sidkbk.celemo.models;
 
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.util.Date;
 
 @Document(collection = "orders")
 public class Order {
@@ -19,27 +16,29 @@ public class Order {
     private User buyerAccount;
     @DBRef
     private Auction auction;
-
     private String auctionId;
-
     private String sellerId;
-
     private String buyerId;
-
-    //@DBRef
     private String productTitle;
-    //@DBRef
     private int endPrice;
-    //@DBRef
     private String endDate;
-
-    //calculating total ammount for the commission of 3%
-    //private double commission = endPrice * 0.03;
+    public String celebrityName;
 
 
-    public Order() {
+
+
+
+
+
+    public Order(String id, String productTitle, String endDate, int endPrice, String celebrityName) {
+        this.id = id;
+        this.productTitle = productTitle;
+        this.endDate = endDate;
+        this.endPrice = endPrice;
+        this.celebrityName = celebrityName;
+
+
     }
-
 
     public String getId() {
         return id;
@@ -55,10 +54,6 @@ public class Order {
 
     public String getProductTitle() {
         return productTitle;
-    }
-
-    public int getEndPrice() {
-        return endPrice;
     }
 
     public String getEndDate() {
@@ -105,7 +100,11 @@ public class Order {
         this.auction = auction;
     }
 
-  /*  public double getCommission() {
-        return commission;
-    }*/
+    public int getEndPrice() {
+        return endPrice;
+    }
+
+    public String getCelebrityName() {
+        return celebrityName;
+    }
 }

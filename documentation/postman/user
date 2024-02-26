@@ -44,10 +44,18 @@ http://localhost:8080/api/account/delete/:id
 
 http://localhost:8080/api/account/put/:id
 
-****************************************************
+
+###########################################
+
+// GET previousPurchase from User by BuyerID
+
+http://localhost:8080/api/user/find/65d33bbcf4da3a3f932fe8ec/previouspurchase
+
+############################################################
 
 // get filter using userId ( replace {filter} with ex. username or grade )
 
 http://localhost:8080/api/user/:id/{filter}
 
 ****************************************************
+

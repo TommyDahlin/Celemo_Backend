@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sidkbk.celemo.models.User;
 import sidkbk.celemo.models.Auction;
+import sidkbk.celemo.repositories.OrderRepository;
 import sidkbk.celemo.repositories.UserRepository;
 import sidkbk.celemo.repositories.AuctionRepository;
 import sidkbk.celemo.repositories.BidsRepository;
@@ -20,6 +21,8 @@ public class AuctionService {
     UserRepository userRepository;
     @Autowired
     BidsRepository bidsRepository;
+    @Autowired
+    OrderRepository orderRepository;
 
     public Auction createAuction(Auction auction) {
         User findUser = userRepository.findById(auction.getSellerId())

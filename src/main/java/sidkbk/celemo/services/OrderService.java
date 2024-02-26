@@ -1,15 +1,17 @@
 package sidkbk.celemo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.aggregation.BooleanOperators;
 import org.springframework.stereotype.Service;
+import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.models.Order;
 import sidkbk.celemo.models.User;
 import sidkbk.celemo.repositories.AuctionRepository;
+import sidkbk.celemo.repositories.BidsRepository;
 import sidkbk.celemo.repositories.OrderRepository;
 import sidkbk.celemo.repositories.UserRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -21,6 +23,8 @@ public class OrderService {
     UserRepository userRepository;
     @Autowired
     AuctionRepository auctionRepository;
+    @Autowired
+    BidsRepository bidsRepository;
 
 
 
@@ -38,6 +42,9 @@ public class OrderService {
         // NEEDS BIDS TO BE FINISHED TO PROCEED WITH BUYERACCOUNTID
         User findBuyerAccount = userRepository.findById(order.getBuyerId())
                 .orElseThrow(() -> new RuntimeException("Couldn't find buyer."));
+
+            order.setBuyerAccount(findBuyerAccount);
+            order.setAuction(findAuction);
 
             order.setBuyerAccount(findBuyerAccount);
             order.setAuction(findAuction);
@@ -70,6 +77,27 @@ public class OrderService {
                     }
                     return orderRepository.save(existingOrder);
                 }).orElseThrow(() -> new RuntimeException("Order was not found"));
+    }
+
+
+    public List<Order> findPreviousPurchase(String id) {
+        List<Order> allOrders = orderRepository.findAll(); //list of all orders
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User was not found with: " + id));// Retrieves the user by its id,// instead of .get() i cast a EntityNotFoundException to make sure the user exists and to understand what was giving error 404
+        List<Order> previousPurchase = new ArrayList<>();
+
+        for (Order order : allOrders) { // takes a check on each order so see if it matches with buyerID
+            if (order.getBuyerId() != null && order.getBuyerId().equals(id)) {
+
+                Auction auction = order.getAuction(); //to access auction from order
+                if (auction.getCelebrityName() != null) {// when celebrityname is null in database it cast message auction null, have it outcommented due to celbrity name being null in database for the orders we have so far.
+                    Order orderHistory = new Order(order.getId(), order.getProductTitle(), order.getEndDate(), order.getEndPrice(), auction.getCelebrityName());
+
+                    previousPurchase.add(order);
+                }
+            }
+        }
+            return previousPurchase;
     }
 
     // Delete one order by id
