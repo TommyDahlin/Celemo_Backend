@@ -10,7 +10,7 @@ http://localhost:8080/api/reports/find
 // GET list one specific report
 http://localhost:8080/api/reports/find/:id
 Params
-    Path Varaibles
+    Path Variables
         Key : id
         Value : 65cf838f7af204a728eb2b6c
         Description : reports ID
@@ -33,7 +33,7 @@ Params
         Value : Auction ID or null.
 Body - raw
     {
-        "content": "This is a reports content.
+        "content": "This is a reports content."
     }
 
 #######################################################################################################
