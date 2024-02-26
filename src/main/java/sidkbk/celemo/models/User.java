@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 @Document(collection = "users")
@@ -205,7 +206,7 @@ private double grade;
         return gender;
     }
 
-    public Enum getRole() {
+    public Set<Role> getRole() {
         return role;
     }
 
