@@ -1,0 +1,43 @@
+#######################################################################################################
+    POSTMAN TRANSACTIONS
+#######################################################################################################
+
+// GET list all transactions
+http://localhost:8080/api/transactions/find
+
+#######################################################################################################
+
+// GET list transactions for a specific user
+http://localhost:8080/api/transactions/find/:user-id
+Params
+    Path Varaibles
+        Key : user-id
+        Value : 65d33c51f4da3a3f932fe8ed
+        Description : User ID
+
+#######################################################################################################
+
+// POST add a transaction
+http://localhost:8080/api/transactions/post/:user-id
+Params
+    Path Variables
+        Key : user-id
+        Value : 65d33bbcf4da3a3f932fe8ec
+        Description : User that buys something
+
+Body - raw
+    {
+        "transactionAmount": 1300
+    }
+
+#######################################################################################################
+
+// DELETE Delete a transaction
+http://localhost:8080/api/reviews/delete/:id
+Params
+    Path Variables
+        Key : id
+        Value : 65dc63a6d1a4d47b380e1865
+        Description : transaction id to delete
+
+#######################################################################################################
