@@ -43,6 +43,7 @@ public class OrderService {
         User findBuyerAccount = userRepository.findById(order.getBuyerId())
                 .orElseThrow(() -> new RuntimeException("Couldn't find buyer."));
             order.setBuyerAccount(findBuyerAccount);
+            order.setAuction(findAuction);
 
         return orderRepository.save(order);
     }
@@ -76,7 +77,6 @@ public class OrderService {
     }
 
 
-
     public List<Order> findPreviousPurchase(String id) {
         List<Order> allOrders = orderRepository.findAll(); //list of all orders
         User user = userRepository.findById(id)
@@ -86,46 +86,16 @@ public class OrderService {
         for (Order order : allOrders) { // takes a check on each order so see if it matches with buyerID
             if (order.getBuyerId() != null && order.getBuyerId().equals(id)) {
 
-                Auction auction = order.getAuction();
-                if (auction.getCelebrityName() != null) {
-                    Order orderHistory = new Order(
-                            order.getId(),
-                            order.getProductTitle(),
-                            order.getEndDate(),
-                            order.getEndPrice(),
-                            auction.getCelebrityName());
-                    previousPurchase.add(orderHistory);
+                Auction auction = order.getAuction(); //to access auction from order
+                if (auction.getCelebrityName() != null) {// when celebrityname is null in database it cast message auction null, have it outcommented due to celbrity name being null in database for the orders we have so far.
+                    Order orderHistory = new Order(order.getId(), order.getProductTitle(), order.getEndDate(), order.getEndPrice(), auction.getCelebrityName());
 
+                    previousPurchase.add(order);
                 }
             }
-            }
+        }
             return previousPurchase;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-//    public List<Order> getPreviousPurchase(String id) {
-//        List<Order> allOrders = orderRepository.findAll();
-//        List<Order> previousPurchases = new ArrayList<>();
-//        for (int i = 0; i < allOrders.size(); i++) {
-//            if (allOrders.get(i).getAuction() != null && !allOrders.get(i).getAuction().isFinished && Objects.equals(allOrders.get(i).getBuyerId(), id)) {      //Objects.equals(allOrders.get(i).getBuyerId(), id))
-//                previousPurchases.add(allOrders.get(i));
-//            }
-//        }
-//        return previousPurchases;
-//    }
-
-
-
 
     // Delete one order by id
     public String deleteOrder(String id) {

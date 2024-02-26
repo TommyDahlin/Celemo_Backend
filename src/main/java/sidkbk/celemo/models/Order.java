@@ -37,6 +37,7 @@ public class Order {
         this.endPrice = endPrice;
         this.celebrityName = celebrityName;
 
+
     }
 
     public String getId() {
@@ -55,10 +56,6 @@ public class Order {
         return productTitle;
     }
 
-  /*  public int getEndPrice(List<Order> previousPurchase) {
-        return endPrice;
-    }
-*/
     public String getEndDate() {
         return endDate;
     }
@@ -110,8 +107,4 @@ public class Order {
     public String getCelebrityName() {
         return celebrityName;
     }
-
-  /*  public double getCommission() {
-        return commission;
-    }*/
 }
