@@ -3,15 +3,11 @@ package sidkbk.celemo.controllers;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.Auction;
-import sidkbk.celemo.models.Reviews;
 import sidkbk.celemo.services.AuctionService;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/auction")
@@ -32,8 +28,12 @@ public class AuctionController {
 
     // Get all orders
     @GetMapping("/find")
-    public List<Auction> getAllAuctions() {
-        return auctionService.getAllAuctions();
+    public ResponseEntity<?> getAllAuctions() {
+        try {
+            return ResponseEntity.ok(auctionService.getAllAuctions());
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
     // GET one order
@@ -65,6 +65,8 @@ public class AuctionController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
+
+    //REMOVE BEFORE PRODUCTION
     @DeleteMapping("/deleteAll")
     public void deleteAllAuctions(){
         auctionService.deleteAllAuctions();

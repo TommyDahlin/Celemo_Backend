@@ -17,7 +17,7 @@ public class Reviews {
     private String id;
 
     @NotNull(message = "Field cannot be blank!")
-    private Short grade; // 1-5
+    private Double grade; // 1-5
 
     @NotBlank(message = "Field cannot be blank!")
     private String reviewText;
@@ -40,7 +40,7 @@ public class Reviews {
         return id;
     }
 
-    public Short getGrade() {
+    public Double getGrade() {
         return grade;
     }
 
@@ -61,7 +61,7 @@ public class Reviews {
     }
 
     // Setters
-    public void setGrade(Short grade) {
+    public void setGrade(Double grade) {
         this.grade = grade;
     }
 

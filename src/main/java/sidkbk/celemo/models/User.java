@@ -1,11 +1,13 @@
 package sidkbk.celemo.models;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 @Document(collection = "users")
 public class User {
@@ -41,8 +43,7 @@ public class User {
     private String firstName;
     @NotBlank(message = "lastName cannot be blank")
     private String lastName;
-    //@NotEmpty(message = "gender cannot be blank")
-   // private int chooseGender;
+
     private ERole role;
     @NotBlank(message = "adress_street cannot be blank")
     private String adress_street;
@@ -55,14 +56,51 @@ public class User {
     private ArrayList<String> favourites = new ArrayList<String>();
 
 
+
     private double balance;
+
+private double grade;
 
     public User() {
 
     }
 
+    //return variable and change to string if necessary
+    public String getFilter(String filter) {
+        filter.toLowerCase();
+        switch (filter) {
+            case "grade":
+                Double a = this.getGrade();
+                return a.toString();
 
+            case "firstname":
+                return this.getFirstName();
 
+            case "lastname":
+                return this.getLastName();
+
+            case "username":
+                return this.getUsername();
+
+            default:
+                return null;
+
+        }
+
+    }
+
+    public void isPasswordCorrect(User user){
+
+        Pattern UpperCasePattern = Pattern.compile("[A-Z ]");
+
+        if (user.getPassword().length() < 8) {
+            throw new RuntimeException("ERROR: password lengt must be atleast 8 characters.");
+        }
+        if (!UpperCasePattern.matcher(user.getPassword()).find()) {
+            throw new RuntimeException("ERROR: password must contain atleast one upperCase.");
+        }
+
+    }
 
     public void addFavourites (String favouritesId){
         this.favourites.add(favouritesId);
@@ -179,4 +217,14 @@ public class User {
     public void setRole(ERole role) {
         this.role = role;
     }
+
+    public double getGrade() {
+        return grade;
+    }
+
+    public void setGrade(double grade) {
+        this.grade = grade;
+    }
+
+
 }

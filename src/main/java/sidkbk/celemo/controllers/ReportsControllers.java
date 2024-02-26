@@ -6,11 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
-import sidkbk.celemo.models.Order;
 import sidkbk.celemo.models.Reports;
 import sidkbk.celemo.services.ReportsServices;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/reports")
@@ -19,14 +16,24 @@ public class ReportsControllers {
     ReportsServices reportsServices;
 
 
-    //Post a new report
-    @PostMapping("/post/{reporting-User-Id}/{reported-User-Id}/{auction}")
-    public ResponseEntity<?> createReport(@PathVariable("reporting-User-Id") String reportingUserId,
-                                       @PathVariable("reported-User-Id")String reportedUserId,
-                                       @PathVariable("auction") String auction,
-                                       @RequestBody Reports reports){
+    //Post a new report for a user
+    @PostMapping("/post/reportuser/{reportinguser}/{reporteduser}")
+    public ResponseEntity<?> createReportUser(
+            @RequestBody Reports report, @PathVariable("reportinguser") String reportingUser, @PathVariable ("reporteduser") String reportedUser){
         try {
-            return ResponseEntity.ok(reportsServices.createReport(reportingUserId,reportedUserId,auction,reports));
+            return ResponseEntity.ok(reportsServices.createReportUser(report, reportingUser, reportedUser));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    //Post a new report for an auction
+    @PostMapping("/post/reportauction/{reportinguser}/{reportedauction}")
+    public ResponseEntity<?> createReportAuction(
+            @RequestBody Reports report, @PathVariable("reportinguser") String reportingUser, @PathVariable ("reportedauction") String reportedAuction
+    ){
+        try {
+            return ResponseEntity.ok(reportsServices.createReportAuction(report, reportingUser, reportedAuction));
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
@@ -43,8 +50,12 @@ public class ReportsControllers {
     }
     // Find all reports
     @GetMapping("/find")
-    public List<Reports> findAllReports(){
-        return reportsServices.findAllReports();
+    public ResponseEntity<?> findAllReports(){
+        try {
+            return ResponseEntity.ok(reportsServices.findAllReports());
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
     @PutMapping("/put/{id}")

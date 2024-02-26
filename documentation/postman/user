@@ -4,20 +4,20 @@
 http://localhost:8080/api/account/post
 
 {
-    "id": "65d33bbcf4da3a3f932fe8ec",
-    "username": "BroderJakob updated",
+    "username": "BroderJakob",
     "password": "BroderJakob22",
     "dateOfBirth": "2011-05-10",
     "email": "BrorJ@gmail.com",
     "gender": "MALE",
     "photo": "brorpic.url",
-    "firstName": "proder",
+    "firstName": "broder",
     "lastName": "jakob",
     "role": "USER",
     "adress_street": "peterpan gata",
     "adress_postalCode": "44556",
     "adress_city": "göteborg",
-    "balance": 0.0
+    "balance": 0.0,
+    "grade": 0.0
 }
 
 ****************************************************
@@ -44,11 +44,18 @@ http://localhost:8080/api/account/delete/:id
 
 http://localhost:8080/api/account/put/:id
 
-****************************************************
 
-
-#######################################################################################################
+###########################################
 
 // GET previousPurchase from User by BuyerID
 
 http://localhost:8080/api/user/find/65d33bbcf4da3a3f932fe8ec/previouspurchase
+
+############################################################
+
+// get filter using userId ( replace {filter} with ex. username or grade )
+
+http://localhost:8080/api/user/:id/{filter}
+
+****************************************************
+

@@ -6,13 +6,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
-import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.models.User;
 import sidkbk.celemo.services.AuctionService;
 import sidkbk.celemo.services.OrderService;
 import sidkbk.celemo.services.UserService;
 
-import java.util.List;
 import java.util.Optional;
 
 
@@ -29,16 +27,33 @@ public class UserController {
 
     // post/add account/user
     @PostMapping("/post")
-    public ResponseEntity<User> addUser(@Valid @RequestBody User user){
+    public ResponseEntity<?> addUser(@Valid @RequestBody User user){
 
-        User newUser = userService.addUser(user);
-        return new ResponseEntity<>(newUser, HttpStatus.CREATED);
+        try {
+            return ResponseEntity.ok(userService.createUser(user));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
     // find all/get all accounts
     @GetMapping("/find")
-    public List<User> getAllUsers(){
-        return userService.getAllUsers();
+    public ResponseEntity<?> getAllUsers(){
+        try {
+            return ResponseEntity.ok(userService.getAllUsers());
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    //get average grade, find user by id
+    @GetMapping("/{id}/{filter}")
+    public ResponseEntity<?> getUserFilter(@PathVariable("id") String id,@PathVariable("filter")String filter){
+        try {
+            return ResponseEntity.ok(userService.getUserFilter(id, filter));
+        }catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
     // find/get using id
@@ -48,15 +63,18 @@ public class UserController {
         return user.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
     // Lists all active listings by User
     @GetMapping("/find/{id}/activeauction")
-    public List<Auction> getActiveAuction(@PathVariable String id){
-        return auctionService.getActiveAuction(id);
-    }
-    // put/update // using responseEntity<?> creates a generic wildcard that can return any type of body
-    @GetMapping("/find/{id}/finishedauction")
-    public List<Auction> getFinishedAuction(@PathVariable String id){return auctionService.getFinishedAuctions(id);}
+    public ResponseEntity<?> getActiveAuction(@PathVariable String id){
+        try {
+            return ResponseEntity.ok(auctionService.getActiveAuction(id));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
 
+    }
+    
 
     // List of all previousPurchases by User
     @GetMapping("/find/{id}/previouspurchase")
@@ -72,6 +90,17 @@ public class UserController {
 
 
 
+
+  // put/update // using responseEntity<?> creates a generic wildcard that can return any type of body
+    @GetMapping("/find/{id}/finishedauction")
+    public ResponseEntity<?> getFinishedAuction(@PathVariable String id){
+        try {
+            return ResponseEntity.ok(auctionService.getFinishedAuctions(id));
+        } catch (EntityNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+
+        }
     @PutMapping("/put/{id}")
     public ResponseEntity<?> updateUser(@PathVariable String id, @Valid @RequestBody User userDetails){
         try{
@@ -84,8 +113,13 @@ public class UserController {
 
     // delete account
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable String id){
-        userService.deleteUser(id);
-        return ResponseEntity.ok("Recipe with id: " + id + " has been deleted!");
+    public ResponseEntity<?> deleteUser(@PathVariable String id){
+        try{
+            return ResponseEntity.ok(userService.deleteUser(id));
+
+        }catch (EntityNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+
     }
 }

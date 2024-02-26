@@ -69,6 +69,8 @@ public class AuctionService {
         auctionRepository.deleteById(id);
         return "Deleted successfully!";
     }
+
+
     // Delete all to drop clean collection remotely (only for testing don't keep to production)
     public void deleteAllAuctions(){
         auctionRepository.deleteAll();

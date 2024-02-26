@@ -2,7 +2,6 @@ package sidkbk.celemo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sidkbk.celemo.models.Order;
 import sidkbk.celemo.models.User;
 import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.models.Reports;
@@ -23,21 +22,28 @@ public class ReportsServices {
     UserRepository userRepository;
 
 
-    public Reports createReport(String reportingUserId,String reportedUserId,String auction, Reports reports){
-        Auction foundAuction = auctionRepository.findById(auction)
-                .orElseThrow(()-> new RuntimeException("Auction does not exist!"));
-        User foundreportinguser = userRepository.findById(reportingUserId)
-                .orElseThrow(()-> new RuntimeException("User does not exist!"));
-        User foundreportedUser = userRepository.findById(reportedUserId)
-                .orElseThrow(()-> new RuntimeException("User does not exist!"));
-
-        reports.setAuction(foundAuction);
-        reports.setReportedUserId(foundreportedUser);
-        reports.setReportingUserId(foundreportinguser);
-        return reportsRepository.save(reports);
+    public Reports createReportUser(Reports report, String reportingUser, String reportedUser) {
+        User foundreportedUser = userRepository.findById(reportedUser)
+                .orElseThrow(() -> new RuntimeException("User does not exist!"));
+        report.setReportedUserId(foundreportedUser);
+        User foundreportinguser = userRepository.findById(reportingUser)
+                .orElseThrow(() -> new RuntimeException("User does not exist!"));
+        report.setReportingUserId(foundreportinguser);
+        return reportsRepository.save(report);
     }
 
-    public List<Reports> findAllReports(){
+    public Reports createReportAuction(Reports report, String reportingUser, String reportedAuction) {
+        Auction foundAuction = auctionRepository.findById(reportedAuction)
+                .orElseThrow(() -> new RuntimeException("Auction does not exist!"));
+        User founduser = userRepository.findById(reportingUser).get();
+        User reportedUser = userRepository.findById(foundAuction.getSellerId()).get();
+        report.setAuction(foundAuction);
+        report.setReportingUserId(founduser);
+        report.setReportedUserId(reportedUser);
+        return reportsRepository.save(report);
+    }
+
+    public List<Reports> findAllReports() {
         return reportsRepository.findAll();
     }
 
@@ -58,13 +64,15 @@ public class ReportsServices {
                     if (updatedReport.getAuction() != null) {
                         existingOrder.setAuction(updatedReport.getAuction());
                     }
+                    if (updatedReport.getContent() != null) {
+                        existingOrder.setContent(updatedReport.getContent());
+                    }
                     return reportsRepository.save(existingOrder);
                 }).orElseThrow(() -> new RuntimeException("Order was not found"));
     }
 
-    public String deleteReport(String id){
+    public String deleteReport(String id) {
         reportsRepository.deleteById(id);
         return "Deleted successfully!";
     }
-
 }
