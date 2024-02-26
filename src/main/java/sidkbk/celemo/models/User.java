@@ -1,12 +1,15 @@
 package sidkbk.celemo.models;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -27,14 +30,20 @@ public class User {
     @NotEmpty
     //int
 */
+
+
+
     @NotBlank(message = "Username cannot be blank")
     private String username;
     @NotBlank(message = "password cannot be blank")
+    @Size(min = 8, max = 32, message = "Password has to be at least 8 characters and max 32 characters.")
     private String password;
     //dateofbirth
     @NotBlank(message = "dateOfBirth cannot be blank")
     private String dateOfBirth;
     @NotBlank(message = "email cannot be blank")
+    @Email
+    @Indexed(unique = true)
     private String email;
 
     private EGender gender;
@@ -45,7 +54,10 @@ public class User {
     @NotBlank(message = "lastName cannot be blank")
     private String lastName;
 
-    private ERole role;
+    // ROLE
+    @DBRef
+    private Set<Role> roles = new HashSet<>();
+    // Makes it into a DBRef Array, ["ROLE_USER", "ROLE_MODERATOR"]
     @NotBlank(message = "adress_street cannot be blank")
     private String adress_street;
     @NotBlank(message = "adress_postalcode cannot be blank")
@@ -63,9 +75,13 @@ public class User {
 private double grade;
 
     public User() {
-
     }
 
+    public User(String username, String password, String email) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+    }
     //return variable and change to string if necessary
     public String getFilter(String filter) {
         filter.toLowerCase();
@@ -110,6 +126,13 @@ private double grade;
         this.favourites.remove(favouritesId);
     }
 
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
 
     public String getUsername() {
         return username;
@@ -205,10 +228,6 @@ private double grade;
 
     public Enum getGender() {
         return gender;
-    }
-
-    public Set<Role> getRole() {
-        return role;
     }
 
     public void setGender(EGender gender) {

@@ -71,8 +71,8 @@ public class AuthController {
 
         // jwt med cookie
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
-                .body(new UserInfoResponse(userDetails.getId(),
+                .body(new UserInfoResponse(userDetails.get,
                         userDetails.getUsername(),
-                        userDetails.getEmail(),
+                        userDetails.,
                         roles));
     }
