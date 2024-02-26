@@ -19,9 +19,14 @@ public class TransactionsService {
 
     // Add transaction
     public ResponseEntity<?> addTransaction(String userId, Transactions transaction) {
+        // Check if user exist
         User findUser = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Couldn't find user."));
+        // Update users balance
+        findUser.setBalance( (findUser.getBalance() - transaction.getTransactionAmount()) );
+        // Set user REF in transaction body
         transaction.setUser(findUser);
+        // Save new transaction to db and return 200 OK with transaction details.
         return ResponseEntity.ok(transactionsRepo.save(transaction));
     }
 
