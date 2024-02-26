@@ -234,10 +234,6 @@ private double grade;
         this.gender = gender;
     }
 
-    public void setRole(ERole role) {
-        this.role = role;
-    }
-
     public double getGrade() {
         return grade;
     }
