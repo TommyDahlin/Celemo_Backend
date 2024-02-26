@@ -23,6 +23,18 @@ public class TransactionsController {
         return transactionsService.addTransaction(userId, transaction);
     }
 
+    // GET list of specific users all transactions
+    @GetMapping("/find/{user-id}")
+    public ResponseEntity<?> findTransactions(@PathVariable("user-id") String userId) {
+        return transactionsService.findTransactions(userId);
+    }
+
+    // GET all transactions
+    @GetMapping("/find")
+    public ResponseEntity<?> findAllTransactions() {
+        return ResponseEntity.ok(transactionsService.findAllTransactions());
+    }
+
     // DELETE a transaction
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteTransaction(@PathVariable("id") String id) {
