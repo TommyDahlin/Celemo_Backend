@@ -25,16 +25,30 @@ Params
         Value : 65cc95f269ca29e134fe9766
         Description : User user that creates the review
 
-        Key : reviewed-user-id
+        Key : reported-user-id
         Value : 65cc95f269ca29e134fe9766
-        Description : Reviewed user user
-
-        Key : auction
-        Value : Auction ID or null.
+        Description : Reported user
 Body - raw
     {
         "content": "This is a reports content."
     }
+#######################################################################################################
+    // POST add a report for an auction
+    http://localhost:8080/api/reports/post/:created-by-id/:auction-id
+    Params
+        Path Variables
+            Key : created-by-id
+            Value : 65cc95f269ca29e134fe9766
+            Description : User user that creates the review
+
+            Key : auction-id
+            Value : 65d7238d6838d5358fc7ff24
+            Description : Reviewed user user
+    Body - raw
+        {
+            "content": "This is a reports content."
+        }
+
 
 #######################################################################################################
 
