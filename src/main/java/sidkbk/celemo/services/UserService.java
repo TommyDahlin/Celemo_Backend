@@ -37,11 +37,11 @@ public class UserService {
             user.setGender(EGender.FEMALE);
         }
         if (user.getRole() == null){ //if role is empty -> user
-            user.setRole(ERole.USER);
+            user.setRole(ERole.ROLE_USER);
         } else if (user.getRole().equals("ADMIN")){ //string to enum
-            user.setRole(ERole.ADMIN);
+            user.setRole(ERole.ROLE_ADMIN);
         }else if (user.getRole().equals("USER")){ //string to enum
-            user.setRole(ERole.USER);
+            user.setRole(ERole.ROLE_USER);
         }
         return userRepository.save(user);
     }
