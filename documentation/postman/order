@@ -18,6 +18,13 @@ Change the info inside the body to the value
 
 
 #######################################################################################################
+
+// GET previousPurchase from User by BuyerID
+
+http://localhost:8080/api/user/find/65d33bbcf4da3a3f932fe8ec/previouspurchase
+
+#######################################################################################################
+
 // GET--list of all orders
 http://localhost:8080/api/order/find
 
