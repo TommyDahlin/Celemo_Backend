@@ -88,7 +88,12 @@ public class OrderService {
 
                 Auction auction = order.getAuction();
                 if (auction.getCelebrityName() != null) {
-                    Order orderHistory = new Order(order.getId(), order.getProductTitle(), order.getEndDate(), order.getEndPrice(), auction.getCelebrityName());
+                    Order orderHistory = new Order(
+                            order.getId(),
+                            order.getProductTitle(),
+                            order.getEndDate(),
+                            order.getEndPrice(),
+                            auction.getCelebrityName());
                     previousPurchase.add(orderHistory);
 
                 }

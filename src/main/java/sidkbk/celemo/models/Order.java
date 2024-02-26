@@ -16,22 +16,12 @@ public class Order {
     private User buyerAccount;
     @DBRef
     private Auction auction;
-
-    // @DBRF
-    // private String // i might need this for celeb name for findPreviousPurchase method
     private String auctionId;
-
     private String sellerId;
-
     private String buyerId;
-
-    //@DBRef
     private String productTitle;
-    //@DBRef
     private int endPrice;
-    //@DBRef
     private String endDate;
-
     public String celebrityName;
 
 
