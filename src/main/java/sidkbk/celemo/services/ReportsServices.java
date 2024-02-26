@@ -64,6 +64,9 @@ public class ReportsServices {
                     if (updatedReport.getAuction() != null) {
                         existingOrder.setAuction(updatedReport.getAuction());
                     }
+                    if (updatedReport.getContent() != null) {
+                        existingOrder.setContent(updatedReport.getContent());
+                    }
                     return reportsRepository.save(existingOrder);
                 }).orElseThrow(() -> new RuntimeException("Order was not found"));
     }

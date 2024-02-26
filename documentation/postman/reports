@@ -18,35 +18,35 @@ Params
 #######################################################################################################
 
 // POST add a report
-http://localhost:8080/api/reports/post/:created-by-id/:reviewed-user-id/:auction
+http://localhost:8080/api/reports/post/reportuser/:reportinguser/:reporteduser
 Params
     Path Variables
-        Key : created-by-id
+        Key : reportinguser
         Value : 65cc95f269ca29e134fe9766
-        Description : User user that creates the review
+        Description : User that creates the report
 
-        Key : reported-user-id
+        Key : reporteduser
         Value : 65cc95f269ca29e134fe9766
         Description : Reported user
 Body - raw
     {
-        "content": "This is a reports content."
+        "content": "This is a reported user."
     }
 #######################################################################################################
     // POST add a report for an auction
-    http://localhost:8080/api/reports/post/:created-by-id/:auction-id
+    http://localhost:8080/api/reports/post/reportauction/:reportinguser/:reportedauction
     Params
         Path Variables
-            Key : created-by-id
-            Value : 65cc95f269ca29e134fe9766
-            Description : User user that creates the review
+            Key : reportinguser
+            Value : 65d33bbcf4da3a3f932fe8ec
+            Description : Userthat creates the report
 
-            Key : auction-id
-            Value : 65d7238d6838d5358fc7ff24
-            Description : Reviewed user user
+            Key : reportedauction
+            Value : 65cf4c97f8e89b4462e5be28
+            Description : Reported auction
     Body - raw
         {
-            "content": "This is a reports content."
+            "content": "This is a reported auction."
         }
 
 
@@ -58,17 +58,17 @@ Params
     Path Variables
         Key : id
         Value : 65d242290dfabbe314edbfa4
-        Description : Review id to delete
+        Description : Reports id to delete
 
 #######################################################################################################
 
 // PUT Update a report
-http://localhost:8080/api/reviews/put/:id
+http://localhost:8080/api/reports/put/:id
 Params
     Path Variables
         Key : id
         Value : 65cf838f7af204a728eb2b6c
-        Description : Review ID to update
+        Description : Report ID to update
 Body - raw
     {
         "content": "updated text"
