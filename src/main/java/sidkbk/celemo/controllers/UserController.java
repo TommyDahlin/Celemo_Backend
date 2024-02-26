@@ -10,7 +10,6 @@ import sidkbk.celemo.models.User;
 import sidkbk.celemo.services.AuctionService;
 import sidkbk.celemo.services.UserService;
 
-import java.util.List;
 import java.util.Optional;
 
 
@@ -36,8 +35,12 @@ public class UserController {
 
     // find all/get all accounts
     @GetMapping("/find")
-    public List<User> getAllUsers(){
-        return userService.getAllUsers();
+    public ResponseEntity<?> getAllUsers(){
+        try {
+            return ResponseEntity.ok(userService.getAllUsers());
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
     //get average grade, find user by id

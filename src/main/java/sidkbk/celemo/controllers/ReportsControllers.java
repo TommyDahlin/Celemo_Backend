@@ -6,11 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
-import sidkbk.celemo.models.Order;
 import sidkbk.celemo.models.Reports;
 import sidkbk.celemo.services.ReportsServices;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/reports")
@@ -43,8 +40,12 @@ public class ReportsControllers {
     }
     // Find all reports
     @GetMapping("/find")
-    public List<Reports> findAllReports(){
-        return reportsServices.findAllReports();
+    public ResponseEntity<?> findAllReports(){
+        try {
+            return ResponseEntity.ok(reportsServices.findAllReports());
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
     @PutMapping("/put/{id}")
