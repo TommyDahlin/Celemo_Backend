@@ -45,3 +45,10 @@ http://localhost:8080/api/account/delete/:id
 http://localhost:8080/api/account/put/:id
 
 ****************************************************
+
+
+#######################################################################################################
+
+// GET previousPurchase from User by BuyerID
+
+http://localhost:8080/api/user/find/65d33bbcf4da3a3f932fe8ec/previouspurchase

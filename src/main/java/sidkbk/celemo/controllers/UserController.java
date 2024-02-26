@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.Auction;
-import sidkbk.celemo.models.Order;
 import sidkbk.celemo.models.User;
 import sidkbk.celemo.services.AuctionService;
 import sidkbk.celemo.services.OrderService;
@@ -61,8 +60,13 @@ public class UserController {
 
     // List of all previousPurchases by User
     @GetMapping("/find/{id}/previouspurchase")
-    public List<Order> getPreviousPurchase(@PathVariable String id) {
-        return orderService.findPreviousPurchase(id);
+    public ResponseEntity<?> getPreviousPurchase(@PathVariable String id) {
+
+        try{
+            return ResponseEntity.ok(orderService.findPreviousPurchase(id));
+        } catch (EntityNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
 
