@@ -1,0 +1,63 @@
+#######################################################################################################
+    POSTMAN REPORTS
+#######################################################################################################
+
+// GET list all reports
+http://localhost:8080/api/reports/find
+
+#######################################################################################################
+
+// GET list one specific report
+http://localhost:8080/api/reports/find/:id
+Params
+    Path Varaibles
+        Key : id
+        Value : 65cf838f7af204a728eb2b6c
+        Description : reports ID
+
+#######################################################################################################
+
+// POST add a report
+http://localhost:8080/api/reports/post/:created-by-id/:reviewed-user-id/:auction
+Params
+    Path Variables
+        Key : created-by-id
+        Value : 65cc95f269ca29e134fe9766
+        Description : User user that creates the review
+
+        Key : reviewed-user-id
+        Value : 65cc95f269ca29e134fe9766
+        Description : Reviewed user user
+
+        Key : auction
+        Value : Auction ID or null.
+Body - raw
+    {
+        "content": "This is a reports content.
+    }
+
+#######################################################################################################
+
+// DELETE Delete a report
+http://localhost:8080/api/reports/delete/:id
+Params
+    Path Variables
+        Key : id
+        Value : 65d242290dfabbe314edbfa4
+        Description : Review id to delete
+
+#######################################################################################################
+
+// PUT Update a report
+http://localhost:8080/api/reviews/put/:id
+Params
+    Path Variables
+        Key : id
+        Value : 65cf838f7af204a728eb2b6c
+        Description : Review ID to update
+Body - raw
+    {
+        "content": "updated text"
+    }
+
+#######################################################################################################

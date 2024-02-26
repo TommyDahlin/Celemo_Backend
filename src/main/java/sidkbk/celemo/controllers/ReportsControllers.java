@@ -20,9 +20,9 @@ public class ReportsControllers {
 
 
     //Post a new report
-    @PostMapping("/post/{reporting-User-Id}/{reported-User-Id}/{auction}")
-    public ResponseEntity<?> createReport(@PathVariable("reporting-User-Id") String reportingUserId,
-                                       @PathVariable("reported-User-Id")String reportedUserId,
+    @PostMapping("/post/{reporting-user-id}/{reported-User-id}/{auction}")
+    public ResponseEntity<?> createReport(@PathVariable("reporting-user-id") String reportingUserId,
+                                       @PathVariable("reported-User-id")String reportedUserId,
                                        @PathVariable("auction") String auction,
                                        @RequestBody Reports reports){
         try {
@@ -31,6 +31,10 @@ public class ReportsControllers {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
+   /* @PostMapping("/create")
+    public ResponseEntity<?> createReport(){
+
+    }*/
 
     //Find a report by id
     @GetMapping("/find/{id}")

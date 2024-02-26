@@ -11,6 +11,7 @@ import sidkbk.celemo.repositories.AuctionRepository;
 import sidkbk.celemo.repositories.ReportsRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ReportsServices {
@@ -24,15 +25,18 @@ public class ReportsServices {
 
 
     public Reports createReport(String reportingUserId,String reportedUserId,String auction, Reports reports){
-        Auction foundAuction = auctionRepository.findById(auction)
-                .orElseThrow(()-> new RuntimeException("Auction does not exist!"));
+        if (!auction.isEmpty()) {
+            Auction foundAuction = auctionRepository.findById(auction)
+                    .orElseThrow(() -> new RuntimeException("Auction does not exist!"));
+            reports.setAuction(foundAuction);
+            reportedUserId = foundAuction.getSellerId();
+        }
+            User foundreportedUser = userRepository.findById(reportedUserId)
+                    .orElseThrow(() -> new RuntimeException("User does not exist!"));
+            reports.setReportedUserId(foundreportedUser);
         User foundreportinguser = userRepository.findById(reportingUserId)
                 .orElseThrow(()-> new RuntimeException("User does not exist!"));
-        User foundreportedUser = userRepository.findById(reportedUserId)
-                .orElseThrow(()-> new RuntimeException("User does not exist!"));
 
-        reports.setAuction(foundAuction);
-        reports.setReportedUserId(foundreportedUser);
         reports.setReportingUserId(foundreportinguser);
         return reportsRepository.save(reports);
     }
