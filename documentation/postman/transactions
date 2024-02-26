@@ -33,7 +33,7 @@ Body - raw
 #######################################################################################################
 
 // DELETE Delete a transaction
-http://localhost:8080/api/reviews/delete/:id
+http://localhost:8080/api/transactions/delete/:id
 Params
     Path Variables
         Key : id
