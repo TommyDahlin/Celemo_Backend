@@ -3,17 +3,21 @@
 #######################################################################################################
 
 // GET list all transactions
-http://localhost:8080/api/transactions/find
+http://localhost:8080/api/transactions/find/all
 
 #######################################################################################################
 
 // GET list transactions for a specific user
-http://localhost:8080/api/transactions/find/:user-id
+http://localhost:8080/api/transactions/find
 Params
     Path Varaibles
         Key : user-id
         Value : 65d33c51f4da3a3f932fe8ed
         Description : User ID
+    Body - raw
+        {
+            "userId": "65d33c51f4da3a3f932fe8ed"
+        }
 
 #######################################################################################################
 

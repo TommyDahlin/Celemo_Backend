@@ -1,4 +1,4 @@
-package sidkbk.celemo.controllers.dto;
+package sidkbk.celemo.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

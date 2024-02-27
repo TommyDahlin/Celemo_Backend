@@ -5,7 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sidkbk.celemo.controllers.dto.TransactionsCreationDTO;
+import sidkbk.celemo.dto.FindTransactionsForUserDTO;
+import sidkbk.celemo.dto.TransactionsCreationDTO;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.services.TransactionsService;
 
@@ -23,13 +24,13 @@ public class TransactionsController {
     }
 
     // GET list of specific users all transactions
-    @GetMapping("/find/{user-id}")
-    public ResponseEntity<?> findTransactions(@PathVariable("user-id") String userId) {
-        return transactionsService.findTransactions(userId);
+    @GetMapping("/find")
+    public ResponseEntity<?> findTransactions(@Valid @RequestBody FindTransactionsForUserDTO findTransactionsForUserDTO) {
+        return transactionsService.findTransactions(findTransactionsForUserDTO);
     }
 
     // GET all transactions
-    @GetMapping("/find")
+    @GetMapping("/find/all")
     public ResponseEntity<?> findAllTransactions() {
         return ResponseEntity.ok(transactionsService.findAllTransactions());
     }

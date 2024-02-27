@@ -3,7 +3,8 @@ package sidkbk.celemo.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import sidkbk.celemo.controllers.dto.TransactionsCreationDTO;
+import sidkbk.celemo.dto.FindTransactionsForUserDTO;
+import sidkbk.celemo.dto.TransactionsCreationDTO;
 import sidkbk.celemo.models.Transactions;
 import sidkbk.celemo.models.User;
 import sidkbk.celemo.repositories.TransactionsRepository;
@@ -28,6 +29,7 @@ public class TransactionsService {
                 .orElseThrow(() -> new RuntimeException("Couldn't find user."));
         // Update users balance
         findUser.setBalance( (findUser.getBalance() - transactionsCreationDTO.getTransactionAmount()) );
+        userRepository.save(findUser);
 
         Transactions newTransaction = new Transactions();
 
@@ -43,9 +45,11 @@ public class TransactionsService {
         return "Transaction deleted!";
     }
 
-    public ResponseEntity<?> findTransactions(String userId) {
+    // List all transactions for a specific user
+    public ResponseEntity<?> findTransactions(FindTransactionsForUserDTO findTransactionsForUserDTO) {
         // Check if user exists
-        User foundUser = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        User foundUser = userRepository.findById(findTransactionsForUserDTO.getUserId()).orElseThrow(
+                () -> new RuntimeException("User not found"));
         // Temp save all transactions
         List<Transactions> allTransactions = transactionsRepo.findAll();
         List<Transactions> foundTransactions = new ArrayList<>(); // List for found transactions for specified user
