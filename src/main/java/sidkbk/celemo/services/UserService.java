@@ -6,17 +6,22 @@ import org.springframework.stereotype.Service;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.EGender;
 import sidkbk.celemo.models.ERole;
+import sidkbk.celemo.models.Role;
 import sidkbk.celemo.models.User;
+import sidkbk.celemo.repositories.RoleRepository;
 import sidkbk.celemo.repositories.UserRepository;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class UserService {
     @Autowired
     UserRepository userRepository;
-
+    @Autowired
+    RoleRepository roleRepository;
 
 
 
@@ -27,7 +32,7 @@ public class UserService {
 
         //checks if  password is longer than 8 chars and contains atleast one upperCase
         user.isPasswordCorrect(user);
-
+        Set<Role> roles = user.getRoles();
         //checks that gender isn't null
         if (user.getGender() == null){
             throw new RuntimeException("ERROR: no gender");
@@ -36,13 +41,14 @@ public class UserService {
         } else if (user.getGender().equals("FEMALE")){//string to enum
             user.setGender(EGender.FEMALE);
         }
-        if (user.getRole() == null){ //if role is empty -> user
-            user.setRole(ERole.USER);
-        } else if (user.getRole().equals("ADMIN")){ //string to enum
-            user.setRole(ERole.ADMIN);
-        }else if (user.getRole().equals("USER")){ //string to enum
-            user.setRole(ERole.USER);
+        if (roles == null){
+            Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+                    .orElseThrow(() -> new RuntimeException("Error: role is not found"));
+            roles.add(userRole);
+        }else {
+            user.setRoles(roles);
         }
+
         return userRepository.save(user);
     }
 
