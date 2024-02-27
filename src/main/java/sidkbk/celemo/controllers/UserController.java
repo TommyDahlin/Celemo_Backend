@@ -26,7 +26,7 @@ public class UserController {
     private OrderService orderService;
 
     // post/add account/user
-    @PostMapping("/post")
+   /* @PostMapping("/post")
     public ResponseEntity<?> addUser(@Valid @RequestBody User user){
 
         try {
@@ -34,7 +34,7 @@ public class UserController {
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
-    }
+    }*/
 
     // find all/get all accounts
     @GetMapping("/find")

@@ -23,7 +23,7 @@ public class UserService {
 
 
     // create/add/post user account
-    public User createUser(User user){
+    /*public User createUser(User user){
 
         //checks if  password is longer than 8 chars and contains atleast one upperCase
         user.isPasswordCorrect(user);
@@ -36,15 +36,15 @@ public class UserService {
         } else if (user.getGender().equals("FEMALE")){//string to enum
             user.setGender(EGender.FEMALE);
         }
-        if (user.getRole() == null){ //if role is empty -> user
-            user.setRole(ERole.ROLE_USER);
-        } else if (user.getRole().equals("ADMIN")){ //string to enum
-            user.setRole(ERole.ROLE_ADMIN);
-        }else if (user.getRole().equals("USER")){ //string to enum
-            user.setRole(ERole.ROLE_USER);
+        if (user.getRoles() == null){ //if role is empty -> user
+            user.setRoles(ERole.ROLE_USER);
+        } else if (user.getRoles().equals("ADMIN")){ //string to enum
+            user.setRoles(ERole.ROLE_ADMIN);
+        }else if (user.getRoles().equals("USER")){ //string to enum
+            user.setRoles(ERole.ROLE_USER);
         }
         return userRepository.save(user);
-    }
+    }*/
 
     // get/find all user accounts
     public List<User> getAllUsers(){
