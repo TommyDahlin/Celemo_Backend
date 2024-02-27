@@ -3,6 +3,7 @@ package sidkbk.celemo.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import sidkbk.celemo.controllers.dto.TransactionsCreationDTO;
 import sidkbk.celemo.models.Transactions;
 import sidkbk.celemo.models.User;
 import sidkbk.celemo.repositories.TransactionsRepository;
@@ -21,16 +22,19 @@ public class TransactionsService {
     UserRepository userRepository;
 
     // Add transaction
-    public ResponseEntity<?> addTransaction(String userId, Transactions transaction) {
+    public ResponseEntity<?> addTransaction(TransactionsCreationDTO transactionsCreationDTO) {
         // Check if user exist
-        User findUser = userRepository.findById(userId)
+        User findUser = userRepository.findById(transactionsCreationDTO.getUserId())
                 .orElseThrow(() -> new RuntimeException("Couldn't find user."));
         // Update users balance
-        findUser.setBalance( (findUser.getBalance() - transaction.getTransactionAmount()) );
-        // Set user REF in transaction body
-        transaction.setUser(findUser);
+        findUser.setBalance( (findUser.getBalance() - transactionsCreationDTO.getTransactionAmount()) );
+
+        Transactions newTransaction = new Transactions();
+
+        newTransaction.setUser(findUser); // Set user REF in transaction body
+        newTransaction.setTransactionAmount(transactionsCreationDTO.getTransactionAmount()); // Set amount
         // Save new transaction to db and return 200 OK with transaction details.
-        return ResponseEntity.ok(transactionsRepo.save(transaction));
+        return ResponseEntity.ok(transactionsRepo.save(newTransaction));
     }
 
     // Delete a transaction

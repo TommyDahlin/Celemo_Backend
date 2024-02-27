@@ -18,16 +18,12 @@ Params
 #######################################################################################################
 
 // POST add a transaction
-http://localhost:8080/api/transactions/post/:user-id
-Params
-    Path Variables
-        Key : user-id
-        Value : 65d33bbcf4da3a3f932fe8ec
-        Description : User that buys something
+http://localhost:8080/api/transactions/post
 
 Body - raw
     {
-        "transactionAmount": 1300
+        "userId": "65d33c51f4da3a3f932fe8ed",
+        "transactionAmount": 30
     }
 
 #######################################################################################################
