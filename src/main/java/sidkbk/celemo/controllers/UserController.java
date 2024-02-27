@@ -76,7 +76,7 @@ public class UserController {
     }
     
 
-    // List of all previousPurchases by User
+  /*  // List of all previousPurchases by User
     @GetMapping("/find/{id}/previouspurchase")
     public ResponseEntity<?> getPreviousPurchase(@PathVariable String id) {
 
@@ -87,6 +87,8 @@ public class UserController {
         }
     }
 
+
+   */
 
 
 

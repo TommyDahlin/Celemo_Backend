@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import sidkbk.celemo.dto.OrderCreationDTO;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.Order;
 import sidkbk.celemo.services.OrderService;
@@ -20,15 +21,12 @@ public class OrderController {
     OrderService orderService;
 
 
-   /* @PostMapping("/post")
-    public ResponseEntity<?> createOrder(@RequestBody Order order) {
-        try {
-            return ResponseEntity.ok(orderService.createOrder(order));
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+   @PostMapping
+    public ResponseEntity<Order> createOrder(@RequestBody OrderCreationDTO orderCreationDTO) {
+       Order newOrder = orderService.createOrder(orderCreationDTO);
+       return new ResponseEntity<>(newOrder, HttpStatus.CREATED);
     }
-*/
+
     @GetMapping("/find")
     public ResponseEntity<?> getAllOrders() {
         try {

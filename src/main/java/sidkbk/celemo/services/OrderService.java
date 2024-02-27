@@ -2,6 +2,7 @@ package sidkbk.celemo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sidkbk.celemo.dto.OrderCreationDTO;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.models.Order;
@@ -29,7 +30,30 @@ public class OrderService {
 
 
 
+public Order createOrder(OrderCreationDTO orderCreationDTO) {
+    Auction findAuction = auctionRepository.findById(orderCreationDTO.getAuctionId())
+            .orElseThrow(() -> new RuntimeException("Auction not found!"));
 
+    User findSellerId = userRepository.findById(orderCreationDTO.getSellerId())
+            .orElseThrow(() -> new RuntimeException("User was not found!"));
+
+    User findBuyerId = userRepository.findById(orderCreationDTO.getBuyerId())
+            .orElseThrow(() -> new RuntimeException("BuyerId was not found"));
+    //Order findOrder = orderRepository.findById(orderCreationDTO.getOrderId())
+    //        .orElseThrow(() -> new RuntimeException("Order was not found!"));
+    //         orderCreationDTO.setOrderId(orderCreationDTO.getOrderId());
+
+
+    Order newOrder = new Order();
+    newOrder.setAuction(findAuction);
+    newOrder.setSellerAccount(findSellerId);
+    newOrder.setBuyerAccount(findBuyerId);
+
+    newOrder.setEndPrice(orderCreationDTO.getEndPrice());
+    newOrder.setEndDate(orderCreationDTO.getEndDate());
+
+    return orderRepository.save(newOrder);
+}
 
 
 
@@ -84,6 +108,10 @@ public class OrderService {
     }
 
 
+
+
+
+/*
     public List<Order> findPreviousPurchase(String id) {
         List<Order> allOrders = orderRepository.findAll(); //list of all orders
         User user = userRepository.findById(id)
@@ -103,6 +131,14 @@ public class OrderService {
         }
             return previousPurchase;
     }
+ */
+
+
+
+
+
+
+
 
     // Delete one order by id
     public String deleteOrder(String id) {
