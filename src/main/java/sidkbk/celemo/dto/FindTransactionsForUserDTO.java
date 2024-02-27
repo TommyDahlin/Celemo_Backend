@@ -8,6 +8,8 @@ public class FindTransactionsForUserDTO {
     @NotBlank
     public String userId;
 
+
+
     // Getters & Setters
     public String getUserId() {
         return userId;

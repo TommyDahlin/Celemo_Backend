@@ -13,6 +13,7 @@ public class TransactionsCreationDTO {
     private Double transactionAmount;
 
 
+
     // Getters Setters
     public String getUserId() {
         return userId;

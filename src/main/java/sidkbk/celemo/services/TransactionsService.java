@@ -3,6 +3,7 @@ package sidkbk.celemo.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import sidkbk.celemo.dto.DeleteTransactionDTO;
 import sidkbk.celemo.dto.FindTransactionsForUserDTO;
 import sidkbk.celemo.dto.TransactionsCreationDTO;
 import sidkbk.celemo.models.Transactions;
@@ -40,9 +41,11 @@ public class TransactionsService {
     }
 
     // Delete a transaction
-    public Object deleteTransaction(String id) {
-        transactionsRepo.deleteById(id);
-        return "Transaction deleted!";
+    public ResponseEntity<?> deleteTransaction(DeleteTransactionDTO deleteTransactionDTO) {
+        transactionsRepo.findById(deleteTransactionDTO.getTransactionId()).orElseThrow(
+                () -> new RuntimeException("Transaction does not exist!"));
+        transactionsRepo.deleteById(deleteTransactionDTO.getTransactionId());
+        return ResponseEntity.ok("Transaction deleted!");
     }
 
     // List all transactions for a specific user
