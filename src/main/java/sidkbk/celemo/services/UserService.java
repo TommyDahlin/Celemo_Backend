@@ -41,12 +41,22 @@ public class UserService {
         } else if (user.getGender().equals("FEMALE")){//string to enum
             user.setGender(EGender.FEMALE);
         }
-        if (roles == null){
+        if (user.getUsersRoles() == null){
             Role userRole = roleRepository.findByName(ERole.ROLE_USER)
                     .orElseThrow(() -> new RuntimeException("Error: role is not found"));
             roles.add(userRole);
-        }else {
             user.setRoles(roles);
+        }else if(user.getUsersRoles().equals("USER")) {
+            Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+                            .orElseThrow(() -> new RuntimeException("Error: role is not found"));
+            roles.add(userRole);
+            user.setRoles(roles);
+        }else if(user.getUsersRoles().equals("ADMIN")) {
+            Role userRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+                    .orElseThrow(() -> new RuntimeException("Error: role is not found"));
+            roles.add(userRole);
+            user.setRoles(roles);
+
         }
 
         return userRepository.save(user);
