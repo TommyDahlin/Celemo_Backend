@@ -32,7 +32,7 @@ public class UserService {
 
         //checks if  password is longer than 8 chars and contains atleast one upperCase
         user.isPasswordCorrect(user);
-        Set<Role> roles = user.getRoles();
+
         //checks that gender isn't null
         if (user.getGender() == null){
             throw new RuntimeException("ERROR: no gender");
@@ -41,24 +41,30 @@ public class UserService {
         } else if (user.getGender().equals("FEMALE")){//string to enum
             user.setGender(EGender.FEMALE);
         }
-        if (user.getUsersRoles() == null){
+        Set<Role> roles = new HashSet<>();
+        Set<String> strRoles = user.getUsersRoles();
+        if (strRoles == null){
             Role userRole = roleRepository.findByName(ERole.ROLE_USER)
                     .orElseThrow(() -> new RuntimeException("Error: role is not found"));
             roles.add(userRole);
-            user.setRoles(roles);
-        }else if(user.getUsersRoles().equals("USER")) {
-            Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                            .orElseThrow(() -> new RuntimeException("Error: role is not found"));
-            roles.add(userRole);
-            user.setRoles(roles);
-        }else if(user.getUsersRoles().equals("ADMIN")) {
-            Role userRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-                    .orElseThrow(() -> new RuntimeException("Error: role is not found"));
-            roles.add(userRole);
-            user.setRoles(roles);
+        }else {
+            strRoles.forEach(role -> {
+                switch (role) {
+                case "ADMIN" -> {
+                    Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+                            .orElseThrow(() -> new RuntimeException("Error: Role couldn't be found"));
+                    roles.add(adminRole);
+                }
+                case "USER" -> {
+                    Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+                            .orElseThrow(() -> new RuntimeException("Error: Role couldn't be found"));
+                    roles.add(userRole);
+                }
+                }
+            });
 
         }
-
+        user.setRoles(roles);
         return userRepository.save(user);
     }
 
