@@ -2,6 +2,7 @@ package sidkbk.celemo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sidkbk.celemo.dto.ReviewsDTO;
 import sidkbk.celemo.models.Reviews;
 import sidkbk.celemo.models.User;
 import sidkbk.celemo.repositories.ReviewsRepo;
@@ -30,14 +31,24 @@ public class ReviewsService {
     }
 
     // Add a review
-    public Reviews addReview(String createdBy, String reviewedUser, Reviews review) {
-        User createdByIdFound = userRepository.findById(createdBy).orElseThrow(() -> new RuntimeException("User not found!"));
-        User reviewedUserIdFound = userRepository.findById(reviewedUser).orElseThrow(() -> new RuntimeException("Reviewed user not found!"));
-        review.setCreatedBy(createdByIdFound);
-        review.setReviwedUser(reviewedUserIdFound);
-        reviewsRepo.save(review);
-        updateAverageGrade(reviewedUser); //have to be before return; // update users average grade
-        return review;
+    public Reviews addReview(ReviewsDTO reviewsDTO) {
+        User createdBy = userRepository.findById(reviewsDTO.getCreatedById())
+                .orElseThrow(() -> new RuntimeException("User createdBy not found"));
+        User reviewedUser = userRepository.findById(reviewsDTO.getReviewedUserId())
+                .orElseThrow(() -> new RuntimeException("User reviewedUser not found"));
+        Reviews newReview = new Reviews();
+        newReview.setGrade(reviewsDTO.getGrade());
+        newReview.setReviewText(reviewsDTO.getReviewText());
+        //newReview.getCreatedAt(reviewsDTO.getCreatedAt());
+        newReview.setCreatedBy(createdBy);
+        newReview.setReviwedUser(reviewedUser);
+
+        reviewsRepo.save(newReview);
+        //grade
+        //reviewText
+        //createdAt
+        updateAverageGrade(reviewsDTO.getReviewedUserId());
+        return newReview;
     }
 
 

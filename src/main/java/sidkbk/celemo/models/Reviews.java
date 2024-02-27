@@ -23,7 +23,8 @@ public class Reviews {
     private String reviewText;
 
     @CreatedDate
-    private Date createdAt = new Date();
+    private Date createdAt;
+
 
     @DBRef
     private User createdBy;
@@ -48,8 +49,8 @@ public class Reviews {
         return reviewText;
     }
 
-    public Date getCreatedAt() {
-        return createdAt;
+    public Date getCreatedAt(Date createdAt) {
+        return this.createdAt;
     }
 
     public User getCreatedBy() {

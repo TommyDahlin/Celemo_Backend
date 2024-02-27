@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import sidkbk.celemo.dto.ReviewsDTO;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.Reviews;
 import sidkbk.celemo.services.ReviewsService;
@@ -39,17 +40,14 @@ public class ReviewsController {
     }
 
     // POST add a review
-    @PostMapping("/post/{created-by-id}/{reviewed-user-id}")
-    public ResponseEntity<?> addReview(@PathVariable("created-by-id") String createdBy,
-                                       @PathVariable("reviewed-user-id") String reviewedUser,
-                                       @Valid @RequestBody Reviews review) {
-        try {
-            return ResponseEntity.ok(reviewsService.addReview(createdBy, reviewedUser, review));
-
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-
+    @PostMapping("/post")
+    public ResponseEntity<Reviews> addReview(@Valid @RequestBody ReviewsDTO reviewsDTO) {
+            Reviews newReview = reviewsService.addReview(reviewsDTO);
+            try {
+                return new ResponseEntity<>(newReview, HttpStatus.CREATED);
+            } catch (EntityNotFoundException e){
+                throw new EntityNotFoundException("WRONG");
+            }
     }
 
     // DELETE Delete a review
