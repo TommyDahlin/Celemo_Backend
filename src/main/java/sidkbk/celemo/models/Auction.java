@@ -19,9 +19,6 @@ public class Auction {
     @NotBlank
     public String sellerId;
     @DBRef
-    private Bids bid;
-    public String bidId;
-    @DBRef
     private User user;
     @NotBlank
     public String title;
@@ -30,15 +27,18 @@ public class Auction {
     public String productPhoto;
     public String celebrityName;
     @NotNull
-    public double startPrice;
+    public Double startPrice;
 
     // Not needed for the body in postman, gets added automatically
     public LocalDate startingDate = LocalDate.now();
     public LocalDate endDate = LocalDate.now().plusDays(7);
 
     // Bids
-    public double currentPrice;
-    public double endPrice;
+    public Double currentPrice;
+    public Double endPrice;
+    @DBRef
+    private Bids bid;
+    public String bidId;
 
     // Both booleans have to be true to move on to make an order.
     public boolean isFinished;
