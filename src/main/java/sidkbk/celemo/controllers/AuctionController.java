@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import sidkbk.celemo.dto.AuctionCreationDTO;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.services.AuctionService;
@@ -18,9 +19,9 @@ public class AuctionController {
 
     // POST create new order
     @PostMapping("/post")
-    public ResponseEntity<?> createAuction(@Valid @RequestBody Auction auction) {
+    public ResponseEntity<?> createAuction(@Valid @RequestBody AuctionCreationDTO auctionCreationDTO) {
         try{
-            return ResponseEntity.ok(auctionService.createAuction(auction));
+            return ResponseEntity.ok(auctionService.createAuction(auctionCreationDTO));
         }catch (EntityNotFoundException e) {
             return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }

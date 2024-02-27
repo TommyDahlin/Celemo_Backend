@@ -2,6 +2,7 @@ package sidkbk.celemo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sidkbk.celemo.dto.AuctionCreationDTO;
 import sidkbk.celemo.models.User;
 import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.repositories.OrderRepository;
@@ -24,11 +25,19 @@ public class AuctionService {
     @Autowired
     OrderRepository orderRepository;
 
-    public Auction createAuction(Auction auction) {
-        User findUser = userRepository.findById(auction.getSellerId())
+    public Auction createAuction(AuctionCreationDTO auctionCreationDTO) {
+        User findUser = userRepository.findById(auctionCreationDTO.getSellerId())
                 .orElseThrow(() -> new RuntimeException("Couldn't find user."));
-        auction.setUser(findUser);
-        return auctionRepository.save(auction);
+        Auction newAuction = new Auction();
+        newAuction.setSellerId(auctionCreationDTO.getSellerId());
+        newAuction.setUser(findUser);
+        newAuction.setTitle(auctionCreationDTO.getTitle());
+        newAuction.setProductDescription(auctionCreationDTO.getProductDescription());
+        newAuction.setProductPhoto(auctionCreationDTO.getProductPhoto());
+        newAuction.setCelebrityName(auctionCreationDTO.getCelebrityName());
+        newAuction.setStartPrice(auctionCreationDTO.getStartPrice());
+        newAuction.setCategoryList(auctionCreationDTO.getCategoryList());
+        return auctionRepository.save(newAuction);
     }
     // READ ALL
     public List<Auction> getAllAuctions(){

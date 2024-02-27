@@ -1,19 +1,17 @@
 #######################################################################################################
     POSTMAN AUCTIONS
 #######################################################################################################
-        POST MODEL
-#######################################################################################################
 
+POST - Create an auction
+Body - raw
 {
-    "sellerId": "65d334444d2b4a0579d35324",  ID
-    "title": "test auction",
-    "productDescription": "This is a test",
-    "productPhoto": "www.photothingy.com",
-    "celebrityName": "Test McGuy",
-    "startPrice": 200.2,
-    "currentPrice": 200.2,
-    "endPrice": 0.0,
-    "isFinished": false,
-    "hasBids": false,
-    "categoryList": []
+    "sellerId": "65d33bbcf4da3a3f932fe8ec",
+    "title": "Boll",
+    "productDescription": "En fet boll",
+    "productPhoto": "pic.jpg",
+    "celebrityName": "En känd jävel",
+    "startPrice": 400,
+    "categoryList": ["HOCKEY", "BOXING"]
 }
+
+#######################################################################################################
