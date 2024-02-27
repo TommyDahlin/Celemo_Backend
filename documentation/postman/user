@@ -12,7 +12,7 @@ http://localhost:8080/api/account/post
     "photo": "brorpic.url",
     "firstName": "broder",
     "lastName": "jakob",
-    "usersRoles": ["USER", "ADMIN"] / null, är den inte med så blir dom inte assignade en role
+    "usersRoles": ["USER", "ADMIN"] / null
     "adress_street": "peterpan gata",
     "adress_postalCode": "44556",
     "adress_city": "göteborg",
