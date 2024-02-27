@@ -20,7 +20,7 @@ public class OrderController {
     OrderService orderService;
 
 
-    @PostMapping("/post")
+   /* @PostMapping("/post")
     public ResponseEntity<?> createOrder(@RequestBody Order order) {
         try {
             return ResponseEntity.ok(orderService.createOrder(order));
@@ -28,7 +28,7 @@ public class OrderController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
-
+*/
     @GetMapping("/find")
     public ResponseEntity<?> getAllOrders() {
         try {

@@ -30,8 +30,13 @@ public class OrderService {
 
 
 
+
+
+
+
+
     // Create an order
-    public Order createOrder(Order order) {
+   /* public Order createOrder(Order order) {
         Auction findAuction = auctionRepository.findById(order.getAuctionId())
                 .orElseThrow(()-> new RuntimeException("Couldn't find Auction"));
         // Finding seller from account repository
@@ -48,7 +53,7 @@ public class OrderService {
 
 
         return orderRepository.save(order);
-    }
+    }*/
 
     // READ ALL ORDERS
     public List<Order> getAllOrders() {
