@@ -46,8 +46,7 @@ public class OrderService {
             order.setBuyerAccount(findBuyerAccount);
             order.setAuction(findAuction);
 
-            order.setBuyerAccount(findBuyerAccount);
-            order.setAuction(findAuction);
+
         return orderRepository.save(order);
     }
 
