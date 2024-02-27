@@ -26,6 +26,16 @@ public class ReviewsController {
         }
     }
 
+    // filtered search
+    @GetMapping("/find/{filter}")
+    public ResponseEntity<?> getAllReviewsFilter(@PathVariable("filter")String filter){
+        try {
+            return ResponseEntity.ok(reviewsService.getAllReviewsFilter(filter));
+        }catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
 
 
     // GET one specific review

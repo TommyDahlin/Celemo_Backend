@@ -23,6 +23,10 @@ public class ReviewsService {
         return reviewsRepo.findAll();
     }
 
+    public List<Reviews> getAllReviewsFilter(String filter){
+        return reviewsRepo.findAll();
+    }
+
     // Find and return one specific review
     public Reviews listOneSpecificReview(String id) {
         Reviews foundReview = reviewsRepo.findById(id).orElseThrow(() -> new RuntimeException("Review not found"));
