@@ -5,8 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import sidkbk.celemo.dto.FindTransactionsForUserDTO;
 import sidkbk.celemo.dto.user.CreateUserDTO;
 import sidkbk.celemo.dto.user.DeleteUserDTO;
+import sidkbk.celemo.dto.user.FindUserIdandFilterDTO;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.User;
 import sidkbk.celemo.services.AuctionService;
@@ -48,11 +50,11 @@ public class UserController {
         }
     }
 
-    //get average grade, find user by id
-    @GetMapping("/{id}/{filter}")
-    public ResponseEntity<?> getUserFilter(@PathVariable("id") String id,@PathVariable("filter")String filter){
+    //get average grade, find user by id, filter out what you want to get from a user
+    @GetMapping("findfilter")
+    public ResponseEntity<?> getUserFilter(@Valid @RequestBody FindUserIdandFilterDTO findUserIdandFilterDTO){
         try {
-            return ResponseEntity.ok(userService.getUserFilter(id, filter));
+            return ResponseEntity.ok(userService.getUserFilter(findUserIdandFilterDTO));
         }catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }

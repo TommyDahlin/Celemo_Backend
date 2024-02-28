@@ -1,13 +1,12 @@
 package sidkbk.celemo.services;
 
 
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 import sidkbk.celemo.dto.user.CreateUserDTO;
 import sidkbk.celemo.dto.user.DeleteUserDTO;
+import sidkbk.celemo.dto.user.FindUserIdandFilterDTO;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.EGender;
 import sidkbk.celemo.models.ERole;
@@ -90,9 +89,9 @@ public class UserService {
     }
 
     //find user variable with filter. For example : grade
-    public String getUserFilter(String id, String filter){ //userId and filter, filter can be grade, username, firstName, lastName
-        User user = userRepository.findById(id).get();
-        return  user.getFilter(filter);
+    public String getUserFilter(FindUserIdandFilterDTO findUserIdandFilterDTO){ //userId and filter, filter can be grade, username, firstName, lastName
+        User user = userRepository.findById(findUserIdandFilterDTO.getUserId()).get();
+        return  user.getFilter(findUserIdandFilterDTO.getFilter());
 
     }
 
