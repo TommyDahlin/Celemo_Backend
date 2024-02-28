@@ -4,33 +4,29 @@
 http://localhost:8080/api/user/post
 
 {
-    "username": "BroderJakob",
-    "password": "BroderJakob22",
+    "username": "muppen",
+    "password": "Muppen22",
     "dateOfBirth": "2011-05-10",
-    "email": "BrorJ@gmail.com",
+    "email": "mupp@gmail.com",
+    "firstName": "Mupp",
+    "lastName": "Muppsson",
     "gender": "MALE",
-    "photo": "brorpic.url",
-    "firstName": "broder",
-    "lastName": "jakob",
-    "usersRoles": ["USER", "ADMIN"] / null
     "adress_street": "peterpan gata",
     "adress_postalCode": "44556",
-    "adress_city": "göteborg",
-    "balance": 0.0,
-    "grade": 0.0
+    "adress_city": "göteborg"
 }
 
 ****************************************************
 
 // find
 
-http://localhost:8080/api/user/find
+http://localhost:8080/api/user/find/all
 
 ****************************************************
 
 // find
 
-http://localhost:8080/api/user/finduser
+http://localhost:8080/api/user/find
 
 {
 "userId": "65d755943b0850253b1640c0"
@@ -52,10 +48,21 @@ http://localhost:8080/api/user/delete
 
 http://localhost:8080/api/user/put
 
+Body - raw // userId REQUIRED, rest OPTIONAL
 {
-"userId": "65d755943b0850253b1640c0"
-"username": "New username" -- Works with everything
-"usersRoles": ["ADMIN","USER"]
+"userId": "65d755943b0850253b1640c0",
+"username": "New username",
+"dateOfBirth": "1961-07-07",
+"email": "asd@asd.com",
+"firstName": "Bosse",
+"lastName": "Bengtsson",
+"usersRoles": ["ADMIN","USER"],
+"gender": "MALE",
+"adress_street": "Vägen 1",
+"adress_postalCode": 12345,
+"adress_city": "Götlanborg",
+"photo": "dummy23.png",
+"balance": 500
 }
 
 
@@ -76,3 +83,24 @@ http://localhost:8080/api/user/findfilter
 }
 
 ****************************************************
+
+GET - Finished Auctions
+http://localhost:8080/api/user/find/finishedauction
+
+Body - raw
+{
+    "userId": "65d3627e890c42399d67cb84"
+}
+
+****************************************************
+
+GET - Previous Purchase
+http://localhost:8080/api/user/find/previouspurchase
+
+Body - raw
+{
+    "userId": "65d3627e890c42399d67cb84"
+}
+
+****************************************************
+

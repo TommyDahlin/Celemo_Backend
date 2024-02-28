@@ -29,6 +29,7 @@ public class CreateUserDTO {
     @NotBlank(message = "adress_city cannot be blank")
     private String adress_city;
 
+
     public String getUsername() {
         return username;
     }

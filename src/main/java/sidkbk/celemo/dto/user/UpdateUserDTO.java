@@ -1,15 +1,16 @@
 package sidkbk.celemo.dto.user;
 
+import jakarta.validation.constraints.NotBlank;
 import sidkbk.celemo.models.EGender;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class UpdateUserDTO {
+    @NotBlank
     private String userId;
     private String username;
     private String password;
-    //dateofbirth
     private String dateOfBirth;
     private String email;
     private String firstName;

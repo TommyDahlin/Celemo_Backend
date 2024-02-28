@@ -124,7 +124,11 @@ public class UserService {
                 existingUser.setAdress_postalCode(updateUserDTO.getAdress_postalCode());
             }if(updateUserDTO.getBalance()!=0.0){
                 existingUser.setBalance(updateUserDTO.getBalance());
-            }if(updateUserDTO.getPhoto()!=null){
+            }
+            if (updateUserDTO.getGender() != null) {
+                existingUser.setGender(updateUserDTO.getGender());
+            }
+            if(updateUserDTO.getPhoto()!=null){
                 existingUser.setPhoto(updateUserDTO.getPhoto());
             }if (strRoles.isEmpty()){
                 Role userRole = roleRepository.findByName(ERole.ROLE_USER)
@@ -168,11 +172,10 @@ adress_city
 
 
     // delete user account
-    public ResponseEntity<?> deleteUser(DeleteUserDTO deleteUserDTO){
+    public ResponseEntity<String> deleteUser(DeleteUserDTO deleteUserDTO){
         userRepository.findById(deleteUserDTO.getUserId())
                 .orElseThrow(()-> new RuntimeException("User does not exist"));
         userRepository.deleteById(deleteUserDTO.getUserId());
         return ResponseEntity.ok("User deleted");
-
     }
 }

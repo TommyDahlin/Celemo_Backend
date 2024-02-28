@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sidkbk.celemo.dto.FindTransactionsForUserDTO;
 import sidkbk.celemo.dto.user.*;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.User;
@@ -39,7 +38,7 @@ public class UserController {
     }
 
     // find all/get all accounts
-    @GetMapping("/find")
+    @GetMapping("/find/all")
     public ResponseEntity<?> getAllUsers(){
         try {
             return ResponseEntity.ok(userService.getAllUsers());
@@ -59,7 +58,7 @@ public class UserController {
     }
 
     // find/get using id
-    @GetMapping ("/finduser")
+    @GetMapping ("/find")
     public ResponseEntity<User> getUserById(@Valid @RequestBody FindUserIdDTO findUserIdDTO){
         Optional<User> user = userService.getUserById(findUserIdDTO);
         return user.map(ResponseEntity::ok)
@@ -113,7 +112,7 @@ public class UserController {
     @DeleteMapping("/delete")
     public ResponseEntity<?> deleteUser(@Valid @RequestBody DeleteUserDTO deleteUserDTO){
         try{
-            return ResponseEntity.ok(userService.deleteUser(deleteUserDTO));
+            return userService.deleteUser(deleteUserDTO);
 
         }catch (EntityNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
