@@ -58,13 +58,9 @@ public class AuctionController {
         }
     }
     // DELETE an auction
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteAuction(@PathVariable("id") String id) {
-        try {
-            return ResponseEntity.ok(auctionService.deleteAuction(id));
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteAuction(@Valid @RequestBody AuctionIdDTO auctionIdDTO) {
+        return auctionService.deleteAuction(auctionIdDTO);
     }
 
     //REMOVE BEFORE PRODUCTION

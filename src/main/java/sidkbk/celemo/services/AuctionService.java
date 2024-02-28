@@ -1,6 +1,8 @@
 package sidkbk.celemo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import sidkbk.celemo.dto.auctions.AuctionCreationDTO;
 import sidkbk.celemo.dto.auctions.AuctionIdDTO;
@@ -88,11 +90,12 @@ public class AuctionService {
         return activeAuctionList;
     }
     // DELETE 1 by id
-    public String deleteAuction(String id) {
-        auctionRepository.deleteById(id);
-        return "Deleted successfully!";
+    public ResponseEntity<?> deleteAuction(AuctionIdDTO auctionIdDTO) {
+        auctionRepository.findById(auctionIdDTO.getAuctionId())
+                .orElseThrow(() -> new RuntimeException("Auction not found!"));
+        auctionRepository.deleteById(auctionIdDTO.getAuctionId());
+        return ResponseEntity.status(HttpStatus.OK).body("Auction deleted!");
     }
-
 
     // Delete all to drop clean collection remotely (only for testing don't keep to production)
     public void deleteAllAuctions(){

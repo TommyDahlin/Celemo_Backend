@@ -39,3 +39,12 @@ Body - raw
     "productPhoto": "nybild.jpg",               // OPTIONAL
     "celebrityName": "Olle"                     // OPTIONAL
 }
+
+#######################################################################################################
+
+DELETE - Delete an auction
+http://localhost:8080/api/auction/delete
+Body - raw
+{
+    "auctionId": "65de3f526e99b52d50b43a91"
+}
