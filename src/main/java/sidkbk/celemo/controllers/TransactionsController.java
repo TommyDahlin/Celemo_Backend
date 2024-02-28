@@ -4,9 +4,9 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sidkbk.celemo.dto.DeleteTransactionDTO;
-import sidkbk.celemo.dto.FindTransactionsForUserDTO;
-import sidkbk.celemo.dto.TransactionsCreationDTO;
+import sidkbk.celemo.dto.transactions.DeleteTransactionDTO;
+import sidkbk.celemo.dto.transactions.FindTransactionsForUserDTO;
+import sidkbk.celemo.dto.transactions.TransactionsCreationDTO;
 import sidkbk.celemo.services.TransactionsService;
 
 @RestController
