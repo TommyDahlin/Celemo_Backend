@@ -118,23 +118,3 @@ public Order createOrder(OrderCreationDTO orderCreationDTO) {
             return previousPurchase;
     }
  */
-
-// Create an order
-   /* public Order createOrder(Order order) {
-        Auction findAuction = auctionRepository.findById(order.getAuctionId())
-                .orElseThrow(()-> new RuntimeException("Couldn't find Auction"));
-        // Finding seller from account repository
-        User findSellerAccount = userRepository.findById(findAuction.getSellerId())
-                .orElseThrow(() -> new RuntimeException("Couldn't find seller."));
-            order.setSellerAccount(findSellerAccount);
-        // Finding buyer from account repository
-        // NEEDS BIDS TO BE FINISHED TO PROCEED WITH BUYERACCOUNTID
-        User findBuyerAccount = userRepository.findById(order.getBuyerId())
-                .orElseThrow(() -> new RuntimeException("Couldn't find buyer."));
-
-            order.setBuyerAccount(findBuyerAccount);
-            order.setAuction(findAuction);
-
-
-        return orderRepository.save(order);
-    }*/
