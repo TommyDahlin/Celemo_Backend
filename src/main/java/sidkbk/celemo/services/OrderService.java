@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import sidkbk.celemo.dto.order.OrderCreationDTO;
 import sidkbk.celemo.dto.order.OrderFoundByIdDTO;
 import sidkbk.celemo.models.Auction;
+import sidkbk.celemo.models.Bids;
 import sidkbk.celemo.models.Order;
 import sidkbk.celemo.models.User;
 import sidkbk.celemo.repositories.AuctionRepository;
@@ -42,13 +43,21 @@ public Order createOrder(OrderCreationDTO orderCreationDTO) {
     User findBuyerId = userRepository.findById(orderCreationDTO.getBuyerId())
             .orElseThrow(() -> new RuntimeException("BuyerId was not found"));
 
+//        double orderAmount = orderCreationDTO.getCommission();
+//        double commissionRate = 0.03;
+//        double commission = orderAmount * commissionRate;
 
     Order newOrder = new Order();
-    newOrder.setEndPrice(orderCreationDTO.getEndPrice());
+
     newOrder.setAuction(findAuction);
     newOrder.setSellerAccount(findSellerId);
     newOrder.setBuyerAccount(findBuyerId);
+    newOrder.setProductTitle(findAuction.getTitle());
+    newOrder.setEndPrice(findAuction.getEndPrice());
+    newOrder.setCreatedAt(orderCreationDTO.getCreatedAt());
+    newOrder.setTest(orderCreationDTO.getTest());
 
+   // newOrder.setBids(orderCreationDTO.getCommission());
 
     return orderRepository.save(newOrder);
 }
