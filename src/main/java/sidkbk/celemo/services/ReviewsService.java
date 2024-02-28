@@ -48,18 +48,18 @@ public class ReviewsService {
         newReview.setCreatedBy(createdBy);
         newReview.setReviewedUser(reviewedUser);
         reviewsRepo.save(newReview);
-        //updateAverageGrade(reUser, aGrade);
+        updateAverageGrade(reUser, aGrade);
         return newReview;
     }
 
 
-    public void updateAverageGrade(String u, double g){
+    public void updateAverageGrade(String userId, double grade){
         List<Reviews> allReviews = reviewsRepo.findAll(); // list all reviews
-        User user = userRepository.findById(u).get(); //get reviews with reviewedUser
+        User user = userRepository.findById(userId).get(); //get reviews with reviewedUser
         List<Double> reviewGrade = new ArrayList<>(); //create a new list to fill with
         for (Reviews reviews : allReviews) { //checks each review if the reviewedUserId matches with id
-            if(reviews.getReviewedUser().equals(u)){
-                reviewGrade.add(g); //if its a match, add grade to users grade
+            if(reviews.getReviewedUser().getId().equals(userId)){
+                reviewGrade.add(reviews.getGrade()); //if its a match, add grade to users grade
             }
         }
         double averageGrade = 0.0; //local grade to fill using for-loop below
