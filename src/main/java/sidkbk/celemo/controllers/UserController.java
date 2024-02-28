@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import sidkbk.celemo.dto.FindTransactionsForUserDTO;
 import sidkbk.celemo.dto.user.CreateUserDTO;
 import sidkbk.celemo.dto.user.DeleteUserDTO;
+import sidkbk.celemo.dto.user.FindUserIdDTO;
 import sidkbk.celemo.dto.user.FindUserIdandFilterDTO;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.User;
@@ -61,18 +62,18 @@ public class UserController {
     }
 
     // find/get using id
-    @GetMapping ("/find/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable String id){
-        Optional<User> user = userService.getUserById(id);
+    @GetMapping ("/finduser")
+    public ResponseEntity<User> getUserById(@Valid @RequestBody FindUserIdDTO findUserIdDTO){
+        Optional<User> user = userService.getUserById(findUserIdDTO);
         return user.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // Lists all active listings by User
-    @GetMapping("/find/{id}/activeauction")
-    public ResponseEntity<?> getActiveAuction(@PathVariable String id){
+    // Lists all active listings by UserID
+    @GetMapping("/find/activeauction")
+    public ResponseEntity<?> getActiveAuction(@Valid @RequestBody FindUserIdDTO findUserIdDTO){
         try {
-            return ResponseEntity.ok(auctionService.getActiveAuction(id));
+            return ResponseEntity.ok(auctionService.getActiveAuction(findUserIdDTO));
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }

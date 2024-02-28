@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import sidkbk.celemo.dto.user.CreateUserDTO;
 import sidkbk.celemo.dto.user.DeleteUserDTO;
+import sidkbk.celemo.dto.user.FindUserIdDTO;
 import sidkbk.celemo.dto.user.FindUserIdandFilterDTO;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.EGender;
@@ -96,8 +97,8 @@ public class UserService {
     }
 
     // get/find user account using id
-    public Optional<User> getUserById(String id){
-        return userRepository.findById(id);
+    public Optional<User> getUserById(FindUserIdDTO findUserIdDTO){
+        return userRepository.findById(findUserIdDTO.getUserId());
     }
 
     // PUT/update user account. checks that new value isn't empty before adding. If something is empty then it will throw EntityNotFoundException

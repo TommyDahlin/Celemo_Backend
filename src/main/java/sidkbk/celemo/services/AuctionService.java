@@ -2,6 +2,7 @@ package sidkbk.celemo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sidkbk.celemo.dto.user.FindUserIdDTO;
 import sidkbk.celemo.models.User;
 import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.repositories.OrderRepository;
@@ -44,11 +45,11 @@ public class AuctionService {
         return auctionRepository.save(auction);
     }
     // Takes all auctions in repository, checks for "isFinished" flag, if true skips, if false adds.
-    public List<Auction> getActiveAuction(String id){
+    public List<Auction> getActiveAuction(FindUserIdDTO findUserIdDTO){
         List<Auction> auctionList = auctionRepository.findAll();
         List<Auction> activeAuctionList = new ArrayList<>();
         for (int i = 0; i < auctionList.size(); i++) {
-            if (!auctionList.get(i).isFinished && Objects.equals(auctionList.get(i).getSellerId(), id)){
+            if (!auctionList.get(i).isFinished && Objects.equals(auctionList.get(i).getSellerId(), findUserIdDTO.getUserId())){
                 activeAuctionList.add(auctionList.get(i));
             }
         }
