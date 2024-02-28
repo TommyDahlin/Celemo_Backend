@@ -22,6 +22,7 @@ public class ReviewsDTO {
     private String createdById;
     private String reviewedUserId;
 
+
     public String getReviewId() {
         return reviewId;
     }
