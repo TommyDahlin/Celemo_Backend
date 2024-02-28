@@ -6,10 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sidkbk.celemo.dto.FindTransactionsForUserDTO;
-import sidkbk.celemo.dto.user.CreateUserDTO;
-import sidkbk.celemo.dto.user.DeleteUserDTO;
-import sidkbk.celemo.dto.user.FindUserIdDTO;
-import sidkbk.celemo.dto.user.FindUserIdandFilterDTO;
+import sidkbk.celemo.dto.user.*;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.User;
 import sidkbk.celemo.services.AuctionService;
@@ -82,19 +79,15 @@ public class UserController {
     
 
     // List of all previousPurchases by User
-    @GetMapping("/find/{id}/previouspurchase")
-    public ResponseEntity<?> getPreviousPurchase(@PathVariable String id) {
+    @GetMapping("/find/previouspurchase")
+    public ResponseEntity<?> getPreviousPurchase(@Valid @RequestBody FindUserIdDTO findUserIdDTO) {
 
         try{
-            return ResponseEntity.ok(orderService.findPreviousPurchase(id));
+            return ResponseEntity.ok(orderService.findPreviousPurchase(findUserIdDTO));
         } catch (EntityNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
-
-
-
-
 
   // put/update // using responseEntity<?> creates a generic wildcard that can return any type of body
     @GetMapping("/find/{id}/finishedauction")
@@ -106,10 +99,10 @@ public class UserController {
         }
 
         }
-    @PutMapping("/put/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable String id, @Valid @RequestBody User userDetails){
+    @PutMapping("/put")
+    public ResponseEntity<?> updateUser(@Valid @RequestBody UpdateUserDTO updateUserDTO){
         try{
-            User updatedUser = userService.updateUser(id, userDetails);
+            User updatedUser = userService.updateUser(updateUserDTO);
             return ResponseEntity.ok(updatedUser);
         } catch (EntityNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

@@ -30,13 +30,21 @@ http://localhost:8080/api/user/find
 
 // find/:id
 
-http://localhost:8080/api/user/find/:id
+http://localhost:8080/api/user/finduser
+
+{
+"userId": "65d755943b0850253b1640c0"
+}
 
 ****************************************************
 
 // delete/:id
 
-http://localhost:8080/api/user/delete/:id
+http://localhost:8080/api/user/delete
+
+{
+"userId": "65d755943b0850253b1640c0"
+}
 
 ****************************************************
 
@@ -58,4 +66,3 @@ http://localhost:8080/api/user/find/65d33bbcf4da3a3f932fe8ec/previouspurchase
 http://localhost:8080/api/user/findfilter
 
 ****************************************************
-

@@ -2,6 +2,7 @@ package sidkbk.celemo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sidkbk.celemo.dto.user.FindUserIdDTO;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.models.Order;
@@ -79,14 +80,14 @@ public class OrderService {
     }
 
 
-    public List<Order> findPreviousPurchase(String id) {
+    public List<Order> findPreviousPurchase(FindUserIdDTO findUserIdDTO) {
         List<Order> allOrders = orderRepository.findAll(); //list of all orders
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("User was not found with: " + id));// Retrieves the user by its id,// instead of .get() i cast a EntityNotFoundException to make sure the user exists and to understand what was giving error 404
+        User user = userRepository.findById(findUserIdDTO.getUserId())
+                .orElseThrow(() -> new EntityNotFoundException("User was not found with: " + findUserIdDTO.getUserId()));// Retrieves the user by its id,// instead of .get() i cast a EntityNotFoundException to make sure the user exists and to understand what was giving error 404
         List<Order> previousPurchase = new ArrayList<>();
 
         for (Order order : allOrders) { // takes a check on each order so see if it matches with buyerID
-            if (order.getBuyerId() != null && order.getBuyerId().equals(id)) {
+            if (order.getBuyerId() != null && order.getBuyerId().equals(findUserIdDTO.getUserId())) {
 
                 Auction auction = order.getAuction(); //to access auction from order
                 if (auction.getCelebrityName() != null) {// when celebrityname is null in database it cast message auction null, have it outcommented due to celbrity name being null in database for the orders we have so far.
