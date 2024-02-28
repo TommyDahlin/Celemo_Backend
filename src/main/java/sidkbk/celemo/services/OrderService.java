@@ -55,9 +55,8 @@ public Order createOrder(OrderCreationDTO orderCreationDTO) {
     newOrder.setProductTitle(findAuction.getTitle());
     newOrder.setEndPrice(findAuction.getEndPrice());
     newOrder.setCreatedAt(orderCreationDTO.getCreatedAt());
-    newOrder.setTest(orderCreationDTO.getTest());
-
-   // newOrder.setBids(orderCreationDTO.getCommission());
+//    newOrder.setTest(orderCreationDTO.getTest());
+//    newOrder.setBids(orderCreationDTO.getCommission());
 
     return orderRepository.save(newOrder);
 }
