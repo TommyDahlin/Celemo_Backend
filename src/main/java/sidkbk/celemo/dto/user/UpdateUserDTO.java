@@ -6,40 +6,49 @@ import sidkbk.celemo.models.EGender;
 import java.util.HashSet;
 import java.util.Set;
 
-public class CreateUserDTO {
-    @NotBlank(message = "Username cannot be blank")
+public class UpdateUserDTO {
+    @NotBlank
+    private String userId;
     private String username;
-    @NotBlank(message = "password cannot be blank")
     private String password;
-    //dateofbirth
-    @NotBlank(message = "dateOfBirth cannot be blank")
     private String dateOfBirth;
-    @NotBlank(message = "email cannot be blank")
     private String email;
-    @NotBlank(message = "firstName cannot be blank")
     private String firstName;
-    @NotBlank(message = "lastName cannot be blank")
     private String lastName;
     private Set<String> usersRoles = new HashSet<>();
     private EGender gender;
-    @NotBlank(message = "adress_street cannot be blank")
     private String adress_street;
-    @NotBlank(message = "adress_postalcode cannot be blank")
     private String adress_postalCode;
-    @NotBlank(message = "adress_city cannot be blank")
     private String adress_city;
+    private String photo;
+    private double balance;
 
+
+    public String getUserId() {
+        return userId;
+    }
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
     public String getUsername() {
         return username;
-    }
-
-    public EGender getGender() {
-        return gender;
-    }
-
-    public void setGender(EGender gender) {
-        this.gender = gender;
     }
 
     public void setUsername(String username) {
@@ -94,6 +103,14 @@ public class CreateUserDTO {
         this.usersRoles = usersRoles;
     }
 
+    public EGender getGender() {
+        return gender;
+    }
+
+    public void setGender(EGender gender) {
+        this.gender = gender;
+    }
+
     public String getAdress_street() {
         return adress_street;
     }
@@ -118,4 +135,3 @@ public class CreateUserDTO {
         this.adress_city = adress_city;
     }
 }
-
