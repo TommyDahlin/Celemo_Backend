@@ -5,9 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sidkbk.celemo.dto.ReviewsDTO;
-import sidkbk.celemo.dto.ReviewsDeleteDTO;
-import sidkbk.celemo.dto.ReviewsFindDTO;
+import sidkbk.celemo.dto.Reviews.ReviewsDTO;
+import sidkbk.celemo.dto.Reviews.ReviewsDeleteDTO;
+import sidkbk.celemo.dto.Reviews.ReviewsFindDTO;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.Reviews;
 import sidkbk.celemo.services.ReviewsService;
@@ -66,11 +66,8 @@ public class ReviewsController {
 
     // PUT Update a review dto
     @PutMapping("/put")
-    public ResponseEntity<?> updateReview(@Valid @RequestBody ReviewsDTO updateReviewsDTO) {
-        try {
-            return ResponseEntity.ok(updateReview(updateReviewsDTO));
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+    public ResponseEntity<Reviews> updateReview(@Valid @RequestBody ReviewsDTO updateReviewsDTO) {
+
+        return ResponseEntity.ok(reviewsService.updateReview(updateReviewsDTO));
     }
 }

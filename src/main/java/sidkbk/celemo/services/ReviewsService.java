@@ -3,9 +3,9 @@ package sidkbk.celemo.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import sidkbk.celemo.dto.ReviewsDTO;
-import sidkbk.celemo.dto.ReviewsDeleteDTO;
-import sidkbk.celemo.dto.ReviewsFindDTO;
+import sidkbk.celemo.dto.Reviews.ReviewsDTO;
+import sidkbk.celemo.dto.Reviews.ReviewsDeleteDTO;
+import sidkbk.celemo.dto.Reviews.ReviewsFindDTO;
 import sidkbk.celemo.models.Reviews;
 import sidkbk.celemo.models.User;
 import sidkbk.celemo.repositories.ReviewsRepo;
@@ -88,6 +88,7 @@ public class ReviewsService {
 
     // Update
     public Reviews updateReview(ReviewsDTO updateReviewsDTO) {
+
         return reviewsRepo.findById(updateReviewsDTO.getReviewId())
                 .map(existingReview -> {
             if (updateReviewsDTO.getGrade() != null) {
@@ -98,5 +99,7 @@ public class ReviewsService {
             }
             return reviewsRepo.save(existingReview);
         }).orElseThrow(() -> new RuntimeException("Review not found!"));
+
+
     }
 }
