@@ -1,7 +1,6 @@
 package sidkbk.celemo.models;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -40,7 +39,7 @@ public class User {
 
     private EGender gender;
 
-    private String photo;
+    private String photo = "dummy.png";
     @NotBlank(message = "firstName cannot be blank")
     private String firstName;
     @NotBlank(message = "lastName cannot be blank")
@@ -61,9 +60,9 @@ public class User {
 
 
 
-    private double balance;
+    private double balance = 0d;
 
-private double grade;
+    private double grade = 0d;
 
     public User() {
 

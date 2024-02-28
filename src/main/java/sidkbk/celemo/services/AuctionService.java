@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import sidkbk.celemo.dto.user.FindUserIdDTO;
 import sidkbk.celemo.dto.auctions.AuctionCreationDTO;
 import sidkbk.celemo.dto.auctions.AuctionIdDTO;
 import sidkbk.celemo.dto.auctions.AuctionUpdateDTO;
@@ -69,25 +70,25 @@ public class AuctionService {
                 }).orElseThrow(() -> new RuntimeException("Auction not found"));
     }
     // Takes all auctions in repository, checks for "isFinished" flag, if true skips, if false adds.
-    public List<Auction> getActiveAuction(String id){
+    public List<Auction> getActiveAuction(FindUserIdDTO findUserIdDTO){
         List<Auction> auctionList = auctionRepository.findAll();
         List<Auction> activeAuctionList = new ArrayList<>();
         for (int i = 0; i < auctionList.size(); i++) {
-            if (!auctionList.get(i).isFinished && Objects.equals(auctionList.get(i).getSellerId(), id)){
+            if (!auctionList.get(i).isFinished && Objects.equals(auctionList.get(i).getSellerId(), findUserIdDTO.getUserId())){
                 activeAuctionList.add(auctionList.get(i));
             }
         }
         return activeAuctionList;
     }
-    public List<Auction> getFinishedAuctions(String id){
+    public List<Auction> getFinishedAuctions(FindUserIdDTO findUserIdDTO){
         List<Auction> auctionList = auctionRepository.findAll();
-        List<Auction> activeAuctionList = new ArrayList<>();
+        List<Auction> finishedAuctionList = new ArrayList<>();
         for (int i = 0; i < auctionList.size(); i++) {
-            if (auctionList.get(i).isFinished && Objects.equals(auctionList.get(i).getSellerId(), id)){
-                activeAuctionList.add(auctionList.get(i));
+            if (auctionList.get(i).isFinished && Objects.equals(auctionList.get(i).getSellerId(), findUserIdDTO.getUserId())){
+                finishedAuctionList.add(auctionList.get(i));
             }
         }
-        return activeAuctionList;
+        return finishedAuctionList;
     }
     // DELETE 1 by id
     public ResponseEntity<?> deleteAuction(AuctionIdDTO auctionIdDTO) {
