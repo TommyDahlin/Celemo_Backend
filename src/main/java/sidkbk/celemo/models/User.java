@@ -46,7 +46,6 @@ public class User {
     @NotBlank(message = "lastName cannot be blank")
     private String lastName;
 
-    private Set<String> usersRoles = new HashSet<>();
     @DBRef
     private Set<Role> roles = new HashSet<>();
 
@@ -223,13 +222,6 @@ private double grade;
         this.roles = roles;
     }
 
-    public Set<String> getUsersRoles() {
-        return usersRoles;
-    }
-
-    public void setUsersRoles(Set<String> usersRoles) {
-        this.usersRoles = usersRoles;
-    }
 
     public double getGrade() {
         return grade;

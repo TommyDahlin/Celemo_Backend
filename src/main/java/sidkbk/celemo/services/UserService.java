@@ -3,6 +3,7 @@ package sidkbk.celemo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sidkbk.celemo.dto.CreateUserDTO;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.EGender;
 import sidkbk.celemo.models.ERole;
@@ -28,8 +29,18 @@ public class UserService {
 
 
     // create/add/post user account
-    public User createUser(User user){
-
+    public User createUser(CreateUserDTO createUserDTO){
+        User user = new User();
+        user.setUsername(createUserDTO.getUsername());
+        user.setPassword(createUserDTO.getPassword());
+        user.setDateOfBirth(createUserDTO.getDateOfBirth());
+        user.setEmail(createUserDTO.getEmail());
+        user.setFirstName(createUserDTO.getFirstName());
+        user.setLastName(createUserDTO.getLastName());
+        user.setAdress_city(createUserDTO.getAdress_city());
+        user.setAdress_street(createUserDTO.getAdress_street());
+        user.setAdress_postalCode(createUserDTO.getAdress_postalCode());
+        user.setGender(createUserDTO.getGender());
         //checks if  password is longer than 8 chars and contains atleast one upperCase
         user.isPasswordCorrect(user);
 
@@ -42,7 +53,7 @@ public class UserService {
             user.setGender(EGender.FEMALE);
         }
         Set<Role> roles = new HashSet<>();
-        Set<String> strRoles = user.getUsersRoles();
+        Set<String> strRoles = createUserDTO.getUsersRoles();
         if (strRoles.isEmpty()){
             Role userRole = roleRepository.findByName(ERole.ROLE_USER)
                     .orElseThrow(() -> new RuntimeException("Error: role is not found"));
