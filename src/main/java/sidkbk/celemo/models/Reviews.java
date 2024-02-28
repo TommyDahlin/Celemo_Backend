@@ -23,7 +23,7 @@ public class Reviews {
     private String reviewText;
 
     @CreatedDate
-    private Date createdAt;
+    private Date createdAt = new Date();
 
 
     @DBRef

@@ -40,31 +40,28 @@ public class ReviewsService {
                 .orElseThrow(() -> new RuntimeException("User createdBy not found"));
         User reviewedUser = userRepository.findById(reviewsDTO.getReviewedUserId())
                 .orElseThrow(() -> new RuntimeException("User reviewedUser not found"));
+        String reUser = reviewedUser.getId();
         Reviews newReview = new Reviews();
         newReview.setGrade(reviewsDTO.getGrade());
+        double aGrade = reviewsDTO.getGrade();
         newReview.setReviewText(reviewsDTO.getReviewText());
-        //newReview.getCreatedAt(reviewsDTO.getCreatedAt());
         newReview.setCreatedBy(createdBy);
         newReview.setReviwedUser(reviewedUser);
-
         reviewsRepo.save(newReview);
-        //grade
-        //reviewText
-        //createdAt
-        updateAverageGrade(reviewsDTO);
+        updateAverageGrade(reUser, aGrade);
         return newReview;
     }
 
 
-    public void updateAverageGrade(ReviewsDTO reviewsDTO){
+    public void updateAverageGrade(String u, double g){
         List<Reviews> allReviews = reviewsRepo.findAll(); // list all reviews
-        User user = userRepository.findById(reviewsDTO.getReviewId()).get(); //get reviews with reviewedUser
+        User user = userRepository.findById(u).get(); //get reviews with reviewedUser
         List<Double> reviewGrade = new ArrayList<>(); //create a new list to fill with
         for (Reviews reviews : allReviews) { //checks each review if the reviewedUserId matches with id
-            if(reviews.getReviwedUser().getId().equals(reviewsDTO.getReviewId())){
-
-                reviewGrade.add(reviewsDTO.getGrade()); //if its a match, add grade to users grade
-
+            if(reviews.getReviwedUser().equals(u)){
+                reviewGrade.add(g); //if its a match, add grade to users grade
+            }else if (reviews == null) {
+                  continue;
             }
         }
         double averageGrade = 0.0; //local grade to fill using for-loop below
@@ -97,9 +94,13 @@ public class ReviewsService {
             if (updateReviewsDTO.getReviewText() != null) {
                 existingReview.setReviewText(updateReviewsDTO.getReviewText());
             }
+            //updateAverageGrade(updateReviewsDTO.getGrade());
             return reviewsRepo.save(existingReview);
         }).orElseThrow(() -> new RuntimeException("Review not found!"));
 
+    }
 
+    public void deleteAllReviews(){
+        reviewsRepo.deleteAll();
     }
 }

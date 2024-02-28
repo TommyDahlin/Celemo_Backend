@@ -43,13 +43,9 @@ public class ReviewsController {
 
     // POST add a review dto
     @PostMapping("/post")
-    public ResponseEntity<Reviews> addReview(@Valid @RequestBody ReviewsDTO reviewsDTO) {
+    public ResponseEntity<?> addReview(@Valid @RequestBody ReviewsDTO reviewsDTO) {
             Reviews newReview = reviewsService.addReview(reviewsDTO);
-            try {
-                return new ResponseEntity<>(newReview, HttpStatus.CREATED);
-            } catch (EntityNotFoundException e){
-                throw new EntityNotFoundException("check dto");
-            }
+            return ResponseEntity.ok(newReview);
     }
 
     // DELETE Delete a review dto
@@ -69,5 +65,10 @@ public class ReviewsController {
     public ResponseEntity<Reviews> updateReview(@Valid @RequestBody ReviewsDTO updateReviewsDTO) {
 
         return ResponseEntity.ok(reviewsService.updateReview(updateReviewsDTO));
+    }
+
+    @DeleteMapping("/delete/all")
+    public void deleteAllReviews(){
+        reviewsService.deleteAllReviews();
     }
 }
