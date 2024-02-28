@@ -92,11 +92,9 @@ public class ReviewsService {
             if (updateReviewsDTO.getReviewText() != null) {
                 existingReview.setReviewText(updateReviewsDTO.getReviewText());
             }
-
-
-
+            reviewsRepo.save(existingReview);
             updateAverageGrade(existingReview.getReviewedUser().getId());
-            return reviewsRepo.save(existingReview);
+            return existingReview;
         }).orElseThrow(() -> new RuntimeException("Review not found!"));
 
     }
