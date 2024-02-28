@@ -2,7 +2,8 @@ package sidkbk.celemo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sidkbk.celemo.dto.AuctionCreationDTO;
+import sidkbk.celemo.dto.auctions.AuctionCreationDTO;
+import sidkbk.celemo.dto.auctions.AuctionIdDTO;
 import sidkbk.celemo.models.User;
 import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.repositories.OrderRepository;
@@ -45,8 +46,8 @@ public class AuctionService {
     }
 
     // READ 1
-    public Auction getOneAuction(String id){
-       return auctionRepository.findById(id).get();
+    public Auction getOneAuction(AuctionIdDTO auctionIdDTO){
+       return auctionRepository.findById(auctionIdDTO.getAuctionId()).get();
     }
     // PUT
     public Auction updateAuction(Auction auction){
