@@ -49,6 +49,7 @@ public class UserService {
         } else if (user.getGender().equals("FEMALE")){//string to enum
             user.setGender(EGender.FEMALE);
         }
+
         Set<Role> roles = new HashSet<>();
         Set<String> strRoles = createUserDTO.getUsersRoles();
         if (strRoles.isEmpty()){
@@ -65,17 +66,22 @@ public class UserService {
                             .orElseThrow(() -> new RuntimeException("Error: Admin Role couldn't be found"));
                     roles.add(adminRole);
                     roles.add(userRole);
+                    user.setRoles(roles);
                 }
                 case "USER" -> {
                     Role userRole = roleRepository.findByName(ERole.ROLE_USER)
                             .orElseThrow(() -> new RuntimeException("Error: Role couldn't be found"));
-                    roles.add(userRole);
+                    if (roles.equals(ERole.ROLE_USER)){
+                        roles.remove(userRole);
+                    }
+
+                    user.setRoles(roles);
                 }
                 }
             });
 
         }
-        user.setRoles(roles);
+
         return userRepository.save(user);
     }
 
