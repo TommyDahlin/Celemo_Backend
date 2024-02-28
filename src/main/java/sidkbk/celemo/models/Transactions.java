@@ -17,7 +17,6 @@ public class Transactions {
     @DBRef
     private User user;
 
-    //@NotEmpty
     private Double transactionAmount;
 
     @CreatedDate
