@@ -13,6 +13,7 @@ import sidkbk.celemo.repositories.BidsRepository;
 import sidkbk.celemo.repositories.OrderRepository;
 import sidkbk.celemo.repositories.UserRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,6 +33,7 @@ public class OrderService {
 
 
 public Order createOrder(OrderCreationDTO orderCreationDTO) {
+
     Auction findAuction = auctionRepository.findById(orderCreationDTO.getAuctionId())
             .orElseThrow(() -> new RuntimeException("Auction not found!"));
 
@@ -41,10 +43,13 @@ public Order createOrder(OrderCreationDTO orderCreationDTO) {
     User findBuyerId = userRepository.findById(orderCreationDTO.getBuyerId())
             .orElseThrow(() -> new RuntimeException("BuyerId was not found"));
 
+
     Order newOrder = new Order();
+    newOrder.setEndPrice(orderCreationDTO.getEndPrice());
     newOrder.setAuction(findAuction);
     newOrder.setSellerAccount(findSellerId);
     newOrder.setBuyerAccount(findBuyerId);
+
 
     return orderRepository.save(newOrder);
 }
