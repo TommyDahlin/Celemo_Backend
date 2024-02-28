@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import sidkbk.celemo.dto.Reviews.ReviewsDTO;
 import sidkbk.celemo.dto.Reviews.ReviewsDeleteDTO;
 import sidkbk.celemo.dto.Reviews.ReviewsFindDTO;
+import sidkbk.celemo.dto.Reviews.ReviewsPutDTO;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.Reviews;
 import sidkbk.celemo.services.ReviewsService;
@@ -62,7 +63,7 @@ public class ReviewsController {
 
     // PUT Update a review dto
     @PutMapping("/put")
-    public ResponseEntity<?> updateReview(@RequestBody ReviewsDTO updateReviewsDTO) {
+    public ResponseEntity<?> updateReview(@RequestBody ReviewsPutDTO updateReviewsDTO) {
 
         return ResponseEntity.ok(reviewsService.updateReview(updateReviewsDTO));
     }

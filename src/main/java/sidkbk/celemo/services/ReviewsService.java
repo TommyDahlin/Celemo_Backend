@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import sidkbk.celemo.dto.Reviews.ReviewsDTO;
 import sidkbk.celemo.dto.Reviews.ReviewsDeleteDTO;
 import sidkbk.celemo.dto.Reviews.ReviewsFindDTO;
+import sidkbk.celemo.dto.Reviews.ReviewsPutDTO;
 import sidkbk.celemo.models.Reviews;
 import sidkbk.celemo.models.User;
 import sidkbk.celemo.repositories.ReviewsRepo;
@@ -40,20 +41,19 @@ public class ReviewsService {
                 .orElseThrow(() -> new RuntimeException("User createdBy not found"));
         User reviewedUser = userRepository.findById(reviewsDTO.getReviewedUserId())
                 .orElseThrow(() -> new RuntimeException("User reviewedUser not found"));
-        String reUser = reviewedUser.getId();
+
         Reviews newReview = new Reviews();
         newReview.setGrade(reviewsDTO.getGrade());
-        double aGrade = reviewsDTO.getGrade();
         newReview.setReviewText(reviewsDTO.getReviewText());
         newReview.setCreatedBy(createdBy);
         newReview.setReviewedUser(reviewedUser);
         reviewsRepo.save(newReview);
-        updateAverageGrade(reUser, aGrade);
+        updateAverageGrade(reviewedUser.getId());
         return newReview;
     }
 
 
-    public void updateAverageGrade(String userId, double grade){
+    public void updateAverageGrade(String userId){
         List<Reviews> allReviews = reviewsRepo.findAll(); // list all reviews
         User user = userRepository.findById(userId).get(); //get reviews with reviewedUser
         List<Double> reviewGrade = new ArrayList<>(); //create a new list to fill with
@@ -82,7 +82,7 @@ public class ReviewsService {
     }
 
     // Update
-    public Reviews updateReview(ReviewsDTO updateReviewsDTO) {
+    public Reviews updateReview(ReviewsPutDTO updateReviewsDTO) {
 
         return reviewsRepo.findById(updateReviewsDTO.getReviewId())
                 .map(existingReview -> {
@@ -93,9 +93,9 @@ public class ReviewsService {
                 existingReview.setReviewText(updateReviewsDTO.getReviewText());
             }
 
-            System.out.println(existingReview.getReviewedUser().getId());
-            //String u = existingReview.getReviewedUser().getId();
-            //updateAverageGrade(u, updateReviewsDTO.getGrade());
+
+
+            updateAverageGrade(existingReview.getReviewedUser().getId());
             return reviewsRepo.save(existingReview);
         }).orElseThrow(() -> new RuntimeException("Review not found!"));
 

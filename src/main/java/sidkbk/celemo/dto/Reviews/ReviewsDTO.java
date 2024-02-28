@@ -1,14 +1,20 @@
 package sidkbk.celemo.dto.Reviews;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public class ReviewsDTO {
 
-
+    @NotBlank(message = "reviewId cannot be blank")
     private String reviewId;
-
+    @NotNull(message = "grade cannot be blank")
     private Double grade;
 
+    @NotBlank(message = "reviewText cannot be blank")
     private String reviewText;
+    @NotBlank(message = "createById cannot be blank")
     private String createdById;
+    @NotBlank(message = "reviewedUserId cannot be blank")
     private String reviewedUserId;
 
 
