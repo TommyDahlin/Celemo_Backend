@@ -1,4 +1,4 @@
-package sidkbk.celemo.dto;
+package sidkbk.celemo.dto.user;
 
 import jakarta.validation.constraints.NotBlank;
 import sidkbk.celemo.models.EGender;

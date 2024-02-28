@@ -3,7 +3,7 @@ package sidkbk.celemo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sidkbk.celemo.dto.CreateUserDTO;
+import sidkbk.celemo.dto.user.CreateUserDTO;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.EGender;
 import sidkbk.celemo.models.ERole;
@@ -23,9 +23,6 @@ public class UserService {
     UserRepository userRepository;
     @Autowired
     RoleRepository roleRepository;
-
-
-
 
 
     // create/add/post user account
