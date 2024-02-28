@@ -1,5 +1,6 @@
 package sidkbk.celemo.models;
 
+import org.springframework.cglib.core.Local;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -20,7 +21,7 @@ public class Order {
     @DBRef
     private Auction auction;
     private double endPrice;
-    private Date endDate;
+    private LocalDate endDate;
 
 
 
@@ -48,10 +49,12 @@ public class Order {
     public void setEndPrice(double endPrice) {
         this.endPrice = endPrice;
     }
-    public Date getEndDate() {
+
+    public LocalDate getEndDate() {
         return endDate;
     }
-    public void setEndDate(Date endDate) {
+
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
 }

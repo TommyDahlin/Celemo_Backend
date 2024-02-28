@@ -5,13 +5,14 @@ import jakarta.validation.constraints.NotBlank;
 public class OrderFoundByIdDTO {
 
     @NotBlank
-    private String userId;
+    private String orderId;
 
-    public String getUserId() {
-        return userId;
+
+    public String getOrderId() {
+        return orderId;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
     }
 }

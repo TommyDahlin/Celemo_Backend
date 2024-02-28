@@ -1,8 +1,10 @@
 package sidkbk.celemo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import sidkbk.celemo.dto.order.OrderCreationDTO;
+import sidkbk.celemo.dto.order.OrderFoundByIdDTO;
 import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.models.Order;
 import sidkbk.celemo.models.User;
@@ -12,6 +14,7 @@ import sidkbk.celemo.repositories.OrderRepository;
 import sidkbk.celemo.repositories.UserRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OrderService {
@@ -54,13 +57,9 @@ public Order createOrder(OrderCreationDTO orderCreationDTO) {
     }
 
 
-
-
-    //READ 1 ORDER
-    public Order getOneOrder(String id) {
-        Order foundOrder = orderRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Order was not found"));
-        return foundOrder;
+    // Find one specific order by orderId
+    public Optional<Order> getOneOrder(OrderFoundByIdDTO orderFoundByIdDTO) {
+        return orderRepository.findById(orderFoundByIdDTO.getOrderId());
     }
 
 
