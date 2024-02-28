@@ -42,7 +42,6 @@ public Order createOrder(OrderCreationDTO orderCreationDTO) {
             .orElseThrow(() -> new RuntimeException("BuyerId was not found"));
 
     Order newOrder = new Order();
-
     newOrder.setAuction(findAuction);
     newOrder.setSellerAccount(findSellerId);
     newOrder.setBuyerAccount(findBuyerId);
