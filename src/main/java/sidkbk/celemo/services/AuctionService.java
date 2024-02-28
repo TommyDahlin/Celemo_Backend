@@ -1,8 +1,13 @@
 package sidkbk.celemo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import sidkbk.celemo.dto.user.FindUserIdDTO;
+import sidkbk.celemo.dto.auctions.AuctionCreationDTO;
+import sidkbk.celemo.dto.auctions.AuctionIdDTO;
+import sidkbk.celemo.dto.auctions.AuctionUpdateDTO;
 import sidkbk.celemo.models.User;
 import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.repositories.OrderRepository;
@@ -25,11 +30,19 @@ public class AuctionService {
     @Autowired
     OrderRepository orderRepository;
 
-    public Auction createAuction(Auction auction) {
-        User findUser = userRepository.findById(auction.getSellerId())
+    public Auction createAuction(AuctionCreationDTO auctionCreationDTO) {
+        User findUser = userRepository.findById(auctionCreationDTO.getSellerId())
                 .orElseThrow(() -> new RuntimeException("Couldn't find user."));
-        auction.setUser(findUser);
-        return auctionRepository.save(auction);
+        Auction newAuction = new Auction();
+        newAuction.setSellerId(auctionCreationDTO.getSellerId());
+        newAuction.setUser(findUser);
+        newAuction.setTitle(auctionCreationDTO.getTitle());
+        newAuction.setProductDescription(auctionCreationDTO.getProductDescription());
+        newAuction.setProductPhoto(auctionCreationDTO.getProductPhoto());
+        newAuction.setCelebrityName(auctionCreationDTO.getCelebrityName());
+        newAuction.setStartPrice(auctionCreationDTO.getStartPrice());
+        newAuction.setCategoryList(auctionCreationDTO.getCategoryList());
+        return auctionRepository.save(newAuction);
     }
     // READ ALL
     public List<Auction> getAllAuctions(){
@@ -37,12 +50,24 @@ public class AuctionService {
     }
 
     // READ 1
-    public Auction getOneAuction(String id){
-       return auctionRepository.findById(id).get();
+    public Auction getOneAuction(AuctionIdDTO auctionIdDTO){
+       return auctionRepository.findById(auctionIdDTO.getAuctionId()).get();
     }
     // PUT
-    public Auction updateAuction(Auction auction){
-        return auctionRepository.save(auction);
+    public Auction updateAuction(AuctionUpdateDTO auctionUpdateDTO){
+         return auctionRepository.findById(auctionUpdateDTO.getAuctionId())
+                .map(updatedAuction -> {
+                    if (auctionUpdateDTO.getProductDescription() != null) {
+                        updatedAuction.setProductDescription(auctionUpdateDTO.getProductDescription());
+                    }
+                    if (auctionUpdateDTO.getProductPhoto() != null) {
+                        updatedAuction.setProductPhoto(auctionUpdateDTO.getProductPhoto());
+                    }
+                    if (auctionUpdateDTO.getCelebrityName() != null) {
+                        updatedAuction.setCelebrityName(auctionUpdateDTO.getCelebrityName());
+                    }
+                    return auctionRepository.save(updatedAuction);
+                }).orElseThrow(() -> new RuntimeException("Auction not found"));
     }
     // Takes all auctions in repository, checks for "isFinished" flag, if true skips, if false adds.
     public List<Auction> getActiveAuction(FindUserIdDTO findUserIdDTO){
@@ -66,11 +91,12 @@ public class AuctionService {
         return finishedAuctionList;
     }
     // DELETE 1 by id
-    public String deleteAuction(String id) {
-        auctionRepository.deleteById(id);
-        return "Deleted successfully!";
+    public ResponseEntity<?> deleteAuction(AuctionIdDTO auctionIdDTO) {
+        auctionRepository.findById(auctionIdDTO.getAuctionId())
+                .orElseThrow(() -> new RuntimeException("Auction not found!"));
+        auctionRepository.deleteById(auctionIdDTO.getAuctionId());
+        return ResponseEntity.status(HttpStatus.OK).body("Auction deleted!");
     }
-
 
     // Delete all to drop clean collection remotely (only for testing don't keep to production)
     public void deleteAllAuctions(){
