@@ -90,10 +90,10 @@ public class UserController {
     }
 
   // put/update // using responseEntity<?> creates a generic wildcard that can return any type of body
-    @GetMapping("/find/{id}/finishedauction")
-    public ResponseEntity<?> getFinishedAuction(@PathVariable String id){
+    @GetMapping("/find/finishedauction")
+    public ResponseEntity<?> getFinishedAuction(@Valid @RequestBody FindUserIdDTO findUserIdDTO){
         try {
-            return ResponseEntity.ok(auctionService.getFinishedAuctions(id));
+            return ResponseEntity.ok(auctionService.getFinishedAuctions(findUserIdDTO));
         } catch (EntityNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
