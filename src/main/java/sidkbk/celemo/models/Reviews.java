@@ -30,7 +30,7 @@ public class Reviews {
     private User createdBy;
 
     @DBRef
-    private User reviwedUser;
+    private User reviewedUser;
 
     // Constructors
     public Reviews() {
@@ -57,8 +57,8 @@ public class Reviews {
         return createdBy;
     }
 
-    public User getReviwedUser() {
-        return reviwedUser;
+    public User getReviewedUser() {
+        return reviewedUser;
     }
 
     // Setters
@@ -74,7 +74,7 @@ public class Reviews {
         this.createdBy = createdBy;
     }
 
-    public void setReviwedUser(User reviwedUser) {
-        this.reviwedUser = reviwedUser;
+    public void setReviewedUser(User reviewedUser) {
+        this.reviewedUser = reviewedUser;
     }
 }

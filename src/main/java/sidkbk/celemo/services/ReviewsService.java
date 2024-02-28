@@ -46,9 +46,9 @@ public class ReviewsService {
         double aGrade = reviewsDTO.getGrade();
         newReview.setReviewText(reviewsDTO.getReviewText());
         newReview.setCreatedBy(createdBy);
-        newReview.setReviwedUser(reviewedUser);
+        newReview.setReviewedUser(reviewedUser);
         reviewsRepo.save(newReview);
-        updateAverageGrade(reUser, aGrade);
+        //updateAverageGrade(reUser, aGrade);
         return newReview;
     }
 
@@ -58,10 +58,8 @@ public class ReviewsService {
         User user = userRepository.findById(u).get(); //get reviews with reviewedUser
         List<Double> reviewGrade = new ArrayList<>(); //create a new list to fill with
         for (Reviews reviews : allReviews) { //checks each review if the reviewedUserId matches with id
-            if(reviews.getReviwedUser().equals(u)){
+            if(reviews.getReviewedUser().equals(u)){
                 reviewGrade.add(g); //if its a match, add grade to users grade
-            }else if (reviews == null) {
-                  continue;
             }
         }
         double averageGrade = 0.0; //local grade to fill using for-loop below
@@ -94,7 +92,10 @@ public class ReviewsService {
             if (updateReviewsDTO.getReviewText() != null) {
                 existingReview.setReviewText(updateReviewsDTO.getReviewText());
             }
-            //updateAverageGrade(updateReviewsDTO.getGrade());
+
+            System.out.println(existingReview.getReviewedUser().getId());
+            //String u = existingReview.getReviewedUser().getId();
+            //updateAverageGrade(u, updateReviewsDTO.getGrade());
             return reviewsRepo.save(existingReview);
         }).orElseThrow(() -> new RuntimeException("Review not found!"));
 

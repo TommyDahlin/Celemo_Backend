@@ -62,7 +62,7 @@ public class ReviewsController {
 
     // PUT Update a review dto
     @PutMapping("/put")
-    public ResponseEntity<Reviews> updateReview(@Valid @RequestBody ReviewsDTO updateReviewsDTO) {
+    public ResponseEntity<?> updateReview(@RequestBody ReviewsDTO updateReviewsDTO) {
 
         return ResponseEntity.ok(reviewsService.updateReview(updateReviewsDTO));
     }
