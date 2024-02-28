@@ -13,6 +13,7 @@ import sidkbk.celemo.repositories.OrderRepository;
 import sidkbk.celemo.repositories.UserRepository;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -35,60 +36,37 @@ public Order createOrder(OrderCreationDTO orderCreationDTO) {
             .orElseThrow(() -> new RuntimeException("Auction not found!"));
 
     User findSellerId = userRepository.findById(orderCreationDTO.getSellerId())
-            .orElseThrow(() -> new RuntimeException("User was not found!"));
+            .orElseThrow(() -> new RuntimeException("SellerId never not found!"));
 
     User findBuyerId = userRepository.findById(orderCreationDTO.getBuyerId())
             .orElseThrow(() -> new RuntimeException("BuyerId was not found"));
-    //Order findOrder = orderRepository.findById(orderCreationDTO.getOrderId())
-    //        .orElseThrow(() -> new RuntimeException("Order was not found!"));
-    //         orderCreationDTO.setOrderId(orderCreationDTO.getOrderId());
-
 
     Order newOrder = new Order();
+
     newOrder.setAuction(findAuction);
     newOrder.setSellerAccount(findSellerId);
     newOrder.setBuyerAccount(findBuyerId);
-
-    newOrder.setEndPrice(orderCreationDTO.getEndPrice());
-    newOrder.setEndDate(orderCreationDTO.getEndDate());
 
     return orderRepository.save(newOrder);
 }
 
 
 
-
-
-    // Create an order
-   /* public Order createOrder(Order order) {
-        Auction findAuction = auctionRepository.findById(order.getAuctionId())
-                .orElseThrow(()-> new RuntimeException("Couldn't find Auction"));
-        // Finding seller from account repository
-        User findSellerAccount = userRepository.findById(findAuction.getSellerId())
-                .orElseThrow(() -> new RuntimeException("Couldn't find seller."));
-            order.setSellerAccount(findSellerAccount);
-        // Finding buyer from account repository
-        // NEEDS BIDS TO BE FINISHED TO PROCEED WITH BUYERACCOUNTID
-        User findBuyerAccount = userRepository.findById(order.getBuyerId())
-                .orElseThrow(() -> new RuntimeException("Couldn't find buyer."));
-
-            order.setBuyerAccount(findBuyerAccount);
-            order.setAuction(findAuction);
-
-
-        return orderRepository.save(order);
-    }*/
-
     // READ ALL ORDERS
     public List<Order> getAllOrders() {
         return orderRepository.findAll();
     }
+
+
+
 
     //READ 1 ORDER
     public Order getOneOrder(String id) {
         Order foundOrder = orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Order was not found"));
         return foundOrder;
     }
+
+
 
     // PUT update one order
     public Order updateOrder(String orderId, Order updateOrder) {
@@ -106,6 +84,15 @@ public Order createOrder(OrderCreationDTO orderCreationDTO) {
                     return orderRepository.save(existingOrder);
                 }).orElseThrow(() -> new RuntimeException("Order was not found"));
     }
+
+
+    // Delete one order by id
+    public String deleteOrder(String id) {
+        orderRepository.deleteById(id);
+        return "Deleted order successfully!";
+    }
+
+}
 
 
 
@@ -133,17 +120,22 @@ public Order createOrder(OrderCreationDTO orderCreationDTO) {
     }
  */
 
+// Create an order
+   /* public Order createOrder(Order order) {
+        Auction findAuction = auctionRepository.findById(order.getAuctionId())
+                .orElseThrow(()-> new RuntimeException("Couldn't find Auction"));
+        // Finding seller from account repository
+        User findSellerAccount = userRepository.findById(findAuction.getSellerId())
+                .orElseThrow(() -> new RuntimeException("Couldn't find seller."));
+            order.setSellerAccount(findSellerAccount);
+        // Finding buyer from account repository
+        // NEEDS BIDS TO BE FINISHED TO PROCEED WITH BUYERACCOUNTID
+        User findBuyerAccount = userRepository.findById(order.getBuyerId())
+                .orElseThrow(() -> new RuntimeException("Couldn't find buyer."));
+
+            order.setBuyerAccount(findBuyerAccount);
+            order.setAuction(findAuction);
 
 
-
-
-
-
-
-    // Delete one order by id
-    public String deleteOrder(String id) {
-        orderRepository.deleteById(id);
-        return "Deleted order successfully!";
-    }
-
-}
+        return orderRepository.save(order);
+    }*/

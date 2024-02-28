@@ -7,8 +7,7 @@ public class OrderCreationDTO {
     private String auctionId;
     private String sellerId;
     private String buyerId;
-    private double endPrice;
-    private Date endDate;
+
 
 
 
@@ -37,23 +36,6 @@ public class OrderCreationDTO {
     public void setBuyerId(String buyerId) {
         this.buyerId = buyerId;
     }
-
-    public double getEndPrice() {
-        return endPrice;
-    }
-
-    public Date getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
-    }
-
-    public void setEndPrice(double endPrice) {
-        this.endPrice = endPrice;
-    }
-
 }
 
 

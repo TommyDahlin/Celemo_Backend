@@ -18,112 +18,39 @@ public class Order {
     private User buyerAccount;
     @DBRef
     private Auction auction;
-
     private double endPrice;
-
     private Date endDate;
 
 
 
-   // public String celebrityName;
-
-
-
-
-
-
-
-   /* public Order(String id, String productTitle, String endDate, int endPrice, String celebrityName) {
-        this.id = id;
-        this.productTitle = productTitle;
-        this.endDate = endDate;
-        this.endPrice = endPrice;
-        this.celebrityName = celebrityName;
-
-
-    }*/
-
-    public String getId() {
-        return id;
-    }
-
-//    public String getSellerId() {
-//        return sellerId;
-//    }
-//
-//    public String getBuyerId() {
-//        return buyerId;
-//    }
-//
-//    public String getProductTitle() {
-//        return productTitle;
-//    }
-//
-//    public String getEndDate() {
-//        return endDate;
-//    }
-//
-//    public void setSellerId(String sellerId) {
-//        this.sellerId = sellerId;
-//    }
-//
-//    public void setBuyerId(String buyerId) {
-//        this.buyerId = buyerId;
-//    }
-//
-//    public void setProductTitle(String productTitle) {
-//        this.productTitle = productTitle;
-//    }
-
     public User getSellerAccount() {
         return sellerAccount;
     }
-
     public void setSellerAccount(User sellerAccount) {
         this.sellerAccount = sellerAccount;
     }
-
     public User getBuyerAccount() {
         return buyerAccount;
     }
-
     public void setBuyerAccount(User buyerAccount) {
         this.buyerAccount = buyerAccount;
     }
-
-//    public String getAuctionId() {
-//        return auctionId;
-//    }
-
     public Auction getAuction() {
         return auction;
     }
-
     public void setAuction(Auction auction) {
         this.auction = auction;
     }
-
     public double getEndPrice() {
         return endPrice;
     }
-
     public void setEndPrice(double endPrice) {
         this.endPrice = endPrice;
     }
-
     public Date getEndDate() {
         return endDate;
     }
-
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
-
-//    public int getEndPrice() {
-//        return endPrice;
-//    }
-
-//    public String getCelebrityName() {
-//        return celebrityName;
-//    }
 }
