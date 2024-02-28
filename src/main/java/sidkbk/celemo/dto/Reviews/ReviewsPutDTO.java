@@ -1,7 +1,10 @@
 package sidkbk.celemo.dto.Reviews;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class ReviewsPutDTO {
 
+    @NotBlank
     private String reviewId;
 
     private Double grade;
