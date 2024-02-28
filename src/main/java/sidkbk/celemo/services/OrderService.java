@@ -33,7 +33,6 @@ public class OrderService {
 
 
 public Order createOrder(OrderCreationDTO orderCreationDTO) {
-
     Auction findAuction = auctionRepository.findById(orderCreationDTO.getAuctionId())
             .orElseThrow(() -> new RuntimeException("Auction not found!"));
 

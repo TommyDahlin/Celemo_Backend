@@ -20,8 +20,10 @@ public class Order {
     private User buyerAccount;
     @DBRef
     private Auction auction;
-
+    private String productTitle;
     private double endPrice;
+
+    private Date createdAt = new Date();
 
     public Order() {
     }
@@ -52,11 +54,7 @@ public class Order {
         this.endPrice = endPrice;
     }
 
-//    public LocalDate getEndDate() {
-//        return endDate;
-//    }
-//
-//    public void setEndDate(LocalDate endDate) {
-//        this.endDate = endDate;
-//    }
+    public String getId() {
+        return id;
+    }
 }

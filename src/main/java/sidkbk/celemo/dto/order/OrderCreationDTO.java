@@ -12,8 +12,7 @@ public class OrderCreationDTO {
     private String buyerId;
     private double endPrice;
 
-    public OrderCreationDTO() {
-    }
+
 
 
     public String getAuctionId() {
