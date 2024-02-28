@@ -1,7 +1,9 @@
 package sidkbk.celemo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import sidkbk.celemo.dto.ReportsDTO;
 import sidkbk.celemo.models.User;
 import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.models.Reports;
@@ -22,14 +24,22 @@ public class ReportsServices {
     UserRepository userRepository;
 
 
-    public Reports createReportUser(Reports report, String reportingUser, String reportedUser) {
-        User foundreportedUser = userRepository.findById(reportedUser)
+    public ResponseEntity<Reports> createReportUser(ReportsDTO reportsDTO) {
+        User foundReportedUser = userRepository.findById(reportsDTO.getId())
                 .orElseThrow(() -> new RuntimeException("User does not exist!"));
-        report.setReportedUserId(foundreportedUser);
-        User foundreportinguser = userRepository.findById(reportingUser)
+        User foundReportingUser = userRepository.findById(reportsDTO.getId())
                 .orElseThrow(() -> new RuntimeException("User does not exist!"));
-        report.setReportingUserId(foundreportinguser);
-        return reportsRepository.save(report);
+        reportsDTO.setReportedUserId(reportsDTO.getReportingUserId());
+        reportsDTO.setReportingUserId(reportsDTO.getReportingUserId());
+        Auction foundReportedAuction = auctionRepository.findById(reportsDTO.getId())
+                .orElseThrow(() -> new RuntimeException("Auction does not exist!"));
+        Reports newReport = new Reports();
+        newReport.setReportedUserId(foundReportedUser);
+        newReport.setReportingUserId(foundReportingUser);
+        newReport.setAuction(foundReportedAuction);
+        newReport.setContent(reportsDTO.getContent());
+
+        return ResponseEntity.ok(reportsRepository.save(newReport));
     }
 
     public Reports createReportAuction(Reports report, String reportingUser, String reportedAuction) {

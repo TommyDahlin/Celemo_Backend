@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import sidkbk.celemo.dto.ReportsDTO;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.Reports;
 import sidkbk.celemo.services.ReportsServices;
@@ -17,11 +18,10 @@ public class ReportsControllers {
 
 
     //Post a new report for a user
-    @PostMapping("/post/reportuser/{reportinguser}/{reporteduser}")
-    public ResponseEntity<?> createReportUser(
-            @RequestBody Reports report, @PathVariable("reportinguser") String reportingUser, @PathVariable ("reporteduser") String reportedUser){
+    @PostMapping("/post/reportuser")
+    public ResponseEntity<?> createReportUser(@Valid @RequestBody ReportsDTO reportsDTO){
         try {
-            return ResponseEntity.ok(reportsServices.createReportUser(report, reportingUser, reportedUser));
+            return reportsServices.createReportUser(reportsDTO);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
