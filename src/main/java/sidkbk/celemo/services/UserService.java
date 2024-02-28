@@ -56,6 +56,7 @@ public class UserService {
             Role userRole = roleRepository.findByName(ERole.ROLE_USER)
                     .orElseThrow(() -> new RuntimeException("Error: role is not found"));
             roles.add(userRole);
+            user.setRoles(roles);
         }else {
             strRoles.forEach(role -> {
                 switch (role) {
