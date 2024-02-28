@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sidkbk.celemo.dto.user.CreateUserDTO;
+import sidkbk.celemo.dto.user.DeleteUserDTO;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.User;
 import sidkbk.celemo.services.AuctionService;
@@ -113,10 +114,10 @@ public class UserController {
     }
 
     // delete account
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable String id){
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteUser(@Valid @RequestBody DeleteUserDTO deleteUserDTO){
         try{
-            return ResponseEntity.ok(userService.deleteUser(id));
+            return ResponseEntity.ok(userService.deleteUser(deleteUserDTO));
 
         }catch (EntityNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

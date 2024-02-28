@@ -1,9 +1,13 @@
 package sidkbk.celemo.services;
 
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 import sidkbk.celemo.dto.user.CreateUserDTO;
+import sidkbk.celemo.dto.user.DeleteUserDTO;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.EGender;
 import sidkbk.celemo.models.ERole;
@@ -61,21 +65,15 @@ public class UserService {
             strRoles.forEach(role -> {
                 switch (role) {
                 case "ADMIN" -> {
-                    Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                            .orElseThrow(()-> new RuntimeException("Error: User Role couldn't be found"));
                     Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
                             .orElseThrow(() -> new RuntimeException("Error: Admin Role couldn't be found"));
                     roles.add(adminRole);
-                    roles.add(userRole);
                     user.setRoles(roles);
                 }
                 case "USER" -> {
                     Role userRole = roleRepository.findByName(ERole.ROLE_USER)
                             .orElseThrow(() -> new RuntimeException("Error: Role couldn't be found"));
-                    if (roles.equals(ERole.ROLE_USER)){
-                        roles.remove(userRole);
-                    }
-
+                    roles.add(userRole);
                     user.setRoles(roles);
                 }
                 }
@@ -148,8 +146,11 @@ adress_city
 
 
     // delete user account
-    public String deleteUser(String id){
-        userRepository.deleteById(id);
-        return "Deleted user successfully!";
+    public ResponseEntity<?> deleteUser(DeleteUserDTO deleteUserDTO){
+        userRepository.findById(deleteUserDTO.getUserId())
+                .orElseThrow(()-> new RuntimeException("User does not exist"));
+        userRepository.deleteById(deleteUserDTO.getUserId());
+        return ResponseEntity.ok("User deleted");
+
     }
 }
