@@ -58,7 +58,8 @@ public Order createOrder(OrderCreationDTO orderCreationDTO) {
 
     //READ 1 ORDER
     public Order getOneOrder(String id) {
-        Order foundOrder = orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Order was not found"));
+        Order foundOrder = orderRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Order was not found"));
         return foundOrder;
     }
 
