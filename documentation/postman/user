@@ -28,7 +28,7 @@ http://localhost:8080/api/user/find
 
 ****************************************************
 
-// find/:id
+// find
 
 http://localhost:8080/api/user/finduser
 
@@ -38,7 +38,7 @@ http://localhost:8080/api/user/finduser
 
 ****************************************************
 
-// delete/:id
+// delete
 
 http://localhost:8080/api/user/delete
 
@@ -50,13 +50,19 @@ http://localhost:8080/api/user/delete
 
 // put/:id
 
-http://localhost:8080/api/user /put/:id
+http://localhost:8080/api/user/put
+
+{
+"userId": "65d755943b0850253b1640c0"
+"username": "New username" -- Works with everything
+"usersRoles": ["ADMIN","USER"]
+}
 
 
 ###########################################
 
 // GET previousPurchase from User by BuyerID
-
+this is borked
 http://localhost:8080/api/user/find/65d33bbcf4da3a3f932fe8ec/previouspurchase
 
 ############################################################
@@ -64,5 +70,9 @@ http://localhost:8080/api/user/find/65d33bbcf4da3a3f932fe8ec/previouspurchase
 // get filter using userId ( replace {filter} with ex. username or grade )
 
 http://localhost:8080/api/user/findfilter
+{
+"userId": "65d755943b0850253b1640c0"
+"filter": "username" / "grade"  / "firstname"  / "lastname"
+}
 
 ****************************************************
