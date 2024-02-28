@@ -1,7 +1,5 @@
 package sidkbk.celemo.dto.Reviews;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 
@@ -11,9 +9,9 @@ public class ReviewsDTO {
 
     @Id
     private String reviewId;
-    @NotNull(message = "Field cannot be blank!")
+
     private Double grade;
-    @NotBlank(message = "Field cannot be blank!")
+
     private String reviewText;
 
     @CreatedDate
