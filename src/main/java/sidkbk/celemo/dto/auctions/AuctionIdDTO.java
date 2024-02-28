@@ -1,8 +1,11 @@
 package sidkbk.celemo.dto.auctions;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class AuctionIdDTO {
 
     // Variables
+    @NotBlank
     private String auctionId;
 
 

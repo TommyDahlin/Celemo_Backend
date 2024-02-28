@@ -29,3 +29,13 @@ Body - raw
 }
 
 #######################################################################################################
+
+PUT - Update an auction
+http://localhost:8080/api/auction/put
+Body - raw
+{
+    "auctionId": "65cf4c97f8e89b4462e5be28",    // REQUIRED
+    "productDescription": "Allan ballan",       // OPTIONAL
+    "productPhoto": "nybild.jpg",               // OPTIONAL
+    "celebrityName": "Olle"                     // OPTIONAL
+}

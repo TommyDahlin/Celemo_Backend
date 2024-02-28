@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sidkbk.celemo.dto.auctions.AuctionCreationDTO;
 import sidkbk.celemo.dto.auctions.AuctionIdDTO;
+import sidkbk.celemo.dto.auctions.AuctionUpdateDTO;
 import sidkbk.celemo.models.User;
 import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.repositories.OrderRepository;
@@ -50,8 +51,20 @@ public class AuctionService {
        return auctionRepository.findById(auctionIdDTO.getAuctionId()).get();
     }
     // PUT
-    public Auction updateAuction(Auction auction){
-        return auctionRepository.save(auction);
+    public Auction updateAuction(AuctionUpdateDTO auctionUpdateDTO){
+         return auctionRepository.findById(auctionUpdateDTO.getAuctionId())
+                .map(updatedAuction -> {
+                    if (auctionUpdateDTO.getProductDescription() != null) {
+                        updatedAuction.setProductDescription(auctionUpdateDTO.getProductDescription());
+                    }
+                    if (auctionUpdateDTO.getProductPhoto() != null) {
+                        updatedAuction.setProductPhoto(auctionUpdateDTO.getProductPhoto());
+                    }
+                    if (auctionUpdateDTO.getCelebrityName() != null) {
+                        updatedAuction.setCelebrityName(auctionUpdateDTO.getCelebrityName());
+                    }
+                    return auctionRepository.save(updatedAuction);
+                }).orElseThrow(() -> new RuntimeException("Auction not found"));
     }
     // Takes all auctions in repository, checks for "isFinished" flag, if true skips, if false adds.
     public List<Auction> getActiveAuction(String id){

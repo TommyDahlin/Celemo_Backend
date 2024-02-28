@@ -7,8 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sidkbk.celemo.dto.auctions.AuctionCreationDTO;
 import sidkbk.celemo.dto.auctions.AuctionIdDTO;
+import sidkbk.celemo.dto.auctions.AuctionUpdateDTO;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
-import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.services.AuctionService;
 
 @RestController
@@ -49,11 +49,10 @@ public class AuctionController {
     }
 
     // PUT update an auction
-    @PutMapping("/put/{id}")
-    public ResponseEntity<?> updateAuction(@PathVariable("id") String auctionId,
-                                          @Valid @RequestBody Auction auction) {
+    @PutMapping("/put")
+    public ResponseEntity<?> updateAuction(@Valid @RequestBody AuctionUpdateDTO auctionUpdateDTO) {
         try {
-            return ResponseEntity.ok(auctionService.updateAuction(auction));
+            return ResponseEntity.ok(auctionService.updateAuction(auctionUpdateDTO));
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
