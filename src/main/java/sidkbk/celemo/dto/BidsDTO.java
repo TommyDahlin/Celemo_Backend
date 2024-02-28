@@ -4,8 +4,12 @@ public class BidsDTO {
 
 
     // Data transfer object/ User and Auction
-    private Double price;
 
+
+
+    private String bidsid;
+
+    private Double price;
 
     private String userId;
 

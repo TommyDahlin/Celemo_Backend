@@ -10,9 +10,6 @@ import java.time.LocalDate;
 @Document(collection = "bids")
 public class Bids {
 
-    public String getId() {
-        return id;
-    }
 
     @Id
     private String id;
@@ -25,6 +22,11 @@ public class Bids {
 
 
     public Bids() {
+    }
+
+
+    public String getId() {
+        return id;
     }
 
 

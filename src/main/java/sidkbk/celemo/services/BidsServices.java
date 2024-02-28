@@ -24,12 +24,12 @@ public class BidsServices {
     @Autowired
     UserRepository userRepository;
 
+
+
 // Find all bids
     public List<Bids>findAllBids(){
         return bidsRepository.findAll();
     }
-
-
 
     // Create a bids using price, userId and listingId
     public Bids createBids(BidsDTO bidsDTO){
@@ -63,8 +63,8 @@ public class BidsServices {
     }
 
 //Find a bids by id
-    public Bids findOne(String id){
-        return bidsRepository.findById(id).get();
+    public Bids findOne(BidsDTO bidsDTO){
+        return bidsRepository.findById(bidsDTO.).get();
     }
 
 // delete a bids
@@ -84,7 +84,6 @@ public class BidsServices {
         newUpdate.setUser(foundUser);
         return bidsRepository.save(newUpdate);
     }
-
 
 
 }
