@@ -2,6 +2,7 @@ package sidkbk.celemo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sidkbk.celemo.dto.BidsDTO;
 import sidkbk.celemo.models.User;
 import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.models.Bids;
@@ -23,25 +24,34 @@ public class BidsServices {
     @Autowired
     UserRepository userRepository;
 
+// Find all bids
+    public List<Bids>findAllBids(){
+        return bidsRepository.findAll();
+    }
 
-    public Bids createBids(Bids bids){
-        User foundUser = userRepository.findById(bids.getUserId())
+
+
+    // Create a bids using price, userId and listingId
+    public Bids createBids(BidsDTO bidsDTO){
+        User foundUser = userRepository.findById(bidsDTO.getUserId())
                 .orElseThrow(()-> new RuntimeException("User does not exist!"));
-        Auction foundAuction = auctionRepository.findById(bids.getAuctionId())
+        Auction foundAuction = auctionRepository.findById(bidsDTO.getAuctionId())
                 .orElseThrow(()-> new RuntimeException("Auction does not exist!"));
-        bids.setAuction(foundAuction);
-        bids.setUser(foundUser);
 
-        if (bids.getPrice() <= foundAuction.currentPrice){
+        Bids newBids = new Bids();
+        newBids.setAuction(foundAuction);
+        newBids.setUser(foundUser);
+
+        if (bidsDTO.getPrice() <= foundAuction.currentPrice){
             throw new RuntimeException("Your bid cannot be lower than " + foundAuction.currentPrice + " the current bid.");
         } else {
-            foundAuction.setCurrentPrice(bids.getPrice());
+            foundAuction.setCurrentPrice(bidsDTO.getPrice());
         }
 
-        if (foundUser.getBalance() < bids.getPrice()){
-            throw new RuntimeException("Your bid cannot be higher than your balance. Your current balance is " + foundUser.getBalance() + "Your current bid is " + bids.getPrice() + ".");
+        if (foundUser.getBalance() < bidsDTO.getPrice()){
+            throw new RuntimeException("Your bid cannot be higher than your balance. Your current balance is " + foundUser.getBalance() + "Your current bid is " + bidsDTO.getPrice() + ".");
         }else {
-            foundUser.setBalance(foundUser.getBalance() - bids.getPrice());
+            foundUser.setBalance(foundUser.getBalance() - bidsDTO.getPrice());
         }
 
         if (foundAuction.isHasBids() == false){
@@ -49,34 +59,32 @@ public class BidsServices {
         }
         userRepository.save(foundUser);
         auctionRepository.save(foundAuction);
-        return bidsRepository.save(bids);
+        return bidsRepository.save(newBids);
     }
 
-    public List<Bids>findAllBids(){
-        return bidsRepository.findAll();
-    }
-
+//Find a bids by id
     public Bids findOne(String id){
         return bidsRepository.findById(id).get();
     }
 
-
-
-    public Bids updateBids(Bids bids) {
-        User foundUser = userRepository.findById(bids.getUserId())
-                .orElseThrow(() -> new RuntimeException("User does not exist!"));
-        Auction foundAuction = auctionRepository.findById(bids.getAuctionId())
-                .orElseThrow(() -> new RuntimeException("Auction does not exist!"));
-        bids.setAuction(foundAuction);
-        bids.setUser(foundUser);
-        return bidsRepository.save(bids);
-    }
-
-
-
+// delete a bids
     public String deleteBids(String id){
         bidsRepository.deleteById(id);
         return "Deleted successfully!";
     }
+
+// update a bids
+    public Bids updateBids(BidsDTO bidsDTO) {
+        User foundUser = userRepository.findById(bidsDTO.getUserId())
+                .orElseThrow(() -> new RuntimeException("User does not exist!"));
+        Auction foundAuction = auctionRepository.findById(bidsDTO.getAuctionId())
+                .orElseThrow(() -> new RuntimeException("Auction does not exist!"));
+        Bids newUpdate = new Bids();
+        newUpdate.setAuction(foundAuction);
+        newUpdate.setUser(foundUser);
+        return bidsRepository.save(newUpdate);
+    }
+
+
 
 }
