@@ -3,28 +3,41 @@ package sidkbk.celemo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sidkbk.celemo.dto.user.CreateUserDTO;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.EGender;
 import sidkbk.celemo.models.ERole;
+import sidkbk.celemo.models.Role;
 import sidkbk.celemo.models.User;
+import sidkbk.celemo.repositories.RoleRepository;
 import sidkbk.celemo.repositories.UserRepository;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class UserService {
     @Autowired
     UserRepository userRepository;
-
-
-
-
+    @Autowired
+    RoleRepository roleRepository;
 
 
     // create/add/post user account
-    public User createUser(User user){
-
+    public User createUser(CreateUserDTO createUserDTO){
+        User user = new User();
+        user.setUsername(createUserDTO.getUsername());
+        user.setPassword(createUserDTO.getPassword());
+        user.setDateOfBirth(createUserDTO.getDateOfBirth());
+        user.setEmail(createUserDTO.getEmail());
+        user.setFirstName(createUserDTO.getFirstName());
+        user.setLastName(createUserDTO.getLastName());
+        user.setAdress_city(createUserDTO.getAdress_city());
+        user.setAdress_street(createUserDTO.getAdress_street());
+        user.setAdress_postalCode(createUserDTO.getAdress_postalCode());
+        user.setGender(createUserDTO.getGender());
         //checks if  password is longer than 8 chars and contains atleast one upperCase
         user.isPasswordCorrect(user);
 
@@ -36,13 +49,33 @@ public class UserService {
         } else if (user.getGender().equals("FEMALE")){//string to enum
             user.setGender(EGender.FEMALE);
         }
-        if (user.getRole() == null){ //if role is empty -> user
-            user.setRole(ERole.USER);
-        } else if (user.getRole().equals("ADMIN")){ //string to enum
-            user.setRole(ERole.ADMIN);
-        }else if (user.getRole().equals("USER")){ //string to enum
-            user.setRole(ERole.USER);
+        Set<Role> roles = new HashSet<>();
+        Set<String> strRoles = createUserDTO.getUsersRoles();
+        if (strRoles.isEmpty()){
+            Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+                    .orElseThrow(() -> new RuntimeException("Error: role is not found"));
+            roles.add(userRole);
+        }else {
+            strRoles.forEach(role -> {
+                switch (role) {
+                case "ADMIN" -> {
+                    Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+                            .orElseThrow(()-> new RuntimeException("Error: User Role couldn't be found"));
+                    Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+                            .orElseThrow(() -> new RuntimeException("Error: Admin Role couldn't be found"));
+                    roles.add(adminRole);
+                    roles.add(userRole);
+                }
+                case "USER" -> {
+                    Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+                            .orElseThrow(() -> new RuntimeException("Error: Role couldn't be found"));
+                    roles.add(userRole);
+                }
+                }
+            });
+
         }
+        user.setRoles(roles);
         return userRepository.save(user);
     }
 

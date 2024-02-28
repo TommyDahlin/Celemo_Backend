@@ -1,7 +1,7 @@
 //post
 
 
-http://localhost:8080/api/account/post
+http://localhost:8080/api/user/post
 
 {
     "username": "BroderJakob",
@@ -12,7 +12,7 @@ http://localhost:8080/api/account/post
     "photo": "brorpic.url",
     "firstName": "broder",
     "lastName": "jakob",
-    "role": "USER",
+    "usersRoles": ["USER", "ADMIN"] / null
     "adress_street": "peterpan gata",
     "adress_postalCode": "44556",
     "adress_city": "göteborg",
@@ -24,25 +24,25 @@ http://localhost:8080/api/account/post
 
 // find
 
-http://localhost:8080/api/account/find
+http://localhost:8080/api/user/find
 
 ****************************************************
 
 // find/:id
 
-http://localhost:8080/api/account/find/:id
+http://localhost:8080/api/user/find/:id
 
 ****************************************************
 
 // delete/:id
 
-http://localhost:8080/api/account/delete/:id
+http://localhost:8080/api/user/delete/:id
 
 ****************************************************
 
 // put/:id
 
-http://localhost:8080/api/account/put/:id
+http://localhost:8080/api/user /put/:id
 
 
 ###########################################

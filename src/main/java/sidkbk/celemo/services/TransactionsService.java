@@ -3,6 +3,9 @@ package sidkbk.celemo.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import sidkbk.celemo.dto.DeleteTransactionDTO;
+import sidkbk.celemo.dto.FindTransactionsForUserDTO;
+import sidkbk.celemo.dto.TransactionsCreationDTO;
 import sidkbk.celemo.models.Transactions;
 import sidkbk.celemo.models.User;
 import sidkbk.celemo.repositories.TransactionsRepository;
@@ -21,27 +24,35 @@ public class TransactionsService {
     UserRepository userRepository;
 
     // Add transaction
-    public ResponseEntity<?> addTransaction(String userId, Transactions transaction) {
+    public ResponseEntity<?> addTransaction(TransactionsCreationDTO transactionsCreationDTO) {
         // Check if user exist
-        User findUser = userRepository.findById(userId)
+        User findUser = userRepository.findById(transactionsCreationDTO.getUserId())
                 .orElseThrow(() -> new RuntimeException("Couldn't find user."));
         // Update users balance
-        findUser.setBalance( (findUser.getBalance() - transaction.getTransactionAmount()) );
-        // Set user REF in transaction body
-        transaction.setUser(findUser);
+        findUser.setBalance( (findUser.getBalance() - transactionsCreationDTO.getTransactionAmount()) );
+        userRepository.save(findUser);
+
+        Transactions newTransaction = new Transactions();
+
+        newTransaction.setUser(findUser); // Set user REF in transaction body
+        newTransaction.setTransactionAmount(transactionsCreationDTO.getTransactionAmount()); // Set amount
         // Save new transaction to db and return 200 OK with transaction details.
-        return ResponseEntity.ok(transactionsRepo.save(transaction));
+        return ResponseEntity.ok(transactionsRepo.save(newTransaction));
     }
 
     // Delete a transaction
-    public Object deleteTransaction(String id) {
-        transactionsRepo.deleteById(id);
-        return "Transaction deleted!";
+    public ResponseEntity<?> deleteTransaction(DeleteTransactionDTO deleteTransactionDTO) {
+        transactionsRepo.findById(deleteTransactionDTO.getTransactionId()).orElseThrow(
+                () -> new RuntimeException("Transaction does not exist!"));
+        transactionsRepo.deleteById(deleteTransactionDTO.getTransactionId());
+        return ResponseEntity.ok("Transaction deleted!");
     }
 
-    public ResponseEntity<?> findTransactions(String userId) {
+    // List all transactions for a specific user
+    public ResponseEntity<?> findTransactions(FindTransactionsForUserDTO findTransactionsForUserDTO) {
         // Check if user exists
-        User foundUser = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        User foundUser = userRepository.findById(findTransactionsForUserDTO.getUserId()).orElseThrow(
+                () -> new RuntimeException("User not found"));
         // Temp save all transactions
         List<Transactions> allTransactions = transactionsRepo.findAll();
         List<Transactions> foundTransactions = new ArrayList<>(); // List for found transactions for specified user
