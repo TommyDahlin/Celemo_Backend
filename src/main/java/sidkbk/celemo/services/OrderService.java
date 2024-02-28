@@ -2,8 +2,7 @@ package sidkbk.celemo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sidkbk.celemo.dto.OrderCreationDTO;
-import sidkbk.celemo.exceptions.EntityNotFoundException;
+import sidkbk.celemo.dto.order.OrderCreationDTO;
 import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.models.Order;
 import sidkbk.celemo.models.User;
@@ -12,8 +11,6 @@ import sidkbk.celemo.repositories.BidsRepository;
 import sidkbk.celemo.repositories.OrderRepository;
 import sidkbk.celemo.repositories.UserRepository;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Service

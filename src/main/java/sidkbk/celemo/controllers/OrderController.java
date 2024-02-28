@@ -5,13 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sidkbk.celemo.dto.OrderCreationDTO;
+import sidkbk.celemo.dto.order.OrderCreationDTO;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.Order;
 import sidkbk.celemo.services.OrderService;
-import sidkbk.celemo.services.UserService;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/order")
