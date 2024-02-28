@@ -23,6 +23,9 @@ public class Order {
 
     private double endPrice;
 
+    public Order() {
+    }
+
 
     public User getSellerAccount() {
         return sellerAccount;
