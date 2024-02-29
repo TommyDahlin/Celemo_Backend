@@ -18,8 +18,7 @@ public class Bids {
     @DBRef
     private User user;
 
-    @DBRef
-    private Auction auction;
+    private String auctionId;
 
 
     private double startPrice;
@@ -34,9 +33,6 @@ public class Bids {
         return id;
     }
 
-    public Auction getAuction() {
-        return auction;
-    }
 
     public User getUser() {
         return user;
@@ -46,8 +42,12 @@ public class Bids {
         this.user = user;
     }
 
-    public void setAuction(Auction auction) {
-        this.auction = auction;
+    public String getAuctionId() {
+        return auctionId;
+    }
+
+    public void setAuctionId(String auctionId) {
+        this.auctionId = auctionId;
     }
 
     public LocalDate getTimestamp() {

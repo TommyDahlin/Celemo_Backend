@@ -20,7 +20,7 @@ public class BidsControllers {
     @PostMapping("/post")
     public ResponseEntity<?> createBids(@RequestBody BidsDTO bidsDTO){
         try {
-            return ResponseEntity.ok(bidsServices.createBids(bidsDTO));
+            return bidsServices.createBids(bidsDTO);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
