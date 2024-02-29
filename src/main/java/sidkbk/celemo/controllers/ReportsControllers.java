@@ -5,8 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import sidkbk.celemo.dto.*;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
-import sidkbk.celemo.models.Reports;
 import sidkbk.celemo.services.ReportsServices;
 
 @RestController
@@ -17,39 +17,37 @@ public class ReportsControllers {
 
 
     //Post a new report for a user
-    @PostMapping("/post/reportuser/{reportinguser}/{reporteduser}")
-    public ResponseEntity<?> createReportUser(
-            @RequestBody Reports report, @PathVariable("reportinguser") String reportingUser, @PathVariable ("reporteduser") String reportedUser){
+    @PostMapping("/post/report/user")
+    public ResponseEntity<?> createReportUser(@Valid @RequestBody ReportsUserDTO rUDTO){
         try {
-            return ResponseEntity.ok(reportsServices.createReportUser(report, reportingUser, reportedUser));
+            return reportsServices.createReportUser(rUDTO);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
     //Post a new report for an auction
-    @PostMapping("/post/reportauction/{reportinguser}/{reportedauction}")
-    public ResponseEntity<?> createReportAuction(
-            @RequestBody Reports report, @PathVariable("reportinguser") String reportingUser, @PathVariable ("reportedauction") String reportedAuction
-    ){
+    @PostMapping("/post/report/auction")
+    public ResponseEntity<?> createReportAuction(@Valid @RequestBody ReportsAuctionDTO rADTO){
         try {
-            return ResponseEntity.ok(reportsServices.createReportAuction(report, reportingUser, reportedAuction));
+            return reportsServices.createReportAuction(rADTO);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
     //Find a report by id
-    @GetMapping("/find/{id}")
-    public ResponseEntity<?> findOne(@PathVariable("id") String id ) {
+    @GetMapping("/find")
+    public ResponseEntity<?> findOne(@Valid @RequestBody ReportsFindDTO reportsFindDTO) {
         try {
-            return ResponseEntity.ok(reportsServices.findOne(id));
+            return reportsServices.findOne(reportsFindDTO);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
+
     // Find all reports
-    @GetMapping("/find")
+    @GetMapping("/find/all")
     public ResponseEntity<?> findAllReports(){
         try {
             return ResponseEntity.ok(reportsServices.findAllReports());
@@ -58,22 +56,20 @@ public class ReportsControllers {
         }
     }
 
-    @PutMapping("/put/{id}")
-    public ResponseEntity<?> updateReport(@PathVariable("id") String reportId,
-                                         @Valid @RequestBody Reports updatedReport) {
+    //update report
+    @PutMapping("/put")
+    public ResponseEntity<?> updateReport(@RequestBody ReportsPutDTO reportsPutDTO) {
         try {
-            return ResponseEntity.ok(reportsServices.updateReport(reportId, updatedReport));
+            return reportsServices.updateReport(reportsPutDTO);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
     // Delete by id
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteReport(@PathVariable String id) {
-        try {
-            return ResponseEntity.ok(reportsServices.deleteReport(id));
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteReport(@RequestBody ReportsDeleteDTO reportsDeleteDTO) {
+
+            return reportsServices.deleteReport(reportsDeleteDTO);
+
     }
 }
