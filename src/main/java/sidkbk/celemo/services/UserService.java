@@ -189,7 +189,7 @@ adress_city
                 reviewsRepository.delete(findReviews.get(i));
             }
             userRepository.deleteById(deleteUserDTO.getUserId());
-            return ResponseEntity.ok("User deleted");
-        }
+        }return ResponseEntity.ok("User deleted");
     }
+
 }
