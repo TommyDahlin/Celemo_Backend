@@ -5,22 +5,14 @@ public class BidsDTO {
 
     // Data transfer object/ User and Auction
 
-    private String bidsid;
 
-    private Double price;
+    private double startPrice;
+    private double currentPrice;
+    private double maxPrice;
 
     private String userId;
 
     private String auctionId;
-
-
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
-    }
 
 
     public String getUserId() {
@@ -39,11 +31,32 @@ public class BidsDTO {
         this.auctionId = auctionId;
     }
 
-    public String getBidsid() {
-        return bidsid;
+
+    public double getStartPrice() {
+        return startPrice;
     }
 
-    public void setBidsid(String bidsid) {
-        this.bidsid = bidsid;
+    public void setStartPrice(double startPrice) {
+        this.startPrice = startPrice;
     }
+
+    public double getCurrentPrice() {
+        return currentPrice;
+    }
+
+    public void setCurrentPrice(double currentPrice) {
+        this.currentPrice = currentPrice;
+    }
+
+    public double getMaxPrice() {
+        return maxPrice;
+    }
+
+    public void setMaxPrice(double maxPrice) {
+        this.maxPrice = maxPrice;
+    }
+
+
+
+
 }

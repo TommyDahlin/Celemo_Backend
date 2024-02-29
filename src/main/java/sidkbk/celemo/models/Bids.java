@@ -14,12 +14,17 @@ public class Bids {
     @Id
     private String id;
 
+
     @DBRef
     private User user;
 
     @DBRef
     private Auction auction;
 
+
+    private double startPrice;
+    private double currentPrice;
+    private double maxPrice;
 
     public Bids() {
     }
@@ -28,7 +33,6 @@ public class Bids {
     public String getId() {
         return id;
     }
-
 
     public Auction getAuction() {
         return auction;
@@ -52,6 +56,28 @@ public class Bids {
 
     public void setTimestamp(LocalDate timestamp) {
         this.timestamp = timestamp;
+    }
+
+
+    public double getStartPrice() {
+        return startPrice;
+    }
+    public double getCurrentPrice() {
+        return currentPrice;
+    }
+    public double getMaxPrice() {
+        return maxPrice;
+    }
+
+
+    public void setStartPrice(double startPrice) {
+        this.startPrice = startPrice;
+    }
+    public void setCurrentPrice(double currentPrice) {
+        this.currentPrice = currentPrice;
+    }
+    public void setMaxPrice(double maxPrice) {
+        this.maxPrice = maxPrice;
     }
 
     @CreatedDate
