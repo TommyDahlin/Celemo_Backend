@@ -5,8 +5,6 @@ public class BidsDTO {
 
     // Data transfer object/ User and Auction
 
-
-
     private String bidsid;
 
     private Double price;
@@ -39,5 +37,13 @@ public class BidsDTO {
 
     public void setAuctionId(String auctionId) {
         this.auctionId = auctionId;
+    }
+
+    public String getBidsid() {
+        return bidsid;
+    }
+
+    public void setBidsid(String bidsid) {
+        this.bidsid = bidsid;
     }
 }

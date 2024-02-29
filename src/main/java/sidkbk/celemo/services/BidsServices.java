@@ -63,8 +63,8 @@ public class BidsServices {
     }
 
 //Find a bids by id
-    public Bids findOne(BidsDTO bidsDTO){
-        return bidsRepository.findById(bidsDTO.).get();
+    public Bids findOne(String id){
+        return bidsRepository.findById(id).get();
     }
 
 // delete a bids
