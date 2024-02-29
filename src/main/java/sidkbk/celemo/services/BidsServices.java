@@ -148,7 +148,7 @@ public class BidsServices {
         Auction foundAuction = auctionRepository.findById(bidsDTO.getAuctionId())
                 .orElseThrow(() -> new RuntimeException("Auction does not exist!"));
         Bids newUpdate = new Bids();
-        newUpdate.setAuction(foundAuction);
+        newUpdate.setAuctionId(foundAuction.getId());
         newUpdate.setUser(foundUser);
         return bidsRepository.save(newUpdate);
     }
