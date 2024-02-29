@@ -40,7 +40,7 @@ public class ReportsControllers {
     @GetMapping("/find")
     public ResponseEntity<?> findOne(@Valid @RequestBody ReportsFindDTO reportsFindDTO) {
         try {
-            return ResponseEntity.ok(reportsServices.findOne(reportsFindDTO));
+            return reportsServices.findOne(reportsFindDTO);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }

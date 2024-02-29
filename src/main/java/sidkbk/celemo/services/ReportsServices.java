@@ -83,7 +83,8 @@ public class ReportsServices {
 
     // DELETE ( Delete report using reportsId(body) )
     public ResponseEntity<?> deleteReport(ReportsDeleteDTO reportsDeleteDTO) {
-
+            reportsRepository.findById(reportsDeleteDTO.reportsId) // Check if report exist
+                    .orElseThrow(() -> new RuntimeException("Report does not exist!"));
             reportsRepository.deleteById(reportsDeleteDTO.getReportsId());
             return ResponseEntity.ok(reportsDeleteDTO.getReportsId() + " Was deleted!");
 
