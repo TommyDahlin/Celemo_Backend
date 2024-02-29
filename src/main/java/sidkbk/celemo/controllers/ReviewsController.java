@@ -52,7 +52,6 @@ public class ReviewsController {
     // DELETE Delete a review dto
     @DeleteMapping("/delete")
     public ResponseEntity<?> deleteReview(@Valid @RequestBody ReviewsDeleteDTO reviewsDeleteDTO) {
-
         try {
             return reviewsService.deleteReview(reviewsDeleteDTO);
         } catch(EntityNotFoundException e) {
