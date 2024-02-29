@@ -113,6 +113,7 @@ public class BidsServices {
             //send back balance of lost bids
         }
         foundAuction.setHasBids(true);
+
         return ResponseEntity.ok(newBid + " Has been created, current price is" + newBid.getCurrentPrice());
     }
 
