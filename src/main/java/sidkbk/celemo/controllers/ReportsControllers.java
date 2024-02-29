@@ -5,7 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sidkbk.celemo.dto.ReportsDTO;
+import sidkbk.celemo.dto.ReportsAuctionDTO;
+import sidkbk.celemo.dto.ReportsUserDTO;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.Reports;
 import sidkbk.celemo.services.ReportsServices;
@@ -18,22 +19,20 @@ public class ReportsControllers {
 
 
     //Post a new report for a user
-    @PostMapping("/post/reportuser")
-    public ResponseEntity<?> createReportUser(@Valid @RequestBody ReportsDTO reportsDTO){
+    @PostMapping("/post/report/user")
+    public ResponseEntity<?> createReportUser(@Valid @RequestBody ReportsUserDTO rUDTO){
         try {
-            return reportsServices.createReportUser(reportsDTO);
+            return reportsServices.createReportUser(rUDTO);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
     //Post a new report for an auction
-    @PostMapping("/post/reportauction/{reportinguser}/{reportedauction}")
-    public ResponseEntity<?> createReportAuction(
-            @RequestBody Reports report, @PathVariable("reportinguser") String reportingUser, @PathVariable ("reportedauction") String reportedAuction
-    ){
+    @PostMapping("/post/report/auction")
+    public ResponseEntity<?> createReportAuction(@Valid @RequestBody ReportsAuctionDTO rADTO){
         try {
-            return ResponseEntity.ok(reportsServices.createReportAuction(report, reportingUser, reportedAuction));
+            return reportsServices.createReportAuction(rADTO);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }

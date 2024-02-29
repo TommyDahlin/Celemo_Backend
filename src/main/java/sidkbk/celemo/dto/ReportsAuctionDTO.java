@@ -8,22 +8,16 @@ import sidkbk.celemo.models.User;
 
 import java.util.Date;
 
-public class ReportsDTO {
-
+public class ReportsAuctionDTO {
     private String id;
 
     @CreatedDate
     private Date createdAt = new Date();
     @NotBlank
     private String content;
-
     @NotBlank
     @DBRef
     private User reportingUserId;
-
-    @NotBlank
-    @DBRef
-    private User reportedUserId;
 
     @NotBlank
     @DBRef
@@ -33,13 +27,6 @@ public class ReportsDTO {
         return id;
     }
 
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
 
     public String getContent() {
         return content;
@@ -55,14 +42,6 @@ public class ReportsDTO {
 
     public void setReportingUserId(User reportingUserId) {
         this.reportingUserId = reportingUserId;
-    }
-
-    public User getReportedUserId() {
-        return reportedUserId;
-    }
-
-    public void setReportedUserId(User reportedUserId) {
-        this.reportedUserId = reportedUserId;
     }
 
     public Auction getAuction() {
