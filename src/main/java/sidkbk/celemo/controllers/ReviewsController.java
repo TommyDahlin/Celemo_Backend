@@ -58,6 +58,12 @@ public class ReviewsController {
         return reviewsService.reviewedUserSortReviews(reviewsSortLowHighDTO);
     }
 
+    // GET all reviews for specific reviewed user and specific grade
+    @GetMapping("/find/all-user-grade")
+    public ResponseEntity<?> reviewedUserSortByGrade(@Valid @RequestBody ReviewsGetByGradeDTO reviewsGetByGradesDTO) {
+        return reviewsService.reviewedUserSortByGrade(reviewsGetByGradesDTO);
+    }
+
     // POST add a review dto
     @PostMapping("/post")
     public ResponseEntity<?> addReview(@Valid @RequestBody ReviewsDTO reviewsDTO) {

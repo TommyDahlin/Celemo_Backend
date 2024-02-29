@@ -1,6 +1,7 @@
 package sidkbk.celemo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import sidkbk.celemo.dto.Reviews.*;
@@ -109,7 +110,7 @@ public class ReviewsService {
         List<Reviews> allReviews = reviewsRepo.findAll(); // Save all reviews
         for (Reviews review : allReviews) { // Loop reviews
             // Find reviews for reviewed user
-            if (review.getReviewedUser().getId() != null &&
+            if (review.getReviewedUser() != null &&
                     findUserIdDTO.getUserId().equals(review.getReviewedUser().getId())) {
                 foundReviews.add(review); // save to temp
             }
@@ -151,4 +152,25 @@ public class ReviewsService {
         }
         return ResponseEntity.ok(sortedReviews); // Return sorted list
     }
+
+    // List all reviews for specific reviewed user and specific grade
+    public ResponseEntity<?> reviewedUserSortByGrade(ReviewsGetByGradeDTO reviewsGetByGradeDTO) {
+        FindUserIdDTO findUserIdDTO = new FindUserIdDTO();
+        findUserIdDTO.setUserId(reviewsGetByGradeDTO.getUserId());
+        // Run method above to get all reviews for specified user
+        List<Reviews> foundReviews = allReviewsForSpecificReviewedUser(findUserIdDTO);
+        if (foundReviews.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No reviews with that grade found...");
+        }
+        List<Reviews> reviewsByGrade = new ArrayList<>();
+        for (Reviews review : foundReviews) {
+            if (review.getGrade().equals(reviewsGetByGradeDTO.getGrade())) {
+                reviewsByGrade.add(review);
+            }
+        }
+        return ResponseEntity.ok(reviewsByGrade);
+    }
+
 }
+
+
