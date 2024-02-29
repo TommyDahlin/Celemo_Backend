@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import sidkbk.celemo.dto.order.OrderCreationDTO;
 import sidkbk.celemo.dto.order.OrderFoundByIdDTO;
+import sidkbk.celemo.dto.order.PreviousPurchaseFromOrderDTO;
 import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.models.Bids;
 import sidkbk.celemo.models.Order;
@@ -15,6 +16,7 @@ import sidkbk.celemo.repositories.OrderRepository;
 import sidkbk.celemo.repositories.UserRepository;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,35 +34,30 @@ public class OrderService {
 
 
 
+    public Order createOrder(OrderCreationDTO orderCreationDTO) {
+        Auction findAuction = auctionRepository.findById(orderCreationDTO.getAuctionId())
+                .orElseThrow(() -> new RuntimeException("Auction not found!"));
 
-public Order createOrder(OrderCreationDTO orderCreationDTO) {
-    Auction findAuction = auctionRepository.findById(orderCreationDTO.getAuctionId())
-            .orElseThrow(() -> new RuntimeException("Auction not found!"));
+        User findSellerId = userRepository.findById(orderCreationDTO.getSellerId())
+                .orElseThrow(() -> new RuntimeException("SellerId never not found!"));
 
-    User findSellerId = userRepository.findById(orderCreationDTO.getSellerId())
-            .orElseThrow(() -> new RuntimeException("SellerId never not found!"));
-
-    User findBuyerId = userRepository.findById(orderCreationDTO.getBuyerId())
-            .orElseThrow(() -> new RuntimeException("BuyerId was not found"));
-
+        User findBuyerId = userRepository.findById(orderCreationDTO.getBuyerId())
+                .orElseThrow(() -> new RuntimeException("BuyerId was not found"));
 //        double orderAmount = orderCreationDTO.getCommission();
 //        double commissionRate = 0.03;
 //        double commission = orderAmount * commissionRate;
+        Order newOrder = new Order();
 
-    Order newOrder = new Order();
-
-    newOrder.setAuction(findAuction);
-    newOrder.setSellerAccount(findSellerId);
-    newOrder.setBuyerAccount(findBuyerId);
-    newOrder.setProductTitle(findAuction.getTitle());
-    newOrder.setEndPrice(findAuction.getEndPrice());
-    newOrder.setCreatedAt(orderCreationDTO.getCreatedAt());
+        newOrder.setAuction(findAuction);
+        newOrder.setSellerAccount(findSellerId);
+        newOrder.setBuyerAccount(findBuyerId);
+        newOrder.setProductTitle(findAuction.getTitle());
+        newOrder.setEndPrice(findAuction.getEndPrice());
+        newOrder.setCreatedAt(orderCreationDTO.getCreatedAt());
 //    newOrder.setTest(orderCreationDTO.getTest());
 //    newOrder.setBids(orderCreationDTO.getCommission());
-
-    return orderRepository.save(newOrder);
-}
-
+        return orderRepository.save(newOrder);
+    }
 
 
     // READ ALL ORDERS
@@ -74,6 +71,22 @@ public Order createOrder(OrderCreationDTO orderCreationDTO) {
         return orderRepository.findById(orderFoundByIdDTO.getOrderId());
     }
 
+
+    public List<Order> findPreviousPurchase(PreviousPurchaseFromOrderDTO previousPurchaseFromOrderDTO) {
+        User findUser = userRepository.findById(previousPurchaseFromOrderDTO.getUserId())
+                .orElseThrow(() -> new RuntimeException("UserId could not be found"));
+            List<Order> previousPurchase = new ArrayList<>();
+
+        for (Order order : orderRepository.findAll()) {
+            if (previousPurchaseFromOrderDTO.getUserId().equals(order.getBuyerAccount().getId())) {
+             Order newOrder = new Order();
+             newOrder.setId(previousPurchaseFromOrderDTO.getUserId());
+
+            }
+
+        }
+        return previousPurchase;
+    }
 
 
     // PUT update one order
@@ -104,9 +117,13 @@ public Order createOrder(OrderCreationDTO orderCreationDTO) {
 
 
 
+// hitta alla orders
+// hitta buyerId
+// jämför alla orderId med buyerId och se om dom matchar.
+// om dom matchar adda dom till ny array list
+// visa den nya array listan.
 
-
-/*
+    /*
     public List<Order> findPreviousPurchase(String id) {
         List<Order> allOrders = orderRepository.findAll(); //list of all orders
         User user = userRepository.findById(id)
@@ -127,3 +144,11 @@ public Order createOrder(OrderCreationDTO orderCreationDTO) {
             return previousPurchase;
     }
  */
+
+
+
+
+
+
+
+

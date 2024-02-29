@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
 @Document(collection = "orders")
 public class Order {
@@ -26,6 +27,7 @@ public class Order {
     private User buyerAccount;
     @DBRef
     private Auction auction;
+
 
 
 
@@ -87,5 +89,8 @@ public class Order {
     }
     public void setTest(String test) {
         this.test = test;
+    }
+    public void setId(String id) {
+        this.id = id;
     }
 }
