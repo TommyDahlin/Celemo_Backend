@@ -5,12 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sidkbk.celemo.dto.ReportsAuctionDTO;
-import sidkbk.celemo.dto.ReportsFindDTO;
-import sidkbk.celemo.dto.ReportsPutDTO;
-import sidkbk.celemo.dto.ReportsUserDTO;
+import sidkbk.celemo.dto.*;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
-import sidkbk.celemo.models.Reports;
 import sidkbk.celemo.services.ReportsServices;
 
 @RestController
@@ -60,7 +56,8 @@ public class ReportsControllers {
         }
     }
 
-    @PutMapping("/put/{id}")
+    //update report
+    @PutMapping("/put")
     public ResponseEntity<?> updateReport(@RequestBody ReportsPutDTO reportsPutDTO) {
         try {
             return reportsServices.updateReport(reportsPutDTO);
@@ -69,12 +66,10 @@ public class ReportsControllers {
         }
     }
     // Delete by id
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteReport(@PathVariable String id) {
-        try {
-            return ResponseEntity.ok(reportsServices.deleteReport(id));
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteReport(@RequestBody ReportsDeleteDTO reportsDeleteDTO) {
+
+            return reportsServices.deleteReport(reportsDeleteDTO);
+
     }
 }

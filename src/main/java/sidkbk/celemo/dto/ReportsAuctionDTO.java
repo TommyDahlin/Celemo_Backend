@@ -2,30 +2,23 @@ package sidkbk.celemo.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import sidkbk.celemo.models.Auction;
-import sidkbk.celemo.models.User;
 
 import java.util.Date;
 
 public class ReportsAuctionDTO {
-    private String id;
+
 
     @CreatedDate
     private Date createdAt = new Date();
     @NotBlank
     private String content;
     @NotBlank
-    @DBRef
-    private User reportingUserId;
+    private String reportingUserId;
 
     @NotBlank
-    @DBRef
-    private Auction auction;
+    private String auctionId;
 
-    public String getId() {
-        return id;
-    }
+
 
 
     public String getContent() {
@@ -36,19 +29,19 @@ public class ReportsAuctionDTO {
         this.content = content;
     }
 
-    public User getReportingUserId() {
+    public String getReportingUserId() {
         return reportingUserId;
     }
 
-    public void setReportingUserId(User reportingUserId) {
+    public void setReportingUserId(String reportingUserId) {
         this.reportingUserId = reportingUserId;
     }
 
-    public Auction getAuction() {
-        return auction;
+    public String getAuctionId() {
+        return auctionId;
     }
 
-    public void setAuction(Auction auction) {
-        this.auction = auction;
+    public void setAuctionId(String auctionId) {
+        this.auctionId = auctionId;
     }
 }

@@ -3,16 +3,13 @@ package sidkbk.celemo.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import sidkbk.celemo.dto.ReportsAuctionDTO;
-import sidkbk.celemo.dto.ReportsFindDTO;
-import sidkbk.celemo.dto.ReportsPutDTO;
-import sidkbk.celemo.dto.ReportsUserDTO;
-import sidkbk.celemo.models.User;
+import sidkbk.celemo.dto.*;
 import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.models.Reports;
-import sidkbk.celemo.repositories.UserRepository;
+import sidkbk.celemo.models.User;
 import sidkbk.celemo.repositories.AuctionRepository;
 import sidkbk.celemo.repositories.ReportsRepository;
+import sidkbk.celemo.repositories.UserRepository;
 
 import java.util.List;
 
@@ -27,13 +24,14 @@ public class ReportsServices {
     UserRepository userRepository;
 
 
+    //post , create report for user
     public ResponseEntity<Reports> createReportUser(ReportsUserDTO reportsDTO) {
-        User foundReportedUser = userRepository.findById(reportsDTO.getId())
+        User foundReportedUser = userRepository.findById(reportsDTO.getReportedUserId())
                 .orElseThrow(() -> new RuntimeException("User does not exist!"));
-        User foundReportingUser = userRepository.findById(reportsDTO.getId())
+        User foundReportingUser = userRepository.findById(reportsDTO.getReportingUserId())
                 .orElseThrow(() -> new RuntimeException("User does not exist!"));
-        reportsDTO.setReportedUserId(reportsDTO.getReportingUserId());
-        reportsDTO.setReportingUserId(reportsDTO.getReportingUserId());
+        //reportsDTO.setReportedUserId(reportsDTO.getReportingUserId());
+        //reportsDTO.setReportingUserId(reportsDTO.getReportingUserId());
         Reports newReport = new Reports();
         newReport.setReportedUserId(foundReportedUser);
         newReport.setReportingUserId(foundReportingUser);
@@ -42,13 +40,15 @@ public class ReportsServices {
         return ResponseEntity.ok(reportsRepository.save(newReport));
     }
 
+
+    //post , create report for auction
     public ResponseEntity<?> createReportAuction(ReportsAuctionDTO reportsAuctionDTO) {
-        User foundReportingAuction = userRepository.findById(reportsAuctionDTO.getId())
+        User foundReportingAuction = userRepository.findById(reportsAuctionDTO.getReportingUserId())
                 .orElseThrow(() -> new RuntimeException("Auction does not exist!"));
-        Auction foundAuction = auctionRepository.findById(reportsAuctionDTO.getId())
+        Auction foundAuction = auctionRepository.findById(reportsAuctionDTO.getAuctionId())
                 .orElseThrow(() -> new RuntimeException("Auction does not exist!"));
-        reportsAuctionDTO.setReportingUserId(reportsAuctionDTO.getReportingUserId());
-        reportsAuctionDTO.setAuction(reportsAuctionDTO.getAuction());
+        //reportsAuctionDTO.setReportingUserId(reportsAuctionDTO.getReportingUserId());
+        //reportsAuctionDTO.setAuction(reportsAuctionDTO.getAuction());
 
         Reports newReport = new Reports();
         newReport.setReportingUserId(foundReportingAuction);
@@ -58,37 +58,34 @@ public class ReportsServices {
         return ResponseEntity.ok(reportsRepository.save(newReport));
     }
 
+    //get , find all reports
     public List<Reports> findAllReports() {
         return reportsRepository.findAll();
     }
 
+    //get , find one report
     public ResponseEntity<?> findOne(ReportsFindDTO reportsFindDTO) {
         Reports foundReport = reportsRepository.findById(reportsFindDTO.getReportsId())
                 .orElseThrow(() -> new RuntimeException("Order was not found"));
         return ResponseEntity.ok(foundReport);
     }
 
+    //put, update report
     public ResponseEntity<?> updateReport(ReportsPutDTO reportsPutDTO) {
-        return reportsRepository.findById()
+        return reportsRepository.findById(reportsPutDTO.getReportsId())
                 .map(existingOrder -> {
-                    if (updatedReport.getReportingUserId() != null) {
-                        existingOrder.setReportingUserId(updatedReport.getReportingUserId());
+                    if (reportsPutDTO.getContent() != null) {
+                        existingOrder.setContent(reportsPutDTO.getContent());
                     }
-                    if (updatedReport.getReportedUserId() != null) {
-                        existingOrder.setReportedUserId(updatedReport.getReportedUserId());
-                    }
-                    if (updatedReport.getAuction() != null) {
-                        existingOrder.setAuction(updatedReport.getAuction());
-                    }
-                    if (updatedReport.getContent() != null) {
-                        existingOrder.setContent(updatedReport.getContent());
-                    }
-                    return reportsRepository.save(existingOrder);
+                    return ResponseEntity.ok(reportsRepository.save(existingOrder));
                 }).orElseThrow(() -> new RuntimeException("Order was not found"));
     }
 
-    public String deleteReport(String id) {
-        reportsRepository.deleteById(id);
-        return "Deleted successfully!";
+    // DELETE ( Delete report using reportsId(body) )
+    public ResponseEntity<?> deleteReport(ReportsDeleteDTO reportsDeleteDTO) {
+
+            reportsRepository.deleteById(reportsDeleteDTO.getReportsId());
+            return ResponseEntity.ok(reportsDeleteDTO.getReportsId() + " Was deleted!");
+
     }
 }

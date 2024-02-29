@@ -5,30 +5,25 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 @Document(collection = "reports")
 public class Reports {
 
-    public String getId() {
-        return id;
-    }
+
 
     @Id
     private String id;
 
 
-    public LocalDate getTimestamp() {
-        return timestamp;
-    }
+
 
     @CreatedDate
-    public LocalDate timestamp = LocalDate.now();
+    public Date createdAt = new Date();
 
     private String content;
 
-    public Reports() {
-    }
+
 
     @DBRef
     private User reportingUserId;
@@ -38,6 +33,13 @@ public class Reports {
 
     @DBRef
     private Auction auction;
+
+    public Reports() {
+    }
+
+    public String getId() {
+        return id;
+    }
 
     public String getContent() {
         return content;
@@ -71,6 +73,14 @@ public class Reports {
         this.content = content;
     }
 
-    // User reference, find a user by id,
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+
 
 }
