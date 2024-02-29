@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import sidkbk.celemo.dto.user.*;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.User;
 import sidkbk.celemo.services.AuctionService;
@@ -26,18 +27,18 @@ public class UserController {
     private OrderService orderService;
 
     // post/add account/user
-   /* @PostMapping("/post")
-    public ResponseEntity<?> addUser(@Valid @RequestBody User user){
+    @PostMapping("/post")
+    public ResponseEntity<?> addUser(@Valid @RequestBody CreateUserDTO createUserDTO){
 
         try {
-            return ResponseEntity.ok(userService.createUser(user));
+            return ResponseEntity.ok(userService.createUser(createUserDTO));
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
-    }*/
+    }
 
     // find all/get all accounts
-    @GetMapping("/find")
+    @GetMapping("/find/all")
     public ResponseEntity<?> getAllUsers(){
         try {
             return ResponseEntity.ok(userService.getAllUsers());
@@ -46,29 +47,29 @@ public class UserController {
         }
     }
 
-    //get average grade, find user by id
-    @GetMapping("/{id}/{filter}")
-    public ResponseEntity<?> getUserFilter(@PathVariable("id") String id,@PathVariable("filter")String filter){
+    //get average grade, find user by id, filter out what you want to get from a user
+    @GetMapping("findfilter")
+    public ResponseEntity<?> getUserFilter(@Valid @RequestBody FindUserIdandFilterDTO findUserIdandFilterDTO){
         try {
-            return ResponseEntity.ok(userService.getUserFilter(id, filter));
+            return ResponseEntity.ok(userService.getUserFilter(findUserIdandFilterDTO));
         }catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
     // find/get using id
-    @GetMapping ("/find/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable String id){
-        Optional<User> user = userService.getUserById(id);
+    @GetMapping ("/find")
+    public ResponseEntity<User> getUserById(@Valid @RequestBody FindUserIdDTO findUserIdDTO){
+        Optional<User> user = userService.getUserById(findUserIdDTO);
         return user.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // Lists all active listings by User
-    @GetMapping("/find/{id}/activeauction")
-    public ResponseEntity<?> getActiveAuction(@PathVariable String id){
+    // Lists all active listings by UserID
+    @GetMapping("/find/activeauction")
+    public ResponseEntity<?> getActiveAuction(@Valid @RequestBody FindUserIdDTO findUserIdDTO){
         try {
-            return ResponseEntity.ok(auctionService.getActiveAuction(id));
+            return ResponseEntity.ok(auctionService.getActiveAuction(findUserIdDTO));
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
@@ -77,34 +78,30 @@ public class UserController {
     
 
     // List of all previousPurchases by User
-    @GetMapping("/find/{id}/previouspurchase")
-    public ResponseEntity<?> getPreviousPurchase(@PathVariable String id) {
+    @GetMapping("/find/previouspurchase")
+    public ResponseEntity<?> getPreviousPurchase(@Valid @RequestBody FindUserIdDTO findUserIdDTO) {
 
         try{
-            return ResponseEntity.ok(orderService.findPreviousPurchase(id));
+            return ResponseEntity.ok(orderService.findPreviousPurchase(findUserIdDTO));
         } catch (EntityNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
-
-
-
-
   // put/update // using responseEntity<?> creates a generic wildcard that can return any type of body
-    @GetMapping("/find/{id}/finishedauction")
-    public ResponseEntity<?> getFinishedAuction(@PathVariable String id){
+    @GetMapping("/find/finishedauction")
+    public ResponseEntity<?> getFinishedAuction(@Valid @RequestBody FindUserIdDTO findUserIdDTO){
         try {
-            return ResponseEntity.ok(auctionService.getFinishedAuctions(id));
+            return ResponseEntity.ok(auctionService.getFinishedAuctions(findUserIdDTO));
         } catch (EntityNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
 
         }
-    @PutMapping("/put/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable String id, @Valid @RequestBody User userDetails){
+    @PutMapping("/put")
+    public ResponseEntity<?> updateUser(@Valid @RequestBody UpdateUserDTO updateUserDTO){
         try{
-            User updatedUser = userService.updateUser(id, userDetails);
+            User updatedUser = userService.updateUser(updateUserDTO);
             return ResponseEntity.ok(updatedUser);
         } catch (EntityNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
@@ -112,10 +109,10 @@ public class UserController {
     }
 
     // delete account
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable String id){
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteUser(@Valid @RequestBody DeleteUserDTO deleteUserDTO){
         try{
-            return ResponseEntity.ok(userService.deleteUser(id));
+            return userService.deleteUser(deleteUserDTO);
 
         }catch (EntityNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
