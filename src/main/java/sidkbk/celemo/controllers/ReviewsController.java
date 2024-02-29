@@ -5,14 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sidkbk.celemo.dto.Reviews.ReviewsDTO;
-import sidkbk.celemo.dto.Reviews.ReviewsDeleteDTO;
-import sidkbk.celemo.dto.Reviews.ReviewsFindDTO;
-import sidkbk.celemo.dto.Reviews.ReviewsPutDTO;
+import sidkbk.celemo.dto.Reviews.*;
 import sidkbk.celemo.dto.user.FindUserIdDTO;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.Reviews;
 import sidkbk.celemo.services.ReviewsService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/reviews")
@@ -31,18 +30,6 @@ public class ReviewsController {
         }
     }
 
-    /*// filtered search
-    @GetMapping("/find/{filter}")
-    public ResponseEntity<?> getAllReviewsFilter(@PathVariable("filter")String filter){
-        try {
-            return ResponseEntity.ok(reviewsService.getAllReviewsFilter(filter));
-        }catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-    }*/
-
-
-
     // GET one specific review
     @GetMapping("/find")
     public ResponseEntity<?> listOneSpecificReview(@Valid @RequestBody ReviewsFindDTO reviewsFindDTO) {
@@ -53,10 +40,22 @@ public class ReviewsController {
         }
     }
 
-    // GET all reviews for specific user
+    // GET all reviews for specific reviewed user
     @GetMapping("/find/all-user")
-    public ResponseEntity<?> allReviewsForSpecificReviewedUser(FindUserIdDTO findUserIdDTO) {
-        return reviewsService.allReviewsForSpecificReviewedUser(findUserIdDTO);
+    public ResponseEntity<?> allReviewsForSpecificReviewedUser(@Valid @RequestBody FindUserIdDTO findUserIdDTO) {
+        List<Reviews> foundReviews = reviewsService.allReviewsForSpecificReviewedUser(findUserIdDTO);
+
+        if (foundReviews.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User is not reviewed...");
+        } else {
+            return ResponseEntity.ok(foundReviews);
+        }
+    }
+
+    // GET all reviews for specific reviewed user and sort grade "Low to High" or "High to Low"
+    @GetMapping("/find/all-user-sort")
+    public ResponseEntity<?> reviewedUserSortReviews(@Valid @RequestBody ReviewsSortLowHighDTO reviewsSortLowHighDTO) {
+        return reviewsService.reviewedUserSortReviews(reviewsSortLowHighDTO);
     }
 
     // POST add a review dto

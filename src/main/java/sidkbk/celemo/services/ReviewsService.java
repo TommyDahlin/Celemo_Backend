@@ -1,13 +1,9 @@
 package sidkbk.celemo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import sidkbk.celemo.dto.Reviews.ReviewsDTO;
-import sidkbk.celemo.dto.Reviews.ReviewsDeleteDTO;
-import sidkbk.celemo.dto.Reviews.ReviewsFindDTO;
-import sidkbk.celemo.dto.Reviews.ReviewsPutDTO;
+import sidkbk.celemo.dto.Reviews.*;
 import sidkbk.celemo.dto.user.FindUserIdDTO;
 import sidkbk.celemo.models.Reviews;
 import sidkbk.celemo.models.User;
@@ -102,27 +98,57 @@ public class ReviewsService {
 
     }
 
+    // DELETE ALL
     public void deleteAllReviews(){
         reviewsRepo.deleteAll();
     }
 
-    public ResponseEntity<?> allReviewsForSpecificReviewedUser(FindUserIdDTO findUserIdDTO) {
-        List<Reviews> foundReviews = new ArrayList<>();
-        List<Reviews> allReviews = reviewsRepo.findAll();
-        System.out.println(findUserIdDTO.getUserId());
-
-        for (Reviews review : allReviews) {
+    // List all reviews for a specified user
+    public List<Reviews> allReviewsForSpecificReviewedUser(FindUserIdDTO findUserIdDTO) {
+        List<Reviews> foundReviews = new ArrayList<>(); // Temp list
+        List<Reviews> allReviews = reviewsRepo.findAll(); // Save all reviews
+        for (Reviews review : allReviews) { // Loop reviews
+            // Find reviews for reviewed user
             if (review.getReviewedUser().getId() != null &&
                     findUserIdDTO.getUserId().equals(review.getReviewedUser().getId())) {
-                System.out.println(review.getReviewedUser().getId());
-                foundReviews.add(review);
+                foundReviews.add(review); // save to temp
             }
         }
         if (foundReviews.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User is not reviewed...");
+            return null;
         } else {
-            return ResponseEntity.ok(foundReviews);
+            return foundReviews;
         }
 
+    }
+
+    // List all reviews for a specified user AND sort reviews by Low or High grades.
+    public ResponseEntity<?> reviewedUserSortReviews(ReviewsSortLowHighDTO reviewsSortLowHighDTO) {
+        FindUserIdDTO findUserIdDTO = new FindUserIdDTO();
+        findUserIdDTO.setUserId(reviewsSortLowHighDTO.getUserId());
+        // Run method above to get all reviews for specified user
+        List<Reviews> foundReviews = allReviewsForSpecificReviewedUser(findUserIdDTO);
+        List<Reviews> sortedReviews = new ArrayList<>();
+        // If sorting from "low" to "high" grade
+        if (reviewsSortLowHighDTO.getLowOrHigh().equals("LOW")) { // Check in DTO
+            for (double i = 1; i <= 5; i++) { // Loop through 1-5
+                for (Reviews review : foundReviews) { // Loop through found reviews
+                    if (review.getGrade().equals(i)) { // If grade matches
+                        sortedReviews.add(review); // Save review to sorted list
+                    }
+                }
+            }
+        }
+        // If sorting from "high" to "low" grade
+        if (reviewsSortLowHighDTO.getLowOrHigh().equals("HIGH")) { // Check in DTO
+            for (double i = 5; i >= 1; i--) { // Loop through 5-1
+                for (Reviews review : foundReviews) { // Loop through found reviews
+                    if (review.getGrade().equals(i)) { // If grade matches
+                        sortedReviews.add(review); // Save review to sorted list
+                    }
+                }
+            }
+        }
+        return ResponseEntity.ok(sortedReviews); // Return sorted list
     }
 }

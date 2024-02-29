@@ -51,3 +51,20 @@ Body - raw
     }
 
 #######################################################################################################
+
+GET - List all reviews for specific user
+http://localhost:8080/api/reviews/find/all-user
+Body - raw
+{
+"userId": "65d755313b0850253b1640bc"
+}
+
+#######################################################################################################
+
+GET - List all reviews for a specified user AND sort reviews by Low or High grades.
+http://localhost:8080/api/reviews/find/all-user-sort
+Body - raw
+{
+    "userId": "65d755313b0850253b1640bc",
+    "lowOrHigh": "low" // Low or High
+}
