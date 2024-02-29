@@ -1,12 +1,14 @@
 package sidkbk.celemo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import sidkbk.celemo.dto.Reviews.ReviewsDTO;
 import sidkbk.celemo.dto.Reviews.ReviewsDeleteDTO;
 import sidkbk.celemo.dto.Reviews.ReviewsFindDTO;
 import sidkbk.celemo.dto.Reviews.ReviewsPutDTO;
+import sidkbk.celemo.dto.user.FindUserIdDTO;
 import sidkbk.celemo.models.Reviews;
 import sidkbk.celemo.models.User;
 import sidkbk.celemo.repositories.ReviewsRepo;
@@ -102,5 +104,25 @@ public class ReviewsService {
 
     public void deleteAllReviews(){
         reviewsRepo.deleteAll();
+    }
+
+    public ResponseEntity<?> allReviewsForSpecificReviewedUser(FindUserIdDTO findUserIdDTO) {
+        List<Reviews> foundReviews = new ArrayList<>();
+        List<Reviews> allReviews = reviewsRepo.findAll();
+        System.out.println(findUserIdDTO.getUserId());
+
+        for (Reviews review : allReviews) {
+            if (review.getReviewedUser().getId() != null &&
+                    findUserIdDTO.getUserId().equals(review.getReviewedUser().getId())) {
+                System.out.println(review.getReviewedUser().getId());
+                foundReviews.add(review);
+            }
+        }
+        if (foundReviews.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User is not reviewed...");
+        } else {
+            return ResponseEntity.ok(foundReviews);
+        }
+
     }
 }

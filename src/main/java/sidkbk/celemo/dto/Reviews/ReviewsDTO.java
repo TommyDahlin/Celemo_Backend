@@ -5,8 +5,6 @@ import jakarta.validation.constraints.NotNull;
 
 public class ReviewsDTO {
 
-    @NotBlank(message = "reviewId cannot be blank")
-    private String reviewId;
     @NotNull(message = "grade cannot be blank")
     private Double grade;
 
@@ -16,15 +14,6 @@ public class ReviewsDTO {
     private String createdById;
     @NotBlank(message = "reviewedUserId cannot be blank")
     private String reviewedUserId;
-
-
-    public String getReviewId() {
-        return reviewId;
-    }
-
-    public void setReviewId(String reviewId) {
-        this.reviewId = reviewId;
-    }
 
     public Double getGrade() {
         return grade;

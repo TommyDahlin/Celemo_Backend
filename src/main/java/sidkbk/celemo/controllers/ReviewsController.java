@@ -9,6 +9,7 @@ import sidkbk.celemo.dto.Reviews.ReviewsDTO;
 import sidkbk.celemo.dto.Reviews.ReviewsDeleteDTO;
 import sidkbk.celemo.dto.Reviews.ReviewsFindDTO;
 import sidkbk.celemo.dto.Reviews.ReviewsPutDTO;
+import sidkbk.celemo.dto.user.FindUserIdDTO;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.Reviews;
 import sidkbk.celemo.services.ReviewsService;
@@ -30,7 +31,7 @@ public class ReviewsController {
         }
     }
 
-    // filtered search
+    /*// filtered search
     @GetMapping("/find/{filter}")
     public ResponseEntity<?> getAllReviewsFilter(@PathVariable("filter")String filter){
         try {
@@ -38,7 +39,7 @@ public class ReviewsController {
         }catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
-    }
+    }*/
 
 
 
@@ -50,6 +51,12 @@ public class ReviewsController {
         }  catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
+    }
+
+    // GET all reviews for specific user
+    @GetMapping("/find/all-user")
+    public ResponseEntity<?> allReviewsForSpecificReviewedUser(FindUserIdDTO findUserIdDTO) {
+        return reviewsService.allReviewsForSpecificReviewedUser(findUserIdDTO);
     }
 
     // POST add a review dto
