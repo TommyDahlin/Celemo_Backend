@@ -59,31 +59,25 @@ public class OrderService {
         return orderRepository.save(newOrder);
     }
 
-
     // READ ALL ORDERS
     public List<Order> getAllOrders() {
         return orderRepository.findAll();
     }
-
 
     // Find one specific order by orderId
     public Optional<Order> getOneOrder(OrderFoundByIdDTO orderFoundByIdDTO) {
         return orderRepository.findById(orderFoundByIdDTO.getOrderId());
     }
 
-
     public List<Order> findPreviousPurchase(PreviousPurchaseFromOrderDTO previousPurchaseFromOrderDTO) {
-        User findUser = userRepository.findById(previousPurchaseFromOrderDTO.getUserId())
+        userRepository.findById(previousPurchaseFromOrderDTO.getUserId())
                 .orElseThrow(() -> new RuntimeException("UserId could not be found"));
             List<Order> previousPurchase = new ArrayList<>();
 
         for (Order order : orderRepository.findAll()) {
-            if (previousPurchaseFromOrderDTO.getUserId().equals(order.getBuyerAccount().getId())) {
-             Order newOrder = new Order();
-             newOrder.setId(previousPurchaseFromOrderDTO.getUserId());
-
+            if (order.getBuyerAccount() != null && previousPurchaseFromOrderDTO.getUserId().equals(order.getBuyerAccount().getId())) {
+                previousPurchase.add(order);
             }
-
         }
         return previousPurchase;
     }
@@ -144,7 +138,19 @@ public class OrderService {
             return previousPurchase;
     }
  */
+//            if (order.getBuyerAccount() != null && order.getBuyerAccount().getId().equals(previousPurchaseFromOrderDTO.getBuyerId())) {
 
+//                Order newOrder = new Order();
+//                newOrder.setAuction(order.getAuction());
+//                newOrder.setSellerAccount(order.getSellerAccount());
+//                newOrder.setBuyerAccount(findUser);
+//                newOrder.setProductTitle(order.getProductTitle());
+//                newOrder.setEndPrice(order.getEndPrice());
+//                previousPurchase.add(newOrder);
+
+//            if (previousPurchaseFromOrderDTO.getUserId().equals(order.getBuyerAccount().getId())) {
+//             previousPurchase.add(order);
+//            }
 
 
 

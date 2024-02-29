@@ -3,7 +3,7 @@ package sidkbk.celemo.dto.order;
 public class PreviousPurchaseFromOrderDTO {
 
     private String auctionId;
-    private String userId;
+    private String userId;    
     private String buyerId;
 
 
