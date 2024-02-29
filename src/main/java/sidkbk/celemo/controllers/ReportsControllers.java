@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sidkbk.celemo.dto.*;
+import sidkbk.celemo.dto.reports.*;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.services.ReportsServices;
 

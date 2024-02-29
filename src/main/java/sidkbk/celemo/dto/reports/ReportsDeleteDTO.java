@@ -1,8 +1,8 @@
-package sidkbk.celemo.dto;
+package sidkbk.celemo.dto.reports;
 
 import jakarta.validation.constraints.NotBlank;
 
-public class ReportsFindDTO {
+public class ReportsDeleteDTO {
     @NotBlank
     public String reportsId;
 

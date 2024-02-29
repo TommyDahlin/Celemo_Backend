@@ -3,7 +3,7 @@ package sidkbk.celemo.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import sidkbk.celemo.dto.*;
+import sidkbk.celemo.dto.reports.*;
 import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.models.Reports;
 import sidkbk.celemo.models.User;

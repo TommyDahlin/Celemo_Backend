@@ -1,25 +1,36 @@
-package sidkbk.celemo.dto;
+package sidkbk.celemo.dto.reports;
 
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.util.Date;
 
-public class ReportsAuctionDTO {
+public class ReportsUserDTO {
+
 
 
     @CreatedDate
     private Date createdAt = new Date();
     @NotBlank
     private String content;
+
     @NotBlank
     private String reportingUserId;
 
     @NotBlank
-    private String auctionId;
+    private String reportedUserId;
 
 
 
+
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
 
     public String getContent() {
         return content;
@@ -37,11 +48,12 @@ public class ReportsAuctionDTO {
         this.reportingUserId = reportingUserId;
     }
 
-    public String getAuctionId() {
-        return auctionId;
+    public String getReportedUserId() {
+        return reportedUserId;
     }
 
-    public void setAuctionId(String auctionId) {
-        this.auctionId = auctionId;
+    public void setReportedUserId(String reportedUserId) {
+        this.reportedUserId = reportedUserId;
     }
+
 }
