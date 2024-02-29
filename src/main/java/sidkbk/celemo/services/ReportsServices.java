@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import sidkbk.celemo.dto.ReportsAuctionDTO;
 import sidkbk.celemo.dto.ReportsFindDTO;
+import sidkbk.celemo.dto.ReportsPutDTO;
 import sidkbk.celemo.dto.ReportsUserDTO;
 import sidkbk.celemo.models.User;
 import sidkbk.celemo.models.Auction;
@@ -64,11 +65,11 @@ public class ReportsServices {
     public ResponseEntity<?> findOne(ReportsFindDTO reportsFindDTO) {
         Reports foundReport = reportsRepository.findById(reportsFindDTO.getReportsId())
                 .orElseThrow(() -> new RuntimeException("Order was not found"));
-        return foundReport;
+        return ResponseEntity.ok(foundReport);
     }
 
-    public Reports updateReport(String orderId, Reports updatedReport) {
-        return reportsRepository.findById(orderId)
+    public ResponseEntity<?> updateReport(ReportsPutDTO reportsPutDTO) {
+        return reportsRepository.findById()
                 .map(existingOrder -> {
                     if (updatedReport.getReportingUserId() != null) {
                         existingOrder.setReportingUserId(updatedReport.getReportingUserId());

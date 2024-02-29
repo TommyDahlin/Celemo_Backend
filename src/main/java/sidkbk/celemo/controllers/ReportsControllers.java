@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sidkbk.celemo.dto.ReportsAuctionDTO;
+import sidkbk.celemo.dto.ReportsFindDTO;
+import sidkbk.celemo.dto.ReportsPutDTO;
 import sidkbk.celemo.dto.ReportsUserDTO;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.Reports;
@@ -39,16 +41,17 @@ public class ReportsControllers {
     }
 
     //Find a report by id
-    @GetMapping("/find/{id}")
-    public ResponseEntity<?> findOne(@PathVariable("id") String id ) {
+    @GetMapping("/find")
+    public ResponseEntity<?> findOne(@Valid @RequestBody ReportsFindDTO reportsFindDTO) {
         try {
-            return ResponseEntity.ok(reportsServices.findOne(id));
+            return ResponseEntity.ok(reportsServices.findOne(reportsFindDTO));
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
+
     // Find all reports
-    @GetMapping("/find")
+    @GetMapping("/find/all")
     public ResponseEntity<?> findAllReports(){
         try {
             return ResponseEntity.ok(reportsServices.findAllReports());
@@ -58,10 +61,9 @@ public class ReportsControllers {
     }
 
     @PutMapping("/put/{id}")
-    public ResponseEntity<?> updateReport(@PathVariable("id") String reportId,
-                                         @Valid @RequestBody Reports updatedReport) {
+    public ResponseEntity<?> updateReport(@RequestBody ReportsPutDTO reportsPutDTO) {
         try {
-            return ResponseEntity.ok(reportsServices.updateReport(reportId, updatedReport));
+            return reportsServices.updateReport(reportsPutDTO);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
