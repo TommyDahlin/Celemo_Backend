@@ -58,7 +58,7 @@ public class ReviewsController {
         return reviewsService.reviewedUserSortReviews(reviewsSortLowHighDTO);
     }
 
-    // GET all reviews for specific reviewed user and specific grade
+    // GET all reviews for specific reviewed user with specific grade
     @GetMapping("/find/all-user-grade")
     public ResponseEntity<?> reviewedUserSortByGrade(@Valid @RequestBody ReviewsGetByGradeDTO reviewsGetByGradesDTO) {
         return reviewsService.reviewedUserSortByGrade(reviewsGetByGradesDTO);

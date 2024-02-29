@@ -153,23 +153,25 @@ public class ReviewsService {
         return ResponseEntity.ok(sortedReviews); // Return sorted list
     }
 
-    // List all reviews for specific reviewed user and specific grade
+    // List all reviews for specific reviewed user with specific grade
     public ResponseEntity<?> reviewedUserSortByGrade(ReviewsGetByGradeDTO reviewsGetByGradeDTO) {
         FindUserIdDTO findUserIdDTO = new FindUserIdDTO();
         findUserIdDTO.setUserId(reviewsGetByGradeDTO.getUserId());
         // Run method above to get all reviews for specified user
         List<Reviews> foundReviews = allReviewsForSpecificReviewedUser(findUserIdDTO);
-        if (foundReviews.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No reviews with that grade found...");
-        }
         List<Reviews> reviewsByGrade = new ArrayList<>();
+        // Loop through reviews found for specified user and find only reviews with matching grade you want to see
         for (Reviews review : foundReviews) {
             if (review.getGrade().equals(reviewsGetByGradeDTO.getGrade())) {
                 reviewsByGrade.add(review);
             }
         }
+        if (reviewsByGrade.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No reviews with that grade found...");
+        }
         return ResponseEntity.ok(reviewsByGrade);
     }
+
 
 }
 
