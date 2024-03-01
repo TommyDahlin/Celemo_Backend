@@ -110,6 +110,7 @@ public class BidsServices {
                         userRepository.save(foundUser);
                         return ResponseEntity.ok(newBid.getCurrentPrice() + " you have the current bid.");
                     }else {
+                        // if you cant do 10 sets to your maxbid
                         newBid.setCurrentPrice(auctionCurrentBid.getCurrentPrice());
                         bidsRepository.save(newBid);
                         foundAuction.setBid(newBid);
