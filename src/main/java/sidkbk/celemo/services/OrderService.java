@@ -43,9 +43,7 @@ public class OrderService {
 
         User findBuyerId = userRepository.findById(orderCreationDTO.getBuyerId())
                 .orElseThrow(() -> new RuntimeException("BuyerId was not found"));
-//        double orderAmount = orderCreationDTO.getCommission();
-//        double commissionRate = 0.03;
-//        double commission = orderAmount * commissionRate;
+
         Order newOrder = new Order();
 
         newOrder.setAuction(findAuction);
@@ -54,8 +52,7 @@ public class OrderService {
         newOrder.setProductTitle(findAuction.getTitle());
         newOrder.setEndPrice(findAuction.getEndPrice());
         newOrder.setCreatedAt(orderCreationDTO.getCreatedAt());
-//    newOrder.setTest(orderCreationDTO.getTest());
-//    newOrder.setBids(orderCreationDTO.getCommission());
+
         return orderRepository.save(newOrder);
     }
 
