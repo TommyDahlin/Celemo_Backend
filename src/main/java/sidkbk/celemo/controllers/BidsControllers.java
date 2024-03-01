@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import sidkbk.celemo.dto.BidsDTO;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.Bids;
 import sidkbk.celemo.services.BidsServices;
@@ -17,9 +18,9 @@ public class BidsControllers {
 
     // Post a new book
     @PostMapping("/post")
-    public ResponseEntity<?> createBids(@RequestBody Bids bids){
+    public ResponseEntity<?> createBids(@RequestBody BidsDTO bidsDTO){
         try {
-            return ResponseEntity.ok(bidsServices.createBids(bids));
+            return bidsServices.createBids(bidsDTO);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
@@ -47,13 +48,15 @@ public class BidsControllers {
 
     //Update by id
     @PutMapping("/put/{id}")
-    public ResponseEntity<?> updateBids(@RequestBody Bids bids, @PathVariable("id") String _id) {
+    public ResponseEntity<?> updateBids(@RequestBody BidsDTO bidsDTO, @PathVariable("id") String _id) {
         try {
-            return  ResponseEntity.ok(bidsServices.updateBids(bids));
+            return  ResponseEntity.ok(bidsServices.updateBids(bidsDTO));
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
+
+
 
     //Delete by id
     @DeleteMapping("/delete/{id}")

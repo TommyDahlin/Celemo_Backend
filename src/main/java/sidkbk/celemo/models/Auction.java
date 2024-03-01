@@ -38,7 +38,6 @@ public class Auction {
     private Double endPrice = 0d;
     @DBRef
     private Bids bid;
-    private String bidId;
 
     // Both booleans have to be true to move on to make an order.
     public boolean isFinished;
@@ -48,6 +47,38 @@ public class Auction {
     public List<ECategory> categoryList = new ArrayList<>();
 
     public Auction(){
+    }
+
+    public LocalDate getStartingDate() {
+        return startingDate;
+    }
+
+    public void setStartingDate(LocalDate startingDate) {
+        this.startingDate = startingDate;
+    }
+
+    public void setCurrentPrice(Double currentPrice) {
+        this.currentPrice = currentPrice;
+    }
+
+    public void setEndPrice(Double endPrice) {
+        this.endPrice = endPrice;
+    }
+
+    public Bids getBid() {
+        return bid;
+    }
+
+    public void setBid(Bids bid) {
+        this.bid = bid;
+    }
+
+    public boolean isFinished() {
+        return isFinished;
+    }
+
+    public void setFinished(boolean finished) {
+        isFinished = finished;
     }
 
     public String getId() {
