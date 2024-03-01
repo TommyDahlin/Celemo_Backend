@@ -78,7 +78,7 @@ public class UserController {
     
 
    // List of all previousPurchases by User
-    @GetMapping("/order/previouspurchase")
+    @GetMapping("/previouspurchase")
     public ResponseEntity<?> getPreviousPurchase(@RequestBody PreviousPurchaseFromOrderDTO previousPurchaseFromOrderDTO) {
         try{
             return ResponseEntity.ok(orderService.findPreviousPurchase(previousPurchaseFromOrderDTO));
@@ -86,11 +86,6 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
-
-
-
-
-
 
 
   // put/update // using responseEntity<?> creates a generic wildcard that can return any type of body

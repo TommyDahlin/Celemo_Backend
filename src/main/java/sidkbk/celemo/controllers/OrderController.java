@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import sidkbk.celemo.dto.order.DeleteOrderDTO;
 import sidkbk.celemo.dto.order.OrderCreationDTO;
 import sidkbk.celemo.dto.order.OrderFoundByIdDTO;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
@@ -19,13 +20,13 @@ public class OrderController {
     OrderService orderService;
 
 
-   @PostMapping
-    public ResponseEntity<Order> createOrder(@RequestBody OrderCreationDTO orderCreationDTO) {
+   @PostMapping("/post")
+    public ResponseEntity<Order> createOrder(@Valid @RequestBody OrderCreationDTO orderCreationDTO) {
        Order newOrder = orderService.createOrder(orderCreationDTO);
        return new ResponseEntity<>(newOrder, HttpStatus.CREATED);
     }
 
-    @GetMapping("/find")
+    @GetMapping("/find/all")
     public ResponseEntity<?> getAllOrders() {
         try {
             return ResponseEntity.ok(orderService.getAllOrders());
@@ -34,8 +35,8 @@ public class OrderController {
         }
     }
 
-    @GetMapping("/find/order")
-    public ResponseEntity<?> getOneOrder(@RequestBody OrderFoundByIdDTO orderFoundByIdDTO) {
+    @GetMapping("/find")
+    public ResponseEntity<?> getOneOrder(@Valid @RequestBody OrderFoundByIdDTO orderFoundByIdDTO) {
         try {
             return ResponseEntity.ok(orderService.getOneOrder(orderFoundByIdDTO));
         } catch (EntityNotFoundException e) {
@@ -43,21 +44,10 @@ public class OrderController {
         }
     }
 
-    @PutMapping("/put/{id}")
-    public ResponseEntity<?> updateOrder(@PathVariable("id") String orderId,
-                                         @Valid @RequestBody Order updatedOrder) {
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteOrder(@Valid @RequestBody DeleteOrderDTO deleteOrderDTO) {
         try {
-            return ResponseEntity.ok(orderService.updateOrder(orderId, updatedOrder));
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-    }
-
-
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteOrder(@PathVariable String id) {
-        try {
-            return ResponseEntity.ok(orderService.deleteOrder(id));
+            return ResponseEntity.ok(orderService.deleteOrder(deleteOrderDTO));
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
