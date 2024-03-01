@@ -5,38 +5,31 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDate;
 
+
 @Document(collection = "bids")
 public class Bids {
+
+
     @Id
     private String id;
 
-    private Double price;
 
-    @CreatedDate
-    public LocalDate timestamp = LocalDate.now();
-
-
-    // User reference, find a user by id,
     @DBRef
     private User user;
-
-    @DBRef
-    private Auction auction;
-
-
-    private String userId;
-
 
     private String auctionId;
 
 
+    private double startPrice;
+    private double currentPrice;
+    private double maxPrice;
 
-    public Double getPrice() {
-        return price;
+    public Bids() {
     }
 
-    public void setPrice(Double price) {
-        this.price = price;
+
+    public String getId() {
+        return id;
     }
 
 
@@ -48,22 +41,6 @@ public class Bids {
         this.user = user;
     }
 
-    public Auction getAuction() {
-        return auction;
-    }
-
-    public void setAuction(Auction auction) {
-        this.auction = auction;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
     public String getAuctionId() {
         return auctionId;
     }
@@ -71,6 +48,39 @@ public class Bids {
     public void setAuctionId(String auctionId) {
         this.auctionId = auctionId;
     }
+
+    public LocalDate getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(LocalDate timestamp) {
+        this.timestamp = timestamp;
+    }
+
+
+    public double getStartPrice() {
+        return startPrice;
+    }
+    public double getCurrentPrice() {
+        return currentPrice;
+    }
+    public double getMaxPrice() {
+        return maxPrice;
+    }
+
+
+    public void setStartPrice(double startPrice) {
+        this.startPrice = startPrice;
+    }
+    public void setCurrentPrice(double currentPrice) {
+        this.currentPrice = currentPrice;
+    }
+    public void setMaxPrice(double maxPrice) {
+        this.maxPrice = maxPrice;
+    }
+
+    @CreatedDate
+    public LocalDate timestamp = LocalDate.now();
 
 
 
