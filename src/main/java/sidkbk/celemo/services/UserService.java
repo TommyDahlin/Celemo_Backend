@@ -11,10 +11,7 @@ import sidkbk.celemo.repositories.AuctionRepository;
 import sidkbk.celemo.repositories.RoleRepository;
 import sidkbk.celemo.repositories.UserRepository;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class UserService {
@@ -185,33 +182,31 @@ adress_city
                 .orElseThrow(()-> new RuntimeException("User does not exist"));
 
         //samla alla auctions i en ny lista
-        List<Auction> allFavourites = findUserFavouritesDTO.getFavouriteAuctions();
+        return ResponseEntity.ok("return statement");
 
         //printa listan to string
-        return ResponseEntity.ok(allFavourites.stream().toString());
+        //return ResponseEntity.ok();
 
     }
-    public ResponseEntity<String> setUserFavouritesById (ModifyUserFavouritesDTO setFavouritesDTO){
-        userRepository.findById(setFavouritesDTO.getUserId())
+    public ResponseEntity<?> setUserFavouritesById (ModifyUserFavouritesDTO favouritesDTO){
+        userRepository.findById(favouritesDTO.getUserId())
                 .orElseThrow(()-> new RuntimeException("User does not exist"));
-        auctionRepository.findById(setFavouritesDTO.getAuctionId())
-                .orElseThrow(()-> new RuntimeException("Auction does not exist"));
+        auctionRepository.findById(favouritesDTO.getAuctionId())
+                .orElseThrow(()-> new RuntimeException("User does not exist"));
+        List<Auction> foundAuction = new ArrayList<>();
 
-        setFavouritesDTO.setAuctionId(setFavouritesDTO.getAuctionId());
-        userRepository.findById(setFavouritesDTO.getUserId());
-
-
-        return userRepository.findById(setFavouritesDTO.getUserId())
+        return userRepository.findById(favouritesDTO.getUserId())
                 .map(existingUser -> {
-                    if(setFavouritesDTO.getAuctionId()!=null) {
-                        existingUser.addfavouriteAuctions(setFavouritesDTO.getAuctionId());
+                    if(favouritesDTO.getAuctionId()!=null) {
+                        foundAuction.add(auctionRepository.findById(favouritesDTO.getAuctionId()).get());
+                        existingUser.setFavouriteAuctions(foundAuction);
+                        userRepository.save(existingUser);
                     }
-                    return userRepository.save(existingUser);
-                }
+                    return ResponseEntity.ok("Auction was added to favourite list!");
+                } 
+                )
                 .orElseThrow(() -> new EntityNotFoundException("Auction was not found!"));
     }
-
-
     public ResponseEntity<String> deleteUserFavouritesById(ModifyUserFavouritesDTO deleteFavouritesDto){
         userRepository.findById(deleteFavouritesDto.getUserId())
                 .orElseThrow(()-> new RuntimeException("User does not exist"));

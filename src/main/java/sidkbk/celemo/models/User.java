@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -55,8 +56,10 @@ public class User {
     @NotBlank(message = "adress_city cannot be blank")
     private String adress_city;
 
+
+
     @DBRef
-    private ArrayList<Auction> favouriteAuctions = new ArrayList<Auction>();
+    private List<Auction> favouriteAuctions = new ArrayList<>();
 
 
     private double balance = 0d;
@@ -65,6 +68,14 @@ public class User {
 
     public User() {
 
+    }
+
+    public List<Auction> getFavouriteAuctions() {
+        return favouriteAuctions;
+    }
+
+    public void setFavouriteAuctions(List<Auction> favouriteAuctions) {
+        this.favouriteAuctions = favouriteAuctions;
     }
 
     //return variable and change to string if necessary
@@ -104,12 +115,7 @@ public class User {
 
     }
 
-    public void addfavouriteAuctions (Auction auction){
-        this.favouriteAuctions.add(auction);
-    }
-    public void removefavouriteAuctions (Auction auction){
-        this.favouriteAuctions.remove(auction);
-    }
+
 
 
     public String getUsername() {
@@ -228,6 +234,7 @@ public class User {
     public void setGrade(double grade) {
         this.grade = grade;
     }
+
 
 
 }

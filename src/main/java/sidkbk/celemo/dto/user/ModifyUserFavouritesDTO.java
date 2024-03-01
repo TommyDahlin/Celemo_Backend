@@ -1,26 +1,25 @@
 package sidkbk.celemo.dto.user;
 
 import jakarta.validation.constraints.NotBlank;
-import sidkbk.celemo.models.Auction;
 
 public class ModifyUserFavouritesDTO {
     @NotBlank
     private String userId;
     @NotBlank
-    private Auction auctionId;
+    private String auctionId;
 
 
     public String getUserId() {
         return userId;
     }
+//setUserId
 
-
-    public Auction getAuctionId() {
+    public String getAuctionId() {
         return auctionId;
     }
 
 
-    public void setAuctionId(Auction auctionId) {
+    public void setAuctionId(String auctionId) {
         this.auctionId = auctionId;
     }
 }
