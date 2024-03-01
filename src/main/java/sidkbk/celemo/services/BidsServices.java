@@ -1,6 +1,7 @@
 package sidkbk.celemo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import sidkbk.celemo.dto.BidsDTO;
@@ -52,19 +53,19 @@ public class BidsServices {
         //newBid.setAuction(foundAuction);
 
         newBid.setStartPrice(bidsDTO.getStartPrice());
-
+        newBid.setAuctionId(bidsDTO.getAuctionId());
         newBid.setMaxPrice(bidsDTO.getMaxPrice());
 
         // Checks if users balance is valid
         if (bidsDTO.getMaxPrice() > foundUser.getBalance()){
-            throw new RuntimeException("Your max bid can not be higher than " + foundUser.getBalance() + " , your current balance." + bidsDTO.getMaxPrice());
+            throw new RuntimeException("Your max bid can not be higher than " + foundUser.getBalance() + " , your current balance.");
         }
         if (foundUser.getBalance() < newBid.getStartPrice()){
             throw new RuntimeException("Your bid cannot be higher than your balance. Your current balance is " + foundUser.getBalance() + "Your current bid is " + bidsDTO.getStartPrice() + ".");
         }
 
         // user loses
-        if (foundAuction.isHasBids()){
+        if (foundAuction.isHasBids() == true){
             if (foundAuction.getBid().getId().equals(newBid.getUser().getId())) {
                 Bids auctionCurrentBid = bidsRepository.findById(foundAuction.getBid().getId()).get();
 
@@ -83,7 +84,7 @@ public class BidsServices {
                     auctionRepository.save(foundAuction);
                     return ResponseEntity.ok(newBid.getMaxPrice() + " is less than auctions current bids max price.");
                 }
-                // if the bids are equal sets the current bid as winner.
+                // if the bids are equal sets the previous/current bid as winner.
                 if (newBid.getMaxPrice() == auctionCurrentBid.getMaxPrice()) {
                     auctionCurrentBid.setCurrentPrice(auctionCurrentBid.getMaxPrice());
                     foundAuction.setCurrentPrice(auctionCurrentBid.getMaxPrice());
@@ -115,15 +116,17 @@ public class BidsServices {
             }
 
             //send back balance of lost bids
+        }else if (!foundAuction.isHasBids()){
+            newBid.setCurrentPrice(newBid.getStartPrice());
+            userRepository.save(foundUser);
+            bidsRepository.save(newBid);
+            foundAuction.setBid(newBid);
+            foundAuction.setCurrentPrice(newBid.getCurrentPrice());
+            foundAuction.setHasBids(true);
+            auctionRepository.save(foundAuction);
+            return ResponseEntity.ok(" Has been created, current price is " + newBid.getCurrentPrice());
         }
-        newBid.setCurrentPrice(newBid.getStartPrice());
-        userRepository.save(foundUser);
-        bidsRepository.save(newBid);
-        foundAuction.setBid(newBid);
-        foundAuction.setCurrentPrice(newBid.getCurrentPrice());
-        foundAuction.setHasBids(true);
-        auctionRepository.save(foundAuction);
-        return ResponseEntity.ok(" Has been created, current price is " + newBid.getCurrentPrice());
+        return ResponseEntity.ok("Something went wrong");
     }
 
 
