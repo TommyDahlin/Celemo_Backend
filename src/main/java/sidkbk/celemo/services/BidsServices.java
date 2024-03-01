@@ -171,7 +171,7 @@ public class BidsServices {
         List<Bids> allBids = bidsRepository.findAll();
         // For loop igenom alla bids och kolla efter bids som matchar med userid
         for (Bids bids : allBids){
-            if (bids.getUser().getId().equals(findUserIdDTO.getUserId())) {
+            if (bids.getUser() != null && bids.getUser().getId().equals(findUserIdDTO.getUserId())) {
                 foundBids.add(bids);
             }
         }
