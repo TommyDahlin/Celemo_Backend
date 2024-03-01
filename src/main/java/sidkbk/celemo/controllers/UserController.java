@@ -119,4 +119,18 @@ public class UserController {
         }
 
     }
+
+    @GetMapping ("/find/favourites")
+    public ResponseEntity<?> getUserFavouritesById(@Valid @RequestBody FindUserFavouritesDTO favouritesDTO){
+        return userService.getUserFavouritesById(favouritesDTO);
+    }
+    @PutMapping ("/favourite/add")
+    public ResponseEntity<?> setUserFavouritesById(@Valid @RequestBody ModifyUserFavouritesDTO addUserFavouritesDTO){
+        return userService.setUserFavouritesById(addUserFavouritesDTO);
+    }
+    @DeleteMapping ("/favourite/delete")
+    public ResponseEntity<?> deleteUserFavouritesById(@Valid @RequestBody ModifyUserFavouritesDTO deleteUserFavouritesDTO){
+        return userService.deleteUserFavouritesById(deleteUserFavouritesDTO);
+    }
+
 }

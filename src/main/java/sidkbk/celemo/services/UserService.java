@@ -6,10 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import sidkbk.celemo.dto.user.*;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
-import sidkbk.celemo.models.EGender;
-import sidkbk.celemo.models.ERole;
-import sidkbk.celemo.models.Role;
-import sidkbk.celemo.models.User;
+import sidkbk.celemo.models.*;
+import sidkbk.celemo.repositories.AuctionRepository;
 import sidkbk.celemo.repositories.RoleRepository;
 import sidkbk.celemo.repositories.UserRepository;
 
@@ -24,6 +22,9 @@ public class UserService {
     UserRepository userRepository;
     @Autowired
     RoleRepository roleRepository;
+
+    @Autowired
+    AuctionRepository auctionRepository;
 
 
     // create/add/post user account
@@ -103,58 +104,58 @@ public class UserService {
         Set<Role> roles = new HashSet<>();
         Set<String> strRoles = updateUserDTO.getUsersRoles();
         return userRepository.findById(updateUserDTO.getUserId())
-        .map(existingUser -> {
-            if(updateUserDTO.getUsername()!=null){
-                existingUser.setUsername(updateUserDTO.getUsername());
-            }if(updateUserDTO.getPassword()!=null){
-                existingUser.setPassword(updateUserDTO.getPassword());
-            }if(updateUserDTO.getDateOfBirth()!=null){
-                existingUser.setDateOfBirth(updateUserDTO.getDateOfBirth());
-            }if(updateUserDTO.getEmail()!=null){
-                existingUser.setEmail(updateUserDTO.getEmail());
-            }if(updateUserDTO.getFirstName()!=null){
-                existingUser.setFirstName(updateUserDTO.getFirstName());
-            }if(updateUserDTO.getLastName()!=null){
-                existingUser.setLastName(updateUserDTO.getLastName());
-            }if(updateUserDTO.getAdress_street()!=null){
-                existingUser.setAdress_street(updateUserDTO.getAdress_street());
-            }if(updateUserDTO.getAdress_city()!=null){
-                existingUser.setAdress_city(updateUserDTO.getAdress_city());
-            }if(updateUserDTO.getAdress_postalCode()!=null){
-                existingUser.setAdress_postalCode(updateUserDTO.getAdress_postalCode());
-            }if(updateUserDTO.getBalance()!=0.0){
-                existingUser.setBalance(updateUserDTO.getBalance());
-            }
-            if (updateUserDTO.getGender() != null) {
-                existingUser.setGender(updateUserDTO.getGender());
-            }
-            if(updateUserDTO.getPhoto()!=null){
-                existingUser.setPhoto(updateUserDTO.getPhoto());
-            }if (strRoles.isEmpty()){
-                Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                        .orElseThrow(() -> new RuntimeException("Error: role is not found"));
-                roles.add(userRole);
-                existingUser.setRoles(roles);
-            }else {
-                strRoles.forEach(role -> {
-                    switch (role) {
-                        case "ADMIN" -> {
-                            Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-                                    .orElseThrow(() -> new RuntimeException("Error: Admin Role couldn't be found"));
-                            roles.add(adminRole);
-                            existingUser.setRoles(roles);
-                        }
-                        case "USER" -> {
-                            Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                                    .orElseThrow(() -> new RuntimeException("Error: Role couldn't be found"));
-                            roles.add(userRole);
-                            existingUser.setRoles(roles);
-                        }
-                    }
-                });
+                            .map(existingUser -> {
+                                if(updateUserDTO.getUsername()!=null){
+                                    existingUser.setUsername(updateUserDTO.getUsername());
+                                }if(updateUserDTO.getPassword()!=null){
+                                    existingUser.setPassword(updateUserDTO.getPassword());
+                                }if(updateUserDTO.getDateOfBirth()!=null){
+                                    existingUser.setDateOfBirth(updateUserDTO.getDateOfBirth());
+                                }if(updateUserDTO.getEmail()!=null){
+                                    existingUser.setEmail(updateUserDTO.getEmail());
+                                }if(updateUserDTO.getFirstName()!=null){
+                                    existingUser.setFirstName(updateUserDTO.getFirstName());
+                                }if(updateUserDTO.getLastName()!=null){
+                                    existingUser.setLastName(updateUserDTO.getLastName());
+                                }if(updateUserDTO.getAdress_street()!=null){
+                                    existingUser.setAdress_street(updateUserDTO.getAdress_street());
+                                }if(updateUserDTO.getAdress_city()!=null){
+                                    existingUser.setAdress_city(updateUserDTO.getAdress_city());
+                                }if(updateUserDTO.getAdress_postalCode()!=null){
+                                    existingUser.setAdress_postalCode(updateUserDTO.getAdress_postalCode());
+                                }if(updateUserDTO.getBalance()!=0.0){
+                                    existingUser.setBalance(updateUserDTO.getBalance());
+                                }
+                                if (updateUserDTO.getGender() != null) {
+                                    existingUser.setGender(updateUserDTO.getGender());
+                                }
+                                if(updateUserDTO.getPhoto()!=null){
+                                    existingUser.setPhoto(updateUserDTO.getPhoto());
+                                }if (strRoles.isEmpty()){
+                                    Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+                                            .orElseThrow(() -> new RuntimeException("Error: role is not found"));
+                                    roles.add(userRole);
+                                    existingUser.setRoles(roles);
+                                }else {
+                                    strRoles.forEach(role -> {
+                                        switch (role) {
+                                            case "ADMIN" -> {
+                                                Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+                                                        .orElseThrow(() -> new RuntimeException("Error: Admin Role couldn't be found"));
+                                                roles.add(adminRole);
+                                                existingUser.setRoles(roles);
+                                            }
+                                            case "USER" -> {
+                                                Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+                                                        .orElseThrow(() -> new RuntimeException("Error: Role couldn't be found"));
+                                                roles.add(userRole);
+                                                existingUser.setRoles(roles);
+                                            }
+                                        }
+                                    });
 
-            }
-            return userRepository.save(existingUser);
+                                }
+                                return userRepository.save(existingUser);
         })
                 .orElseThrow(() -> new EntityNotFoundException("User with id:" + updateUserDTO.getUserId() + " was not found!"));
     }
@@ -177,5 +178,49 @@ adress_city
                 .orElseThrow(()-> new RuntimeException("User does not exist"));
         userRepository.deleteById(deleteUserDTO.getUserId());
         return ResponseEntity.ok("User deleted");
+    }
+
+    public ResponseEntity<String> getUserFavouritesById (FindUserFavouritesDTO findUserFavouritesDTO){
+        userRepository.findById(findUserFavouritesDTO.getUserId())
+                .orElseThrow(()-> new RuntimeException("User does not exist"));
+
+        //samla alla auctions i en ny lista
+        List<Auction> allFavourites = findUserFavouritesDTO.getFavouriteAuctions();
+
+        //printa listan to string
+        return ResponseEntity.ok(allFavourites.stream().toString());
+
+    }
+    public ResponseEntity<String> setUserFavouritesById (ModifyUserFavouritesDTO setFavouritesDTO){
+        userRepository.findById(setFavouritesDTO.getUserId())
+                .orElseThrow(()-> new RuntimeException("User does not exist"));
+        auctionRepository.findById(setFavouritesDTO.getAuctionId())
+                .orElseThrow(()-> new RuntimeException("Auction does not exist"));
+
+        setFavouritesDTO.setAuctionId(setFavouritesDTO.getAuctionId());
+        userRepository.findById(setFavouritesDTO.getUserId());
+
+
+        return userRepository.findById(setFavouritesDTO.getUserId())
+                .map(existingUser -> {
+                    if(setFavouritesDTO.getAuctionId()!=null) {
+                        existingUser.addfavouriteAuctions(setFavouritesDTO.getAuctionId());
+                    }
+                    return userRepository.save(existingUser);
+                }
+                .orElseThrow(() -> new EntityNotFoundException("Auction was not found!"));
+    }
+
+
+    public ResponseEntity<String> deleteUserFavouritesById(ModifyUserFavouritesDTO deleteFavouritesDto){
+        userRepository.findById(deleteFavouritesDto.getUserId())
+                .orElseThrow(()-> new RuntimeException("User does not exist"));
+
+
+
+
+        auctionRepository.findById(deleteFavouritesDto.getAuctionId())
+                .orElseThrow(()-> new RuntimeException("Auction does not exist"));
+
     }
 }

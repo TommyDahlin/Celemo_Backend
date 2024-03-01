@@ -56,8 +56,7 @@ public class User {
     private String adress_city;
 
     @DBRef
-    private ArrayList<String> favourites = new ArrayList<String>();
-
+    private ArrayList<Auction> favouriteAuctions = new ArrayList<Auction>();
 
 
     private double balance = 0d;
@@ -105,11 +104,11 @@ public class User {
 
     }
 
-    public void addFavourites (String favouritesId){
-        this.favourites.add(favouritesId);
+    public void addfavouriteAuctions (Auction auction){
+        this.favouriteAuctions.add(auction);
     }
-    public void removeFavourites (String favouritesId){
-        this.favourites.remove(favouritesId);
+    public void removefavouriteAuctions (Auction auction){
+        this.favouriteAuctions.remove(auction);
     }
 
 
