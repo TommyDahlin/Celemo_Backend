@@ -1,6 +1,7 @@
 package sidkbk.celemo.dto.user;
 
 public class FindUserIdandFilterDTO {
+
     private String userId;
     private String filter;
 
