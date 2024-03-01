@@ -55,6 +55,9 @@ public class User {
     @NotBlank(message = "adress_city cannot be blank")
     private String adress_city;
 
+    // HELENA:
+    // det här en en DBRef till... String?
+    // ska nog vara en lista med Auction va?
     @DBRef
     private ArrayList<String> favourites = new ArrayList<String>();
 
@@ -92,6 +95,8 @@ public class User {
 
     }
 
+    // det här ingår i Security genom BCrypt, jättebra att ni tänker på det men kom ihåg
+    // att fundera över vad ni lägger er tid på nästa gång
     public void isPasswordCorrect(User user){
 
         Pattern UpperCasePattern = Pattern.compile("[A-Z ]");

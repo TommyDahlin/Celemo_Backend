@@ -23,6 +23,12 @@ public class UserService {
     ReviewsRepo reviewsRepository;
 
 
+    // HELENA:
+    // är det här regsiter eller inte?
+    // det ser ut som ett ihopkok av createUser och register eftersom ni blandar in roller
+    // om det här är en metod för att registrera en user så bör metodsignaturen spegla det
+    // den bör inte heller ligga i en UserService utan i så fall => AuthService
+
     // create/add/post user account
     public User createUser(CreateUserDTO createUserDTO) {
         User user = new User();
@@ -94,6 +100,16 @@ public class UserService {
     public Optional<User> getUserById(FindUserIdDTO findUserIdDTO) {
         return userRepository.findById(findUserIdDTO.getUserId());
     }
+
+    //HELENA:
+    // ska en user verkligen få uppdatera sin roll? det känns inte så bra...
+    // fundera på:
+    // vad ska en admin få uppdatera på en user?
+    // vad ska en user få uppdatera om sig själv?
+
+    // dessutom kan ni göra det lite snyggare och ta bort era 1000 ifs med det här :)
+    // Optional.ofNullable(updateUserDTO.getUsername()).ifPresent(existingUser::setUsername);
+    // går att göra likadant för varje rad
 
     // PUT/update user account. checks that new value isn't empty before adding. If something is empty then it will throw EntityNotFoundException
     public User updateUser(UpdateUserDTO updateUserDTO) {

@@ -56,11 +56,19 @@ public class OrderService {
         return orderRepository.findAll();
     }
 
+    //HELENA:
+    // vi hittar EN order men hittar vi EN order som tillhör en specifik user?
+    // hittar vi ALLA ordrar som tillhör en specifik user?
+
     //READ 1 ORDER
     public Order getOneOrder(String id) {
         Order foundOrder = orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Order was not found"));
         return foundOrder;
     }
+
+    //HELENA:
+    // en order kan man INTE uppdatera då blir revisorn arg...
+    // man makulerar och skapar en ny i så fall
 
     // PUT update one order
     public Order updateOrder(String orderId, Order updateOrder) {

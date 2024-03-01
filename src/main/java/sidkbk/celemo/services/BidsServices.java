@@ -27,6 +27,10 @@ public class BidsServices {
     UserRepository userRepository;
 
 
+    //HELENA:
+    // hittar vi alla bud som tillhör en user? jag tror att ni kanske jobbar på det issuet iofs
+
+
 
 // Find all bids
     public List<Bids>findAllBids(){

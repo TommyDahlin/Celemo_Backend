@@ -6,6 +6,8 @@ import sidkbk.celemo.models.EGender;
 import java.util.HashSet;
 import java.util.Set;
 
+//HELENA: se kommentar om update i servicen...
+
 public class UpdateUserDTO {
     @NotBlank
     private String userId;
