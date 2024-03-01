@@ -185,8 +185,8 @@ adress_city
         // Function to remove reviews referencing reviewed user
         List<Reviews> findReviews = reviewsRepository.findAll();
         for (int i = 0; i < findReviews.size(); i++) {
-            if (findReviews.get(i).getReviewedUser().equals(deleteUserDTO.getUserId())) {
-                reviewsRepository.delete(findReviews.get(i));
+            if (findReviews.get(i).getReviewedUser().getId().equals(deleteUserDTO.getUserId())) {
+                reviewsRepository.deleteById(findReviews.get(i).getId());
             }
             userRepository.deleteById(deleteUserDTO.getUserId());
         }return ResponseEntity.ok("User deleted");
