@@ -3,60 +3,51 @@
 #######################################################################################################
 
 // GET list all reviews
-http://localhost:8080/api/reviews/find
+http://localhost:8080/api/reviews/find/all
 
 #######################################################################################################
 
-// GET list one specific review
-http://localhost:8080/api/reviews/find/:id
-Params
-    Path Varaibles
-        Key : id
-        Value : 65cf838f7af204a728eb2b6c
-        Description : Review ID
+// GET list of one specific review
+http://localhost:8080/api/reviews/find
+
+Body - raw
+    {
+        "reviewId" : "65d75b87c3c7a5270fc7dded"
+    }
 
 #######################################################################################################
 
 // POST add a review
-http://localhost:8080/api/reviews/post/:created-by-id/:reviewed-user-id
-Params
-    Path Variables
-        Key : created-by-id
-        Value : 65cc95f269ca29e134fe9766
-        Description : User user that creates the review
+http://localhost:8080/api/reviews/post
 
-        Key : reviewed-user-id
-        Value : 65cc95f269ca29e134fe9766
-        Description : Reviewed user user
 Body - raw
     {
-        "grade": 4,
-        "reviewText": "This is an review"
+        "grade": 1-5,
+        "reviewText": " text ",
+        "createdById": " ObjectId ",
+        "reviewedUserId": " ObjectId "
     }
 
 #######################################################################################################
 
 // DELETE Delete a review
-http://localhost:8080/api/reviews/delete/:id
-Params
-    Path Variables
-        Key : id
-        Value : 65d242290dfabbe314edbfa4
-        Description : Review id to delete
+http://localhost:8080/api/reviews/delete
+
+Body - raw
+{
+    "reviewId":" ObjectId "
+}
 
 #######################################################################################################
 
 // PUT Update a review
-http://localhost:8080/api/reviews/put/:id
-Params
-    Path Variables
-        Key : id
-        Value : 65cf838f7af204a728eb2b6c
-        Description : Review ID to update
+http://localhost:8080/api/reviews/put
+
 Body - raw
     {
-        "grade": 4,
-        "reviewText": "This is a review text."
+        "reviewId":"ObjectId",
+        "grade": 1-5,
+        "reviewText": " tour text",
     }
 
 #######################################################################################################
