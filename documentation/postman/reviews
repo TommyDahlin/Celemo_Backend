@@ -57,7 +57,7 @@ Body - raw
 
 #######################################################################################################
 
-GET - List all reviews for specific user
+GET - List all reviews for specific REVIEWED user
 ***********************************
 http://localhost:8080/api/reviews/find/all-user
 Body - raw
