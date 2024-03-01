@@ -8,8 +8,7 @@ import java.util.Date;
 public class OrderCreationDTO {
 
 
-    private String test;
-//    private double commission;
+
     @CreatedDate
     private Date createdAt = new Date();
     private String auctionId;
@@ -32,12 +31,6 @@ public class OrderCreationDTO {
     public Date getCreatedAt() {
         return createdAt;
     }
-    public String getTest() {
-        return test;
-    }
-//    public double getCommission() {
-//        return commission;
-//    }
 
 
 
@@ -54,12 +47,6 @@ public class OrderCreationDTO {
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
-    public void setTest(String test) {
-        this.test = test;
-    }
-//    public void setCommission(double commission) {
-//        this.commission = commission;
-//    }
 }
 
 

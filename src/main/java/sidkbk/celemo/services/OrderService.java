@@ -1,13 +1,12 @@
 package sidkbk.celemo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import sidkbk.celemo.dto.order.DeleteOrderDTO;
 import sidkbk.celemo.dto.order.OrderCreationDTO;
 import sidkbk.celemo.dto.order.OrderFoundByIdDTO;
 import sidkbk.celemo.dto.order.PreviousPurchaseFromOrderDTO;
 import sidkbk.celemo.models.Auction;
-import sidkbk.celemo.models.Bids;
 import sidkbk.celemo.models.Order;
 import sidkbk.celemo.models.User;
 import sidkbk.celemo.repositories.AuctionRepository;
@@ -15,7 +14,6 @@ import sidkbk.celemo.repositories.BidsRepository;
 import sidkbk.celemo.repositories.OrderRepository;
 import sidkbk.celemo.repositories.UserRepository;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -66,6 +64,7 @@ public class OrderService {
         return orderRepository.findById(orderFoundByIdDTO.getOrderId());
     }
 
+    // fine all orders that are bound to one user ID
     public List<Order> findPreviousPurchase(PreviousPurchaseFromOrderDTO previousPurchaseFromOrderDTO) {
         userRepository.findById(previousPurchaseFromOrderDTO.getUserId())
                 .orElseThrow(() -> new RuntimeException("UserId could not be found"));
@@ -79,29 +78,10 @@ public class OrderService {
         return previousPurchase;
     }
 
-
-    // PUT update one order
-    public Order updateOrder(String orderId, Order updateOrder) {
-        return orderRepository.findById(orderId)
-                .map(existingOrder -> {
-                    if (updateOrder.getBuyerAccount() != null) {
-                        existingOrder.setBuyerAccount(updateOrder.getBuyerAccount());
-                    }
-                    if (updateOrder.getSellerAccount() != null) {
-                        existingOrder.setSellerAccount(updateOrder.getSellerAccount());
-                    }
-                    if (updateOrder.getAuction() != null) {
-                        existingOrder.setAuction(updateOrder.getAuction());
-                    }
-                    return orderRepository.save(existingOrder);
-                }).orElseThrow(() -> new RuntimeException("Order was not found"));
-    }
-
-
-    // Delete one order by id
-    public String deleteOrder(String id) {
-        orderRepository.deleteById(id);
-        return "Deleted order successfully!";
+    // Delete one order by orderId
+    public String deleteOrder(DeleteOrderDTO deleteOrderDTO) {
+        orderRepository.deleteById(deleteOrderDTO.getOrderId());
+        return "Order was deleted successfully!";
     }
 
 }

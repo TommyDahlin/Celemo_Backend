@@ -18,7 +18,6 @@ public class Order {
 
     private String productTitle;
     private double endPrice;
-    private String test;
     @CreatedDate
     private Date createdAt = new Date();
     @DBRef
@@ -52,7 +51,6 @@ public class Order {
     public Auction getAuction() {
         return auction;
     }
-
     public String getProductTitle() {
         return productTitle;
     }
@@ -62,9 +60,7 @@ public class Order {
     public Date getCreatedAt() {
         return createdAt;
     }
-    public String getTest() {
-        return test;
-    }
+
 
 
 
@@ -86,9 +82,6 @@ public class Order {
     }
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
-    }
-    public void setTest(String test) {
-        this.test = test;
     }
     public void setId(String id) {
         this.id = id;
