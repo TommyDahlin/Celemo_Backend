@@ -5,9 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import sidkbk.celemo.dto.Reviews.*;
+import sidkbk.celemo.dto.user.FindUserIdDTO;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.Reviews;
 import sidkbk.celemo.services.ReviewsService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/reviews")
@@ -17,7 +21,7 @@ public class ReviewsController {
     ReviewsService reviewsService;
 
     // GET all reviews
-    @GetMapping("/find")
+    @GetMapping("/find/all")
     public ResponseEntity<?> listAllReviews() {
         try {
             return ResponseEntity.ok(reviewsService.listAllReviews());
@@ -26,50 +30,68 @@ public class ReviewsController {
         }
     }
 
-
-
     // GET one specific review
-    @GetMapping("/find/{id}")
-    public ResponseEntity<?> listOneSpecificReview(@PathVariable("id") String id) {
+    @GetMapping("/find")
+    public ResponseEntity<?> listOneSpecificReview(@Valid @RequestBody ReviewsFindDTO reviewsFindDTO) {
         try {
-            return ResponseEntity.ok(reviewsService.listOneSpecificReview(id));
-        } catch (EntityNotFoundException e) {
+            return reviewsService.listOneSpecificReview(reviewsFindDTO);
+        }  catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
-    // POST add a review
-    @PostMapping("/post/{created-by-id}/{reviewed-user-id}")
-    public ResponseEntity<?> addReview(@PathVariable("created-by-id") String createdBy,
-                                       @PathVariable("reviewed-user-id") String reviewedUser,
-                                       @Valid @RequestBody Reviews review) {
-        try {
-            return ResponseEntity.ok(reviewsService.addReview(createdBy, reviewedUser, review));
+    // GET all reviews for specific reviewed user
+    @GetMapping("/find/all-user")
+    public ResponseEntity<?> allReviewsForSpecificReviewedUser(@Valid @RequestBody FindUserIdDTO findUserIdDTO) {
+        List<Reviews> foundReviews = reviewsService.allReviewsForSpecificReviewedUser(findUserIdDTO);
 
-        } catch (EntityNotFoundException e) {
+        if (foundReviews.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User is not reviewed...");
+        } else {
+            return ResponseEntity.ok(foundReviews);
+        }
+    }
+
+    // GET all reviews for specific reviewed user and sort grade "Low to High" or "High to Low"
+    @GetMapping("/find/all-user-sort")
+    public ResponseEntity<?> reviewedUserSortReviews(@Valid @RequestBody ReviewsSortLowHighDTO reviewsSortLowHighDTO) {
+        return reviewsService.reviewedUserSortReviews(reviewsSortLowHighDTO);
+    }
+
+    // GET all reviews for specific reviewed user with specific grade
+    @GetMapping("/find/all-user-grade")
+    public ResponseEntity<?> reviewedUserSortByGrade(@Valid @RequestBody ReviewsGetByGradeDTO reviewsGetByGradesDTO) {
+        return reviewsService.reviewedUserSortByGrade(reviewsGetByGradesDTO);
+    }
+
+    // POST add a review dto
+    @PostMapping("/post")
+    public ResponseEntity<?> addReview(@Valid @RequestBody ReviewsDTO reviewsDTO) {
+            Reviews newReview = reviewsService.addReview(reviewsDTO);
+            return ResponseEntity.ok(newReview);
+    }
+
+    // DELETE Delete a review dto
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteReview(@Valid @RequestBody ReviewsDeleteDTO reviewsDeleteDTO) {
+
+        try {
+            return reviewsService.deleteReview(reviewsDeleteDTO);
+        } catch(EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
 
     }
 
-    // DELETE Delete a review
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteReview(@PathVariable("id") String id) {
-        try {
-            return ResponseEntity.ok(reviewsService.deleteReview(id));
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+    // PUT Update a review dto
+    @PutMapping("/put")
+    public ResponseEntity<?> updateReview(@RequestBody ReviewsPutDTO updateReviewsDTO) {
+
+        return ResponseEntity.ok(reviewsService.updateReview(updateReviewsDTO));
     }
 
-    // PUT Update a review
-    @PutMapping("/put/{id}")
-    public ResponseEntity<?> updateReview(@PathVariable("id") String reviewId,
-                                          @Valid @RequestBody Reviews updatedReview) {
-        try {
-            return ResponseEntity.ok(reviewsService.updateReview(reviewId, updatedReview));
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+    @DeleteMapping("/delete/all")
+    public void deleteAllReviews(){
+        reviewsService.deleteAllReviews();
     }
 }

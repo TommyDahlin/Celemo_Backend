@@ -1,12 +1,13 @@
 package sidkbk.celemo.models;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 @Document(collection = "users")
@@ -38,13 +39,15 @@ public class User {
 
     private EGender gender;
 
-    private String photo;
+    private String photo = "dummy.png";
     @NotBlank(message = "firstName cannot be blank")
     private String firstName;
     @NotBlank(message = "lastName cannot be blank")
     private String lastName;
 
-    private ERole role;
+    @DBRef
+    private Set<Role> roles = new HashSet<>();
+
     @NotBlank(message = "adress_street cannot be blank")
     private String adress_street;
     @NotBlank(message = "adress_postalcode cannot be blank")
@@ -52,14 +55,17 @@ public class User {
     @NotBlank(message = "adress_city cannot be blank")
     private String adress_city;
 
+    // HELENA:
+    // det här en en DBRef till... String?
+    // ska nog vara en lista med Auction va?
     @DBRef
     private ArrayList<String> favourites = new ArrayList<String>();
 
 
 
-    private double balance;
+    private double balance = 0d;
 
-private double grade;
+    private double grade = 0d;
 
     public User() {
 
@@ -89,6 +95,8 @@ private double grade;
 
     }
 
+    // det här ingår i Security genom BCrypt, jättebra att ni tänker på det men kom ihåg
+    // att fundera över vad ni lägger er tid på nästa gång
     public void isPasswordCorrect(User user){
 
         Pattern UpperCasePattern = Pattern.compile("[A-Z ]");
@@ -206,17 +214,18 @@ private double grade;
         return gender;
     }
 
-    public Enum getRole() {
-        return role;
-    }
-
     public void setGender(EGender gender) {
         this.gender = gender;
     }
 
-    public void setRole(ERole role) {
-        this.role = role;
+    public Set<Role> getRoles() {
+        return roles;
     }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
 
     public double getGrade() {
         return grade;

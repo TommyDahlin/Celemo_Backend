@@ -58,6 +58,7 @@ public class OrderService {
         return orderRepository.findAll();
     }
 
+
     // Find one specific order by orderId
     public Optional<Order> getOneOrder(OrderFoundByIdDTO orderFoundByIdDTO) {
         return orderRepository.findById(orderFoundByIdDTO.getOrderId());
@@ -71,10 +72,21 @@ public class OrderService {
         for (Order order : orderRepository.findAll()) {
             if (order.getBuyerAccount() != null && previousPurchaseFromOrderDTO.getUserId().equals(order.getBuyerAccount().getId())) {
                 previousPurchase.add(order);
-            }
+              }
         }
         return previousPurchase;
     }
+  
+    //HELENA:
+    // vi hittar EN order men hittar vi EN order som tillhör en specifik user?
+    // hittar vi ALLA ordrar som tillhör en specifik user?
+
+   
+    //HELENA:
+    // en order kan man INTE uppdatera då blir revisorn arg...
+    // man makulerar och skapar en ny i så fall
+
+            
 
     // Delete one order by orderId
     public ResponseEntity<?> deleteOrder(DeleteOrderDTO deleteOrderDTO) {
