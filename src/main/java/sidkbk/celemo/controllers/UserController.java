@@ -120,7 +120,7 @@ public class UserController {
 
     }
 
-    @GetMapping ("/find/favourites")
+    @GetMapping ("/favourites/all")
     public ResponseEntity<?> getUserFavouritesById(@Valid @RequestBody FindUserFavouritesDTO favouritesDTO){
         return userService.getUserFavouritesById(favouritesDTO);
     }

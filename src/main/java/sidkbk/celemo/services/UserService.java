@@ -177,7 +177,7 @@ adress_city
         return ResponseEntity.ok("User deleted");
     }
 
-    public ResponseEntity<String> getUserFavouritesById (FindUserFavouritesDTO findUserFavouritesDTO){
+    public ResponseEntity<?> getUserFavouritesById (FindUserFavouritesDTO findUserFavouritesDTO){
         userRepository.findById(findUserFavouritesDTO.getUserId())
                 .orElseThrow(()-> new RuntimeException("User does not exist"));
 
@@ -203,11 +203,11 @@ adress_city
                         userRepository.save(existingUser);
                     }
                     return ResponseEntity.ok("Auction was added to favourite list!");
-                } 
+                }
                 )
                 .orElseThrow(() -> new EntityNotFoundException("Auction was not found!"));
     }
-    public ResponseEntity<String> deleteUserFavouritesById(ModifyUserFavouritesDTO deleteFavouritesDto){
+    public ResponseEntity<?> deleteUserFavouritesById(ModifyUserFavouritesDTO deleteFavouritesDto){
         userRepository.findById(deleteFavouritesDto.getUserId())
                 .orElseThrow(()-> new RuntimeException("User does not exist"));
 
@@ -217,5 +217,6 @@ adress_city
         auctionRepository.findById(deleteFavouritesDto.getAuctionId())
                 .orElseThrow(()-> new RuntimeException("Auction does not exist"));
 
+        return ResponseEntity.ok("return statement");
     }
 }
