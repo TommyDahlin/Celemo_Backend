@@ -50,7 +50,7 @@ public class BidsServices {
         // sets user found from DTO ID
         newBid.setUser(foundUser);
         // sets auction from found bid on auction which might try to find the bid from the auction and the auction has the bid
-        //newBid.setAuction(foundAuction);
+        // newBid.setAuction(foundAuction);
 
         newBid.setStartPrice(bidsDTO.getStartPrice());
         newBid.setAuctionId(bidsDTO.getAuctionId());
@@ -60,16 +60,19 @@ public class BidsServices {
         if (bidsDTO.getMaxPrice() > foundUser.getBalance()){
             throw new RuntimeException("Your max bid can not be higher than " + foundUser.getBalance() + " , your current balance.");
         }
+        // Checks if users balance is less than starting bid
         if (foundUser.getBalance() < newBid.getStartPrice()){
             throw new RuntimeException("Your bid cannot be higher than your balance. Your current balance is " + foundUser.getBalance() + "Your current bid is " + bidsDTO.getStartPrice() + ".");
         }
 
         // user loses
+            // checks if auction has a bid
         if (foundAuction.isHasBids() == true){
-            if (foundAuction.getBid().getId().equals(newBid.getUser().getId())) {
+            // checks if user has the same id as the previous user
+            if (!foundAuction.getBid().getUser().getId().equals(newBid.getUser().getId())) {
                 Bids auctionCurrentBid = bidsRepository.findById(foundAuction.getBid().getId()).get();
 
-                User currentBidUser = userRepository.findById(auctionCurrentBid.getId()).get();
+                User currentBidUser = userRepository.findById(auctionCurrentBid.getUser().getId()).get();
 
                 // checks if new bid is less than the current
                 if (newBid.getMaxPrice() < auctionCurrentBid.getMaxPrice()) {
@@ -90,7 +93,7 @@ public class BidsServices {
                     foundAuction.setCurrentPrice(auctionCurrentBid.getMaxPrice());
                     bidsRepository.save(auctionCurrentBid);
                     auctionRepository.save(foundAuction);
-                    return ResponseEntity.ok(newBid.getMaxPrice() + " is as much than auctions current bids max price. Make a new bid if you want to continue. New price is previous bids max");
+                    return ResponseEntity.ok(newBid.getMaxPrice() + " is as much as the auctions current bids max price. Make a new bid if you want to continue. New price is previous bids max");
                 }
                 // user wins
                 // Checks if you can raise the current price by ten if not still wins
@@ -100,19 +103,25 @@ public class BidsServices {
                         bidsRepository.save(newBid);
                         foundAuction.setCurrentPrice(newBid.getCurrentPrice());
                         currentBidUser.setBalance(auctionCurrentBid.getMaxPrice());
+                        foundAuction.setBid(newBid);
                         auctionRepository.save(foundAuction);
                         userRepository.save(currentBidUser);
-                        foundUser.setBalance(newBid.getCurrentPrice());
+                        foundUser.setBalance(foundUser.getBalance() - newBid.getMaxPrice());
                         userRepository.save(foundUser);
                         return ResponseEntity.ok(newBid.getCurrentPrice() + " you have the current bid.");
                     }else {
                         newBid.setCurrentPrice(auctionCurrentBid.getCurrentPrice());
                         bidsRepository.save(newBid);
+                        foundAuction.setBid(newBid);
                         foundAuction.setCurrentPrice(newBid.getCurrentPrice());
+                        foundUser.setBalance(foundUser.getBalance() - newBid.getMaxPrice());
+                        userRepository.save(foundUser);
                         auctionRepository.save(foundAuction);
                         return ResponseEntity.ok(newBid.getCurrentPrice() + " you have the current bid.");
                     }
                 }
+            } else {
+                return ResponseEntity.ok("You can't bid twice in a row.");
             }
 
             //send back balance of lost bids
@@ -126,6 +135,7 @@ public class BidsServices {
             auctionRepository.save(foundAuction);
             return ResponseEntity.ok(" Has been created, current price is " + newBid.getCurrentPrice());
         }
+
         return ResponseEntity.ok("Something went wrong");
     }
 
