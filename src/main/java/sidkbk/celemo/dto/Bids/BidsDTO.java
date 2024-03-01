@@ -1,4 +1,4 @@
-package sidkbk.celemo.dto;
+package sidkbk.celemo.dto.Bids;
 
 public class BidsDTO {
 

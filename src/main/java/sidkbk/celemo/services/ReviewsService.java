@@ -1,12 +1,11 @@
 package sidkbk.celemo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import sidkbk.celemo.dto.Reviews.ReviewsDTO;
-import sidkbk.celemo.dto.Reviews.ReviewsDeleteDTO;
-import sidkbk.celemo.dto.Reviews.ReviewsFindDTO;
-import sidkbk.celemo.dto.Reviews.ReviewsPutDTO;
+import sidkbk.celemo.dto.Reviews.*;
+import sidkbk.celemo.dto.user.FindUserIdDTO;
 import sidkbk.celemo.models.Reviews;
 import sidkbk.celemo.models.User;
 import sidkbk.celemo.repositories.ReviewsRepo;
@@ -33,6 +32,7 @@ public class ReviewsService {
         Reviews foundReview = reviewsRepo.findById(reviewsFindDTO.getReviewId())
                 .orElseThrow(() -> new RuntimeException("Review not found"));
         return ResponseEntity.ok(foundReview);
+
     }
 
     // Add a review dto
@@ -99,7 +99,80 @@ public class ReviewsService {
 
     }
 
+    // DELETE ALL
     public void deleteAllReviews(){
         reviewsRepo.deleteAll();
     }
+
+    // List all reviews for a specified user
+    public List<Reviews> allReviewsForSpecificReviewedUser(FindUserIdDTO findUserIdDTO) {
+        List<Reviews> foundReviews = new ArrayList<>(); // Temp list
+        List<Reviews> allReviews = reviewsRepo.findAll(); // Save all reviews
+        for (Reviews review : allReviews) { // Loop reviews
+            // Find reviews for reviewed user
+            if (review.getReviewedUser() != null &&
+                    findUserIdDTO.getUserId().equals(review.getReviewedUser().getId())) {
+                foundReviews.add(review); // save to temp
+            }
+        }
+        if (foundReviews.isEmpty()) {
+            return null;
+        } else {
+            return foundReviews;
+        }
+
+    }
+
+    // List all reviews for a specified user AND sort reviews by Low or High grades.
+    public ResponseEntity<?> reviewedUserSortReviews(ReviewsSortLowHighDTO reviewsSortLowHighDTO) {
+        FindUserIdDTO findUserIdDTO = new FindUserIdDTO();
+        findUserIdDTO.setUserId(reviewsSortLowHighDTO.getUserId());
+        // Run method above to get all reviews for specified user
+        List<Reviews> foundReviews = allReviewsForSpecificReviewedUser(findUserIdDTO);
+        List<Reviews> sortedReviews = new ArrayList<>();
+        // If sorting from "low" to "high" grade
+        if (reviewsSortLowHighDTO.getLowOrHigh().equals("LOW")) { // Check in DTO
+            for (double i = 1; i <= 5; i++) { // Loop through 1-5
+                for (Reviews review : foundReviews) { // Loop through found reviews
+                    if (review.getGrade().equals(i)) { // If grade matches
+                        sortedReviews.add(review); // Save review to sorted list
+                    }
+                }
+            }
+        }
+        // If sorting from "high" to "low" grade
+        if (reviewsSortLowHighDTO.getLowOrHigh().equals("HIGH")) { // Check in DTO
+            for (double i = 5; i >= 1; i--) { // Loop through 5-1
+                for (Reviews review : foundReviews) { // Loop through found reviews
+                    if (review.getGrade().equals(i)) { // If grade matches
+                        sortedReviews.add(review); // Save review to sorted list
+                    }
+                }
+            }
+        }
+        return ResponseEntity.ok(sortedReviews); // Return sorted list
+    }
+
+    // List all reviews for specific reviewed user with specific grade
+    public ResponseEntity<?> reviewedUserSortByGrade(ReviewsGetByGradeDTO reviewsGetByGradeDTO) {
+        FindUserIdDTO findUserIdDTO = new FindUserIdDTO();
+        findUserIdDTO.setUserId(reviewsGetByGradeDTO.getUserId());
+        // Run method above to get all reviews for specified user
+        List<Reviews> foundReviews = allReviewsForSpecificReviewedUser(findUserIdDTO);
+        List<Reviews> reviewsByGrade = new ArrayList<>();
+        // Loop through reviews found for specified user and find only reviews with matching grade you want to see
+        for (Reviews review : foundReviews) {
+            if (review.getGrade().equals(reviewsGetByGradeDTO.getGrade())) {
+                reviewsByGrade.add(review);
+            }
+        }
+        if (reviewsByGrade.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No reviews with that grade found...");
+        }
+        return ResponseEntity.ok(reviewsByGrade);
+    }
+
+
 }
+
+

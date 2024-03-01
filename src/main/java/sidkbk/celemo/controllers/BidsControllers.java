@@ -1,12 +1,13 @@
 package sidkbk.celemo.controllers;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sidkbk.celemo.dto.BidsDTO;
+import sidkbk.celemo.dto.Bids.BidsDTO;
+import sidkbk.celemo.dto.Bids.FindBidIdDTO;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
-import sidkbk.celemo.models.Bids;
 import sidkbk.celemo.services.BidsServices;
 
 @RestController
@@ -16,7 +17,7 @@ public class BidsControllers {
     @Autowired
     BidsServices bidsServices;
 
-    // Post a new book
+    // Post a new Bid
     @PostMapping("/post")
     public ResponseEntity<?> createBids(@RequestBody BidsDTO bidsDTO){
         try {
@@ -26,18 +27,18 @@ public class BidsControllers {
         }
     }
 
-    //Find by book
-    @GetMapping("/find/{id}")
-    public ResponseEntity<?> findOne(@PathVariable String id){
+    //Find by BidId
+    @GetMapping("/find")
+    public ResponseEntity<?> findOne(@Valid @RequestBody FindBidIdDTO findBidIdDTO){
         try {
-            return ResponseEntity.ok(bidsServices.findOne(id));
+            return ResponseEntity.ok(bidsServices.findOne(findBidIdDTO));
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
     // find all bids
-    @GetMapping("/find")
+    @GetMapping("/find/all")
     public ResponseEntity<?> findAllBids() {
         try {
             return ResponseEntity.ok(bidsServices.findAllBids());
@@ -59,10 +60,10 @@ public class BidsControllers {
 
 
     //Delete by id
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteBids(@PathVariable String id){
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteBids(@Valid @RequestBody FindBidIdDTO findBidIdDTO){
         try {
-            return ResponseEntity.ok(bidsServices.deleteBids(id));
+            return ResponseEntity.ok(bidsServices.deleteBids(findBidIdDTO));
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
