@@ -114,7 +114,7 @@ public class ReviewsService {
     // List all reviews for a specified user WITH paging
     public List<Reviews> allReviewsForSpecificReviewedUserPage(int pageNr, ReviewsAllPagingUserDTO reviewsAllPagingUserDTO) {
         Pageable paging = PageRequest.of(pageNr, reviewsAllPagingUserDTO.getPageSize());
-        return reviewsRepo.findByReviewedUser_Id(reviewsAllPagingUserDTO.getUserId(), paging);
+        return reviewsRepo.findByReviewedUser_Id(reviewsAllPagingUserDTO.getReviewedUserId(), paging);
     }
 
     // List all reviews for a specified user AND sort reviews by Low or High grades.
@@ -149,17 +149,8 @@ public class ReviewsService {
 
     // List all reviews for specific reviewed user with specific grade
     public ResponseEntity<?> reviewedUserSortByGrade(ReviewsGetByGradeDTO reviewsGetByGradeDTO) {
-        FindUserIdDTO findUserIdDTO = new FindUserIdDTO();
-        findUserIdDTO.setUserId(reviewsGetByGradeDTO.getUserId());
-        // Run method above to get all reviews for specified user
-        List<Reviews> foundReviews = allReviewsForSpecificReviewedUser(findUserIdDTO);
-        List<Reviews> reviewsByGrade = new ArrayList<>();
-        // Loop through reviews found for specified user and find only reviews with matching grade you want to see
-        for (Reviews review : foundReviews) {
-            if (review.getGrade().equals(reviewsGetByGradeDTO.getGrade())) {
-                reviewsByGrade.add(review);
-            }
-        }
+        List<Reviews> reviewsByGrade = reviewsRepo.findByReviewedUser_IdAndGrade(
+                reviewsGetByGradeDTO.getReviewedUserId(), reviewsGetByGradeDTO.getGrade());
         if (reviewsByGrade.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No reviews with that grade found...");
         }
@@ -170,7 +161,7 @@ public class ReviewsService {
     public ResponseEntity<?> reviewedUserSortByGradeAndPage(int pageNr, ReviewsGetByGradeDTO reviewsGetByGradeDTO) {
         Pageable paging = PageRequest.of(pageNr, reviewsGetByGradeDTO.getPageSize());
         List<Reviews> reviewsByGrade = reviewsRepo.findByReviewedUser_IdAndGrade(
-                reviewsGetByGradeDTO.getUserId(), reviewsGetByGradeDTO.getGrade(), paging);
+                reviewsGetByGradeDTO.getReviewedUserId(), reviewsGetByGradeDTO.getGrade(), paging);
         if (reviewsByGrade.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No reviews with that grade found...");
         }

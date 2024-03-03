@@ -6,16 +6,16 @@ public class ReviewsAllPagingUserDTO {
 
     // Variables
     @NotBlank
-    private String userId;
-    private int pageSize = 3; // A default of 10 is better, for now 3 is better for testing now when db is low
+    private String reviewedUserId;
+    private int pageSize = 3; // A default of 10 is better, for now 3 is better for testing when db is low
 
 
     // Getters & Setters
-    public String getUserId() {
-        return userId;
+    public String getReviewedUserId() {
+        return reviewedUserId;
     }
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUserId(String reviewedUserId) {
+        this.reviewedUserId = reviewedUserId;
     }
     public int getPageSize() {
         return pageSize;

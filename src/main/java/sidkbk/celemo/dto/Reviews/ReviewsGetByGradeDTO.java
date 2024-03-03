@@ -7,18 +7,18 @@ public class ReviewsGetByGradeDTO {
 
     // Variables
     @NotBlank
-    private String userId;
+    private String reviewedUserId;
     @NotNull
     private double grade;
 
     private int pageSize = 3; // OPTIONAL Used with paging
 
     //Getters & Setters
-    public String getUserId() {
-        return userId;
+    public String getReviewedUserId() {
+        return reviewedUserId;
     }
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUserId(String reviewedUserId) {
+        this.reviewedUserId = reviewedUserId;
     }
     public double getGrade() {
         return grade;

@@ -10,10 +10,11 @@ import java.util.List;
 @Repository
 public interface ReviewsRepo extends MongoRepository<Reviews, String> {
 
-    List<Reviews> findByReviewedUser_Id(String reviewedUserId);
 
+    List<Reviews> findByReviewedUser_Id(String reviewedUserId);
     List<Reviews> findByReviewedUser_Id(String reviewedUserId, Pageable pageable);
 
+    List<Reviews> findByReviewedUser_IdAndGrade(String reviewedUserId, double grade);
     List<Reviews> findByReviewedUser_IdAndGrade(String reviewedUserId, double grade, Pageable pageable);
 
 }
