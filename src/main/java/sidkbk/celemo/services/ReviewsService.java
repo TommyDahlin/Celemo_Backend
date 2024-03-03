@@ -108,20 +108,7 @@ public class ReviewsService {
 
     // List all reviews for a specified user
     public List<Reviews> allReviewsForSpecificReviewedUser(FindUserIdDTO findUserIdDTO) {
-        List<Reviews> foundReviews = new ArrayList<>(); // Temp list
-        List<Reviews> allReviews = reviewsRepo.findAll(); // Save all reviews
-        for (Reviews review : allReviews) { // Loop reviews
-            // Find reviews for reviewed user
-            if (review.getReviewedUser() != null &&
-                    findUserIdDTO.getUserId().equals(review.getReviewedUser().getId())) {
-                foundReviews.add(review); // save to temp
-            }
-        }
-        if (foundReviews.isEmpty()) {
-            return null;
-        } else {
-            return foundReviews;
-        }
+        return reviewsRepo.findByReviewedUser_Id(findUserIdDTO.getUserId());
     }
 
     // List all reviews for a specified user with paging - replaces method above
