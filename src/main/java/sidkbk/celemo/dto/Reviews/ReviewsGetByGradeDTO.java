@@ -11,6 +11,8 @@ public class ReviewsGetByGradeDTO {
     @NotNull
     private double grade;
 
+    private int pageSize = 3; // OPTIONAL Used with paging
+
     //Getters & Setters
     public String getUserId() {
         return userId;
@@ -23,5 +25,11 @@ public class ReviewsGetByGradeDTO {
     }
     public void setGrade(double grade) {
         this.grade = grade;
+    }
+    public int getPageSize() {
+        return pageSize;
+    }
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
     }
 }

@@ -111,7 +111,7 @@ public class ReviewsService {
         return reviewsRepo.findByReviewedUser_Id(findUserIdDTO.getUserId());
     }
 
-    // List all reviews for a specified user with paging - replaces method above
+    // List all reviews for a specified user WITH paging
     public List<Reviews> allReviewsForSpecificReviewedUserPage(int pageNr, ReviewsAllPagingUserDTO reviewsAllPagingUserDTO) {
         Pageable paging = PageRequest.of(pageNr, reviewsAllPagingUserDTO.getPageSize());
         return reviewsRepo.findByReviewedUser_Id(reviewsAllPagingUserDTO.getUserId(), paging);
@@ -166,6 +166,16 @@ public class ReviewsService {
         return ResponseEntity.ok(reviewsByGrade);
     }
 
+    // List all reviews for specific reviewed user with specific grade WITH paging
+    public ResponseEntity<?> reviewedUserSortByGradeAndPage(int pageNr, ReviewsGetByGradeDTO reviewsGetByGradeDTO) {
+        Pageable paging = PageRequest.of(pageNr, reviewsGetByGradeDTO.getPageSize());
+        List<Reviews> reviewsByGrade = reviewsRepo.findByReviewedUser_IdAndGrade(
+                reviewsGetByGradeDTO.getUserId(), reviewsGetByGradeDTO.getGrade(), paging);
+        if (reviewsByGrade.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No reviews with that grade found...");
+        }
+        return ResponseEntity.ok(reviewsByGrade);
+    }
 
 }
 

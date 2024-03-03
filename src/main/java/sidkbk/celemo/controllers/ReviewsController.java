@@ -52,7 +52,7 @@ public class ReviewsController {
         }
     }
 
-    // GET all reviews for specific reviewed user with paging - Replaces method above
+    // GET all reviews for specific reviewed user WITH paging
     @GetMapping("/find/all-user/page/{pagenumber}")
     public ResponseEntity<?> allReviewsForSpecificReviewedUserPage(
             @PathVariable("pagenumber") int pageNr,
@@ -76,6 +76,14 @@ public class ReviewsController {
     @GetMapping("/find/all-user-grade")
     public ResponseEntity<?> reviewedUserSortByGrade(@Valid @RequestBody ReviewsGetByGradeDTO reviewsGetByGradesDTO) {
         return reviewsService.reviewedUserSortByGrade(reviewsGetByGradesDTO);
+    }
+
+    // GET all reviews for specific reviewed user with specific grade WITH paging
+    @GetMapping("/find/all-user-grade/page/{pagenumber}")
+    public ResponseEntity<?> reviewedUserSortByGradeAndPage(
+            @PathVariable("pagenumber") int pageNr,
+            @Valid @RequestBody ReviewsGetByGradeDTO reviewsGetByGradesDTO) {
+        return reviewsService.reviewedUserSortByGradeAndPage(pageNr, reviewsGetByGradesDTO);
     }
 
     // POST add a review dto
