@@ -1,6 +1,8 @@
 package sidkbk.celemo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -120,7 +122,12 @@ public class ReviewsService {
         } else {
             return foundReviews;
         }
+    }
 
+    // List all reviews for a specified user with paging - replaces method above
+    public List<Reviews> allReviewsForSpecificReviewedUserPage(int pageNr, ReviewsAllPagingUserDTO reviewsAllPagingUserDTO) {
+        Pageable paging = PageRequest.of(pageNr, reviewsAllPagingUserDTO.getPageSize());
+        return reviewsRepo.findByReviewedUser_Id(reviewsAllPagingUserDTO.getUserId(), paging);
     }
 
     // List all reviews for a specified user AND sort reviews by Low or High grades.

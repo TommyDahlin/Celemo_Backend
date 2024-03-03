@@ -52,6 +52,20 @@ public class ReviewsController {
         }
     }
 
+    // GET all reviews for specific reviewed user with paging - Replaces method above
+    @GetMapping("/find/all-user/page/{pagenumber}")
+    public ResponseEntity<?> allReviewsForSpecificReviewedUserPage(
+            @PathVariable("pagenumber") int pageNr,
+            @Valid @RequestBody ReviewsAllPagingUserDTO reviewsAllPagingUserDTO) {
+        List<Reviews> foundReviews = reviewsService.allReviewsForSpecificReviewedUserPage(pageNr, reviewsAllPagingUserDTO);
+
+        if (foundReviews.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User is not reviewed or empty page...");
+        } else {
+            return ResponseEntity.ok(foundReviews);
+        }
+    }
+
     // GET all reviews for specific reviewed user and sort grade "Low to High" or "High to Low"
     @GetMapping("/find/all-user-sort")
     public ResponseEntity<?> reviewedUserSortReviews(@Valid @RequestBody ReviewsSortLowHighDTO reviewsSortLowHighDTO) {
@@ -94,4 +108,6 @@ public class ReviewsController {
     public void deleteAllReviews(){
         reviewsService.deleteAllReviews();
     }
+
+
 }
