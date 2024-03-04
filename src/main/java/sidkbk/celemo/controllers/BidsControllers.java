@@ -7,8 +7,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sidkbk.celemo.dto.Bids.BidsDTO;
 import sidkbk.celemo.dto.Bids.FindBidIdDTO;
+import sidkbk.celemo.dto.user.FindUserIdDTO;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
+import sidkbk.celemo.models.Bids;
 import sidkbk.celemo.services.BidsServices;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/bids")
@@ -66,6 +70,19 @@ public class BidsControllers {
             return ResponseEntity.ok(bidsServices.deleteBids(findBidIdDTO));
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+
+    // find all bid for one user
+
+    @GetMapping("/find/all-user")
+    public ResponseEntity<?> findAllBidsForUser(@Valid @RequestBody FindUserIdDTO findUserIdDTO){
+        List<Bids> foundBids = bidsServices.findAllBidsForUser(findUserIdDTO);
+        if (foundBids.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no bids found");
+        }else{
+            return ResponseEntity.ok().body(foundBids);
         }
     }
 }
