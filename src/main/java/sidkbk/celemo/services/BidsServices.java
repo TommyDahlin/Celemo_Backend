@@ -1,16 +1,16 @@
 package sidkbk.celemo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import sidkbk.celemo.dto.BidsDTO;
-import sidkbk.celemo.models.User;
+import sidkbk.celemo.dto.Bids.BidsDTO;
+import sidkbk.celemo.dto.Bids.FindBidIdDTO;
 import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.models.Bids;
-import sidkbk.celemo.repositories.UserRepository;
+import sidkbk.celemo.models.User;
 import sidkbk.celemo.repositories.AuctionRepository;
 import sidkbk.celemo.repositories.BidsRepository;
+import sidkbk.celemo.repositories.UserRepository;
 
 import java.util.List;
 
@@ -52,17 +52,24 @@ public class BidsServices {
         // sets auction from found bid on auction which might try to find the bid from the auction and the auction has the bid
         // newBid.setAuction(foundAuction);
 
-        newBid.setStartPrice(bidsDTO.getStartPrice());
+        newBid.setStartPrice(bidsDTO.getStartBid());
         newBid.setAuctionId(bidsDTO.getAuctionId());
-        newBid.setMaxPrice(bidsDTO.getMaxPrice());
+        newBid.setMaxPrice(bidsDTO.getMaxBid());
+
+        // Check if startBid and maxBid is higher than auction startPrice
+        if (bidsDTO.getStartBid() <= foundAuction.getStartPrice() ||
+            bidsDTO.getMaxBid() <= foundAuction.getStartPrice()) {
+            throw new RuntimeException("Your bids cannot be lower than auctions starting price...");
+        }
 
         // Checks if users balance is valid
-        if (bidsDTO.getMaxPrice() > foundUser.getBalance()){
+        if (bidsDTO.getMaxBid() > foundUser.getBalance()){
             throw new RuntimeException("Your max bid can not be higher than " + foundUser.getBalance() + " , your current balance.");
         }
         // Checks if users balance is less than starting bid
         if (foundUser.getBalance() < newBid.getStartPrice()){
-            throw new RuntimeException("Your bid cannot be higher than your balance. Your current balance is " + foundUser.getBalance() + "Your current bid is " + bidsDTO.getStartPrice() + ".");
+            throw new RuntimeException("Your bid cannot be higher than your balance. Your current balance is "
+                    + foundUser.getBalance() + "Your current bid is " + bidsDTO.getStartBid() + ".");
         }
 
         // user loses
@@ -93,7 +100,8 @@ public class BidsServices {
                     foundAuction.setCurrentPrice(auctionCurrentBid.getMaxPrice());
                     bidsRepository.save(auctionCurrentBid);
                     auctionRepository.save(foundAuction);
-                    return ResponseEntity.ok(newBid.getMaxPrice() + " is as much as the auctions current bids max price. Make a new bid if you want to continue. New price is previous bids max");
+                    return ResponseEntity.ok(newBid.getMaxPrice() + " is as much as the auctions current " +
+                            "bids max price. Make a new bid if you want to continue. New price is previous bids max");
                 }
                 // user wins
                 // Checks if you can raise the current price by ten if not still wins
@@ -145,13 +153,13 @@ public class BidsServices {
 
 
 //Find a bids by id
-    public Bids findOne(String id){
-        return bidsRepository.findById(id).get();
+    public Bids findOne(FindBidIdDTO findBidIdDTO){
+        return bidsRepository.findById(findBidIdDTO.getbidId()).get();
     }
 
 // delete a bids
-    public String deleteBids(String id){
-        bidsRepository.deleteById(id);
+    public String deleteBids(FindBidIdDTO findBidIdDTO){
+        bidsRepository.deleteById(findBidIdDTO.getbidId());
         return "Deleted successfully!";
     }
 

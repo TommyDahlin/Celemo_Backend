@@ -5,10 +5,10 @@
 POST - Create a bid
 Body - raw
 {
-    "userId": "65d33bbcf4da3a3f932fe8ec",
-    "auctionId": "65e17a166946020ddff35457",
-    "startPrice": double
-    "maxPrice": double
+    "startBid": "225",
+    "maxBid": "300",
+    "userId": "65d755943b0850253b1640c0",
+    "auctionId": "65e17a136946020ddff35456"
 }
 
 #######################################################################################################
