@@ -181,8 +181,9 @@ adress_city
         userRepository.findById(findUserFavouritesDTO.getUserId())
                 .orElseThrow(()-> new RuntimeException("User does not exist"));
 
+
         //samla alla auctions i en ny lista
-        return ResponseEntity.ok("return statement");
+        return ResponseEntity.ok(userRepository.findById(findUserFavouritesDTO.getUserId()).get().getFavouriteAuctions());
 
         //printa listan to string
         //return ResponseEntity.ok();
@@ -192,14 +193,16 @@ adress_city
         userRepository.findById(favouritesDTO.getUserId())
                 .orElseThrow(()-> new RuntimeException("User does not exist"));
         auctionRepository.findById(favouritesDTO.getAuctionId())
-                .orElseThrow(()-> new RuntimeException("User does not exist"));
-        List<Auction> foundAuction = new ArrayList<>();
+                .orElseThrow(()-> new RuntimeException("Auction does not exist"));
+        //List<Auction> foundAuction = new ArrayList<>();
+        User user = new User();
 
         return userRepository.findById(favouritesDTO.getUserId())
                 .map(existingUser -> {
                     if(favouritesDTO.getAuctionId()!=null) {
-                        foundAuction.add(auctionRepository.findById(favouritesDTO.getAuctionId()).get());
-                        existingUser.setFavouriteAuctions(foundAuction);
+                        //foundAuction.add(auctionRepository.findById(favouritesDTO.getAuctionId()).get());
+                        //user.addFavouriteAuctions(auctionRepository.findById(favouritesDTO.getAuctionId()).get());
+                        userRepository.findById(favouritesDTO.getUserId()).get().addFavouriteAuctions(favouritesDTO.getAuctionId()) ;
                         userRepository.save(existingUser);
                     }
                     return ResponseEntity.ok("Auction was added to favourite list!");
@@ -207,15 +210,16 @@ adress_city
                 )
                 .orElseThrow(() -> new EntityNotFoundException("Auction was not found!"));
     }
+
     public ResponseEntity<?> deleteUserFavouritesById(ModifyUserFavouritesDTO deleteFavouritesDto){
         userRepository.findById(deleteFavouritesDto.getUserId())
                 .orElseThrow(()-> new RuntimeException("User does not exist"));
-
-
-
-
         auctionRepository.findById(deleteFavouritesDto.getAuctionId())
                 .orElseThrow(()-> new RuntimeException("Auction does not exist"));
+        if(userRepository.findById(deleteFavouritesDto.getUserId()).get().getFavouriteAuctions().contains(deleteFavouritesDto.getAuctionId())){
+            userRepository.findById(deleteFavouritesDto.getUserId()).get().deleteAuctionFromFavourites(deleteFavouritesDto.getAuctionId());
+        }
+
 
         return ResponseEntity.ok("return statement");
     }
