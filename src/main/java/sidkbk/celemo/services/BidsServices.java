@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import sidkbk.celemo.dto.Bids.BidsDTO;
 import sidkbk.celemo.dto.Bids.FindBidIdDTO;
+import sidkbk.celemo.dto.user.FindUserIdDTO;
 import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.models.Bids;
 import sidkbk.celemo.models.User;
@@ -12,6 +13,7 @@ import sidkbk.celemo.repositories.AuctionRepository;
 import sidkbk.celemo.repositories.BidsRepository;
 import sidkbk.celemo.repositories.UserRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -184,5 +186,21 @@ public class BidsServices {
         return bidsRepository.save(newUpdate);
     }
 
+    public List<Bids> findAllBidsForUser(FindUserIdDTO findUserIdDTO){
+        // Find user
+        userRepository.findById(findUserIdDTO.getUserId())
+                .orElseThrow(()->new RuntimeException("User not found"));
+        // Skapa en tom lista för hittade bids
+        List<Bids> foundBids = new ArrayList<>();
+        // Spara alla bids i en lista
+        List<Bids> allBids = bidsRepository.findAll();
+        // For loop igenom alla bids och kolla efter bids som matchar med userid
+        for (Bids bids : allBids){
+            if (bids.getUser().getId().equals(findUserIdDTO.getUserId())) {
+                foundBids.add(bids);
+            }
+        }
+        return foundBids;
+    }
 
 }
