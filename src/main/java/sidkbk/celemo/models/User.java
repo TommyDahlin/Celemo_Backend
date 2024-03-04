@@ -15,22 +15,20 @@ import java.util.regex.Pattern;
 public class User {
 
 
-
-
     @Id
     private String id;
 
 
-/*
-    @NotBlank
-    //String
+    /*
+        @NotBlank
+        //String
 
-    @NotEmpty
-    //List
+        @NotEmpty
+        //List
 
-    @NotEmpty
-    //int
-*/
+        @NotEmpty
+        //int
+    */
     @NotBlank(message = "Username cannot be blank")
     private String username;
     @NotBlank(message = "password cannot be blank")
@@ -60,7 +58,6 @@ public class User {
     private String adress_city;
 
 
-
     @DBRef
     private List<Auction> favouriteAuctions = new ArrayList<>();
 
@@ -74,9 +71,13 @@ public class User {
     }
 
 
+    public void addToFav(Auction auction) {
+        favouriteAuctions.add(auction);
+    }
 
-
-
+    public void removeFromFav(Auction auction) {
+        favouriteAuctions.remove(auction);
+    }
 
 
     //return variable and change to string if necessary
@@ -103,7 +104,7 @@ public class User {
 
     }
 
-    public void isPasswordCorrect(User user){
+    public void isPasswordCorrect(User user) {
 
         Pattern UpperCasePattern = Pattern.compile("[A-Z ]");
 
@@ -115,8 +116,6 @@ public class User {
         }
 
     }
-
-
 
 
     public String getUsername() {

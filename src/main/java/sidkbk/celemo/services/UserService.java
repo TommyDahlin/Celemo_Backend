@@ -190,7 +190,9 @@ adress_city
                 .orElseThrow(()-> new RuntimeException("Auction does not exist"));
 
         if (!foundUser.getFavouriteAuctions().contains(foundAuction) ){
-            return ResponseEntity.ok( foundUser.getFavouriteAuctions().add(foundAuction));
+            foundUser.addToFav(foundAuction);
+            userRepository.save(foundUser);
+            return ResponseEntity.ok(   " Auction was added to favourite list.");
         } else {
             throw new RuntimeException("Auction is already in favourite list.");
         }
@@ -204,12 +206,13 @@ adress_city
         Auction foundAuction = auctionRepository.findById(deleteFavouritesDto.getAuctionId())
                 .orElseThrow(()-> new RuntimeException("Auction does not exist"));
 
-        if(foundUser.getFavouriteAuctions().contains(foundAuction.getId())){
-            return ResponseEntity.ok(foundUser.getFavouriteAuctions().remove(foundAuction) + " Auction was added to favourite list.");
+        if(deleteFavouritesDto.getAuctionId().equals(foundAuction.getId())){
+            foundUser.removeFromFav(foundAuction);
+            userRepository.save(foundUser);
+            return ResponseEntity.ok("Auction was removed from favourite-list.");
         } else {
             throw new RuntimeException("Auction in favourite-list does not exist.");
         }
-
 
     }
 }
