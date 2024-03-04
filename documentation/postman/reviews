@@ -83,8 +83,20 @@ GET - List all reviews for a specified user AND sort reviews by Low or High grad
 http://localhost:8080/api/reviews/find/all-user-sort
 Body - raw
 {
-    "userId": "65d755313b0850253b1640bc",
+    "reviewedUserId": "65d755313b0850253b1640bc",
     "lowOrHigh": "low" // Low or High
+}
+
+#######################################################################################################
+
+GET - List all reviews for a specified user AND sort reviews by Low or High grades WITH paging.
+***********************************
+http://localhost:8080/api/reviews/find/all-user-sort/page/0     <--- Change number for page
+Body - raw
+{
+    "reviewedUserId": "65d755313b0850253b1640bc",
+    "lowOrHigh": "low" // Low or High,
+    "pageSize": 3   // OPTIONAL Reviews per page. Default is 3
 }
 
 #######################################################################################################

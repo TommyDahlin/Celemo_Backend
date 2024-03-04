@@ -66,10 +66,28 @@ public class ReviewsController {
         }
     }
 
-    // GET all reviews for specific reviewed user and sort grade "Low to High" or "High to Low"
+    // GET List all reviews for a specified user AND sort reviews by Low or High grades
     @GetMapping("/find/all-user-sort")
     public ResponseEntity<?> reviewedUserSortReviews(@Valid @RequestBody ReviewsSortLowHighDTO reviewsSortLowHighDTO) {
-        return reviewsService.reviewedUserSortReviews(reviewsSortLowHighDTO);
+        List<Reviews> foundReviews = reviewsService.reviewedUserSortReviews(reviewsSortLowHighDTO);
+        if (foundReviews.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No reviews found for user...");
+        } else {
+            return ResponseEntity.ok(foundReviews);
+        }
+    }
+
+    // GET List all reviews for a specified user AND sort reviews by Low or High grades WITH paging
+    @GetMapping("/find/all-user-sort/page/{pagenumber}")
+    public ResponseEntity<?> reviewedUserSortReviewsPage(
+            @PathVariable("pagenumber") int pageNr,
+            @Valid @RequestBody ReviewsSortLowHighDTO reviewsSortLowHighDTO) {
+        List<Reviews> foundReviews = reviewsService.reviewedUserSortReviewsPage(pageNr, reviewsSortLowHighDTO);
+        if (foundReviews.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No reviews found for user...");
+        } else {
+            return ResponseEntity.ok(foundReviews);
+        }
     }
 
     // GET all reviews for specific reviewed user with specific grade

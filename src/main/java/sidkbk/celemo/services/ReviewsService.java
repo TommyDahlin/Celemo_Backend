@@ -118,33 +118,26 @@ public class ReviewsService {
     }
 
     // List all reviews for a specified user AND sort reviews by Low or High grades.
-    public ResponseEntity<?> reviewedUserSortReviews(ReviewsSortLowHighDTO reviewsSortLowHighDTO) {
-        FindUserIdDTO findUserIdDTO = new FindUserIdDTO();
-        findUserIdDTO.setUserId(reviewsSortLowHighDTO.getUserId());
-        // Run method above to get all reviews for specified user
-        List<Reviews> foundReviews = allReviewsForSpecificReviewedUser(findUserIdDTO);
-        List<Reviews> sortedReviews = new ArrayList<>();
-        // If sorting from "low" to "high" grade
-        if (reviewsSortLowHighDTO.getLowOrHigh().equals("LOW")) { // Check in DTO
-            for (double i = 1; i <= 5; i++) { // Loop through 1-5
-                for (Reviews review : foundReviews) { // Loop through found reviews
-                    if (review.getGrade().equals(i)) { // If grade matches
-                        sortedReviews.add(review); // Save review to sorted list
-                    }
-                }
-            }
+    public List<Reviews> reviewedUserSortReviews(ReviewsSortLowHighDTO reviewsSortLowHighDTO) {
+        if (reviewsSortLowHighDTO.getLowOrHigh().equals("LOW")) {
+            return reviewsRepo.findByReviewedUser_IdOrderByGradeAsc(
+                    reviewsSortLowHighDTO.getReviewedUserId());
+        } else {
+            return reviewsRepo.findByReviewedUser_IdOrderByGradeDesc(
+                    reviewsSortLowHighDTO.getReviewedUserId());
         }
-        // If sorting from "high" to "low" grade
-        if (reviewsSortLowHighDTO.getLowOrHigh().equals("HIGH")) { // Check in DTO
-            for (double i = 5; i >= 1; i--) { // Loop through 5-1
-                for (Reviews review : foundReviews) { // Loop through found reviews
-                    if (review.getGrade().equals(i)) { // If grade matches
-                        sortedReviews.add(review); // Save review to sorted list
-                    }
-                }
-            }
+    }
+
+    // List all reviews for a specified user AND sort reviews by Low or High grades WITH paging.
+    public List<Reviews> reviewedUserSortReviewsPage(int pageNr, ReviewsSortLowHighDTO reviewsSortLowHighDTO) {
+        Pageable pageing = PageRequest.of(pageNr, reviewsSortLowHighDTO.getPageSize());
+        if (reviewsSortLowHighDTO.getLowOrHigh().equals("LOW")) {
+            return reviewsRepo.findByReviewedUser_IdOrderByGradeAsc(
+                    reviewsSortLowHighDTO.getReviewedUserId(), pageing);
+        } else {
+            return reviewsRepo.findByReviewedUser_IdOrderByGradeDesc(
+                    reviewsSortLowHighDTO.getReviewedUserId(), pageing);
         }
-        return ResponseEntity.ok(sortedReviews); // Return sorted list
     }
 
     // List all reviews for specific reviewed user with specific grade
