@@ -1,14 +1,15 @@
 package sidkbk.celemo.dto.Bids;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class BidsDTO {
 
 
     // Data transfer object/ User and Auction
 
-
-    private double startPrice;
-    private double currentPrice;
-    private double maxPrice;
+    @NotBlank
+    private Double startBid;
+    private Double maxBid;
 
     private String userId;
 
@@ -32,28 +33,20 @@ public class BidsDTO {
     }
 
 
-    public double getStartPrice() {
-        return startPrice;
+    public double getStartBid() {
+        return startBid;
     }
 
-    public void setStartPrice(double startPrice) {
-        this.startPrice = startPrice;
+    public void setStartPrice(double startBid) {
+        this.startBid = startBid;
     }
 
-    public double getCurrentPrice() {
-        return currentPrice;
+    public double getMaxBid() {
+        return maxBid;
     }
 
-    public void setCurrentPrice(double currentPrice) {
-        this.currentPrice = currentPrice;
-    }
-
-    public double getMaxPrice() {
-        return maxPrice;
-    }
-
-    public void setMaxPrice(double maxPrice) {
-        this.maxPrice = maxPrice;
+    public void setMaxBid(double maxBid) {
+        this.maxBid = maxBid;
     }
 
 
