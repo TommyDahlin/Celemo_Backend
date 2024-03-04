@@ -58,15 +58,6 @@ public class AuctionController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
-    // FOR TESTING PURPOSES
-    @PutMapping("/puthasbids")
-    public ResponseEntity<?> updateAllAuctionHasbidsFalse() {
-        try {
-            return ResponseEntity.ok(auctionService.updateAllAuctionHasbidsFalse());
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-    }
     // DELETE an auction
     @DeleteMapping("/delete")
     public ResponseEntity<?> deleteAuction(@Valid @RequestBody AuctionIdDTO auctionIdDTO) {
