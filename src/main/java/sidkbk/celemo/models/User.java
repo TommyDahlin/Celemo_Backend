@@ -14,6 +14,9 @@ import java.util.regex.Pattern;
 @Document(collection = "users")
 public class User {
 
+
+
+
     @Id
     private String id;
 
@@ -59,7 +62,7 @@ public class User {
 
 
     @DBRef
-    private List<String> favouriteAuctions = new ArrayList<>();
+    private List<Auction> favouriteAuctions = new ArrayList<>();
 
 
     private double balance = 0d;
@@ -70,17 +73,11 @@ public class User {
 
     }
 
-    public List<String> getFavouriteAuctions() {
-        return favouriteAuctions;
-    }
 
-    public void addFavouriteAuctions(String auction) {
-        favouriteAuctions.add(auction);
-    }
 
-    public void deleteAuctionFromFavourites(String auction){
-        favouriteAuctions.remove(auction);
-    }
+
+
+
 
     //return variable and change to string if necessary
     public String getFilter(String filter) {
@@ -240,5 +237,11 @@ public class User {
     }
 
 
+    public void setFavouriteAuctions(List<Auction> favouriteAuctions) {
+        this.favouriteAuctions = favouriteAuctions;
+    }
 
+    public List<Auction> getFavouriteAuctions() {
+        return favouriteAuctions;
+    }
 }
