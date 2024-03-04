@@ -46,11 +46,7 @@ public class OrderController {
 
     @DeleteMapping("/delete")
     public ResponseEntity<?> deleteOrder(@Valid @RequestBody DeleteOrderDTO deleteOrderDTO) {
-        try {
-            return ResponseEntity.ok(orderService.deleteOrder(deleteOrderDTO));
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+            return orderService.deleteOrder(deleteOrderDTO);
     }
 }
 

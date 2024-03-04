@@ -89,10 +89,6 @@ public class OrderService {
 
     // Delete one order by orderId
     public ResponseEntity<?> deleteOrder(DeleteOrderDTO deleteOrderDTO) {
-        //looks if deleteorderDTO is null OR if there is no given orderId.
-        if (deleteOrderDTO == null || deleteOrderDTO.getOrderId() == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("This is an invalid request");
-        }
         //tries to find the orderId , if found it gets deleted
         orderRepository.findById(deleteOrderDTO.getOrderId())
                 .orElseThrow(() -> new RuntimeException("Order does not exist"));
