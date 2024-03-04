@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sidkbk.celemo.dto.order.PreviousPurchaseFromOrderDTO;
+import sidkbk.celemo.dto.user.*;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.User;
 import sidkbk.celemo.services.AuctionService;
