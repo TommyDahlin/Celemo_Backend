@@ -76,6 +76,7 @@ public class User {
     }
 
     public void removeFromFav(Auction auction) {
+
         favouriteAuctions.remove(auction);
     }
 
