@@ -30,6 +30,17 @@ public class ReviewsController {
         }
     }
 
+    // GET all reviews WITH paging
+    @GetMapping("/find/all/page/{pagenumber}")
+    public ResponseEntity<?> listAllReviewsPage(@PathVariable("pagenumber") int pageNr,
+                                                @RequestBody ReviewsPageSizeDTO reviewsPageSizeDTO) {
+        try {
+            return ResponseEntity.ok(reviewsService.listAllReviewsPage(pageNr, reviewsPageSizeDTO));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
     // GET one specific review
     @GetMapping("/find")
     public ResponseEntity<?> listOneSpecificReview(@Valid @RequestBody ReviewsFindDTO reviewsFindDTO) {

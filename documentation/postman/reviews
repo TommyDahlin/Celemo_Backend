@@ -8,6 +8,15 @@ http://localhost:8080/api/reviews/find/all
 
 #######################################################################################################
 
+// GET list all reviews WITH paging
+***********************************
+http://localhost:8080/api/reviews/find/all/page/0       <--- Change for page number
+{
+    "pageSize": "2"
+}
+
+#######################################################################################################
+
 // GET list of one specific review
 ***********************************
 http://localhost:8080/api/reviews/find

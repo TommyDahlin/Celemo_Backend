@@ -10,6 +10,9 @@ import java.util.List;
 @Repository
 public interface ReviewsRepo extends MongoRepository<Reviews, String> {
 
+    // Find all reviews WITH paging
+    //List<Reviews> findAllReviews(Pageable pageable);
+
     // Find all reviews for specified reviewed user.
     List<Reviews> findByReviewedUser_Id(String reviewedUserId);
     List<Reviews> findByReviewedUser_Id(String reviewedUserId, Pageable pageable);

@@ -1,6 +1,7 @@
 package sidkbk.celemo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -24,9 +25,16 @@ public class ReviewsService {
     @Autowired
     UserRepository userRepository;
 
-    // Find all reviews and return a list
+    // Find all reviews
     public List<Reviews> listAllReviews() {
         return reviewsRepo.findAll();
+    }
+
+    // Find all reviews WITH paging
+    public List<Reviews> listAllReviewsPage(int pageNr, ReviewsPageSizeDTO reviewsPageSizeDTO) {
+        Page<Reviews> allReviews = reviewsRepo.findAll(PageRequest.of(pageNr, reviewsPageSizeDTO.getPageSize()));
+        List<Reviews> reviews = allReviews.getContent();
+        return reviews;
     }
 
     // Find and return one specific review dto
