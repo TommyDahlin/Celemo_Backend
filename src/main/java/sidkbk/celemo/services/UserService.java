@@ -217,19 +217,18 @@ adress_city
         Auction foundAuction = auctionRepository.findById(deleteFavouritesDto.getAuctionId())
                 .orElseThrow(() -> new RuntimeException("Auction does not exist"));
 
-
-        for (int i = 0; i < auctionRepository.findAll().size(); i++) {
-
-            if (foundAuction.getId().equals(deleteFavouritesDto.getAuctionId())) {
-                foundUser.removeFromFav(foundUser.getFavouriteAuctions().get(i));
-                foundUser.removeFromFav(foundAuction);
+        // Loop through favorite list of user
+        for (Auction auction : foundUser.getFavouriteAuctions()) {
+            // If current auction id in loop match id in DTO
+            if (auction.getId().equals(deleteFavouritesDto.getAuctionId())) {
+                // Save found auction before removing, this was necessary otherwise it doesnt work
+                Auction foundAuctionToRemove = auction;
+                foundUser.getFavouriteAuctions().remove(foundAuctionToRemove);
                 userRepository.save(foundUser);
                 return ResponseEntity.ok("Auction removed from favourite list.");
-            } else {
-                return ResponseEntity.ok("Auction was not removed or does now exist in favourite-list");
             }
         }
-        return null;
+        return ResponseEntity.ok("Auction was not removed or does now exist in favourite-list");
 
 
 
