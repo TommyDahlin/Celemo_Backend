@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import sidkbk.celemo.dto.order.PreviousPurchaseFromOrderDTO;
 import sidkbk.celemo.dto.user.*;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.User;
@@ -76,13 +77,11 @@ public class UserController {
 
     }
     
-
-    // List of all previousPurchases by User
-    @GetMapping("/find/previouspurchase")
-    public ResponseEntity<?> getPreviousPurchase(@Valid @RequestBody FindUserIdDTO findUserIdDTO) {
-
+   // List of all previousPurchases by User
+    @GetMapping("/previouspurchase")
+    public ResponseEntity<?> getPreviousPurchase(@RequestBody PreviousPurchaseFromOrderDTO previousPurchaseFromOrderDTO) {
         try{
-            return ResponseEntity.ok(orderService.findPreviousPurchase(findUserIdDTO));
+            return ResponseEntity.ok(orderService.findPreviousPurchase(previousPurchaseFromOrderDTO));
         } catch (EntityNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }

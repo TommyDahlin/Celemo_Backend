@@ -17,6 +17,8 @@ public class Bids {
     @DBRef
     private User user;
 
+    // HELENA:
+    // om det här ska vara en inbäddat dokument så ska det ändå vara av typen Auction inte String
     private String auctionId;
 
 

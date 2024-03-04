@@ -28,6 +28,7 @@ public class AuctionController {
         }
     }
 
+
     // Get all auctions
     @GetMapping("/find/all")
     public ResponseEntity<?> getAllAuctions() {
