@@ -166,17 +166,7 @@ public class UserService {
                 })
                 .orElseThrow(() -> new EntityNotFoundException("User with id:" + updateUserDTO.getUserId() + " was not found!"));
     }
-/*
-username
-password
-dateOfBirth
-email
-firstName
-lastName
-adress_street
-adress_postalCode
-adress_city
- */
+
 
 
     // delete user account
@@ -188,24 +178,24 @@ adress_city
     }
 
     public ResponseEntity<?> getUserFavouritesById(FindUserFavouritesDTO findUserFavouritesDTO) {
-        User user = userRepository.findById(findUserFavouritesDTO.getUserId())
-                .orElseThrow(() -> new RuntimeException("User does not exist"));
-        return ResponseEntity.ok(user.getFavouriteAuctions());
+        User user = userRepository.findById(findUserFavouritesDTO.getUserId()) //find user with dto userId
+                .orElseThrow(() -> new RuntimeException("User does not exist"));// if user cant be found
+        return ResponseEntity.ok(user.getFavouriteAuctions());//get favouriteAuction List
 
     }
 
     public ResponseEntity<?> setUserFavouritesById(ModifyUserFavouritesDTO favouritesDTO) {
-        User foundUser = userRepository.findById(favouritesDTO.getUserId())
-                .orElseThrow(() -> new RuntimeException("User does not exist"));
-        Auction foundAuction = auctionRepository.findById(favouritesDTO.getAuctionId())
-                .orElseThrow(() -> new RuntimeException("Auction does not exist"));
+        User foundUser = userRepository.findById(favouritesDTO.getUserId())// find user with dto userId
+                .orElseThrow(() -> new RuntimeException("User does not exist")); // if user cant be found
+        Auction foundAuction = auctionRepository.findById(favouritesDTO.getAuctionId())// find auction with dto auctionId
+                .orElseThrow(() -> new RuntimeException("Auction does not exist"));// if auction cant be found
 
-        if (!foundUser.getFavouriteAuctions().contains(foundAuction)) {
-            foundUser.addToFav(foundAuction);
-            userRepository.save(foundUser);
+        if (!foundUser.getFavouriteAuctions().contains(foundAuction)) { //if auction does not already contain the auction we want to add
+            foundUser.addToFav(foundAuction); //add auction to fave list
+            userRepository.save(foundUser); //save user (updated favouriteList)
             return ResponseEntity.ok(" Auction was added to favourite list.");
         } else {
-            throw new RuntimeException("Auction is already in favourite list.");
+            throw new RuntimeException("Auction is already in favourite list."); //if auction alredy exists in fave list
         }
 
 
