@@ -80,6 +80,15 @@ public class AuctionService {
         }
         return activeAuctionList;
     }
+    public List <Auction> updateAllAuctionHasbidsFalse(){
+        List<Auction> getAllAuctions =auctionRepository.findAll();
+        for (int i = 0; i < getAllAuctions.size(); i++) {
+            Auction auction = getAllAuctions.get(i);
+            auction.setHasBids(false);
+            auctionRepository.save(auction);
+        }
+        return getAllAuctions;
+    }
     public List<Auction> getFinishedAuctions(FindUserIdDTO findUserIdDTO){
         List<Auction> auctionList = auctionRepository.findAll();
         List<Auction> finishedAuctionList = new ArrayList<>();

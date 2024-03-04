@@ -1,11 +1,13 @@
 package sidkbk.celemo.dto.Bids;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class BidsDTO {
 
 
     // Data transfer object/ User and Auction
 
-
+    @NotBlank
     private double startBid;
     private double maxBid;
 

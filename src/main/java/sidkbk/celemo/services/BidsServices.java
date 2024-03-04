@@ -34,8 +34,6 @@ public class BidsServices {
     }
 
 
-
-
     // Create a bids using price, userId and listingId
     public ResponseEntity<?> createBids(BidsDTO bidsDTO){
         // gets DTO, checks user from user-repo
@@ -58,7 +56,7 @@ public class BidsServices {
 
         // Check if startBid and maxBid is higher than auction startPrice
         if (bidsDTO.getStartBid() <= foundAuction.getStartPrice() ||
-            bidsDTO.getMaxBid() <= foundAuction.getStartPrice()) {
+                bidsDTO.getMaxBid() <= foundAuction.getStartPrice()) {
             throw new RuntimeException("Your bids cannot be lower than auctions starting price...");
         }
 
@@ -72,9 +70,10 @@ public class BidsServices {
                     + foundUser.getBalance() + "Your current bid is " + bidsDTO.getStartBid() + ".");
         }
 
-        // user loses
-            // checks if auction has a bid
+
+        // checks if auction has a bid
         if (foundAuction.isHasBids() == true){
+            // user loses
             // checks if user has the same id as the previous user
             if (!foundAuction.getBid().getUser().getId().equals(newBid.getUser().getId())) {
                 Bids auctionCurrentBid = bidsRepository.findById(foundAuction.getBid().getId()).get();
@@ -110,7 +109,7 @@ public class BidsServices {
                         newBid.setCurrentPrice(auctionCurrentBid.getCurrentPrice() + 10);
                         bidsRepository.save(newBid);
                         foundAuction.setCurrentPrice(newBid.getCurrentPrice());
-                        currentBidUser.setBalance(auctionCurrentBid.getMaxPrice());
+                        currentBidUser.setBalance(currentBidUser.getBalance() + auctionCurrentBid.getMaxPrice());
                         foundAuction.setBid(newBid);
                         auctionRepository.save(foundAuction);
                         userRepository.save(currentBidUser);
@@ -121,9 +120,11 @@ public class BidsServices {
                         // if you cant do 10 sets to your maxbid
                         newBid.setCurrentPrice(auctionCurrentBid.getCurrentPrice());
                         bidsRepository.save(newBid);
-                        foundAuction.setBid(newBid);
                         foundAuction.setCurrentPrice(newBid.getCurrentPrice());
+                        currentBidUser.setBalance(currentBidUser.getBalance() + auctionCurrentBid.getMaxPrice());
+                        foundAuction.setBid(newBid);
                         foundUser.setBalance(foundUser.getBalance() - newBid.getMaxPrice());
+                        userRepository.save(currentBidUser);
                         userRepository.save(foundUser);
                         auctionRepository.save(foundAuction);
                         return ResponseEntity.ok(newBid.getCurrentPrice() + " you have the current bid.");

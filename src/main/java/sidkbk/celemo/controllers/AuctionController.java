@@ -28,6 +28,7 @@ public class AuctionController {
         }
     }
 
+
     // Get all auctions
     @GetMapping("/find/all")
     public ResponseEntity<?> getAllAuctions() {
@@ -53,6 +54,15 @@ public class AuctionController {
     public ResponseEntity<?> updateAuction(@Valid @RequestBody AuctionUpdateDTO auctionUpdateDTO) {
         try {
             return ResponseEntity.ok(auctionService.updateAuction(auctionUpdateDTO));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+    // FOR TESTING PURPOSES
+    @PutMapping("/puthasbids")
+    public ResponseEntity<?> updateAllAuctionHasbidsFalse() {
+        try {
+            return ResponseEntity.ok(auctionService.updateAllAuctionHasbidsFalse());
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
