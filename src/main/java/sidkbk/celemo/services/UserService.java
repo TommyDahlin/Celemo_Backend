@@ -219,19 +219,17 @@ adress_city
 
 
         for (int i = 0; i < auctionRepository.findAll().size(); i++) {
-            System.out.println("i++: " + i);
-
 
             if (foundAuction.getId().equals(deleteFavouritesDto.getAuctionId())) {
                 foundUser.removeFromFav(foundUser.getFavouriteAuctions().get(i));
                 foundUser.removeFromFav(foundAuction);
                 userRepository.save(foundUser);
-                return ResponseEntity.ok("success");
+                return ResponseEntity.ok("Auction removed from favourite list.");
             } else {
-                return ResponseEntity.ok("no success");
+                return ResponseEntity.ok("Auction was not removed or does now exist in favourite-list");
             }
         }
-        return ResponseEntity.ok("hehe");
+        return null;
 
 
 
