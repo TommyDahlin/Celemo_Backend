@@ -8,8 +8,8 @@ public class BidsDTO {
     // Data transfer object/ User and Auction
 
     @NotBlank
-    private double startBid;
-    private double maxBid;
+    private Double startBid;
+    private Double maxBid;
 
     private String userId;
 

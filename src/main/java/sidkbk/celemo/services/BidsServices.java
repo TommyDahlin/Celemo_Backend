@@ -52,8 +52,12 @@ public class BidsServices {
 
         newBid.setStartPrice(bidsDTO.getStartBid());
         newBid.setAuctionId(bidsDTO.getAuctionId());
-        newBid.setMaxPrice(bidsDTO.getMaxBid());
-
+        if (bidsDTO.getMaxBid() == 0) {
+            newBid.setMaxPrice(newBid.getStartPrice());
+            bidsDTO.setMaxBid(bidsDTO.getStartBid());
+        } else {
+            newBid.setMaxPrice(bidsDTO.getMaxBid());
+        }
         // Check if startBid and maxBid is higher than auction startPrice
         if (bidsDTO.getStartBid() <= foundAuction.getStartPrice() ||
                 bidsDTO.getMaxBid() <= foundAuction.getStartPrice()) {
