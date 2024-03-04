@@ -12,7 +12,6 @@ public class OrderCreationDTO {
     @CreatedDate
     private Date createdAt = new Date();
     private String auctionId;
-    private String sellerId;
     private String buyerId;
 
 
@@ -21,9 +20,6 @@ public class OrderCreationDTO {
 
     public String getAuctionId() {
         return auctionId;
-    }
-    public String getSellerId() {
-        return sellerId;
     }
     public String getBuyerId() {
         return buyerId;
@@ -37,9 +33,6 @@ public class OrderCreationDTO {
 
     public void setAuctionId(String auctionId) {
         this.auctionId = auctionId;
-    }
-    public void setSellerId(String sellerId) {
-        this.sellerId = sellerId;
     }
     public void setBuyerId(String buyerId) {
         this.buyerId = buyerId;
