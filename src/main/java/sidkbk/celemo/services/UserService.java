@@ -7,7 +7,11 @@ import org.springframework.stereotype.Service;
 import sidkbk.celemo.dto.user.*;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.*;
+
 import sidkbk.celemo.repositories.AuctionRepository;
+
+import sidkbk.celemo.repositories.ReviewsRepo;
+
 import sidkbk.celemo.repositories.RoleRepository;
 import sidkbk.celemo.repositories.UserRepository;
 
@@ -19,9 +23,17 @@ public class UserService {
     UserRepository userRepository;
     @Autowired
     RoleRepository roleRepository;
-
+    @Autowired
+    ReviewsRepo reviewsRepository;
     @Autowired
     AuctionRepository auctionRepository;
+
+
+    // HELENA:
+    // är det här regsiter eller inte?
+    // det ser ut som ett ihopkok av createUser och register eftersom ni blandar in roller
+    // om det här är en metod för att registrera en user så bör metodsignaturen spegla det
+    // den bör inte heller ligga i en UserService utan i så fall => AuthService
 
 
     // create/add/post user account
@@ -96,6 +108,16 @@ public class UserService {
         return userRepository.findById(findUserIdDTO.getUserId());
     }
 
+    //HELENA:
+    // ska en user verkligen få uppdatera sin roll? det känns inte så bra...
+    // fundera på:
+    // vad ska en admin få uppdatera på en user?
+    // vad ska en user få uppdatera om sig själv?
+
+    // dessutom kan ni göra det lite snyggare och ta bort era 1000 ifs med det här :)
+    // Optional.ofNullable(updateUserDTO.getUsername()).ifPresent(existingUser::setUsername);
+    // går att göra likadant för varje rad
+
     // PUT/update user account. checks that new value isn't empty before adding. If something is empty then it will throw EntityNotFoundException
     public User updateUser(UpdateUserDTO updateUserDTO) {
         Set<Role> roles = new HashSet<>();
@@ -113,6 +135,7 @@ public class UserService {
                     }
                     if (updateUserDTO.getEmail() != null) {
                         existingUser.setEmail(updateUserDTO.getEmail());
+
                     }
                     if (updateUserDTO.getFirstName() != null) {
                         existingUser.setFirstName(updateUserDTO.getFirstName());
@@ -138,6 +161,7 @@ public class UserService {
                     if (updateUserDTO.getPhoto() != null) {
                         existingUser.setPhoto(updateUserDTO.getPhoto());
                     }
+
                     if (strRoles.isEmpty()) {
                         Role userRole = roleRepository.findByName(ERole.ROLE_USER)
                                 .orElseThrow(() -> new RuntimeException("Error: role is not found"));
@@ -173,9 +197,16 @@ public class UserService {
     public ResponseEntity<String> deleteUser(DeleteUserDTO deleteUserDTO) {
         userRepository.findById(deleteUserDTO.getUserId())
                 .orElseThrow(() -> new RuntimeException("User does not exist"));
-        userRepository.deleteById(deleteUserDTO.getUserId());
-        return ResponseEntity.ok("User deleted");
+              // Function to remove reviews referencing reviewed user
+        List<Reviews> findReviews = reviewsRepository.findAll();
+        for (int i = 0; i < findReviews.size(); i++) {
+            if (findReviews.get(i).getReviewedUser().getId().equals(deleteUserDTO.getUserId())) {
+                reviewsRepository.deleteById(findReviews.get(i).getId());
+            }
+            userRepository.deleteById(deleteUserDTO.getUserId());
+        }return ResponseEntity.ok("User deleted");
     }
+
 
     public ResponseEntity<?> getUserFavouritesById(FindUserFavouritesDTO findUserFavouritesDTO) {
         User user = userRepository.findById(findUserFavouritesDTO.getUserId()) //find user with dto userId
@@ -224,3 +255,4 @@ public class UserService {
 
     }
 }
+

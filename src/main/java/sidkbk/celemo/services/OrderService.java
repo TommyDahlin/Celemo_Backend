@@ -1,9 +1,13 @@
 package sidkbk.celemo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import sidkbk.celemo.dto.user.FindUserIdDTO;
-import sidkbk.celemo.exceptions.EntityNotFoundException;
+import sidkbk.celemo.dto.order.DeleteOrderDTO;
+import sidkbk.celemo.dto.order.OrderCreationDTO;
+import sidkbk.celemo.dto.order.OrderFoundByIdDTO;
+import sidkbk.celemo.dto.order.PreviousPurchaseFromOrderDTO;
 import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.models.Order;
 import sidkbk.celemo.models.User;
@@ -14,6 +18,7 @@ import sidkbk.celemo.repositories.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OrderService {
@@ -29,26 +34,22 @@ public class OrderService {
 
 
 
+    public Order createOrder(OrderCreationDTO orderCreationDTO) {
+        Auction findAuction = auctionRepository.findById(orderCreationDTO.getAuctionId())
+                .orElseThrow(() -> new RuntimeException("Auction not found!"));
+        User findSellerId = userRepository.findById(findAuction.getSellerId()).get();
+        User findBuyerId = userRepository.findById(orderCreationDTO.getBuyerId())
+                .orElseThrow(() -> new RuntimeException("BuyerId was not found"));
 
+        Order newOrder = new Order();
+        newOrder.setAuction(findAuction);
+        newOrder.setSellerAccount(findSellerId);
+        newOrder.setBuyerAccount(findBuyerId);
+        newOrder.setProductTitle(findAuction.getTitle());
+        newOrder.setEndPrice(findAuction.getEndPrice());
+        newOrder.setCreatedAt(orderCreationDTO.getCreatedAt());
 
-    // Create an order
-    public Order createOrder(Order order) {
-        Auction findAuction = auctionRepository.findById(order.getAuctionId())
-                .orElseThrow(()-> new RuntimeException("Couldn't find Auction"));
-        // Finding seller from account repository
-        User findSellerAccount = userRepository.findById(findAuction.getSellerId())
-                .orElseThrow(() -> new RuntimeException("Couldn't find seller."));
-            order.setSellerAccount(findSellerAccount);
-        // Finding buyer from account repository
-        // NEEDS BIDS TO BE FINISHED TO PROCEED WITH BUYERACCOUNTID
-        User findBuyerAccount = userRepository.findById(order.getBuyerId())
-                .orElseThrow(() -> new RuntimeException("Couldn't find buyer."));
-
-            order.setBuyerAccount(findBuyerAccount);
-            order.setAuction(findAuction);
-
-
-        return orderRepository.save(order);
+        return orderRepository.save(newOrder);
     }
 
     // READ ALL ORDERS
@@ -56,54 +57,43 @@ public class OrderService {
         return orderRepository.findAll();
     }
 
-    //READ 1 ORDER
-    public Order getOneOrder(String id) {
-        Order foundOrder = orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Order was not found"));
-        return foundOrder;
+
+    // Find one specific order by orderId
+    public Optional<Order> getOneOrder(OrderFoundByIdDTO orderFoundByIdDTO) {
+        return orderRepository.findById(orderFoundByIdDTO.getOrderId());
     }
 
-    // PUT update one order
-    public Order updateOrder(String orderId, Order updateOrder) {
-        return orderRepository.findById(orderId)
-                .map(existingOrder -> {
-                    if (updateOrder.getBuyerAccount() != null) {
-                        existingOrder.setBuyerAccount(updateOrder.getBuyerAccount());
-                    }
-                    if (updateOrder.getSellerAccount() != null) {
-                        existingOrder.setSellerAccount(updateOrder.getSellerAccount());
-                    }
-                    if (updateOrder.getAuction() != null) {
-                        existingOrder.setAuction(updateOrder.getAuction());
-                    }
-                    return orderRepository.save(existingOrder);
-                }).orElseThrow(() -> new RuntimeException("Order was not found"));
-    }
-
-
-    public List<Order> findPreviousPurchase(FindUserIdDTO findUserIdDTO) {
-        List<Order> allOrders = orderRepository.findAll(); //list of all orders
-        User user = userRepository.findById(findUserIdDTO.getUserId())
-                .orElseThrow(() -> new EntityNotFoundException("User was not found with: " + findUserIdDTO.getUserId()));// Retrieves the user by its id,// instead of .get() i cast a EntityNotFoundException to make sure the user exists and to understand what was giving error 404
-        List<Order> previousPurchase = new ArrayList<>();
-
-        for (Order order : allOrders) { // takes a check on each order so see if it matches with buyerID
-            if (order.getBuyerId() != null && order.getBuyerId().equals(findUserIdDTO.getUserId())) {
-
-                Auction auction = order.getAuction(); //to access auction from order
-                if (auction.getCelebrityName() != null) {// when celebrityname is null in database it cast message auction null, have it outcommented due to celbrity name being null in database for the orders we have so far.
-                    Order orderHistory = new Order(order.getId(), order.getProductTitle(), order.getEndDate(), order.getEndPrice(), auction.getCelebrityName());
-
-                    previousPurchase.add(order);
-                }
-            }
+    // fine all orders that are bound to one user ID
+    public List<Order> findPreviousPurchase(PreviousPurchaseFromOrderDTO previousPurchaseFromOrderDTO) {
+        userRepository.findById(previousPurchaseFromOrderDTO.getUserId())
+                .orElseThrow(() -> new RuntimeException("UserId could not be found"));
+            List<Order> previousPurchase = new ArrayList<>();
+        for (Order order : orderRepository.findAll()) {
+            if (order.getBuyerAccount() != null && previousPurchaseFromOrderDTO.getUserId().equals(order.getBuyerAccount().getId())) {
+                previousPurchase.add(order);
+              }
         }
-            return previousPurchase;
+        return previousPurchase;
     }
+  
+    //HELENA:
+    // vi hittar EN order men hittar vi EN order som tillhör en specifik user?
+    // hittar vi ALLA ordrar som tillhör en specifik user?
 
-    // Delete one order by id
-    public String deleteOrder(String id) {
-        orderRepository.deleteById(id);
-        return "Deleted order successfully!";
+   
+    //HELENA:
+    // en order kan man INTE uppdatera då blir revisorn arg...
+    // man makulerar och skapar en ny i så fall
+
+            
+
+    // Delete one order by orderId
+    public ResponseEntity<?> deleteOrder(DeleteOrderDTO deleteOrderDTO) {
+        //tries to find the orderId , if found it gets deleted
+        orderRepository.findById(deleteOrderDTO.getOrderId())
+                .orElseThrow(() -> new RuntimeException("Order does not exist"));
+
+        orderRepository.deleteById(deleteOrderDTO.getOrderId());
+        return ResponseEntity.status(HttpStatus.OK).body("Order was deleted successfully!");
     }
-
 }

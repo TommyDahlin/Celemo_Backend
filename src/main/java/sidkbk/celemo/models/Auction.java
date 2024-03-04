@@ -14,6 +14,20 @@ import java.util.List;
 public class Auction {
     // Everything from here to the comment of bids are required before we can post an auction to the database
     // sellerId is the user that makes the auction, the rest is self-explanatory.
+
+    //HELENA:
+    // vem är sellerId? och vem är user?
+    // är det dubbelt upp?
+    // eller är sellerId en annan säljare som är av typen String? och user kanske en annan säljare som är av typen User?
+    // har vi två säljare?
+    // wierd, right? ^^
+
+    // ni har ju en DBRef till User men ni bör döpa om fältet till:
+    // private User seller;
+    // i den Usern finns ju id? Så String sellerId ska väck härifrån
+
+    // jag vet inte om ni någon gång mappar om Enum till strängar men säger det här i alla fall att det bör ni göra
+    // det blir MYCKET lättare i så fall och ni kan enkelt lösa pagination med filtrering om ni skulle vilja det
     @Id
     private String id;
     @NotBlank
@@ -38,7 +52,6 @@ public class Auction {
     private Double endPrice = 0d;
     @DBRef
     private Bids bid;
-    private String bidId;
 
     // Both booleans have to be true to move on to make an order.
     public boolean isFinished;
@@ -48,6 +61,38 @@ public class Auction {
     public List<ECategory> categoryList = new ArrayList<>();
 
     public Auction(){
+    }
+
+    public LocalDate getStartingDate() {
+        return startingDate;
+    }
+
+    public void setStartingDate(LocalDate startingDate) {
+        this.startingDate = startingDate;
+    }
+
+    public void setCurrentPrice(Double currentPrice) {
+        this.currentPrice = currentPrice;
+    }
+
+    public void setEndPrice(Double endPrice) {
+        this.endPrice = endPrice;
+    }
+
+    public Bids getBid() {
+        return bid;
+    }
+
+    public void setBid(Bids bid) {
+        this.bid = bid;
+    }
+
+    public boolean isFinished() {
+        return isFinished;
+    }
+
+    public void setFinished(boolean finished) {
+        isFinished = finished;
     }
 
     public String getId() {

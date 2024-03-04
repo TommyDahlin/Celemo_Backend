@@ -58,6 +58,7 @@ public class User {
     private String adress_city;
 
 
+
     @DBRef
     private List<Auction> favouriteAuctions = new ArrayList<>();
 
@@ -105,7 +106,11 @@ public class User {
 
     }
 
-    public void isPasswordCorrect(User user) {
+
+    // det här ingår i Security genom BCrypt, jättebra att ni tänker på det men kom ihåg
+    // att fundera över vad ni lägger er tid på nästa gång
+    public void isPasswordCorrect(User user){
+
 
         Pattern UpperCasePattern = Pattern.compile("[A-Z ]");
 
