@@ -17,9 +17,8 @@ public class Bids {
     @DBRef
     private User user;
 
-    // HELENA:
-    // om det här ska vara en inbäddat dokument så ska det ändå vara av typen Auction inte String
-    private String auctionId;
+
+    private String auctionId; // This i a String because otherwise we get infinte recursion error
 
 
     private double startPrice;

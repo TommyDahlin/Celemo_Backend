@@ -12,7 +12,6 @@ import sidkbk.celemo.models.User;
 import sidkbk.celemo.repositories.AuctionRepository;
 import sidkbk.celemo.repositories.BidsRepository;
 import sidkbk.celemo.repositories.UserRepository;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,9 +27,6 @@ public class BidsServices {
     @Autowired
     UserRepository userRepository;
 
-
-    //HELENA:
-    // hittar vi alla bud som tillhör en user? jag tror att ni kanske jobbar på det issuet iofs
 
 
 

@@ -31,9 +31,8 @@ public class Auction {
     @Id
     private String id;
     @NotBlank
-    private String sellerId;
     @DBRef
-    private User user;
+    private User seller;
     @NotBlank
     private String title;
     @NotBlank
@@ -103,13 +102,7 @@ public class Auction {
         this.id = id;
     }
 
-    public String getSellerId() {
-        return sellerId;
-    }
 
-    public void setSellerId(String sellerId) {
-        this.sellerId = sellerId;
-    }
 
     public String getTitle() {
         return title;
@@ -137,14 +130,6 @@ public class Auction {
 
     public double getCurrentPrice() {
         return currentPrice;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
 
@@ -198,5 +183,13 @@ public class Auction {
 
     public void setStartPrice(Double startPrice) {
         this.startPrice = startPrice;
+    }
+
+    public User getSeller() {
+        return seller;
+    }
+
+    public void setSellerId(User seller) {
+        this.seller = seller;
     }
 }
