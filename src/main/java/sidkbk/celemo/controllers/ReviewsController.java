@@ -30,6 +30,17 @@ public class ReviewsController {
         }
     }
 
+    // GET all reviews WITH paging
+    @GetMapping("/find/all/page/{pagenumber}")
+    public ResponseEntity<?> listAllReviewsPage(@PathVariable("pagenumber") int pageNr,
+                                                @RequestBody ReviewsPageSizeDTO reviewsPageSizeDTO) {
+        try {
+            return ResponseEntity.ok(reviewsService.listAllReviewsPage(pageNr, reviewsPageSizeDTO));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
     // GET one specific review
     @GetMapping("/find")
     public ResponseEntity<?> listOneSpecificReview(@Valid @RequestBody ReviewsFindDTO reviewsFindDTO) {
@@ -52,16 +63,56 @@ public class ReviewsController {
         }
     }
 
-    // GET all reviews for specific reviewed user and sort grade "Low to High" or "High to Low"
+    // GET all reviews for specific reviewed user WITH paging
+    @GetMapping("/find/all-user/page/{pagenumber}")
+    public ResponseEntity<?> allReviewsForSpecificReviewedUserPage(
+            @PathVariable("pagenumber") int pageNr,
+            @Valid @RequestBody ReviewsAllPagingUserDTO reviewsAllPagingUserDTO) {
+        List<Reviews> foundReviews = reviewsService.allReviewsForSpecificReviewedUserPage(pageNr, reviewsAllPagingUserDTO);
+
+        if (foundReviews.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User is not reviewed or empty page...");
+        } else {
+            return ResponseEntity.ok(foundReviews);
+        }
+    }
+
+    // GET List all reviews for a specified user AND sort reviews by Low or High grades
     @GetMapping("/find/all-user-sort")
     public ResponseEntity<?> reviewedUserSortReviews(@Valid @RequestBody ReviewsSortLowHighDTO reviewsSortLowHighDTO) {
-        return reviewsService.reviewedUserSortReviews(reviewsSortLowHighDTO);
+        List<Reviews> foundReviews = reviewsService.reviewedUserSortReviews(reviewsSortLowHighDTO);
+        if (foundReviews.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No reviews found for user...");
+        } else {
+            return ResponseEntity.ok(foundReviews);
+        }
+    }
+
+    // GET List all reviews for a specified user AND sort reviews by Low or High grades WITH paging
+    @GetMapping("/find/all-user-sort/page/{pagenumber}")
+    public ResponseEntity<?> reviewedUserSortReviewsPage(
+            @PathVariable("pagenumber") int pageNr,
+            @Valid @RequestBody ReviewsSortLowHighDTO reviewsSortLowHighDTO) {
+        List<Reviews> foundReviews = reviewsService.reviewedUserSortReviewsPage(pageNr, reviewsSortLowHighDTO);
+        if (foundReviews.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No reviews found for user...");
+        } else {
+            return ResponseEntity.ok(foundReviews);
+        }
     }
 
     // GET all reviews for specific reviewed user with specific grade
     @GetMapping("/find/all-user-grade")
     public ResponseEntity<?> reviewedUserSortByGrade(@Valid @RequestBody ReviewsGetByGradeDTO reviewsGetByGradesDTO) {
         return reviewsService.reviewedUserSortByGrade(reviewsGetByGradesDTO);
+    }
+
+    // GET all reviews for specific reviewed user with specific grade WITH paging
+    @GetMapping("/find/all-user-grade/page/{pagenumber}")
+    public ResponseEntity<?> reviewedUserSortByGradeAndPage(
+            @PathVariable("pagenumber") int pageNr,
+            @Valid @RequestBody ReviewsGetByGradeDTO reviewsGetByGradesDTO) {
+        return reviewsService.reviewedUserSortByGradeAndPage(pageNr, reviewsGetByGradesDTO);
     }
 
     // POST add a review dto
@@ -93,4 +144,6 @@ public class ReviewsController {
     public void deleteAllReviews(){
         reviewsService.deleteAllReviews();
     }
+
+
 }

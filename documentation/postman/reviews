@@ -8,6 +8,15 @@ http://localhost:8080/api/reviews/find/all
 
 #######################################################################################################
 
+// GET list all reviews WITH paging
+***********************************
+http://localhost:8080/api/reviews/find/all/page/0       <--- Change for page number
+{
+    "pageSize": "2"
+}
+
+#######################################################################################################
+
 // GET list of one specific review
 ***********************************
 http://localhost:8080/api/reviews/find
@@ -67,13 +76,36 @@ Body - raw
 
 #######################################################################################################
 
+GET - List all reviews for specific REVIEWED user WITH paging
+***********************************
+http://localhost:8080/api/reviews/find/all-user/page/0      <--- Change number for page
+Body - raw
+{
+"userId": "65d755313b0850253b1640bc",
+"pageSize": 3   // Reviews per page. This is optional, 3 is default
+}
+
+#######################################################################################################
+
 GET - List all reviews for a specified user AND sort reviews by Low or High grades.
 ***********************************
 http://localhost:8080/api/reviews/find/all-user-sort
 Body - raw
 {
-    "userId": "65d755313b0850253b1640bc",
+    "reviewedUserId": "65d755313b0850253b1640bc",
     "lowOrHigh": "low" // Low or High
+}
+
+#######################################################################################################
+
+GET - List all reviews for a specified user AND sort reviews by Low or High grades WITH paging.
+***********************************
+http://localhost:8080/api/reviews/find/all-user-sort/page/0     <--- Change number for page
+Body - raw
+{
+    "reviewedUserId": "65d755313b0850253b1640bc",
+    "lowOrHigh": "low" // Low or High,
+    "pageSize": 3   // OPTIONAL Reviews per page. Default is 3
 }
 
 #######################################################################################################
@@ -85,6 +117,18 @@ Body - raw
 {
     "userId": "65d755313b0850253b1640bc",
     "grade": 3      // 1-5
+}
+
+#######################################################################################################
+
+GET - all reviews for specific reviewed user WITH specific grade AND paging
+***********************************
+http://localhost:8080/api/reviews/find/all-user-grade/page/0    <--- Change page number
+Body - raw
+{
+    "userId": "65d755313b0850253b1640bc",
+    "grade": 3      // 1-5,
+    "pageSize": 3   // OPTIONAL Reviews per page. Default is 3
 }
 
 #######################################################################################################

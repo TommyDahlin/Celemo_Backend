@@ -1,30 +1,21 @@
 package sidkbk.celemo.dto.Reviews;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 
-public class ReviewsGetByGradeDTO {
+public class ReviewsAllPagingUserDTO {
 
     // Variables
     @NotBlank
     private String reviewedUserId;
-    @NotNull
-    private double grade;
+    private int pageSize = 3; // A default of 10 is better, for now 3 is better for testing when db is low
 
-    private int pageSize = 3; // OPTIONAL Used with paging
 
-    //Getters & Setters
+    // Getters & Setters
     public String getReviewedUserId() {
         return reviewedUserId;
     }
     public void setUserId(String reviewedUserId) {
         this.reviewedUserId = reviewedUserId;
-    }
-    public double getGrade() {
-        return grade;
-    }
-    public void setGrade(double grade) {
-        this.grade = grade;
     }
     public int getPageSize() {
         return pageSize;

@@ -1,6 +1,9 @@
 package sidkbk.celemo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -22,9 +25,16 @@ public class ReviewsService {
     @Autowired
     UserRepository userRepository;
 
-    // Find all reviews and return a list
+    // Find all reviews
     public List<Reviews> listAllReviews() {
         return reviewsRepo.findAll();
+    }
+
+    // Find all reviews WITH paging
+    public List<Reviews> listAllReviewsPage(int pageNr, ReviewsPageSizeDTO reviewsPageSizeDTO) {
+        Page<Reviews> allReviews = reviewsRepo.findAll(PageRequest.of(pageNr, reviewsPageSizeDTO.getPageSize()));
+        List<Reviews> reviews = allReviews.getContent();
+        return reviews;
     }
 
     // Find and return one specific review dto
@@ -106,72 +116,58 @@ public class ReviewsService {
 
     // List all reviews for a specified user
     public List<Reviews> allReviewsForSpecificReviewedUser(FindUserIdDTO findUserIdDTO) {
-        List<Reviews> foundReviews = new ArrayList<>(); // Temp list
-        List<Reviews> allReviews = reviewsRepo.findAll(); // Save all reviews
-        for (Reviews review : allReviews) { // Loop reviews
-            // Find reviews for reviewed user
-            if (review.getReviewedUser() != null &&
-                    findUserIdDTO.getUserId().equals(review.getReviewedUser().getId())) {
-                foundReviews.add(review); // save to temp
-            }
-        }
-        if (foundReviews.isEmpty()) {
-            return null;
-        } else {
-            return foundReviews;
-        }
+        return reviewsRepo.findByReviewedUser_Id(findUserIdDTO.getUserId());
+    }
 
+    // List all reviews for a specified user WITH paging
+    public List<Reviews> allReviewsForSpecificReviewedUserPage(int pageNr, ReviewsAllPagingUserDTO reviewsAllPagingUserDTO) {
+        Pageable paging = PageRequest.of(pageNr, reviewsAllPagingUserDTO.getPageSize());
+        return reviewsRepo.findByReviewedUser_Id(reviewsAllPagingUserDTO.getReviewedUserId(), paging);
     }
 
     // List all reviews for a specified user AND sort reviews by Low or High grades.
-    public ResponseEntity<?> reviewedUserSortReviews(ReviewsSortLowHighDTO reviewsSortLowHighDTO) {
-        FindUserIdDTO findUserIdDTO = new FindUserIdDTO();
-        findUserIdDTO.setUserId(reviewsSortLowHighDTO.getUserId());
-        // Run method above to get all reviews for specified user
-        List<Reviews> foundReviews = allReviewsForSpecificReviewedUser(findUserIdDTO);
-        List<Reviews> sortedReviews = new ArrayList<>();
-        // If sorting from "low" to "high" grade
-        if (reviewsSortLowHighDTO.getLowOrHigh().equals("LOW")) { // Check in DTO
-            for (double i = 1; i <= 5; i++) { // Loop through 1-5
-                for (Reviews review : foundReviews) { // Loop through found reviews
-                    if (review.getGrade().equals(i)) { // If grade matches
-                        sortedReviews.add(review); // Save review to sorted list
-                    }
-                }
-            }
+    public List<Reviews> reviewedUserSortReviews(ReviewsSortLowHighDTO reviewsSortLowHighDTO) {
+        if (reviewsSortLowHighDTO.getLowOrHigh().equals("LOW")) {
+            return reviewsRepo.findByReviewedUser_IdOrderByGradeAsc(
+                    reviewsSortLowHighDTO.getReviewedUserId());
+        } else {
+            return reviewsRepo.findByReviewedUser_IdOrderByGradeDesc(
+                    reviewsSortLowHighDTO.getReviewedUserId());
         }
-        // If sorting from "high" to "low" grade
-        if (reviewsSortLowHighDTO.getLowOrHigh().equals("HIGH")) { // Check in DTO
-            for (double i = 5; i >= 1; i--) { // Loop through 5-1
-                for (Reviews review : foundReviews) { // Loop through found reviews
-                    if (review.getGrade().equals(i)) { // If grade matches
-                        sortedReviews.add(review); // Save review to sorted list
-                    }
-                }
-            }
+    }
+
+    // List all reviews for a specified user AND sort reviews by Low or High grades WITH paging.
+    public List<Reviews> reviewedUserSortReviewsPage(int pageNr, ReviewsSortLowHighDTO reviewsSortLowHighDTO) {
+        Pageable pageing = PageRequest.of(pageNr, reviewsSortLowHighDTO.getPageSize());
+        if (reviewsSortLowHighDTO.getLowOrHigh().equals("LOW")) {
+            return reviewsRepo.findByReviewedUser_IdOrderByGradeAsc(
+                    reviewsSortLowHighDTO.getReviewedUserId(), pageing);
+        } else {
+            return reviewsRepo.findByReviewedUser_IdOrderByGradeDesc(
+                    reviewsSortLowHighDTO.getReviewedUserId(), pageing);
         }
-        return ResponseEntity.ok(sortedReviews); // Return sorted list
     }
 
     // List all reviews for specific reviewed user with specific grade
     public ResponseEntity<?> reviewedUserSortByGrade(ReviewsGetByGradeDTO reviewsGetByGradeDTO) {
-        FindUserIdDTO findUserIdDTO = new FindUserIdDTO();
-        findUserIdDTO.setUserId(reviewsGetByGradeDTO.getUserId());
-        // Run method above to get all reviews for specified user
-        List<Reviews> foundReviews = allReviewsForSpecificReviewedUser(findUserIdDTO);
-        List<Reviews> reviewsByGrade = new ArrayList<>();
-        // Loop through reviews found for specified user and find only reviews with matching grade you want to see
-        for (Reviews review : foundReviews) {
-            if (review.getGrade().equals(reviewsGetByGradeDTO.getGrade())) {
-                reviewsByGrade.add(review);
-            }
-        }
+        List<Reviews> reviewsByGrade = reviewsRepo.findByReviewedUser_IdAndGrade(
+                reviewsGetByGradeDTO.getReviewedUserId(), reviewsGetByGradeDTO.getGrade());
         if (reviewsByGrade.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No reviews with that grade found...");
         }
         return ResponseEntity.ok(reviewsByGrade);
     }
 
+    // List all reviews for specific reviewed user with specific grade WITH paging
+    public ResponseEntity<?> reviewedUserSortByGradeAndPage(int pageNr, ReviewsGetByGradeDTO reviewsGetByGradeDTO) {
+        Pageable paging = PageRequest.of(pageNr, reviewsGetByGradeDTO.getPageSize());
+        List<Reviews> reviewsByGrade = reviewsRepo.findByReviewedUser_IdAndGrade(
+                reviewsGetByGradeDTO.getReviewedUserId(), reviewsGetByGradeDTO.getGrade(), paging);
+        if (reviewsByGrade.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No reviews with that grade found...");
+        }
+        return ResponseEntity.ok(reviewsByGrade);
+    }
 
 }
 
