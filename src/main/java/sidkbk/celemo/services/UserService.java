@@ -2,6 +2,7 @@ package sidkbk.celemo.services;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import sidkbk.celemo.dto.user.*;
@@ -221,22 +222,19 @@ public class UserService {
         Auction foundAuction = auctionRepository.findById(favouritesDTO.getAuctionId())// find auction with dto auctionId
                 .orElseThrow(() -> new RuntimeException("Auction does not exist"));// if auction cant be found
 
-        if (!foundUser.getFavouriteAuctions().contains(foundAuction)) { //if auction does not already contain the auction we want to add
-            foundUser.addToFav(foundAuction); //add auction to fave list
-            userRepository.save(foundUser); //save user (updated favouriteList)
-            return ResponseEntity.ok(" Auction was added to favourite list.");
-        } else {
-            throw new RuntimeException("Auction is already in favourite list."); //if auction alredy exists in fave list
+        for (Auction auction : foundUser.getFavouriteAuctions()) {
+            if (auction.getId().equals(favouritesDTO.getAuctionId())) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Auction already exist in favourites list...");
+            }
         }
-
-
+        foundUser.addToFav(foundAuction); //add auction to fave list
+        userRepository.save(foundUser); //save user (updated favouriteList)
+        return ResponseEntity.ok("Auction was added to favourite list.");
     }
 
     public ResponseEntity<?> deleteUserFavouritesById(ModifyUserFavouritesDTO deleteFavouritesDto) {
         User foundUser = userRepository.findById(deleteFavouritesDto.getUserId())
                 .orElseThrow(() -> new RuntimeException("User does not exist"));
-        Auction foundAuction = auctionRepository.findById(deleteFavouritesDto.getAuctionId())
-                .orElseThrow(() -> new RuntimeException("Auction does not exist"));
 
         // Loop through favorite list of user
         for (Auction auction : foundUser.getFavouriteAuctions()) {
