@@ -3,6 +3,7 @@ package sidkbk.celemo.dto.user;
 import jakarta.validation.constraints.NotBlank;
 import sidkbk.celemo.models.EGender;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,6 +30,7 @@ public class CreateUserDTO {
     @NotBlank(message = "adress_city cannot be blank")
     private String adress_city;
 
+    private ArrayList<String> favouriteAuctions = new ArrayList<String>();
 
     public String getUsername() {
         return username;
@@ -117,5 +119,6 @@ public class CreateUserDTO {
     public void setAdress_city(String adress_city) {
         this.adress_city = adress_city;
     }
+
 }
 

@@ -104,3 +104,35 @@ Body - raw
 
 ****************************************************
 
+PUT - Add auction to favourite list
+http://localhost:8080/api/user/favourite/add
+
+Body - raw
+
+{
+    "userId": " ObjectId ",
+    "auctionId": " ObjectId "
+}
+
+****************************************************
+
+GET - get favourite list from userId
+http://localhost:8080/api/user/favourites/all
+
+Body - raw
+
+{
+    "userId": " ObjectId "
+}
+
+****************************************************
+
+DELETE - Delete Auction from userId:s favourite list
+http://localhost:8080/api/user/favourite/delete
+
+Body - raw
+
+{
+    "userId": " ObjectId ",
+    "auctionId": " ObjectId "
+}

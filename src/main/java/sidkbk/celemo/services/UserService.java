@@ -2,12 +2,17 @@ package sidkbk.celemo.services;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import sidkbk.celemo.dto.user.*;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.*;
+
+import sidkbk.celemo.repositories.AuctionRepository;
+
 import sidkbk.celemo.repositories.ReviewsRepo;
+
 import sidkbk.celemo.repositories.RoleRepository;
 import sidkbk.celemo.repositories.UserRepository;
 
@@ -21,6 +26,8 @@ public class UserService {
     RoleRepository roleRepository;
     @Autowired
     ReviewsRepo reviewsRepository;
+    @Autowired
+    AuctionRepository auctionRepository;
 
 
     // HELENA:
@@ -28,6 +35,7 @@ public class UserService {
     // det ser ut som ett ihopkok av createUser och register eftersom ni blandar in roller
     // om det här är en metod för att registrera en user så bör metodsignaturen spegla det
     // den bör inte heller ligga i en UserService utan i så fall => AuthService
+
 
     // create/add/post user account
     public User createUser(CreateUserDTO createUserDTO) {
@@ -128,6 +136,7 @@ public class UserService {
                     }
                     if (updateUserDTO.getEmail() != null) {
                         existingUser.setEmail(updateUserDTO.getEmail());
+
                     }
                     if (updateUserDTO.getFirstName() != null) {
                         existingUser.setFirstName(updateUserDTO.getFirstName());
@@ -153,6 +162,7 @@ public class UserService {
                     if (updateUserDTO.getPhoto() != null) {
                         existingUser.setPhoto(updateUserDTO.getPhoto());
                     }
+
                     if (strRoles.isEmpty()) {
                         Role userRole = roleRepository.findByName(ERole.ROLE_USER)
                                 .orElseThrow(() -> new RuntimeException("Error: role is not found"));
@@ -181,24 +191,14 @@ public class UserService {
                 })
                 .orElseThrow(() -> new EntityNotFoundException("User with id:" + updateUserDTO.getUserId() + " was not found!"));
     }
-/*
-username
-password
-dateOfBirth
-email
-firstName
-lastName
-adress_street
-adress_postalCode
-adress_city
-*/
+
 
 
     // delete user account
     public ResponseEntity<String> deleteUser(DeleteUserDTO deleteUserDTO) {
         userRepository.findById(deleteUserDTO.getUserId())
                 .orElseThrow(() -> new RuntimeException("User does not exist"));
-        // Function to remove reviews referencing reviewed user
+              // Function to remove reviews referencing reviewed user
         List<Reviews> findReviews = reviewsRepository.findAll();
         for (int i = 0; i < findReviews.size(); i++) {
             if (findReviews.get(i).getReviewedUser().getId().equals(deleteUserDTO.getUserId())) {
@@ -208,4 +208,49 @@ adress_city
         }return ResponseEntity.ok("User deleted");
     }
 
+
+    public ResponseEntity<?> getUserFavouritesById(FindUserFavouritesDTO findUserFavouritesDTO) {
+        User user = userRepository.findById(findUserFavouritesDTO.getUserId()) //find user with dto userId
+                .orElseThrow(() -> new RuntimeException("User does not exist"));// if user cant be found
+        return ResponseEntity.ok(user.getFavouriteAuctions());//get favouriteAuction List
+
+    }
+
+    public ResponseEntity<?> setUserFavouritesById(ModifyUserFavouritesDTO favouritesDTO) {
+        User foundUser = userRepository.findById(favouritesDTO.getUserId())// find user with dto userId
+                .orElseThrow(() -> new RuntimeException("User does not exist")); // if user cant be found
+        Auction foundAuction = auctionRepository.findById(favouritesDTO.getAuctionId())// find auction with dto auctionId
+                .orElseThrow(() -> new RuntimeException("Auction does not exist"));// if auction cant be found
+
+        for (Auction auction : foundUser.getFavouriteAuctions()) {
+            if (auction.getId().equals(favouritesDTO.getAuctionId())) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Auction already exist in favourites list...");
+            }
+        }
+        foundUser.addToFav(foundAuction); //add auction to fave list
+        userRepository.save(foundUser); //save user (updated favouriteList)
+        return ResponseEntity.ok("Auction was added to favourite list.");
+    }
+
+    public ResponseEntity<?> deleteUserFavouritesById(ModifyUserFavouritesDTO deleteFavouritesDto) {
+        User foundUser = userRepository.findById(deleteFavouritesDto.getUserId())
+                .orElseThrow(() -> new RuntimeException("User does not exist"));
+
+        // Loop through favorite list of user
+        for (Auction auction : foundUser.getFavouriteAuctions()) {
+            // If current auction id in loop match id in DTO
+            if (auction.getId().equals(deleteFavouritesDto.getAuctionId())) {
+                // Save found auction before removing, this was necessary otherwise it doesnt work
+                Auction foundAuctionToRemove = auction;
+                foundUser.getFavouriteAuctions().remove(foundAuctionToRemove);
+                userRepository.save(foundUser);
+                return ResponseEntity.ok("Auction removed from favourite list.");
+            }
+        }
+        return ResponseEntity.ok("Auction was not removed or does now exist in favourite-list");
+
+
+
+    }
 }
+

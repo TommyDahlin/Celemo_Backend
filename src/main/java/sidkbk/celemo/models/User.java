@@ -7,26 +7,28 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
 @Document(collection = "users")
 public class User {
 
+
     @Id
     private String id;
 
 
-/*
-    @NotBlank
-    //String
+    /*
+        @NotBlank
+        //String
 
-    @NotEmpty
-    //List
+        @NotEmpty
+        //List
 
-    @NotEmpty
-    //int
-*/
+        @NotEmpty
+        //int
+    */
     @NotBlank(message = "Username cannot be blank")
     private String username;
     @NotBlank(message = "password cannot be blank")
@@ -55,12 +57,10 @@ public class User {
     @NotBlank(message = "adress_city cannot be blank")
     private String adress_city;
 
-    // HELENA:
-    // det här en en DBRef till... String?
-    // ska nog vara en lista med Auction va?
-    @DBRef
-    private ArrayList<String> favourites = new ArrayList<String>();
 
+
+    @DBRef
+    private List<Auction> favouriteAuctions = new ArrayList<>();
 
 
     private double balance = 0d;
@@ -70,6 +70,17 @@ public class User {
     public User() {
 
     }
+
+
+    public void addToFav(Auction auction) {
+        favouriteAuctions.add(auction);
+    }
+
+    public void removeFromFav(Auction auction) {
+
+        favouriteAuctions.remove(auction);
+    }
+
 
     //return variable and change to string if necessary
     public String getFilter(String filter) {
@@ -95,9 +106,11 @@ public class User {
 
     }
 
+
     // det här ingår i Security genom BCrypt, jättebra att ni tänker på det men kom ihåg
     // att fundera över vad ni lägger er tid på nästa gång
     public void isPasswordCorrect(User user){
+
 
         Pattern UpperCasePattern = Pattern.compile("[A-Z ]");
 
@@ -108,13 +121,6 @@ public class User {
             throw new RuntimeException("ERROR: password must contain atleast one upperCase.");
         }
 
-    }
-
-    public void addFavourites (String favouritesId){
-        this.favourites.add(favouritesId);
-    }
-    public void removeFavourites (String favouritesId){
-        this.favourites.remove(favouritesId);
     }
 
 
@@ -236,4 +242,11 @@ public class User {
     }
 
 
+    public void setFavouriteAuctions(List<Auction> favouriteAuctions) {
+        this.favouriteAuctions = favouriteAuctions;
+    }
+
+    public List<Auction> getFavouriteAuctions() {
+        return favouriteAuctions;
+    }
 }
