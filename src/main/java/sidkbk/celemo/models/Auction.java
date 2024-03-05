@@ -15,16 +15,6 @@ public class Auction {
     // Everything from here to the comment of bids are required before we can post an auction to the database
     // sellerId is the user that makes the auction, the rest is self-explanatory.
 
-    //HELENA:
-    // vem är sellerId? och vem är user?
-    // är det dubbelt upp?
-    // eller är sellerId en annan säljare som är av typen String? och user kanske en annan säljare som är av typen User?
-    // har vi två säljare?
-    // wierd, right? ^^
-
-    // ni har ju en DBRef till User men ni bör döpa om fältet till:
-    // private User seller;
-    // i den Usern finns ju id? Så String sellerId ska väck härifrån
 
     // jag vet inte om ni någon gång mappar om Enum till strängar men säger det här i alla fall att det bör ni göra
     // det blir MYCKET lättare i så fall och ni kan enkelt lösa pagination med filtrering om ni skulle vilja det
