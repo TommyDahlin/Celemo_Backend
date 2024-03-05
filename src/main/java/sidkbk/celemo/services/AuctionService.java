@@ -38,8 +38,8 @@ public class AuctionService {
         User findUser = userRepository.findById(auctionCreationDTO.getSellerId())
                 .orElseThrow(() -> new RuntimeException("Couldn't find user."));
         Auction newAuction = new Auction();
-        newAuction.setSellerId(auctionCreationDTO.getSellerId());
-        newAuction.setUser(findUser);
+        newAuction.setSellerId(userRepository.findById(auctionCreationDTO.getSellerId()).get());
+        newAuction.setSellerId(findUser);
         newAuction.setTitle(auctionCreationDTO.getTitle());
         newAuction.setProductDescription(auctionCreationDTO.getProductDescription());
         newAuction.setProductPhoto(auctionCreationDTO.getProductPhoto());
@@ -53,7 +53,7 @@ public class AuctionService {
         return auctionRepository.findAll();
     }
 
-    // READ 1
+    // READ 1 from user
     public Auction getOneAuction(AuctionIdDTO auctionIdDTO){
        return auctionRepository.findById(auctionIdDTO.getAuctionId()).get();
     }
@@ -78,7 +78,7 @@ public class AuctionService {
         List<Auction> auctionList = auctionRepository.findAll();
         List<Auction> activeAuctionList = new ArrayList<>();
         for (int i = 0; i < auctionList.size(); i++) {
-            if (!auctionList.get(i).isFinished && Objects.equals(auctionList.get(i).getSellerId(), findUserIdDTO.getUserId())){
+            if (!auctionList.get(i).isFinished && Objects.equals(auctionList.get(i).getSeller(), findUserIdDTO.getUserId())){
                 activeAuctionList.add(auctionList.get(i));
             }
         }
@@ -88,7 +88,7 @@ public class AuctionService {
         List<Auction> auctionList = auctionRepository.findAll();
         List<Auction> finishedAuctionList = new ArrayList<>();
         for (int i = 0; i < auctionList.size(); i++) {
-            if (auctionList.get(i).isFinished && Objects.equals(auctionList.get(i).getSellerId(), findUserIdDTO.getUserId())){
+            if (auctionList.get(i).isFinished && Objects.equals(auctionList.get(i).getSeller(), findUserIdDTO.getUserId())){
                 finishedAuctionList.add(auctionList.get(i));
             }
         }

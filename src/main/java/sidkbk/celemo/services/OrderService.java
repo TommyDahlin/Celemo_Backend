@@ -37,7 +37,8 @@ public class OrderService {
     public Order createOrder(OrderCreationDTO orderCreationDTO) {
         Auction findAuction = auctionRepository.findById(orderCreationDTO.getAuctionId())
                 .orElseThrow(() -> new RuntimeException("Auction not found!"));
-        User findSellerId = userRepository.findById(findAuction.getSellerId()).get();
+        User findSellerId = userRepository.findById(findAuction.getSeller().getId())
+                .orElseThrow(() -> new RuntimeException("SellerId was not found"));
         User findBuyerId = userRepository.findById(orderCreationDTO.getBuyerId())
                 .orElseThrow(() -> new RuntimeException("BuyerId was not found"));
 
