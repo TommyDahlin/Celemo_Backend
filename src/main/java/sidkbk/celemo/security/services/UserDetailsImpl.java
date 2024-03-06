@@ -1,7 +1,6 @@
-package com.spring.security.security.services;
+package sidkbk.celemo.security.services;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.spring.security.models.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,6 +11,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class UserDetailsImpl implements UserDetails {
+
     private static final long serialVersionUID = 1L;
 
     private String id;
@@ -20,7 +20,6 @@ public class UserDetailsImpl implements UserDetails {
     @JsonIgnore
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
-
 
     public UserDetailsImpl(String id, String username, String email, String password,
                            Collection<? extends GrantedAuthority> authorities) {
@@ -43,7 +42,6 @@ public class UserDetailsImpl implements UserDetails {
                 user.getPassword(),
                 authorities);
     }
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
