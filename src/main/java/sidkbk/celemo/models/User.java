@@ -68,9 +68,13 @@ public class User {
     private double grade = 0d;
 
     public User() {
-
     }
 
+    public User(String username, String password, String email) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+    }
 
     public void addToFav(Auction auction) {
         favouriteAuctions.add(auction);
