@@ -1,0 +1,32 @@
+#######################################################################################################
+    POSTMAN AUTHCONTROLLER
+#######################################################################################################
+
+POST - Sign up user
+Body - raw
+{
+    "username": "SignupTest6",
+    "password": "12050154dD",
+    "email": "bingbong@gmail.com",
+    "dateOfBirth" : "2020-05-06",
+    "firstName" : "Testen",
+    "lastName": "testarensson",
+    "gender": "MALE",
+    "photo": "penis",
+    "adress_street": "Testgaten",
+    "adress_postalCode": "1337",
+    "adress_city": "Paradise city"
+}
+
+http://localhost:8080/api/auth/signup
+
+#######################################################################################################
+
+POST - Sign in as user
+Body - raw
+{
+    "username": "SignupTest6",
+    "password" "12050154dD"
+}
+
+#######################################################################################################
