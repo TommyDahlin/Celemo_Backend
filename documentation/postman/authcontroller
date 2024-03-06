@@ -5,17 +5,17 @@
 POST - Sign up user
 Body - raw
 {
-    "username": "SignupTest6",
-    "password": "12050154dD",
-    "email": "bingbong@gmail.com",
-    "dateOfBirth" : "2020-05-06",
-    "firstName" : "Testen",
-    "lastName": "testarensson",
+    "username": "min 3, max 20",
+    "password": "min 6, max 40",
+    "email": "email",
+    "dateOfBirth" : "åååå-mm-dd",
+    "firstName" : "firstName",
+    "lastName": "lastName",
     "gender": "MALE",
-    "photo": "penis",
-    "adress_street": "Testgaten",
-    "adress_postalCode": "1337",
-    "adress_city": "Paradise city"
+    "photo": "img.url",
+    "adress_street": "street",
+    "adress_postalCode": "postalCode",
+    "adress_city": "City"
 }
 
 http://localhost:8080/api/auth/signup
