@@ -24,6 +24,5 @@ public class SigninRequest {
         this.password = password;
     }
 
-    public String getUsername(){}
 
 }
