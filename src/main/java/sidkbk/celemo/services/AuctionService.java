@@ -19,9 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-//HELENA:
-// kan vi hitta EN auction som tillhör en specifik user?
-// kan vi hitta ALLA som tillhör en specifik user?
+
 
 @Service
 public class AuctionService {
