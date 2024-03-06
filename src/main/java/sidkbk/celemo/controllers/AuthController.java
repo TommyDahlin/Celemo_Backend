@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import sidkbk.celemo.models.EGender;
 import sidkbk.celemo.models.ERole;
 import sidkbk.celemo.models.Role;
 import sidkbk.celemo.models.User;
@@ -80,11 +81,18 @@ public class AuthController {
 
         User user = new User(signupRequest.getUsername(),
                 signupRequest.getEmail(),
-                encoder.encode(signupRequest.getPassword()));
-
+                encoder.encode(signupRequest.getPassword()), signupRequest.getDateOfBirth(), signupRequest.getPhoto(), signupRequest.getFirstName(), signupRequest.getLastName(), signupRequest.getAdress_street(), signupRequest.getAdress_postalCode(), signupRequest.getAdress_city());
+        user.setGender(signupRequest.getGender());
         Set<String> strRoles = signupRequest.getRoles();
         Set<Role> roles = new HashSet<>();
-
+        //checks that gender isn't null
+        if (user.getGender() == null) {
+            throw new RuntimeException("ERROR: no gender");
+        } else if (user.getGender().equals("MALE")) { //string to enum
+            user.setGender(EGender.MALE);
+        } else if (user.getGender().equals("FEMALE")) {//string to enum
+            user.setGender(EGender.FEMALE);
+        }
         if (strRoles == null) {
             Role userRole = roleRepository.findByName(ERole.ROLE_USER)
                     .orElseThrow(() -> new RuntimeException("Error: roles is not found"));
