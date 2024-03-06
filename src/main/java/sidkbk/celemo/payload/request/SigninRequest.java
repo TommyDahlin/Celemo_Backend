@@ -6,7 +6,8 @@ public class SigninRequest {
     @NotBlank
     public String username;
 
-    @NotBlank String password;
+    @NotBlank
+    String password;
 
     public String getUsername(){
         return username;
