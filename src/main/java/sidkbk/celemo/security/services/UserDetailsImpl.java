@@ -1,4 +1,6 @@
 package sidkbk.celemo.security.services;
 
-public class UserDetailsImpl {
+import org.springframework.security.core.userdetails.UserDetails;
+
+public class UserDetailsImpl implements UserDetails {
 }
