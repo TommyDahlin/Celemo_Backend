@@ -4,16 +4,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import sidkbk.celemo.dto.user.FindUserIdDTO;
 import sidkbk.celemo.dto.auctions.AuctionCreationDTO;
 import sidkbk.celemo.dto.auctions.AuctionIdDTO;
 import sidkbk.celemo.dto.auctions.AuctionUpdateDTO;
-import sidkbk.celemo.models.User;
+import sidkbk.celemo.dto.user.FindUserIdDTO;
 import sidkbk.celemo.models.Auction;
-import sidkbk.celemo.repositories.OrderRepository;
-import sidkbk.celemo.repositories.UserRepository;
+import sidkbk.celemo.models.User;
 import sidkbk.celemo.repositories.AuctionRepository;
 import sidkbk.celemo.repositories.BidsRepository;
+import sidkbk.celemo.repositories.OrderRepository;
+import sidkbk.celemo.repositories.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +51,11 @@ public class AuctionService {
     // READ ALL
     public List<Auction> getAllAuctions(){
         return auctionRepository.findAll();
+    }
+
+    // get All auctions from User
+    public List<Auction> getAllAuctionsFromUser(FindUserIdDTO findUserIdDTO) {
+        return auctionRepository.findAuctionBySeller(findUserIdDTO.getUserId());
     }
 
     // READ 1 from user
