@@ -1,5 +1,6 @@
 package sidkbk.celemo.dto.user;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import sidkbk.celemo.models.EGender;
 
@@ -10,13 +11,14 @@ import java.util.Set;
 public class CreateUserDTO {
     @NotBlank(message = "Username cannot be blank")
     private String username;
+    @Email
+    @NotBlank(message = "email cannot be blank")
+    private String email;
     @NotBlank(message = "password cannot be blank")
     private String password;
     //dateofbirth
     @NotBlank(message = "dateOfBirth cannot be blank")
     private String dateOfBirth;
-    @NotBlank(message = "email cannot be blank")
-    private String email;
     @NotBlank(message = "firstName cannot be blank")
     private String firstName;
     @NotBlank(message = "lastName cannot be blank")
