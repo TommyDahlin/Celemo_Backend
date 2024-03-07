@@ -52,7 +52,7 @@ public class BidsControllers {
         }
     }
     @GetMapping("/find/byauction")
-    public ResponseEntity<?> findByAuction(AuctionIdDTO auctionIdDTO) {
+    public ResponseEntity<?> findByAuction(@RequestBody AuctionIdDTO auctionIdDTO) {
         List<Bids> foundByAuction = bidsServices.findByAuction(auctionIdDTO);
         if (foundByAuction == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Could not find any bids");
