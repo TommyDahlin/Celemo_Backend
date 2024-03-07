@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import sidkbk.celemo.dto.order.DeleteOrderDTO;
 import sidkbk.celemo.dto.order.OrderCreationDTO;
@@ -25,6 +26,7 @@ public class OrderController {
 // ADMIN
 //////////////////////////////////////////////////////////////////////////////////////
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/find/all")
     public ResponseEntity<?> getAllOrders() {
         try {
@@ -34,6 +36,7 @@ public class OrderController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/find-one")
     public ResponseEntity<?> getOneOrder(@Valid @RequestBody OrderFoundByIdDTO orderFoundByIdDTO) {
         try {
@@ -46,7 +49,7 @@ public class OrderController {
 // SYSTEM
 //////////////////////////////////////////////////////////////////////////////////////
 
-    @PostMapping("/post")
+    @PostMapping("/create")
     public ResponseEntity<Order> createOrder(@Valid @RequestBody OrderCreationDTO orderCreationDTO) {
         Order newOrder = orderService.createOrder(orderCreationDTO);
         return new ResponseEntity<>(newOrder, HttpStatus.CREATED);

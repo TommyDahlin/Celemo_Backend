@@ -26,7 +26,7 @@ public class BidsControllers {
 //////////////////////////////////////////////////////////////////////////////////////
 
     // Post a new Bid
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PostMapping("/create")
     public ResponseEntity<?> createBids(@RequestBody BidsDTO bidsDTO){
         try {
@@ -37,7 +37,7 @@ public class BidsControllers {
     }
 
     //Update by id
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateBids(@RequestBody BidsDTO bidsDTO, @PathVariable("id") String _id) {
         try {
@@ -48,7 +48,7 @@ public class BidsControllers {
     }
 
     // find all bid for one user
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping("/find/all-user")
     public ResponseEntity<?> findAllBidsForUser(@Valid @RequestBody FindUserIdDTO findUserIdDTO){
         List<Bids> foundBids = bidsServices.findAllBidsForUser(findUserIdDTO);
@@ -63,7 +63,7 @@ public class BidsControllers {
 //////////////////////////////////////////////////////////////////////////////////////
 
     //Find by BidId
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/find-one")
     public ResponseEntity<?> findOne(@Valid @RequestBody FindBidIdDTO findBidIdDTO){
         try {
@@ -74,7 +74,7 @@ public class BidsControllers {
     }
 
     // find all bids
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/find/all")
     public ResponseEntity<?> findAllBids() {
         try {
@@ -85,7 +85,7 @@ public class BidsControllers {
     }
 
     //Delete by id
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/delete")
     public ResponseEntity<?> deleteBids(@Valid @RequestBody FindBidIdDTO findBidIdDTO){
         try {

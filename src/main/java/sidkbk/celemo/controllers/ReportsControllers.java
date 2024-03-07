@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import sidkbk.celemo.dto.reports.*;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
@@ -18,11 +19,9 @@ public class ReportsControllers {
 // USER
 //////////////////////////////////////////////////////////////////////////////////////
 
-// ADMIN
-//////////////////////////////////////////////////////////////////////////////////////
-
     //Post a new report for a user
-    @PostMapping("/post/report/user")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PostMapping("/report/user")
     public ResponseEntity<?> createReportUser(@Valid @RequestBody ReportsUserDTO rUDTO){
         try {
             return reportsServices.createReportUser(rUDTO);
@@ -32,7 +31,8 @@ public class ReportsControllers {
     }
 
     //Post a new report for an auction
-    @PostMapping("/post/report/auction")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PostMapping("/report/auction")
     public ResponseEntity<?> createReportAuction(@Valid @RequestBody ReportsAuctionDTO rADTO){
         try {
             return reportsServices.createReportAuction(rADTO);
@@ -41,8 +41,12 @@ public class ReportsControllers {
         }
     }
 
+// ADMIN
+//////////////////////////////////////////////////////////////////////////////////////
+
     //Find a report by id
-    @GetMapping("/find")
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/find-one")
     public ResponseEntity<?> findOne(@Valid @RequestBody ReportsFindDTO reportsFindDTO) {
         try {
             return reportsServices.findOne(reportsFindDTO);
@@ -52,6 +56,7 @@ public class ReportsControllers {
     }
 
     // Find all reports
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/find/all")
     public ResponseEntity<?> findAllReports(){
         try {
@@ -62,7 +67,8 @@ public class ReportsControllers {
     }
 
     //update report
-    @PutMapping("/put")
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/update")
     public ResponseEntity<?> updateReport(@RequestBody ReportsPutDTO reportsPutDTO) {
         try {
             return reportsServices.updateReport(reportsPutDTO);
@@ -70,11 +76,11 @@ public class ReportsControllers {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
+
     // Delete by id
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/delete")
     public ResponseEntity<?> deleteReport(@RequestBody ReportsDeleteDTO reportsDeleteDTO) {
-
-            return reportsServices.deleteReport(reportsDeleteDTO);
-
+        return reportsServices.deleteReport(reportsDeleteDTO);
     }
 }
