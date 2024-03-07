@@ -9,12 +9,7 @@ import sidkbk.celemo.dto.user.*;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.*;
 
-import sidkbk.celemo.repositories.AuctionRepository;
-
-import sidkbk.celemo.repositories.ReviewsRepo;
-
-import sidkbk.celemo.repositories.RoleRepository;
-import sidkbk.celemo.repositories.UserRepository;
+import sidkbk.celemo.repositories.*;
 
 import java.util.*;
 
@@ -28,6 +23,8 @@ public class UserService {
     ReviewsRepo reviewsRepository;
     @Autowired
     AuctionRepository auctionRepository;
+    @Autowired
+    OrderRepository orderRepository;
 
 
     // HELENA:
@@ -151,8 +148,24 @@ public class UserService {
         }
         return ResponseEntity.ok("Auction was not removed or does now exist in favourite-list");
 
-
-
     }
+
+    public List<Order> findAllOrderForOneUser(FindUserIdDTO findUserIdDTO) {
+        //Find user using id
+        userRepository.findById(findUserIdDTO.getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        //Skapa en tom lista för hitta order
+        List<Order> foundOrder = new ArrayList<>();
+        //spare all order i en lista
+        List<Order> allOrder = orderRepository.findAll();
+
+        for (Order order : allOrder) {
+            if (order.getBuyerAccount() != null && order.getBuyerAccount().equals(findUserIdDTO.getUserId())) {
+                foundOrder.add(order);
+            }
+        }
+        return allOrder;
+    }
+
 }
 
