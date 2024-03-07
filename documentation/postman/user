@@ -34,6 +34,12 @@ http://localhost:8080/api/user/find
 
 ****************************************************
 
+// get only username and email from all users
+
+http://localhost:8080/api/user/find/all/username-email
+
+****************************************************
+
 // delete
 
 http://localhost:8080/api/user/delete

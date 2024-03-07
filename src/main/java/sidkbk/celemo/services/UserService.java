@@ -8,15 +8,16 @@ import org.springframework.stereotype.Service;
 import sidkbk.celemo.dto.user.*;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.*;
-
 import sidkbk.celemo.repositories.AuctionRepository;
-
 import sidkbk.celemo.repositories.ReviewsRepo;
-
 import sidkbk.celemo.repositories.RoleRepository;
 import sidkbk.celemo.repositories.UserRepository;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -95,6 +96,20 @@ public class UserService {
     // get/find all user accounts
     public List<User> getAllUsers() {
         return userRepository.findAll();
+    }
+
+    //get all username and mail
+    public List<String> getAllUsernameAndEmail() {
+
+        try {
+            return userRepository.findAll()
+                    .stream()
+                    .map(User::getUsernameAndEmail)
+                    .collect(Collectors.toList());
+        } catch (NullPointerException e) {
+            throw new NullPointerException("no users found");
+        }
+
     }
 
     //find user variable with filter. For example : grade
@@ -193,19 +208,19 @@ public class UserService {
     }
 
 
-
     // delete user account
     public ResponseEntity<String> deleteUser(DeleteUserDTO deleteUserDTO) {
         userRepository.findById(deleteUserDTO.getUserId())
                 .orElseThrow(() -> new RuntimeException("User does not exist"));
-              // Function to remove reviews referencing reviewed user
+        // Function to remove reviews referencing reviewed user
         List<Reviews> findReviews = reviewsRepository.findAll();
         for (int i = 0; i < findReviews.size(); i++) {
             if (findReviews.get(i).getReviewedUser().getId().equals(deleteUserDTO.getUserId())) {
                 reviewsRepository.deleteById(findReviews.get(i).getId());
             }
             userRepository.deleteById(deleteUserDTO.getUserId());
-        }return ResponseEntity.ok("User deleted");
+        }
+        return ResponseEntity.ok("User deleted");
     }
 
 
@@ -248,7 +263,6 @@ public class UserService {
             }
         }
         return ResponseEntity.ok("Auction was not removed or does now exist in favourite-list");
-
 
 
     }

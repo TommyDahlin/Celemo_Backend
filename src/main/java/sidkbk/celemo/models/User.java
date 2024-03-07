@@ -128,6 +128,11 @@ public class User {
         return username;
     }
 
+    public String getUsernameAndEmail(){
+
+        return getUsername() + " , " + getEmail();
+    }
+
     public void setUsername(String username) {
         this.username = username;
     }

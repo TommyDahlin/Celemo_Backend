@@ -48,6 +48,16 @@ public class UserController {
         }
     }
 
+    // find all/get all accounts
+    @GetMapping("/find/all/username-email")
+    public ResponseEntity<?> getAllUsernameAndEmail(){
+        try {
+            return ResponseEntity.ok(userService.getAllUsernameAndEmail());
+        } catch(EntityNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No users");
+        }
+    }
+
     //get average grade, find user by id, filter out what you want to get from a user
     @GetMapping("findfilter")
     public ResponseEntity<?> getUserFilter(@Valid @RequestBody FindUserIdandFilterDTO findUserIdandFilterDTO){
