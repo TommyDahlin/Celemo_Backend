@@ -57,11 +57,8 @@ public class WebSecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/auction/find/all").permitAll()
-                        .requestMatchers("/auction/create").hasAnyRole("USER")
-                        .requestMatchers("/auction/update").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers("/auction/delete").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/**").permitAll()
+                        .requestMatchers("/auction/**").permitAll()
                                 .anyRequest().authenticated()
                 );
 

@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import sidkbk.celemo.dto.auctions.AuctionCreationDTO;
 import sidkbk.celemo.dto.auctions.AuctionIdDTO;
@@ -35,6 +36,7 @@ public class AuctionController {
 //////////////////////////////////////////////////////////////////////////////////////
 
     // POST create new auction
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PostMapping("/create")
     public ResponseEntity<?> createAuction(@Valid @RequestBody AuctionCreationDTO auctionCreationDTO) {
         try{
