@@ -13,7 +13,7 @@ import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.services.AuctionService;
 
 @RestController
-@RequestMapping(value = "/auction")
+@RequestMapping(value = "/api/auction")
 public class AuctionController {
 
     @Autowired
@@ -36,7 +36,7 @@ public class AuctionController {
 //////////////////////////////////////////////////////////////////////////////////////
 
     // POST create new auction
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/create")
     public ResponseEntity<?> createAuction(@Valid @RequestBody AuctionCreationDTO auctionCreationDTO) {
         try{
@@ -47,6 +47,7 @@ public class AuctionController {
     }
 
     // PUT update an auction
+    @PreAuthorize("hasRole('USER')")
     @PutMapping("/update")
     public ResponseEntity<?> updateAuction(@Valid @RequestBody AuctionUpdateDTO auctionUpdateDTO) {
         try {
@@ -57,6 +58,7 @@ public class AuctionController {
     }
 
     // DELETE an auction
+    @PreAuthorize("hasRole('USER')")
     @DeleteMapping("/delete")
     public ResponseEntity<?> deleteAuction(@Valid @RequestBody AuctionIdDTO auctionIdDTO) {
         return auctionService.deleteAuction(auctionIdDTO);
@@ -66,6 +68,7 @@ public class AuctionController {
 //////////////////////////////////////////////////////////////////////////////////////
 
     // GET one auction
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping("/find-one")
     public ResponseEntity<?> getAuction(@Valid @RequestBody AuctionIdDTO auctionIdDTO) {
         try {
