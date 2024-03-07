@@ -8,8 +8,12 @@ import org.springframework.web.bind.annotation.*;
 import sidkbk.celemo.dto.auctions.AuctionCreationDTO;
 import sidkbk.celemo.dto.auctions.AuctionIdDTO;
 import sidkbk.celemo.dto.auctions.AuctionUpdateDTO;
+import sidkbk.celemo.dto.user.FindUserIdDTO;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
+import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.services.AuctionService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/auction")
@@ -37,6 +41,19 @@ public class AuctionController {
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
+    }
+
+    // Get all auctions from user
+    @GetMapping("/find/all/user")
+    public ResponseEntity<?> getAllAuctionsFromUser(@Valid @RequestBody FindUserIdDTO findUserIdDTO) {
+
+        List<Auction> foundAuctions = auctionService.getAllAuctionsFromUser(findUserIdDTO);
+        if (foundAuctions.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User does not have any auctions...");
+        } else {
+            return ResponseEntity.ok(foundAuctions);
+        }
+
     }
 
     // GET one auction
