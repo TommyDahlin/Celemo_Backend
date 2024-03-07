@@ -17,6 +17,7 @@ import sidkbk.celemo.repositories.RoleRepository;
 import sidkbk.celemo.repositories.UserRepository;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -95,6 +96,14 @@ public class UserService {
     // get/find all user accounts
     public List<User> getAllUsers() {
         return userRepository.findAll();
+    }
+
+    public ResponseEntity<?> getAllUsernameAndEmail(FindAllByIdDTO findAllByIdDTO){
+        List<User> findAllById = userRepository.findAllById(findAllByIdDTO.getId());
+        if (findAllById.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No user found");
+        }
+        return ResponseEntity.ok(findAllById.stream().map(User::getUsername).collect(Collectors.toList()));
     }
 
     //find user variable with filter. For example : grade
