@@ -125,14 +125,6 @@ public class UserController {
     }
 
 
-    @GetMapping("/find/user-orders")
-    public ResponseEntity<?>findAllOrderForOneUser(@Valid @RequestBody FindUserIdDTO findUserIdDTO){
-        List<Order> foundOrder = userService.findAllOrderForOneUser(findUserIdDTO);
-        if (foundOrder.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no order found");
-        }else {
-            return ResponseEntity.ok().body(foundOrder);
-        }
-    }
+
 
 }

@@ -150,21 +150,7 @@ public class UserService {
 
     }
 
-    public List<Order> findAllOrderForOneUser(FindUserIdDTO findUserIdDTO) {
-        //Find user using id
-        userRepository.findById(findUserIdDTO.getUserId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        //Skapa en tom lista för hitta order
-        List<Order> foundOrder = new ArrayList<>();
-        //spare all order i en lista
-        List<Order> allOrder = orderRepository.findAll();
-        for (Order order : allOrder) {
-            if (order.getBuyerAccount() != null && order.getBuyerAccount().getId().equals(findUserIdDTO.getUserId())) {
-                foundOrder.add(order);
-            }
-        }
-        return allOrder;
-    }
+
 
 }
 
