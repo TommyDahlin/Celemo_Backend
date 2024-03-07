@@ -45,11 +45,15 @@ public class BidsServices {
         // gets DTO, checks auction id from auction-repo
         Auction foundAuction = auctionRepository.findById(bidsDTO.getAuctionId())
                 .orElseThrow(()-> new RuntimeException("Auction does not exist!"));
-
+        User auctionOwner = userRepository.findById(foundAuction.getSeller().getId()).get();
+        if (foundUser.getUsername().equals(auctionOwner.getUsername())) {
+            throw new RuntimeException("You can't bid on your own auction");
+        }
         // makes new bid object
         Bids newBid = new Bids();
         // sets user found from DTO ID
         newBid.setUser(foundUser);
+
         // sets auction from found bid on auction which might try to find the bid from the auction and the auction has the bid
         // newBid.setAuction(foundAuction);
 
@@ -86,7 +90,6 @@ public class BidsServices {
                 Bids auctionCurrentBid = bidsRepository.findById(foundAuction.getBid().getId()).get();
 
                 User currentBidUser = userRepository.findById(auctionCurrentBid.getUser().getId()).get();
-
                 // checks if new bid is less than the current
                 if (newBid.getMaxPrice() < auctionCurrentBid.getMaxPrice()) {
                     // Raises by 10 if possible
