@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import sidkbk.celemo.dto.Reviews.*;
 import sidkbk.celemo.dto.user.FindUserIdDTO;
@@ -20,36 +21,8 @@ public class ReviewsController {
     @Autowired
     ReviewsService reviewsService;
 
-    // GET all reviews
-    @GetMapping("/find/all")
-    public ResponseEntity<?> listAllReviews() {
-        try {
-            return ResponseEntity.ok(reviewsService.listAllReviews());
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-    }
-
-    // GET all reviews WITH paging
-    @GetMapping("/find/all/page/{pagenumber}")
-    public ResponseEntity<?> listAllReviewsPage(@PathVariable("pagenumber") int pageNr,
-                                                @RequestBody ReviewsPageSizeDTO reviewsPageSizeDTO) {
-        try {
-            return ResponseEntity.ok(reviewsService.listAllReviewsPage(pageNr, reviewsPageSizeDTO));
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-    }
-
-    // GET one specific review
-    @GetMapping("/find")
-    public ResponseEntity<?> listOneSpecificReview(@Valid @RequestBody ReviewsFindDTO reviewsFindDTO) {
-        try {
-            return reviewsService.listOneSpecificReview(reviewsFindDTO);
-        }  catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-    }
+// PUBLIC
+//////////////////////////////////////////////////////////////////////////////////////
 
     // GET all reviews for specific reviewed user
     @GetMapping("/find/all-user")
@@ -115,14 +88,64 @@ public class ReviewsController {
         return reviewsService.reviewedUserSortByGradeAndPage(pageNr, reviewsGetByGradesDTO);
     }
 
+// USER
+//////////////////////////////////////////////////////////////////////////////////////
+
     // POST add a review dto
-    @PostMapping("/post")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PostMapping("/create")
     public ResponseEntity<?> addReview(@Valid @RequestBody ReviewsDTO reviewsDTO) {
-            Reviews newReview = reviewsService.addReview(reviewsDTO);
-            return ResponseEntity.ok(newReview);
+        Reviews newReview = reviewsService.addReview(reviewsDTO);
+        return ResponseEntity.ok(newReview);
+    }
+
+    // PUT Update a review dto
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PutMapping("/update")
+    public ResponseEntity<?> updateReview(@RequestBody ReviewsPutDTO updateReviewsDTO) {
+
+        return ResponseEntity.ok(reviewsService.updateReview(updateReviewsDTO));
+    }
+
+// ADMIN
+//////////////////////////////////////////////////////////////////////////////////////
+
+    // GET all reviews
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/find/all")
+    public ResponseEntity<?> listAllReviews() {
+        try {
+            return ResponseEntity.ok(reviewsService.listAllReviews());
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    // GET all reviews WITH paging
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/find/all/page/{pagenumber}")
+    public ResponseEntity<?> listAllReviewsPage(@PathVariable("pagenumber") int pageNr,
+                                                @RequestBody ReviewsPageSizeDTO reviewsPageSizeDTO) {
+        try {
+            return ResponseEntity.ok(reviewsService.listAllReviewsPage(pageNr, reviewsPageSizeDTO));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    // GET one specific review
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/find-one")
+    public ResponseEntity<?> listOneSpecificReview(@Valid @RequestBody ReviewsFindDTO reviewsFindDTO) {
+        try {
+            return reviewsService.listOneSpecificReview(reviewsFindDTO);
+        }  catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
     // DELETE Delete a review dto
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/delete")
     public ResponseEntity<?> deleteReview(@Valid @RequestBody ReviewsDeleteDTO reviewsDeleteDTO) {
         try {
@@ -130,20 +153,11 @@ public class ReviewsController {
         } catch(EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
-
     }
 
-    // PUT Update a review dto
-    @PutMapping("/put")
-    public ResponseEntity<?> updateReview(@RequestBody ReviewsPutDTO updateReviewsDTO) {
-
-        return ResponseEntity.ok(reviewsService.updateReview(updateReviewsDTO));
-    }
-
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/delete/all")
     public void deleteAllReviews(){
         reviewsService.deleteAllReviews();
     }
-
-
 }
