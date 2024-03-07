@@ -17,6 +17,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -98,8 +99,12 @@ public class UserService {
     }
 
     //get all username and mail
-    public ResponseEntity<User> getAllUsernameAndEmail(FindUsernameAndEmailDTO findUsernameAndEmailDTO){
-        return null;
+    public List<String> getAllUsernameAndEmail() {
+
+        return userRepository.findAll()
+                .stream()
+                .map(User::getUsernameAndEmail)
+                .collect(Collectors.toList());
 
     }
 
@@ -199,19 +204,19 @@ public class UserService {
     }
 
 
-
     // delete user account
     public ResponseEntity<String> deleteUser(DeleteUserDTO deleteUserDTO) {
         userRepository.findById(deleteUserDTO.getUserId())
                 .orElseThrow(() -> new RuntimeException("User does not exist"));
-              // Function to remove reviews referencing reviewed user
+        // Function to remove reviews referencing reviewed user
         List<Reviews> findReviews = reviewsRepository.findAll();
         for (int i = 0; i < findReviews.size(); i++) {
             if (findReviews.get(i).getReviewedUser().getId().equals(deleteUserDTO.getUserId())) {
                 reviewsRepository.deleteById(findReviews.get(i).getId());
             }
             userRepository.deleteById(deleteUserDTO.getUserId());
-        }return ResponseEntity.ok("User deleted");
+        }
+        return ResponseEntity.ok("User deleted");
     }
 
 
@@ -254,7 +259,6 @@ public class UserService {
             }
         }
         return ResponseEntity.ok("Auction was not removed or does now exist in favourite-list");
-
 
 
     }
