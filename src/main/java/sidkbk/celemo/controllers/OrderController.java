@@ -19,12 +19,11 @@ public class OrderController {
     @Autowired
     OrderService orderService;
 
+// USER
+//////////////////////////////////////////////////////////////////////////////////////
 
-   @PostMapping("/post")
-    public ResponseEntity<Order> createOrder(@Valid @RequestBody OrderCreationDTO orderCreationDTO) {
-       Order newOrder = orderService.createOrder(orderCreationDTO);
-       return new ResponseEntity<>(newOrder, HttpStatus.CREATED);
-    }
+// ADMIN
+//////////////////////////////////////////////////////////////////////////////////////
 
     @GetMapping("/find/all")
     public ResponseEntity<?> getAllOrders() {
@@ -35,7 +34,7 @@ public class OrderController {
         }
     }
 
-    @GetMapping("/find")
+    @GetMapping("/find-one")
     public ResponseEntity<?> getOneOrder(@Valid @RequestBody OrderFoundByIdDTO orderFoundByIdDTO) {
         try {
             return ResponseEntity.ok(orderService.getOneOrder(orderFoundByIdDTO));
@@ -44,7 +43,18 @@ public class OrderController {
         }
     }
 
-    @DeleteMapping("/delete")
+// SYSTEM
+//////////////////////////////////////////////////////////////////////////////////////
+
+    @PostMapping("/post")
+    public ResponseEntity<Order> createOrder(@Valid @RequestBody OrderCreationDTO orderCreationDTO) {
+        Order newOrder = orderService.createOrder(orderCreationDTO);
+        return new ResponseEntity<>(newOrder, HttpStatus.CREATED);
+    }
+
+
+/////////////// REMOVE LATER ///////////////////////
+    @DeleteMapping("/dev/delete")
     public ResponseEntity<?> deleteOrder(@Valid @RequestBody DeleteOrderDTO deleteOrderDTO) {
             return orderService.deleteOrder(deleteOrderDTO);
     }
