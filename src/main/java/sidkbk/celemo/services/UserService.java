@@ -101,10 +101,14 @@ public class UserService {
     //get all username and mail
     public List<String> getAllUsernameAndEmail() {
 
-        return userRepository.findAll()
-                .stream()
-                .map(User::getUsernameAndEmail)
-                .collect(Collectors.toList());
+        try {
+            return userRepository.findAll()
+                    .stream()
+                    .map(User::getUsernameAndEmail)
+                    .collect(Collectors.toList());
+        } catch (NullPointerException e) {
+            throw new NullPointerException("no users found");
+        }
 
     }
 
