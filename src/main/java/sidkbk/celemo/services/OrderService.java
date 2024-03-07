@@ -49,7 +49,8 @@ public class OrderService {
         newOrder.setProductTitle(findAuction.getTitle());
         newOrder.setEndPrice(findAuction.getEndPrice());
         newOrder.setCreatedAt(orderCreationDTO.getCreatedAt());
-
+        findAuction.setFinished(true);
+        auctionRepository.save(findAuction);
         return orderRepository.save(newOrder);
     }
 
