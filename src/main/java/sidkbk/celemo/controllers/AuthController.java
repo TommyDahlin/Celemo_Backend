@@ -76,6 +76,11 @@ public class AuthController {
                     .badRequest()
                     .body(new MessageResponse("Error: username already exists!"));
         }
+        if (userRepository.existsByEmail((signupRequest.getEmail()))) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: email already exists!"));
+        }
 
         // create user account
 

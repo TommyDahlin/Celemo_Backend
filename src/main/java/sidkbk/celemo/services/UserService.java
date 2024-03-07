@@ -54,15 +54,6 @@ public class UserService {
         return userRepository.findById(findUserIdDTO.getUserId());
     }
 
-    //HELENA:
-    // ska en user verkligen få uppdatera sin roll? det känns inte så bra...
-    // fundera på:
-    // vad ska en admin få uppdatera på en user?
-    // vad ska en user få uppdatera om sig själv?
-
-    // dessutom kan ni göra det lite snyggare och ta bort era 1000 ifs med det här :)
-    // Optional.ofNullable(updateUserDTO.getUsername()).ifPresent(existingUser::setUsername);
-    // går att göra likadant för varje rad
 
     // PUT/update user account. checks that new value isn't empty before adding. If something is empty then it will throw EntityNotFoundException
     public User updateUser(UpdateUserDTO updateUserDTO) {
