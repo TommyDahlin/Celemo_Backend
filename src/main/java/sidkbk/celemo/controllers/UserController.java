@@ -27,16 +27,6 @@ public class UserController {
     @Autowired
     private OrderService orderService;
 
-    // post/add account/user
-    @PostMapping("/post")
-    public ResponseEntity<?> addUser(@Valid @RequestBody CreateUserDTO createUserDTO){
-
-        try {
-            return ResponseEntity.ok(userService.createUser(createUserDTO));
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-    }
 
     // find all/get all accounts
     @GetMapping("/find/all")

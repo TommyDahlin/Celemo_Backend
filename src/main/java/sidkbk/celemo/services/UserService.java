@@ -37,61 +37,6 @@ public class UserService {
     // den bör inte heller ligga i en UserService utan i så fall => AuthService
 
 
-    // create/add/post user account
-    public User createUser(CreateUserDTO createUserDTO) {
-        User user = new User();
-        user.setUsername(createUserDTO.getUsername());
-        user.setPassword(createUserDTO.getPassword());
-        user.setDateOfBirth(createUserDTO.getDateOfBirth());
-        user.setEmail(createUserDTO.getEmail());
-        user.setFirstName(createUserDTO.getFirstName());
-        user.setLastName(createUserDTO.getLastName());
-        user.setAdress_city(createUserDTO.getAdress_city());
-        user.setAdress_street(createUserDTO.getAdress_street());
-        user.setAdress_postalCode(createUserDTO.getAdress_postalCode());
-        user.setGender(createUserDTO.getGender());
-        //checks if  password is longer than 8 chars and contains atleast one upperCase
-        user.isPasswordCorrect(user);
-
-        //checks that gender isn't null
-        if (user.getGender() == null) {
-            throw new RuntimeException("ERROR: no gender");
-        } else if (user.getGender().equals("MALE")) { //string to enum
-            user.setGender(EGender.MALE);
-        } else if (user.getGender().equals("FEMALE")) {//string to enum
-            user.setGender(EGender.FEMALE);
-        }
-
-        Set<Role> roles = new HashSet<>();
-        Set<String> strRoles = createUserDTO.getUsersRoles();
-        if (strRoles.isEmpty()) {
-            Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                    .orElseThrow(() -> new RuntimeException("Error: role is not found"));
-            roles.add(userRole);
-            user.setRoles(roles);
-        } else {
-            strRoles.forEach(role -> {
-                switch (role) {
-                    case "ADMIN" -> {
-                        Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-                                .orElseThrow(() -> new RuntimeException("Error: Admin Role couldn't be found"));
-                        roles.add(adminRole);
-                        user.setRoles(roles);
-                    }
-                    case "USER" -> {
-                        Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                                .orElseThrow(() -> new RuntimeException("Error: Role couldn't be found"));
-                        roles.add(userRole);
-                        user.setRoles(roles);
-                    }
-                }
-            });
-
-        }
-
-        return userRepository.save(user);
-    }
-
     // get/find all user accounts
     public List<User> getAllUsers() {
         return userRepository.findAll();
