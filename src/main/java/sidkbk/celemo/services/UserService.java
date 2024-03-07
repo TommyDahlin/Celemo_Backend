@@ -158,9 +158,8 @@ public class UserService {
         List<Order> foundOrder = new ArrayList<>();
         //spare all order i en lista
         List<Order> allOrder = orderRepository.findAll();
-
         for (Order order : allOrder) {
-            if (order.getBuyerAccount() != null && order.getBuyerAccount().equals(findUserIdDTO.getUserId())) {
+            if (order.getBuyerAccount() != null && order.getBuyerAccount().getId().equals(findUserIdDTO.getUserId())) {
                 foundOrder.add(order);
             }
         }
