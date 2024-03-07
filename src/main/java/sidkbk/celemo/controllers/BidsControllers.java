@@ -21,8 +21,11 @@ public class BidsControllers {
     @Autowired
     BidsServices bidsServices;
 
+// USER
+//////////////////////////////////////////////////////////////////////////////////////
+
     // Post a new Bid
-    @PostMapping("/post")
+    @PostMapping("/create")
     public ResponseEntity<?> createBids(@RequestBody BidsDTO bidsDTO){
         try {
             return bidsServices.createBids(bidsDTO);
@@ -31,8 +34,32 @@ public class BidsControllers {
         }
     }
 
+    //Update by id
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> updateBids(@RequestBody BidsDTO bidsDTO, @PathVariable("id") String _id) {
+        try {
+            return  ResponseEntity.ok(bidsServices.updateBids(bidsDTO));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    // find all bid for one user
+    @GetMapping("/find/all-user")
+    public ResponseEntity<?> findAllBidsForUser(@Valid @RequestBody FindUserIdDTO findUserIdDTO){
+        List<Bids> foundBids = bidsServices.findAllBidsForUser(findUserIdDTO);
+        if (foundBids.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no bids found");
+        }else{
+            return ResponseEntity.ok().body(foundBids);
+        }
+    }
+
+// ADMIN
+//////////////////////////////////////////////////////////////////////////////////////
+
     //Find by BidId
-    @GetMapping("/find")
+    @GetMapping("/find-one")
     public ResponseEntity<?> findOne(@Valid @RequestBody FindBidIdDTO findBidIdDTO){
         try {
             return ResponseEntity.ok(bidsServices.findOne(findBidIdDTO));
@@ -51,18 +78,6 @@ public class BidsControllers {
         }
     }
 
-    //Update by id
-    @PutMapping("/put/{id}")
-    public ResponseEntity<?> updateBids(@RequestBody BidsDTO bidsDTO, @PathVariable("id") String _id) {
-        try {
-            return  ResponseEntity.ok(bidsServices.updateBids(bidsDTO));
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-    }
-
-
-
     //Delete by id
     @DeleteMapping("/delete")
     public ResponseEntity<?> deleteBids(@Valid @RequestBody FindBidIdDTO findBidIdDTO){
@@ -70,19 +85,6 @@ public class BidsControllers {
             return ResponseEntity.ok(bidsServices.deleteBids(findBidIdDTO));
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-    }
-
-
-    // find all bid for one user
-
-    @GetMapping("/find/all-user")
-    public ResponseEntity<?> findAllBidsForUser(@Valid @RequestBody FindUserIdDTO findUserIdDTO){
-        List<Bids> foundBids = bidsServices.findAllBidsForUser(findUserIdDTO);
-        if (foundBids.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no bids found");
-        }else{
-            return ResponseEntity.ok().body(foundBids);
         }
     }
 }
