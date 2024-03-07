@@ -8,6 +8,7 @@ import sidkbk.celemo.dto.order.DeleteOrderDTO;
 import sidkbk.celemo.dto.order.OrderCreationDTO;
 import sidkbk.celemo.dto.order.OrderFoundByIdDTO;
 import sidkbk.celemo.dto.order.PreviousPurchaseFromOrderDTO;
+import sidkbk.celemo.dto.user.FindUserIdDTO;
 import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.models.Order;
 import sidkbk.celemo.models.User;
@@ -98,4 +99,23 @@ public class OrderService {
         orderRepository.deleteById(deleteOrderDTO.getOrderId());
         return ResponseEntity.status(HttpStatus.OK).body("Order was deleted successfully!");
     }
+
+
+    public List<Order> findAllOrderForOneUser(FindUserIdDTO findUserIdDTO) {
+        //Find user using id
+        userRepository.findById(findUserIdDTO.getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        //Skapa en tom lista för hitta order
+        List<Order> foundOrder = new ArrayList<>();
+        //spare all order i en lista
+        List<Order> allOrder = orderRepository.findAll();
+        for (Order order : allOrder) {
+            if (order.getBuyerAccount() != null && order.getBuyerAccount().getId().equals(findUserIdDTO.getUserId())) {
+                foundOrder.add(order);
+            }
+        }
+        return allOrder;
+    }
+
+
 }

@@ -9,12 +9,7 @@ import sidkbk.celemo.dto.user.*;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.*;
 
-import sidkbk.celemo.repositories.AuctionRepository;
-
-import sidkbk.celemo.repositories.ReviewsRepo;
-
-import sidkbk.celemo.repositories.RoleRepository;
-import sidkbk.celemo.repositories.UserRepository;
+import sidkbk.celemo.repositories.*;
 
 import java.util.*;
 
@@ -28,6 +23,8 @@ public class UserService {
     ReviewsRepo reviewsRepository;
     @Autowired
     AuctionRepository auctionRepository;
+    @Autowired
+    OrderRepository orderRepository;
 
 
     // HELENA:
@@ -142,8 +139,9 @@ public class UserService {
         }
         return ResponseEntity.ok("Auction was not removed or does now exist in favourite-list");
 
-
-
     }
+
+
+
 }
 
