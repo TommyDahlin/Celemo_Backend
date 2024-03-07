@@ -19,7 +19,7 @@ http://localhost:8080/api/reviews/find/all/page/0       <--- Change for page num
 
 // GET list of one specific review
 ***********************************
-http://localhost:8080/api/reviews/find
+http://localhost:8080/api/reviews/find-one
 
 Body - raw
     {
@@ -30,7 +30,7 @@ Body - raw
 
 // POST add a review
 ***********************************
-http://localhost:8080/api/reviews/post
+http://localhost:8080/api/reviews/create
 
 Body - raw
     {
@@ -55,7 +55,7 @@ Body - raw
 
 // PUT Update a review
 ***********************************
-http://localhost:8080/api/reviews/put
+http://localhost:8080/api/reviews/update
 
 Body - raw
     {

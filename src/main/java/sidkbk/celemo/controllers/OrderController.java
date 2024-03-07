@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import sidkbk.celemo.dto.order.DeleteOrderDTO;
 import sidkbk.celemo.dto.order.OrderCreationDTO;
@@ -22,13 +23,13 @@ public class OrderController {
     @Autowired
     OrderService orderService;
 
+// USER
+//////////////////////////////////////////////////////////////////////////////////////
 
-   @PostMapping("/post")
-    public ResponseEntity<Order> createOrder(@Valid @RequestBody OrderCreationDTO orderCreationDTO) {
-       Order newOrder = orderService.createOrder(orderCreationDTO);
-       return new ResponseEntity<>(newOrder, HttpStatus.CREATED);
-    }
+// ADMIN
+//////////////////////////////////////////////////////////////////////////////////////
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/find/all")
     public ResponseEntity<?> getAllOrders() {
         try {
@@ -38,7 +39,8 @@ public class OrderController {
         }
     }
 
-    @GetMapping("/find")
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/find-one")
     public ResponseEntity<?> getOneOrder(@Valid @RequestBody OrderFoundByIdDTO orderFoundByIdDTO) {
         try {
             return ResponseEntity.ok(orderService.getOneOrder(orderFoundByIdDTO));
@@ -47,7 +49,18 @@ public class OrderController {
         }
     }
 
-    @DeleteMapping("/delete")
+// SYSTEM
+//////////////////////////////////////////////////////////////////////////////////////
+
+    @PostMapping("/create")
+    public ResponseEntity<Order> createOrder(@Valid @RequestBody OrderCreationDTO orderCreationDTO) {
+        Order newOrder = orderService.createOrder(orderCreationDTO);
+        return new ResponseEntity<>(newOrder, HttpStatus.CREATED);
+    }
+
+
+/////////////// REMOVE LATER ///////////////////////
+    @DeleteMapping("/dev/delete")
     public ResponseEntity<?> deleteOrder(@Valid @RequestBody DeleteOrderDTO deleteOrderDTO) {
             return orderService.deleteOrder(deleteOrderDTO);
     }

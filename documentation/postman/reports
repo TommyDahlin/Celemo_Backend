@@ -8,7 +8,7 @@ http://localhost:8080/api/reports/find/all
 #######################################################################################################
 
 // GET (list one specific report)
-http://localhost:8080/api/reports/find
+http://localhost:8080/api/reports/find-one
 
 Body - raw
 (Example):
@@ -20,7 +20,7 @@ Body - raw
 #######################################################################################################
 
 // POST (report user)
-http://localhost:8080/api/reports/post/report/user
+http://localhost:8080/api/reports/report/user
 
 Body - raw
 (example):
@@ -33,7 +33,7 @@ Body - raw
 
 #######################################################################################################
     // POST (report auction))
-    http://localhost:8080/api/reports/post/report/auction
+    http://localhost:8080/api/reports/report/auction
 
 
     Body - raw
@@ -63,7 +63,7 @@ Body - raw
 #######################################################################################################
 
 // PUT Update a report
-http://localhost:8080/api/reports/put
+http://localhost:8080/api/reports/update
 
 Body - raw
     (Example):
