@@ -8,16 +8,15 @@ import org.springframework.stereotype.Service;
 import sidkbk.celemo.dto.user.*;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.*;
-
 import sidkbk.celemo.repositories.AuctionRepository;
-
 import sidkbk.celemo.repositories.ReviewsRepo;
-
 import sidkbk.celemo.repositories.RoleRepository;
 import sidkbk.celemo.repositories.UserRepository;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class UserService {
@@ -98,12 +97,10 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public ResponseEntity<?> getAllUsernameAndEmail(FindAllByIdDTO findAllByIdDTO){
-        List<User> findAllById = userRepository.findAllById(findAllByIdDTO.getId());
-        if (findAllById.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No user found");
-        }
-        return ResponseEntity.ok(findAllById.stream().map(User::getUsername).collect(Collectors.toList()));
+    //get all username and mail
+    public ResponseEntity<User> getAllUsernameAndEmail(FindUsernameAndEmailDTO findUsernameAndEmailDTO){
+        return null;
+
     }
 
     //find user variable with filter. For example : grade

@@ -50,8 +50,8 @@ public class UserController {
 
     // find all/get all accounts
     @GetMapping("/find/all/username-email")
-    public ResponseEntity<?> getAllUsernameAndEmail(@Valid @RequestBody FindAllByIdDTO findUsernameAndMailDTO){
-        return ResponseEntity.ok(findUsernameAndMailDTO);
+    public ResponseEntity<?> getAllUsernameAndEmail(FindUsernameAndEmailDTO findUsernameAndEmailDTO){
+        return null;
     }
 
     //get average grade, find user by id, filter out what you want to get from a user
