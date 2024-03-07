@@ -17,6 +17,9 @@ public class SearchController {
     @Autowired
     SearchService searchService;
 
+// PUBLIC
+//////////////////////////////////////////////////////////////////////////////////////
+
     // Search function
     @GetMapping()
     public ResponseEntity<?> search(@RequestParam String search) {
