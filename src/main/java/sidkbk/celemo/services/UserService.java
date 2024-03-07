@@ -125,67 +125,24 @@ public class UserService {
         Set<String> strRoles = updateUserDTO.getUsersRoles();
         return userRepository.findById(updateUserDTO.getUserId())
                 .map(existingUser -> {
-                    if (updateUserDTO.getUsername() != null) {
-                        existingUser.setUsername(updateUserDTO.getUsername());
-                    }
-                    if (updateUserDTO.getPassword() != null) {
-                        existingUser.setPassword(updateUserDTO.getPassword());
-                    }
-                    if (updateUserDTO.getDateOfBirth() != null) {
-                        existingUser.setDateOfBirth(updateUserDTO.getDateOfBirth());
-                    }
-                    if (updateUserDTO.getEmail() != null) {
-                        existingUser.setEmail(updateUserDTO.getEmail());
-
-                    }
-                    if (updateUserDTO.getFirstName() != null) {
-                        existingUser.setFirstName(updateUserDTO.getFirstName());
-                    }
-                    if (updateUserDTO.getLastName() != null) {
-                        existingUser.setLastName(updateUserDTO.getLastName());
-                    }
-                    if (updateUserDTO.getAdress_street() != null) {
-                        existingUser.setAdress_street(updateUserDTO.getAdress_street());
-                    }
-                    if (updateUserDTO.getAdress_city() != null) {
-                        existingUser.setAdress_city(updateUserDTO.getAdress_city());
-                    }
-                    if (updateUserDTO.getAdress_postalCode() != null) {
-                        existingUser.setAdress_postalCode(updateUserDTO.getAdress_postalCode());
-                    }
-                    if (updateUserDTO.getBalance() != 0.0) {
-                        existingUser.setBalance(updateUserDTO.getBalance());
-                    }
-                    if (updateUserDTO.getGender() != null) {
-                        existingUser.setGender(updateUserDTO.getGender());
-                    }
-                    if (updateUserDTO.getPhoto() != null) {
-                        existingUser.setPhoto(updateUserDTO.getPhoto());
-                    }
+                    Optional.ofNullable(updateUserDTO.getUsername()).ifPresent(existingUser::setUsername);
+                    Optional.ofNullable(updateUserDTO.getPassword()).ifPresent(existingUser::setPassword);
+                    Optional.ofNullable(updateUserDTO.getDateOfBirth()).ifPresent(existingUser::setDateOfBirth);
+                    Optional.ofNullable(updateUserDTO.getEmail()).ifPresent(existingUser::setEmail);
+                    Optional.ofNullable(updateUserDTO.getFirstName()).ifPresent(existingUser::setFirstName);
+                    Optional.ofNullable(updateUserDTO.getLastName()).ifPresent(existingUser::setLastName);
+                    Optional.ofNullable(updateUserDTO.getAdress_street()).ifPresent(existingUser::setAdress_street);
+                    Optional.ofNullable(updateUserDTO.getAdress_city()).ifPresent(existingUser::setAdress_city);
+                    Optional.ofNullable(updateUserDTO.getAdress_postalCode()).ifPresent(existingUser::setAdress_postalCode);
+                    Optional.of(updateUserDTO.getBalance()).ifPresent(existingUser::setBalance);
+                    Optional.ofNullable(updateUserDTO.getGender()).ifPresent(existingUser::setGender);
+                    Optional.ofNullable(updateUserDTO.getPhoto()).ifPresent(existingUser::setPhoto);
 
                     if (strRoles.isEmpty()) {
                         Role userRole = roleRepository.findByName(ERole.ROLE_USER)
                                 .orElseThrow(() -> new RuntimeException("Error: role is not found"));
                         roles.add(userRole);
                         existingUser.setRoles(roles);
-                    } else {
-                        strRoles.forEach(role -> {
-                            switch (role) {
-                                case "ADMIN" -> {
-                                    Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-                                            .orElseThrow(() -> new RuntimeException("Error: Admin Role couldn't be found"));
-                                    roles.add(adminRole);
-                                    existingUser.setRoles(roles);
-                                }
-                                case "USER" -> {
-                                    Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                                            .orElseThrow(() -> new RuntimeException("Error: Role couldn't be found"));
-                                    roles.add(userRole);
-                                    existingUser.setRoles(roles);
-                                }
-                            }
-                        });
-
                     }
                     return userRepository.save(existingUser);
                 })
