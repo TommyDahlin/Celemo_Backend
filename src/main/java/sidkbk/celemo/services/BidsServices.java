@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import sidkbk.celemo.dto.Bids.BidsDTO;
 import sidkbk.celemo.dto.Bids.FindBidIdDTO;
+import sidkbk.celemo.dto.auctions.AuctionIdDTO;
 import sidkbk.celemo.dto.user.FindUserIdDTO;
 import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.models.Bids;
@@ -199,4 +200,7 @@ public class BidsServices {
         return foundBids;
     }
 
+    public List<Bids> findByAuction(AuctionIdDTO auctionIdDTO) {
+        return bidsRepository.findBidsByAuctionId(auctionIdDTO.getAuctionId());
+    }
 }
