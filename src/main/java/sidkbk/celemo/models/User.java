@@ -70,10 +70,17 @@ public class User {
     public User() {
     }
 
-    public User(String username, String email, String password) {
+    public User(String username, String email, String password, String dateOfBirth, String photo, String firstName, String lastName, String adress_street, String adress_postalCode, String adress_city) {
         this.username = username;
-        this.email = email;
         this.password = password;
+        this.dateOfBirth = dateOfBirth;
+        this.email = email;
+        this.photo = photo;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.adress_street = adress_street;
+        this.adress_postalCode = adress_postalCode;
+        this.adress_city = adress_city;
     }
 
     public void addToFav(Auction auction) {

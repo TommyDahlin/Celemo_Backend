@@ -9,11 +9,13 @@ import org.springframework.web.bind.annotation.*;
 import sidkbk.celemo.dto.order.PreviousPurchaseFromOrderDTO;
 import sidkbk.celemo.dto.user.*;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
+import sidkbk.celemo.models.Order;
 import sidkbk.celemo.models.User;
 import sidkbk.celemo.services.AuctionService;
 import sidkbk.celemo.services.OrderService;
 import sidkbk.celemo.services.UserService;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -27,6 +29,7 @@ public class UserController {
     private AuctionService auctionService;
     @Autowired
     private OrderService orderService;
+
 
 // USER
 //////////////////////////////////////////////////////////////////////////////////////
@@ -91,6 +94,7 @@ public class UserController {
     public ResponseEntity<?> deleteUserFavouritesById(@Valid @RequestBody ModifyUserFavouritesDTO deleteUserFavouritesDTO){
         return userService.deleteUserFavouritesById(deleteUserFavouritesDTO);
     }
+
 
 // ADMIN
 //////////////////////////////////////////////////////////////////////////////////////

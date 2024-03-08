@@ -8,6 +8,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import sidkbk.celemo.dto.Bids.BidsDTO;
 import sidkbk.celemo.dto.Bids.FindBidIdDTO;
+import sidkbk.celemo.dto.auctions.AuctionIdDTO;
 import sidkbk.celemo.dto.user.FindUserIdDTO;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.Bids;
@@ -81,6 +82,15 @@ public class BidsControllers {
             return ResponseEntity.ok(bidsServices.findAllBids());
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+    @GetMapping("/find/byauction")
+    public ResponseEntity<?> findByAuction(@RequestBody AuctionIdDTO auctionIdDTO) {
+        List<Bids> foundByAuction = bidsServices.findByAuction(auctionIdDTO);
+        if (foundByAuction == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Could not find any bids");
+        } else {
+            return ResponseEntity.ok(foundByAuction);
         }
     }
 
