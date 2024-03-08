@@ -49,8 +49,8 @@ public class SearchService {
     }
 
     public List<Auction> searchPage(int pageNr, SearchDTO searchDTO) {
-        Pageable paging = PageRequest.of(pageNr, 5);
-        List<Auction> foundAuctions = new ArrayList<>();
+        Pageable paging = PageRequest.of(pageNr, searchDTO.getPageSize());
+        List<Auction> foundAuctions;
         if (searchDTO.getSearch().toUpperCase().equals(searchDTO.getSearch())) {
             foundAuctions = auctionRepository.findByCategoryListContains(searchDTO.getSearch(),paging);
         } else {
