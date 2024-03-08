@@ -56,8 +56,8 @@ public class WebSecurityConfig {
         http.csrf(csrf -> csrf.disable()) // Enable later in frontend!!!
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/**").permitAll()
+                .authorizeHttpRequests(auth ->
+                        auth.requestMatchers("/api/**").permitAll()
                             .anyRequest().authenticated()
                 );
 

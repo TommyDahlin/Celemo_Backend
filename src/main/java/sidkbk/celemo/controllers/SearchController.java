@@ -35,11 +35,15 @@ public class SearchController {
     // Search with pagination
     @GetMapping("/page/{pagenumber}")
     public ResponseEntity<?> searchPage(@PathVariable("pagenumber") int pageNr,
-                                    @Valid @RequestBody SearchDTO searchDTO) {
+                                     @RequestBody SearchDTO searchDTO) {
         List<Auction> foundAuctions = searchService.searchPage(pageNr, searchDTO);
-        if (foundAuctions.isEmpty()) {
+        if (foundAuctions.isEmpty() && searchDTO.getSearch().length() > 0) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nothing found!");
-        } else {
+        }
+        else if(searchDTO.getSearch().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.LENGTH_REQUIRED).body("Cannot be blank");
+        }
+        else {
             return ResponseEntity.ok(foundAuctions);
         }
     }

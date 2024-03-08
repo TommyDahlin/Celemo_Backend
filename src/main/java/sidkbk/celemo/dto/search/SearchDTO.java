@@ -2,9 +2,10 @@ package sidkbk.celemo.dto.search;
 
 import jakarta.validation.constraints.NotEmpty;
 
-public class SearchDTO {
 
-    @NotEmpty
+public class SearchDTO{
+
+    @NotEmpty(message = "Error - field is blank!")
     private String search;
 
     public String getSearch() {
