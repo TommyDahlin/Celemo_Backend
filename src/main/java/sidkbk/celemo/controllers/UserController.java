@@ -142,4 +142,11 @@ public class UserController {
         return userService.deleteUserFavouritesById(deleteUserFavouritesDTO);
     }
 
+    ///////// ONLY FOR TEST //////////
+    @PutMapping("/dev/update-users-favourite-list/{auctionId}")
+    public ResponseEntity<?> updateUsersFavouritesList(@PathVariable("auctionId") String auctionId) {
+        userService.removeFavouriteAuctionFromUsers(auctionId);
+        return ResponseEntity.ok("Method have removed if there was anything to remove");
+    }
+
 }
