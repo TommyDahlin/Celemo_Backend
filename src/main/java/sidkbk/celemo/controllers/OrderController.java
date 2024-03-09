@@ -26,6 +26,17 @@ public class OrderController {
 // USER
 //////////////////////////////////////////////////////////////////////////////////////
 
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @GetMapping("/find/user-orders")
+    public ResponseEntity<?>findAllOrderForOneUser(@Valid @RequestBody FindUserIdDTO findUserIdDTO){
+        List<Order> foundOrder = orderService.findAllOrderForOneUser(findUserIdDTO);
+        if (foundOrder.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no order found");
+        }else {
+            return ResponseEntity.ok().body(foundOrder);
+        }
+    }
+
 // ADMIN
 //////////////////////////////////////////////////////////////////////////////////////
 
@@ -52,7 +63,7 @@ public class OrderController {
 // SYSTEM
 //////////////////////////////////////////////////////////////////////////////////////
 
-    @PostMapping("/create")
+    @PostMapping("/create") // --- Remove this line later
     public ResponseEntity<Order> createOrder(@Valid @RequestBody OrderCreationDTO orderCreationDTO) {
         Order newOrder = orderService.createOrder(orderCreationDTO);
         return new ResponseEntity<>(newOrder, HttpStatus.CREATED);
@@ -66,14 +77,6 @@ public class OrderController {
     }
 
 
-    @GetMapping("/find/user-orders")
-    public ResponseEntity<?>findAllOrderForOneUser(@Valid @RequestBody FindUserIdDTO findUserIdDTO){
-        List<Order> foundOrder = orderService.findAllOrderForOneUser(findUserIdDTO);
-        if (foundOrder.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no order found");
-        }else {
-            return ResponseEntity.ok().body(foundOrder);
-        }
-    }
+
 }
 
