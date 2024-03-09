@@ -31,6 +31,8 @@ public class OrderService {
     AuctionRepository auctionRepository;
     @Autowired
     BidsRepository bidsRepository;
+    @Autowired
+    UserService userService;
 
 
 
@@ -49,7 +51,8 @@ public class OrderService {
         newOrder.setProductTitle(findAuction.getTitle());
         newOrder.setEndPrice(findAuction.getEndPrice());
         newOrder.setCreatedAt(orderCreationDTO.getCreatedAt());
-
+        // Run method to remove finished acution from users favourite lists.
+        userService.removeFavouriteAuctionFromUsers(findAuction.getId());
         return orderRepository.save(newOrder);
     }
 
