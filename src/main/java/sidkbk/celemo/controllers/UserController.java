@@ -9,13 +9,11 @@ import org.springframework.web.bind.annotation.*;
 import sidkbk.celemo.dto.order.PreviousPurchaseFromOrderDTO;
 import sidkbk.celemo.dto.user.*;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
-import sidkbk.celemo.models.Order;
 import sidkbk.celemo.models.User;
 import sidkbk.celemo.services.AuctionService;
 import sidkbk.celemo.services.OrderService;
 import sidkbk.celemo.services.UserService;
 
-import java.util.List;
 import java.util.Optional;
 
 
@@ -57,7 +55,7 @@ public class UserController {
         }
     }
 
-    // put/update // using responseEntity<?> creates a generic wildcard that can return any type of body
+    // find finished auction
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping("/find/finishedauction")
     public ResponseEntity<?> getFinishedAuction(@Valid @RequestBody FindUserIdDTO findUserIdDTO){
@@ -111,7 +109,7 @@ public class UserController {
     }
 
     //get average grade, find user by id, filter out what you want to get from a user
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping("/findfilter")
     public ResponseEntity<?> getUserFilter(@Valid @RequestBody FindUserIdandFilterDTO findUserIdandFilterDTO){
         try {

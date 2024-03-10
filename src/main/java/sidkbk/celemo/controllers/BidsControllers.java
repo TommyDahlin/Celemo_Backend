@@ -84,6 +84,7 @@ public class BidsControllers {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping("/find/byauction")
     public ResponseEntity<?> findByAuction(@RequestBody AuctionIdDTO auctionIdDTO) {
         List<Bids> foundByAuction = bidsServices.findByAuction(auctionIdDTO);
