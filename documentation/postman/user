@@ -1,7 +1,7 @@
 //post
 
 
-http://localhost:8080/api/user/create
+http://localhost:8080/api/auth/signup  < ----- Not in user classes but has to do with user so good to be here aswell
 
 {
     "username": "muppen",
@@ -16,14 +16,18 @@ http://localhost:8080/api/user/create
     "adress_city": "göteborg"
 }
 
-****************************************************
+{
+    "message": "User registered successfully"
+}
 
+****************************************************
+    ADMIN ONLY
 // find
 
 http://localhost:8080/api/user/find/all
 
 ****************************************************
-
+    ADMIN ONLY
 // find
 
 http://localhost:8080/api/user/find-one
@@ -33,13 +37,13 @@ http://localhost:8080/api/user/find-one
 }
 
 ****************************************************
-
+    Public
 // get only username and email from all users
 
 http://localhost:8080/api/user/find/all/username-email
 
 ****************************************************
-
+    ADMIN ONLY
 // delete
 
 http://localhost:8080/api/user/delete
@@ -49,7 +53,7 @@ http://localhost:8080/api/user/delete
 }
 
 ****************************************************
-
+    User  ---- Need to fix method to take current user and update itself but not another user.
 // put/:id
 
 http://localhost:8080/api/user/update
@@ -79,12 +83,12 @@ this is borked
 http://localhost:8080/api/user/find/65d33bbcf4da3a3f932fe8ec/previouspurchase
 
 ############################################################
-
+    USER
 // get filter using userId ( replace {filter} with ex. username or grade )
 
 http://localhost:8080/api/user/findfilter
 {
-"userId": "65d755943b0850253b1640c0"
+"userId": "65d755943b0850253b1640c0",
 "filter": "username" / "grade"  / "firstname"  / "lastname"
 }
 
@@ -111,7 +115,7 @@ Body - raw
 ****************************************************
 
 
-GET - Find all auctions from specifik user
+GET - Find all auctions from specific user
 http://localhost:8080/api/auction/find/all/user
 Body - raw
 
