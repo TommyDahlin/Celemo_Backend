@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import sidkbk.celemo.dto.order.DeleteOrderDTO;
 import sidkbk.celemo.dto.order.OrderCreationDTO;
@@ -22,37 +23,10 @@ public class OrderController {
     @Autowired
     OrderService orderService;
 
+// USER
+//////////////////////////////////////////////////////////////////////////////////////
 
-   @PostMapping("/post")
-    public ResponseEntity<Order> createOrder(@Valid @RequestBody OrderCreationDTO orderCreationDTO) {
-       Order newOrder = orderService.createOrder(orderCreationDTO);
-       return new ResponseEntity<>(newOrder, HttpStatus.CREATED);
-    }
-
-    @GetMapping("/find/all")
-    public ResponseEntity<?> getAllOrders() {
-        try {
-            return ResponseEntity.ok(orderService.getAllOrders());
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-    }
-
-    @GetMapping("/find")
-    public ResponseEntity<?> getOneOrder(@Valid @RequestBody OrderFoundByIdDTO orderFoundByIdDTO) {
-        try {
-            return ResponseEntity.ok(orderService.getOneOrder(orderFoundByIdDTO));
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-    }
-
-    @DeleteMapping("/delete")
-    public ResponseEntity<?> deleteOrder(@Valid @RequestBody DeleteOrderDTO deleteOrderDTO) {
-            return orderService.deleteOrder(deleteOrderDTO);
-    }
-
-
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping("/find/user-orders")
     public ResponseEntity<?>findAllOrderForOneUser(@Valid @RequestBody FindUserIdDTO findUserIdDTO){
         List<Order> foundOrder = orderService.findAllOrderForOneUser(findUserIdDTO);
@@ -62,5 +36,47 @@ public class OrderController {
             return ResponseEntity.ok().body(foundOrder);
         }
     }
+
+// ADMIN
+//////////////////////////////////////////////////////////////////////////////////////
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/find/all")
+    public ResponseEntity<?> getAllOrders() {
+        try {
+            return ResponseEntity.ok(orderService.getAllOrders());
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/find-one")
+    public ResponseEntity<?> getOneOrder(@Valid @RequestBody OrderFoundByIdDTO orderFoundByIdDTO) {
+        try {
+            return ResponseEntity.ok(orderService.getOneOrder(orderFoundByIdDTO));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+// SYSTEM
+//////////////////////////////////////////////////////////////////////////////////////
+
+    @PostMapping("/create") // --- Remove this line later
+    public ResponseEntity<Order> createOrder(@Valid @RequestBody OrderCreationDTO orderCreationDTO) {
+        Order newOrder = orderService.createOrder(orderCreationDTO);
+        return new ResponseEntity<>(newOrder, HttpStatus.CREATED);
+    }
+
+
+/////////////// REMOVE LATER ///////////////////////
+    @DeleteMapping("/dev/delete")
+    public ResponseEntity<?> deleteOrder(@Valid @RequestBody DeleteOrderDTO deleteOrderDTO) {
+            return orderService.deleteOrder(deleteOrderDTO);
+    }
+
+
+
 }
 

@@ -1,7 +1,7 @@
 //post
 
 
-http://localhost:8080/api/user/post
+http://localhost:8080/api/user/create
 
 {
     "username": "muppen",
@@ -26,7 +26,7 @@ http://localhost:8080/api/user/find/all
 
 // find
 
-http://localhost:8080/api/user/find
+http://localhost:8080/api/user/find-one
 
 {
 "userId": "65d755943b0850253b1640c0"
@@ -46,7 +46,7 @@ http://localhost:8080/api/user/delete
 
 // put/:id
 
-http://localhost:8080/api/user/put
+http://localhost:8080/api/user/update
 
 Body - raw // userId REQUIRED, rest OPTIONAL
 {
