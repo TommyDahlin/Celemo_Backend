@@ -1,14 +1,12 @@
 package sidkbk.celemo.models;
 
 import jakarta.validation.constraints.NotBlank;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Pattern;
 
 @Document(collection = "users")
@@ -66,6 +64,9 @@ public class User {
     private double balance = 0d;
 
     private double grade = 0d;
+
+    @CreatedDate
+    private Date createdAt = new Date();
 
     public User() {
     }
@@ -264,5 +265,13 @@ public class User {
 
     public List<Auction> getFavouriteAuctions() {
         return favouriteAuctions;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 }
