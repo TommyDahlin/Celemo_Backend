@@ -15,10 +15,10 @@ import sidkbk.celemo.repositories.BidsRepository;
 import sidkbk.celemo.repositories.OrderRepository;
 import sidkbk.celemo.repositories.UserRepository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
 
 
 @Service
@@ -60,6 +60,35 @@ public class AuctionService {
     public Auction getOneAuction(AuctionIdDTO auctionIdDTO){
        return auctionRepository.findById(auctionIdDTO.getAuctionId()).get();
     }
+
+
+    // test method to show less on one specific auction
+    public List<String> seeTimeLeftOnAuction(AuctionIdDTO auctionIdDTO) {
+        // tries to find an auction by auctionId in the repo
+        Optional<Auction> oneSpecificAuction = auctionRepository.findById(auctionIdDTO.getAuctionId());
+
+        // If the auction is found it continues.
+        return oneSpecificAuction
+                .map(auction -> {
+                    // get the current date to be able to calculate the time between that and endDate
+                    LocalDateTime currentTime = LocalDateTime.now();
+
+                    //LocalDateTime auctionEndDateTime = auction.getEndDate();
+                    // this i had to look up on forums.
+                    // it calculates the time left until the auctions end date but in days.
+                 long timeLeft = currentTime.until(auction.getEndDate(), ChronoUnit.DAYS);
+                    // had to check this up on forums aswell.
+                    //This returns a list of details as Strings
+                    return List.of(
+                            "Auction ends in" + " " +timeLeft + ":" + "Days",
+                            "Current price on Auction is:" + " " + auction.currentPrice,
+                            "Auction ends at:" + " " + auction.getEndDate()
+                    );
+                })
+                // If no auction is found it returns an empty list.
+                .orElse(Collections.emptyList());
+    }
+
     // PUT
     public Auction updateAuction(AuctionUpdateDTO auctionUpdateDTO){
          return auctionRepository.findById(auctionUpdateDTO.getAuctionId())

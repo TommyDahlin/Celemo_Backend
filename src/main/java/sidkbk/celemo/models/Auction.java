@@ -7,7 +7,9 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Document(collection = "auctions")
@@ -33,8 +35,10 @@ public class Auction {
     private Double startPrice;
 
     // Not needed for the body in postman, gets added automatically
-    private LocalDate startingDate = LocalDate.now();
-    private LocalDate endDate = LocalDate.now().plusDays(7);
+    private LocalDateTime startingDate = LocalDateTime.now();
+    private LocalDateTime endDate = LocalDateTime.now().plusDays(7);
+
+    //private Date startingDate = new Date();
 
     // Bids
     public Double currentPrice = 0d;
@@ -52,13 +56,7 @@ public class Auction {
     public Auction(){
     }
 
-    public LocalDate getStartingDate() {
-        return startingDate;
-    }
 
-    public void setStartingDate(LocalDate startingDate) {
-        this.startingDate = startingDate;
-    }
 
     public void setCurrentPrice(Double currentPrice) {
         this.currentPrice = currentPrice;
@@ -110,13 +108,7 @@ public class Auction {
         this.celebrityName = celebrityName;
     }
 
-    public LocalDate getEndDate() {
-        return endDate;
-    }
 
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
-    }
 
     public double getCurrentPrice() {
         return currentPrice;
@@ -181,5 +173,21 @@ public class Auction {
 
     public void setSellerId(User seller) {
         this.seller = seller;
+    }
+
+    public LocalDateTime getStartingDate() {
+        return startingDate;
+    }
+
+    public void setStartingDate(LocalDateTime startingDate) {
+        this.startingDate = startingDate;
+    }
+
+    public LocalDateTime getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDateTime endDate) {
+        this.endDate = endDate;
     }
 }

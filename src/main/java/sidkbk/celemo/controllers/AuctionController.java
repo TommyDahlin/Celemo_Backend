@@ -63,7 +63,15 @@ public class AuctionController {
         }
 
     }
-
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @GetMapping("/find-auction-time-left")
+    public ResponseEntity<?> timeLeft(@Valid @RequestBody AuctionIdDTO auctionIdDTO) {
+        try {
+            return ResponseEntity.ok(auctionService.seeTimeLeftOnAuction(auctionIdDTO));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
 
 
     // PUT update an auction
