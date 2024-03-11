@@ -77,21 +77,7 @@ public class UserController {
         }
     }
 
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    @GetMapping ("/favourites/all")
-    public ResponseEntity<?> getUserFavouritesById(@Valid @RequestBody FindUserFavouritesDTO favouritesDTO){
-        return userService.getUserFavouritesById(favouritesDTO);
-    }
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    @PutMapping ("/favourite/add")
-    public ResponseEntity<?> setUserFavouritesById(@Valid @RequestBody ModifyUserFavouritesDTO addUserFavouritesDTO){
-        return userService.setUserFavouritesById(addUserFavouritesDTO);
-    }
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    @DeleteMapping ("/favourite/delete")
-    public ResponseEntity<?> deleteUserFavouritesById(@Valid @RequestBody ModifyUserFavouritesDTO deleteUserFavouritesDTO){
-        return userService.deleteUserFavouritesById(deleteUserFavouritesDTO);
-    }
+
 
 
 // ADMIN
