@@ -57,7 +57,7 @@ public class AuctionService {
     }
 
     // method to show less info on one specific auction
-    public List<String> getOneAuction(AuctionIdDTO auctionIdDTO) {
+    public List<String> getOneAuctionTimeleft(AuctionIdDTO auctionIdDTO) {
         // tries to find an auction by auctionId in the repo
         Optional<Auction> oneSpecificAuction = auctionRepository.findById(auctionIdDTO.getAuctionId());
         // If the auction is found it continues.
@@ -78,6 +78,12 @@ public class AuctionService {
                 })
                 // If no auction is found it returns an empty list.
                 .orElse(Collections.emptyList());
+    }
+
+
+
+    public Auction getOneAuction(AuctionIdDTO auctionIdDTO){
+        return auctionRepository.findById(auctionIdDTO.getAuctionId()).get();
     }
 
     // PUT
