@@ -44,10 +44,12 @@ public class AuctionController {
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PostMapping("/create")
     public ResponseEntity<?> createAuction(@Valid @RequestBody AuctionCreationDTO auctionCreationDTO) {
-        try{
+        try {
             return ResponseEntity.ok(auctionService.createAuction(auctionCreationDTO));
-        }catch (EntityNotFoundException e) {
-            return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
 
     // Get all auctions from user
     @GetMapping("/find/all/user")
@@ -62,16 +64,7 @@ public class AuctionController {
 
     }
 
-    // GET one auction
-    @GetMapping("/find")
-    public ResponseEntity<?> getAuction(@Valid @RequestBody AuctionIdDTO auctionIdDTO) {
-        try {
-            return ResponseEntity.ok(auctionService.getOneAuction(auctionIdDTO));
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 
-        }
-    }
 
     // PUT update an auction
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
@@ -107,7 +100,7 @@ public class AuctionController {
 
     //REMOVE BEFORE PRODUCTION
     @DeleteMapping("/dev/deleteAll")
-    public void deleteAllAuctions(){
+    public void deleteAllAuctions() {
         auctionService.deleteAllAuctions();
     }
 }
