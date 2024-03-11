@@ -269,14 +269,17 @@ public class UserService {
     public void removeFavouriteAuctionFromUsers(String auctionId) {
         for (User user : userRepository.findAll()) {
             for (Auction auction : user.getFavouriteAuctions()) {
+                if (auction != null) {
                     if (!user.getFavouriteAuctions().isEmpty() && auction.getId().equals(auctionId)) {
                         Auction foundAuction = auction;
                         user.getFavouriteAuctions().remove(foundAuction);
                         break;
                     }
                 }
-                userRepository.save(user);
+            }
+            userRepository.save(user);
         }
     }
+
 }
 
