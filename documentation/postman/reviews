@@ -60,7 +60,6 @@ http://localhost:8080/api/reviews/update
 Body - raw
     {
         "reviewId":"ObjectId",
-        "grade": 1-5,
         "reviewText": " tour text",
     }
 
