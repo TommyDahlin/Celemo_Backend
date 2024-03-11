@@ -56,24 +56,15 @@ public class AuctionService {
         return auctionRepository.findAuctionBySeller(findUserIdDTO.getUserId());
     }
 
-    // READ 1 from user
-    public Auction getOneAuction(AuctionIdDTO auctionIdDTO){
-       return auctionRepository.findById(auctionIdDTO.getAuctionId()).get();
-    }
-
-
-    // test method to show less on one specific auction
-    public List<String> seeTimeLeftOnAuction(AuctionIdDTO auctionIdDTO) {
+    // method to show less info on one specific auction
+    public List<String> getOneAuction(AuctionIdDTO auctionIdDTO) {
         // tries to find an auction by auctionId in the repo
         Optional<Auction> oneSpecificAuction = auctionRepository.findById(auctionIdDTO.getAuctionId());
-
         // If the auction is found it continues.
         return oneSpecificAuction
                 .map(auction -> {
                     // get the current date to be able to calculate the time between that and endDate
                     LocalDateTime currentTime = LocalDateTime.now();
-
-                    //LocalDateTime auctionEndDateTime = auction.getEndDate();
                     // this i had to look up on forums.
                     // it calculates the time left until the auctions end date but in days.
                  long timeLeft = currentTime.until(auction.getEndDate(), ChronoUnit.DAYS);
