@@ -2,7 +2,7 @@
     POSTMAN ORDER
 #######################################################################################################
 // POST a new order
-http://localhost:8080/api/order/post
+http://localhost:8080/api/order/create
 
 This is just example id's so they might not exist anymore.
 
@@ -27,14 +27,14 @@ http://localhost:8080/api/order/find/all
 
 #######################################################################################################
 // GET--one specific order
-http://localhost:8080/api/order/find
+http://localhost:8080/api/order/find-one
 inside body
 {
     "orderId": "65df8703a827142e976e1c13"
 }
 #######################################################################################################
 // delete/:id
-http://localhost:8080/api/order/delete
+http://localhost:8080/api/order/dev/delete
 inside body
 {
     "orderId": "65df8703a827142e976e1c13"

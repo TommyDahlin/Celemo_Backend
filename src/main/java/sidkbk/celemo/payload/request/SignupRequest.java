@@ -1,28 +1,37 @@
-package sidkbk.celemo.dto.user;
+package sidkbk.celemo.payload.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import sidkbk.celemo.models.EGender;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-public class CreateUserDTO {
-    @NotBlank(message = "Username cannot be blank")
+public class SignupRequest {
+
+    @NotBlank
+    @Size(min = 3, max = 20)
     private String username;
+
+
+    @NotBlank
     @Email
-    @NotBlank(message = "email cannot be blank")
     private String email;
-    @NotBlank(message = "password cannot be blank")
+
+
+    private Set<String> roles;
+
+    @NotBlank
+    @Size(min = 6, max = 40)
     private String password;
-    //dateofbirth
     @NotBlank(message = "dateOfBirth cannot be blank")
     private String dateOfBirth;
     @NotBlank(message = "firstName cannot be blank")
     private String firstName;
     @NotBlank(message = "lastName cannot be blank")
     private String lastName;
+    private String photo;
     private Set<String> usersRoles = new HashSet<>();
     private EGender gender;
     @NotBlank(message = "adress_street cannot be blank")
@@ -32,22 +41,33 @@ public class CreateUserDTO {
     @NotBlank(message = "adress_city cannot be blank")
     private String adress_city;
 
-    private ArrayList<String> favouriteAuctions = new ArrayList<String>();
+
+    public String getPhoto() {
+        return photo;
+    }
 
     public String getUsername() {
         return username;
     }
 
-    public EGender getGender() {
-        return gender;
-    }
-
-    public void setGender(EGender gender) {
-        this.gender = gender;
-    }
-
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Set<String> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<String> roles) {
+        this.roles = roles;
     }
 
     public String getPassword() {
@@ -62,65 +82,31 @@ public class CreateUserDTO {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(String dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getFirstName() {
         return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
     }
 
     public String getLastName() {
         return lastName;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
     public Set<String> getUsersRoles() {
         return usersRoles;
     }
 
-    public void setUsersRoles(Set<String> usersRoles) {
-        this.usersRoles = usersRoles;
+    public EGender getGender() {
+        return gender;
     }
 
     public String getAdress_street() {
         return adress_street;
     }
 
-    public void setAdress_street(String adress_street) {
-        this.adress_street = adress_street;
-    }
-
     public String getAdress_postalCode() {
         return adress_postalCode;
-    }
-
-    public void setAdress_postalCode(String adress_postalCode) {
-        this.adress_postalCode = adress_postalCode;
     }
 
     public String getAdress_city() {
         return adress_city;
     }
-
-    public void setAdress_city(String adress_city) {
-        this.adress_city = adress_city;
-    }
-
 }
-

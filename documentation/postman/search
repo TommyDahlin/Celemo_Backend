@@ -3,12 +3,18 @@
 #######################################################################################################
 
 // GET Search a word in an auctions title or for a category [ENUM].
-http://localhost:8080/api/search?search=test
-
-Params
-    Query Params
-        Key : search
-        Value : test
-        Description : Value takes a search term or an category Enum like "HOCKEY"
+http://localhost:8080/api/search/
+Body - raw
+{
+    "search": "HOCKEY"    // takes a search term or an category Enum like "HOCKEY"
+}
 
 #######################################################################################################
+
+// Same as above but with pagination
+http://localhost:8080/api/search/page/0   <--- Change page
+Body - raw
+{
+    "search": "HOCKEY"    // takes a search term or an category Enum like "HOCKEY"
+    "pageSize": 5         // OPTIONAL
+}
