@@ -163,9 +163,24 @@ public class UserService {
             }
         }
         return ResponseEntity.ok("Auction was not removed or does now exist in favourite-list");
-
     }
 
+
+    // Remove auction from users favourite list. This function auto runs when creating an order.
+    public void removeFavouriteAuctionFromUsers(String auctionId) {
+        for (User user : userRepository.findAll()) {
+            for (Auction auction : user.getFavouriteAuctions()) {
+                if (auction != null) {
+                    if (!user.getFavouriteAuctions().isEmpty() && auction.getId().equals(auctionId)) {
+                        Auction foundAuction = auction;
+                        user.getFavouriteAuctions().remove(foundAuction);
+                        break;
+                    }
+                }
+            }
+            userRepository.save(user);
+        }
+    }
 
 
 }

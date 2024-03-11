@@ -158,3 +158,14 @@ Body - raw
     "userId": " ObjectId ",
     "auctionId": " ObjectId "
 }
+
+****************************************************
+
+// DEV // to test autoremove method to remove an finished auction from users favourite lists
+// This method auto runs at the end of order create.
+http://localhost:8080/api/user/dev/update-users-favourite-list/:auctionId
+Path Variables
+    Key : aucitonId
+    Value : 65e9c79d2aa5fa61f0d71a22
+
+****************************************************

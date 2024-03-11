@@ -151,4 +151,26 @@ public class UserController {
 
     }
 
+
+    @GetMapping ("/favourites/all")
+    public ResponseEntity<?> getUserFavouritesById(@Valid @RequestBody FindUserFavouritesDTO favouritesDTO){
+        return userService.getUserFavouritesById(favouritesDTO);
+    }
+    @PutMapping ("/favourite/add")
+    public ResponseEntity<?> setUserFavouritesById(@Valid @RequestBody ModifyUserFavouritesDTO addUserFavouritesDTO){
+        return userService.setUserFavouritesById(addUserFavouritesDTO);
+    }
+    @DeleteMapping ("/favourite/delete")
+    public ResponseEntity<?> deleteUserFavouritesById(@Valid @RequestBody ModifyUserFavouritesDTO deleteUserFavouritesDTO){
+        return userService.deleteUserFavouritesById(deleteUserFavouritesDTO);
+    }
+
+    
+    @PutMapping("/dev/update-users-favourite-list/{auctionId}")
+    public ResponseEntity<?> updateUsersFavouritesList(@PathVariable("auctionId") String auctionId) {
+        userService.removeFavouriteAuctionFromUsers(auctionId);
+        return ResponseEntity.ok("Method have removed if there was anything to remove");
+    }
+
+
 }

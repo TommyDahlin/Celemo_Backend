@@ -31,6 +31,8 @@ public class AuctionService {
     BidsRepository bidsRepository;
     @Autowired
     OrderRepository orderRepository;
+    @Autowired
+    UserService userService;
 
     public Auction createAuction(AuctionCreationDTO auctionCreationDTO) {
         User findUser = userRepository.findById(auctionCreationDTO.getSellerId())
@@ -101,6 +103,8 @@ public class AuctionService {
     public ResponseEntity<?> deleteAuction(AuctionIdDTO auctionIdDTO) {
         auctionRepository.findById(auctionIdDTO.getAuctionId())
                 .orElseThrow(() -> new RuntimeException("Auction not found!"));
+        //auto remove from users favourite list
+        userService.removeFavouriteAuctionFromUsers(auctionIdDTO.getAuctionId());
         auctionRepository.deleteById(auctionIdDTO.getAuctionId());
         return ResponseEntity.status(HttpStatus.OK).body("Auction deleted!");
     }
