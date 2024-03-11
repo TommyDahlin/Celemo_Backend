@@ -7,8 +7,6 @@ public class ReviewsPutDTO {
     @NotBlank
     private String reviewId;
 
-    private Double grade;
-
     private String reviewText;
 
     public String getReviewId() {
@@ -17,14 +15,6 @@ public class ReviewsPutDTO {
 
     public void setReviewId(String reviewId) {
         this.reviewId = reviewId;
-    }
-
-    public Double getGrade() {
-        return grade;
-    }
-
-    public void setGrade(Double grade) {
-        this.grade = grade;
     }
 
     public String getReviewText() {

@@ -1,0 +1,32 @@
+#######################################################################################################
+    POSTMAN AUTHCONTROLLER
+#######################################################################################################
+
+POST - Sign up user
+Body - raw
+{
+    "username": "min 3, max 20",
+    "password": "min 6, max 40",
+    "email": "email",
+    "dateOfBirth" : "åååå-mm-dd",
+    "firstName" : "firstName",
+    "lastName": "lastName",
+    "gender": "MALE",
+    "photo": "img.url",
+    "adress_street": "street",
+    "adress_postalCode": "postalCode",
+    "adress_city": "City"
+}
+
+http://localhost:8080/api/auth/signup
+
+#######################################################################################################
+
+POST - Sign in as user
+Body - raw
+{
+    "username": "SignupTest6",
+    "password" "12050154dD"
+}
+
+#######################################################################################################

@@ -37,7 +37,7 @@ public class Auction {
     private LocalDate endDate = LocalDate.now().plusDays(7);
 
     // Bids
-    public Double currentPrice = 0d;
+    public Double currentPrice = startPrice;
     private Double endPrice = 0d;
     @DBRef
     private Bids bid;

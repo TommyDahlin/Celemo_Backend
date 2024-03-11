@@ -8,7 +8,7 @@ http://localhost:8080/api/transactions/find/all
 #######################################################################################################
 
 // GET list transactions for a specific user
-http://localhost:8080/api/transactions/find
+http://localhost:8080/api/transactions/find/all-user
 Body - raw
     {
         "userId": "65d33c51f4da3a3f932fe8ed"
@@ -17,7 +17,7 @@ Body - raw
 #######################################################################################################
 
 // POST add a transaction
-http://localhost:8080/api/transactions/post
+http://localhost:8080/api/transactions/create
 
 Body - raw
     {

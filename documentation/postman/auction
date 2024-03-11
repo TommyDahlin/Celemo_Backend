@@ -3,6 +3,7 @@
 #######################################################################################################
 
 POST - Create an auction
+http://localhost:8080/api/auction/create
 Body - raw
 {
     "sellerId": "65d33bbcf4da3a3f932fe8ec",
@@ -22,7 +23,7 @@ http://localhost:8080/api/auction/find/all
 #######################################################################################################
 
 GET - Find one auction by id
-http://localhost:8080/api/auction/find
+http://localhost:8080/auction/find-one
 Body - raw
 {
     "auctionId": "65cf4c97f8e89b4462e5be28"
@@ -42,7 +43,7 @@ Body - raw
 #######################################################################################################
 
 PUT - Update an auction
-http://localhost:8080/api/auction/put
+http://localhost:8080/api/auction/update
 Body - raw
 {
     "auctionId": "65cf4c97f8e89b4462e5be28",    // REQUIRED
