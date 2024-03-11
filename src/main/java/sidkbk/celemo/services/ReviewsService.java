@@ -96,9 +96,6 @@ public class ReviewsService {
 
         return reviewsRepo.findById(updateReviewsDTO.getReviewId())
                 .map(existingReview -> {
-            if (updateReviewsDTO.getGrade() != null) {
-                existingReview.setGrade(updateReviewsDTO.getGrade());
-            }
             if (updateReviewsDTO.getReviewText() != null) {
                 existingReview.setReviewText(updateReviewsDTO.getReviewText());
             }
