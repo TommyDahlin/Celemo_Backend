@@ -100,7 +100,7 @@ public class ReviewsController {
     }
 
     // PUT Update a review dto
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PutMapping("/update")
     public ResponseEntity<?> updateReview(@RequestBody ReviewsPutDTO updateReviewsDTO) {
 
