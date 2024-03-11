@@ -34,6 +34,12 @@ http://localhost:8080/api/user/find-one
 
 ****************************************************
 
+// get only username and email from all users
+
+http://localhost:8080/api/user/find/all/username-email
+
+****************************************************
+
 // delete
 
 http://localhost:8080/api/user/delete
@@ -100,6 +106,18 @@ http://localhost:8080/api/user/find/previouspurchase
 Body - raw
 {
     "userId": "65d3627e890c42399d67cb84"
+}
+
+****************************************************
+
+
+GET - Find all auctions from specifik user
+http://localhost:8080/api/auction/find/all/user
+Body - raw
+
+(example)
+{
+    "userId": "65d771baa9e6823a9c1c27fa"
 }
 
 ****************************************************

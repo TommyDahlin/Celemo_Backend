@@ -31,6 +31,17 @@ Body - raw
 
 #######################################################################################################
 
+GET - Find all auctions from specifik user
+http://localhost:8080/api/auction/find/all/user
+Body - raw
+
+(example)
+{
+    "userId": "65d771baa9e6823a9c1c27fa"
+}
+
+#######################################################################################################
+
 PUT - Update an auction
 http://localhost:8080/api/auction/update
 Body - raw
