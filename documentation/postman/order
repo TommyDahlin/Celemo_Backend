@@ -14,9 +14,9 @@ http://localhost:8080/api/order/create
 }
 
 #######################################################################################################
-    USER AND ADMIN
+    ADMIN
 // Get orders from user by userId
-http://localhost:8080/api/order/find/user-orders
+http://localhost:8080/api/order/find/user-orders/admin
 
 {
     "userId": "65eedef949aaf15adc303069"
@@ -27,7 +27,7 @@ http://localhost:8080/api/order/find/user-orders
 // GET orders from User by userId
 shows less info
 
-http://localhost:8080/api/order/find/user-orders/timeleft
+http://localhost:8080/api/order/find/user-orders
 
 {
     "userId": "65eedef949aaf15adc303069"

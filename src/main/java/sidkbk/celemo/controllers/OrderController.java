@@ -29,7 +29,7 @@ public class OrderController {
 
     // List of all previousPurchases by User
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    @GetMapping("/find/user-orders/timeleft")
+    @GetMapping("/find/user-orders")
     public ResponseEntity<?> getPreviousPurchase(@Valid @RequestBody FindUserIdDTO findUserIdDTO ) {
         try{
             return ResponseEntity.ok(orderService.findOrdersByUserId(findUserIdDTO));
@@ -38,8 +38,8 @@ public class OrderController {
         }
     }
 
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    @GetMapping("/find/user-orders")
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/find/user-order/admin")
     public ResponseEntity<?>findAllOrderForOneUser(@Valid @RequestBody FindUserIdDTO findUserIdDTO){
         List<Order> foundOrder = orderService.findAllOrderForOneUser(findUserIdDTO);
         if (foundOrder.isEmpty()){
