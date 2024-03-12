@@ -40,7 +40,7 @@ public class Auction {
     //private Date startingDate = new Date();
 
     // Bids
-    public Double currentPrice = startPrice;
+    public Double currentPrice;
     private Double endPrice = 0d;
     @DBRef
     private Bids bid;
@@ -107,16 +107,6 @@ public class Auction {
         this.celebrityName = celebrityName;
     }
 
-
-
-    public double getCurrentPrice() {
-        return currentPrice;
-    }
-
-
-    public void setCurrentPrice(double currentPrice) {
-        this.currentPrice = currentPrice;
-    }
 
     public double getEndPrice() {
         return endPrice;

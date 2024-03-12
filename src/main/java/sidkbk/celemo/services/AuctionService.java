@@ -38,6 +38,7 @@ public class AuctionService {
         User findUser = userRepository.findById(auctionCreationDTO.getSellerId())
                 .orElseThrow(() -> new RuntimeException("Couldn't find user."));
         Auction newAuction = new Auction();
+        newAuction.setCurrentPrice(newAuction.getStartPrice());
         newAuction.setSellerId(userRepository.findById(auctionCreationDTO.getSellerId()).get());
         newAuction.setSellerId(findUser);
         newAuction.setTitle(auctionCreationDTO.getTitle());
