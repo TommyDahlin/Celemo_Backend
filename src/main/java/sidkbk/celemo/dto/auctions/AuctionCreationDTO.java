@@ -10,25 +10,20 @@ import java.util.List;
 
 public class AuctionCreationDTO {
 
-    // Variables
-    @NotBlank
-    private String sellerId;
-
     @NotBlank
     private String title;
-
     @NotBlank
     private String productDescription;
     @NotBlank
     private String productPhoto;
     @NotBlank
     private String celebrityName;
-
     @NotNull
     private Double startPrice;
     @NotEmpty
     private List<ECategory> categoryList = new ArrayList<>();
-
+    @NotBlank
+    private String sellerId;
 
 
     // Getters

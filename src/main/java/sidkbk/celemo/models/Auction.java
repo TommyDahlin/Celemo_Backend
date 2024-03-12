@@ -22,9 +22,6 @@ public class Auction {
     @Id
     private String id;
     @NotBlank
-    @DBRef
-    private User seller;
-    @NotBlank
     private String title;
     @NotBlank
     private String productDescription;
@@ -51,6 +48,10 @@ public class Auction {
 
     // Enum List
     public List<ECategory> categoryList = new ArrayList<>();
+
+    @NotBlank
+    @DBRef
+    private User seller;
 
     public Auction(){
     }
