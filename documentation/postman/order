@@ -1,31 +1,43 @@
 #######################################################################################################
     POSTMAN ORDER
 #######################################################################################################
+    DEV//SYSTEM
+supposed to be erased later due to automation
+
 // POST a new order
 http://localhost:8080/api/order/create
 
-This is just example id's so they might not exist anymore.
+{
+    "auctionId": "65eee9475f2d3d188834d95a",
+    "buyerId": "65eedef949aaf15adc303069"
+}
+
+#######################################################################################################
+    ADMIN
+// Get orders from user by userId
+http://localhost:8080/api/order/find/user-orders/admin
 
 {
-    "auctionId": "65cf4c97f8e89b4462e5be28",
-    "sellerId": "65d33c51f4da3a3f932fe8ed",
-    "buyerId": "65d33bbcf4da3a3f932fe8ec"
+    "userId": "65eedef949aaf15adc303069"
 }
+
 #######################################################################################################
+    USER AND ADMIN
+// GET orders from User by userId
+shows less info
 
-// GET previousPurchase from User by BuyerID
+http://localhost:8080/api/order/find/user-orders
 
-http://localhost:8080/api/user/previouspurchase
-inside body
 {
-    "userId": "65df00851a8a335638a03866"
+    "userId": "65eedef949aaf15adc303069"
 }
 #######################################################################################################
-
+    ADMIN ONLY
 // GET--list of all orders
 http://localhost:8080/api/order/find/all
 
 #######################################################################################################
+    ADMIN ONLY
 // GET--one specific order
 http://localhost:8080/api/order/find-one
 inside body
@@ -33,7 +45,9 @@ inside body
     "orderId": "65df8703a827142e976e1c13"
 }
 #######################################################################################################
-// delete/:id
+    DEV//SYSTEM
+    going to get removed later
+// delete one order
 http://localhost:8080/api/order/dev/delete
 inside body
 {

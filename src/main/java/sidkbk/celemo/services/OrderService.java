@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import sidkbk.celemo.dto.order.DeleteOrderDTO;
 import sidkbk.celemo.dto.order.OrderCreationDTO;
 import sidkbk.celemo.dto.order.OrderFoundByIdDTO;
-import sidkbk.celemo.dto.order.PreviousPurchaseFromOrderDTO;
 import sidkbk.celemo.dto.user.FindUserIdDTO;
 import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.models.Order;
@@ -17,9 +16,8 @@ import sidkbk.celemo.repositories.BidsRepository;
 import sidkbk.celemo.repositories.OrderRepository;
 import sidkbk.celemo.repositories.UserRepository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
@@ -74,28 +72,30 @@ public class OrderService {
     }
 
     // fine all orders that are bound to one user ID
-    public List<Order> findPreviousPurchase(PreviousPurchaseFromOrderDTO previousPurchaseFromOrderDTO) {
-        userRepository.findById(previousPurchaseFromOrderDTO.getUserId())
-                .orElseThrow(() -> new RuntimeException("UserId could not be found"));
-            List<Order> previousPurchase = new ArrayList<>();
-        for (Order order : orderRepository.findAll()) {
-            if (order.getBuyerAccount() != null && previousPurchaseFromOrderDTO.getUserId().equals(order.getBuyerAccount().getId())) {
-                previousPurchase.add(order);
-              }
+    public List<Map<String, Object>> findOrdersByUserId(FindUserIdDTO findUserIdDTO) {
+        //Tries to find orders by userId
+        List<Order> findOrders = orderRepository.findByBuyerAccount_Id(findUserIdDTO.getUserId());
+        // returns the orders it finds that are connected to the userId
+        //then it maps thrue the orders and shows only whats inside the .map
+        // Tho it dosnt seem to show in the order i put the orderDetails in.
+        if(findOrders.isEmpty()){
+            throw new RuntimeException("no orders exists or incorrect id given");
+        } else {
+            return findOrders.stream()
+                    .map(order -> {
+                        Map<String, Object> orderDetails = new HashMap<>();
+                        orderDetails.put("ProductTitle:", order.getProductTitle());
+                        orderDetails.put("BuyerUsername", order.getBuyerAccount().getUsername());
+                        orderDetails.put("SellerUsername", order.getSellerAccount().getUsername());
+                        orderDetails.put("endPrice", order.getEndPrice());
+                        orderDetails.put("createdAt", order.getCreatedAt());
+                        return orderDetails;
+                    })
+                    //then it adds it to a list.
+                    .collect(Collectors.toList());
+
         }
-        return previousPurchase;
     }
-  
-    //HELENA:
-    // vi hittar EN order men hittar vi EN order som tillhör en specifik user?
-    // hittar vi ALLA ordrar som tillhör en specifik user?
-
-   
-    //HELENA:
-    // en order kan man INTE uppdatera då blir revisorn arg...
-    // man makulerar och skapar en ny i så fall
-
-            
 
     // Delete one order by orderId
     public ResponseEntity<?> deleteOrder(DeleteOrderDTO deleteOrderDTO) {

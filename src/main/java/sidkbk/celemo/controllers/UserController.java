@@ -25,8 +25,7 @@ public class UserController {
     private UserService userService;
     @Autowired
     private AuctionService auctionService;
-    @Autowired
-    private OrderService orderService;
+
 
 
 // USER
@@ -44,16 +43,6 @@ public class UserController {
 
     }
 
-    // List of all previousPurchases by User
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    @GetMapping("/previouspurchase")
-    public ResponseEntity<?> getPreviousPurchase(@RequestBody PreviousPurchaseFromOrderDTO previousPurchaseFromOrderDTO) {
-        try{
-            return ResponseEntity.ok(orderService.findPreviousPurchase(previousPurchaseFromOrderDTO));
-        } catch (EntityNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-    }
 
     // find finished auction
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
