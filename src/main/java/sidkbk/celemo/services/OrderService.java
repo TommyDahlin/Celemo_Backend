@@ -79,18 +79,23 @@ public class OrderService {
         // returns the orders it finds that are connected to the userId
         //then it maps thrue the orders and shows only whats inside the .map
         // Tho it dosnt seem to show in the order i put the orderDetails in.
-        return findOrders.stream()
-                .map(order -> {
-                    Map<String, Object> orderDetails = new HashMap<>();
-                    orderDetails.put("ProductTitle:", order.getProductTitle());
-                    orderDetails.put("BuyerUsername", order.getBuyerAccount().getUsername());
-                    orderDetails.put("SellerUsername", order.getSellerAccount().getUsername());
-                    orderDetails.put("endPrice", order.getEndPrice());
-                    orderDetails.put("createdAt", order.getCreatedAt());
-                    return orderDetails;
-                })
-                //then it adds it to a list.
-                .collect(Collectors.toList());
+        if(findOrders.isEmpty()){
+            throw new RuntimeException("no orders exists or incorrect id given");
+        } else {
+            return findOrders.stream()
+                    .map(order -> {
+                        Map<String, Object> orderDetails = new HashMap<>();
+                        orderDetails.put("ProductTitle:", order.getProductTitle());
+                        orderDetails.put("BuyerUsername", order.getBuyerAccount().getUsername());
+                        orderDetails.put("SellerUsername", order.getSellerAccount().getUsername());
+                        orderDetails.put("endPrice", order.getEndPrice());
+                        orderDetails.put("createdAt", order.getCreatedAt());
+                        return orderDetails;
+                    })
+                    //then it adds it to a list.
+                    .collect(Collectors.toList());
+
+        }
     }
 
     // Delete one order by orderId
