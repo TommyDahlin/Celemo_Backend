@@ -119,7 +119,7 @@ public class AuctionService {
         List<Auction> auctionList = auctionRepository.findAll();
         List<Auction> finishedAuctionList = new ArrayList<>();
         for (int i = 0; i < auctionList.size(); i++) {
-            if (auctionList.get(i).isFinished && Objects.equals(auctionList.get(i).getSeller(), findUserIdDTO.getUserId())){
+            if (auctionList.get(i).isFinished && Objects.equals(auctionList.get(i).getSeller().getId(), findUserIdDTO.getUserId())){
                 finishedAuctionList.add(auctionList.get(i));
             }
         }
