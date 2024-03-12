@@ -9,7 +9,6 @@ http://localhost:8080/api/order/create
 
 {
     "auctionId": "65eee9475f2d3d188834d95a",
-    "sellerId": "65f03f9df189912b7d6e9c84",
     "buyerId": "65eedef949aaf15adc303069"
 }
 
