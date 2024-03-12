@@ -26,6 +26,18 @@ public class OrderController {
 // USER
 //////////////////////////////////////////////////////////////////////////////////////
 
+
+    // List of all previousPurchases by User
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @GetMapping("/find/user-orders/timeleft")
+    public ResponseEntity<?> getPreviousPurchase(@Valid @RequestBody FindUserIdDTO findUserIdDTO ) {
+        try{
+            return ResponseEntity.ok(orderService.findOrdersByUserId(findUserIdDTO));
+        } catch (EntityNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping("/find/user-orders")
     public ResponseEntity<?>findAllOrderForOneUser(@Valid @RequestBody FindUserIdDTO findUserIdDTO){

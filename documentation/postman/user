@@ -76,12 +76,6 @@ Body - raw // userId REQUIRED, rest OPTIONAL
 }
 
 
-###########################################
-
-// GET previousPurchase from User by BuyerID
-this is borked
-http://localhost:8080/api/user/find/65d33bbcf4da3a3f932fe8ec/previouspurchase
-
 ############################################################
     USER
 // get filter using userId ( replace {filter} with ex. username or grade )
