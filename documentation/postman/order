@@ -8,8 +8,8 @@ supposed to be erased later due to automation
 http://localhost:8080/api/order/create
 
 {
-    "auctionId": "65eee9475f2d3d188834d95a",
-    "buyerId": "65eedef949aaf15adc303069"
+    "auctionId": "65f17315b58e2d448262765a",
+    "buyerUsername": "bruddajake"
 }
 
 #######################################################################################################
@@ -18,7 +18,7 @@ http://localhost:8080/api/order/create
 http://localhost:8080/api/order/find/user-orders/admin
 
 {
-    "userId": "65eedef949aaf15adc303069"
+    "buyerAccount": "bruddajake"
 }
 
 #######################################################################################################
@@ -29,7 +29,7 @@ shows less info
 http://localhost:8080/api/order/find/user-orders
 
 {
-    "userId": "65eedef949aaf15adc303069"
+    "buyerAccount": "bruddajake"
 }
 #######################################################################################################
     ADMIN ONLY
