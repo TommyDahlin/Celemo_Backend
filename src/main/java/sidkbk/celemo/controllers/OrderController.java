@@ -7,9 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import sidkbk.celemo.dto.order.DeleteOrderDTO;
+import sidkbk.celemo.dto.order.FindBuyerDTO;
 import sidkbk.celemo.dto.order.OrderCreationDTO;
 import sidkbk.celemo.dto.order.OrderFoundByIdDTO;
-import sidkbk.celemo.dto.user.FindUserIdDTO;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.Order;
 import sidkbk.celemo.services.OrderService;
@@ -30,9 +30,9 @@ public class OrderController {
     // List of all previousPurchases by User
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping("/find/user-orders")
-    public ResponseEntity<?> getPreviousPurchase(@Valid @RequestBody FindUserIdDTO findUserIdDTO ) {
+    public ResponseEntity<?> getPreviousPurchase(@Valid @RequestBody FindBuyerDTO findBuyerDTO) {
         try{
-            return ResponseEntity.ok(orderService.findOrdersByUserId(findUserIdDTO));
+            return ResponseEntity.ok(orderService.findOrdersByUserId(findBuyerDTO));
         } catch (EntityNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
@@ -40,8 +40,8 @@ public class OrderController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/find/user-order/admin")
-    public ResponseEntity<?>findAllOrderForOneUser(@Valid @RequestBody FindUserIdDTO findUserIdDTO){
-        List<Order> foundOrder = orderService.findAllOrderForOneUser(findUserIdDTO);
+    public ResponseEntity<?>findAllOrderForOneUser(@Valid @RequestBody FindBuyerDTO findBuyerDTO){
+        List<Order> foundOrder = orderService.findAllOrderForOneUser(findBuyerDTO);
         if (foundOrder.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no order found");
         }else {

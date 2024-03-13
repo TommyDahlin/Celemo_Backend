@@ -1,14 +1,11 @@
 package sidkbk.celemo.models;
 
-import org.springframework.cglib.core.Local;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDate;
 import java.util.Date;
-import java.util.List;
 
 @Document(collection = "orders")
 public class Order {
@@ -20,10 +17,11 @@ public class Order {
     private double endPrice;
     @CreatedDate
     private Date createdAt = new Date();
-    @DBRef
-    private User sellerAccount;
-    @DBRef
-    private User buyerAccount;
+
+
+    private String sellerAccount;
+
+    private String buyerAccount;
     @DBRef
     private Auction auction;
 
@@ -42,10 +40,10 @@ public class Order {
     public String getId() {
         return id;
     }
-    public User getSellerAccount() {
+    public String getSellerAccount() {
         return sellerAccount;
     }
-    public User getBuyerAccount() {
+    public String getBuyerAccount() {
         return buyerAccount;
     }
     public Auction getAuction() {
@@ -71,10 +69,10 @@ public class Order {
     public void setAuction(Auction auction) {
         this.auction = auction;
     }
-    public void setBuyerAccount(User buyerAccount) {
+    public void setBuyerAccount(String buyerAccount) {
         this.buyerAccount = buyerAccount;
     }
-    public void setSellerAccount(User sellerAccount) {
+    public void setSellerAccount(String sellerAccount) {
         this.sellerAccount = sellerAccount;
     }
     public void setProductTitle(String productTitle) {

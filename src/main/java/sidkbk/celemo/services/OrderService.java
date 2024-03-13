@@ -5,9 +5,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import sidkbk.celemo.dto.order.DeleteOrderDTO;
+import sidkbk.celemo.dto.order.FindBuyerDTO;
 import sidkbk.celemo.dto.order.OrderCreationDTO;
 import sidkbk.celemo.dto.order.OrderFoundByIdDTO;
-import sidkbk.celemo.dto.user.FindUserIdDTO;
 import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.models.Order;
 import sidkbk.celemo.models.User;
@@ -38,15 +38,11 @@ public class OrderService {
     public Order createOrder(OrderCreationDTO orderCreationDTO) {
         Auction findAuction = auctionRepository.findById(orderCreationDTO.getAuctionId())
                 .orElseThrow(() -> new RuntimeException("Auction not found!"));
-        User findSellerId = userRepository.findById(findAuction.getSeller().getId())
-                .orElseThrow(() -> new RuntimeException("SellerId was not found"));
-        User findBuyerId = userRepository.findById(orderCreationDTO.getBuyerId())
-                .orElseThrow(() -> new RuntimeException("BuyerId was not found"));
 
         Order newOrder = new Order();
         newOrder.setAuction(findAuction);
-        newOrder.setSellerAccount(findSellerId);
-        newOrder.setBuyerAccount(findBuyerId);
+        newOrder.setSellerAccount(findAuction.getSeller().getUsernameAndEmail());
+        newOrder.setBuyerAccount(orderCreationDTO.getBuyerUsername());
         newOrder.setProductTitle(findAuction.getTitle());
         newOrder.setEndPrice(findAuction.getEndPrice());
         newOrder.setCreatedAt(orderCreationDTO.getCreatedAt());
@@ -72,9 +68,9 @@ public class OrderService {
     }
 
     // fine all orders that are bound to one user ID
-    public List<Map<String, Object>> findOrdersByUserId(FindUserIdDTO findUserIdDTO) {
+    public List<Map<String, Object>> findOrdersByUserId(FindBuyerDTO findBuyerDTO) {
         //Tries to find orders by userId
-        List<Order> findOrders = orderRepository.findByBuyerAccount_Id(findUserIdDTO.getUserId());
+        List<Order> findOrders = orderRepository.findByBuyerAccount(findBuyerDTO.getBuyerAccount());
         // returns the orders it finds that are connected to the userId
         //then it maps thrue the orders and shows only whats inside the .map
         // Tho it dosnt seem to show in the order i put the orderDetails in.
@@ -85,8 +81,8 @@ public class OrderService {
                     .map(order -> {
                         Map<String, Object> orderDetails = new HashMap<>();
                         orderDetails.put("ProductTitle:", order.getProductTitle());
-                        orderDetails.put("BuyerUsername", order.getBuyerAccount().getUsername());
-                        orderDetails.put("SellerUsername", order.getSellerAccount().getUsername());
+                        orderDetails.put("BuyerUsername", order.getBuyerAccount());
+                        orderDetails.put("SellerUsername", order.getSellerAccount());
                         orderDetails.put("endPrice", order.getEndPrice());
                         orderDetails.put("createdAt", order.getCreatedAt());
                         return orderDetails;
@@ -108,16 +104,16 @@ public class OrderService {
     }
 
 
-    public List<Order> findAllOrderForOneUser(FindUserIdDTO findUserIdDTO) {
+    public List<Order> findAllOrderForOneUser(FindBuyerDTO findBuyerDTO) {
         //Find user using id
-        userRepository.findById(findUserIdDTO.getUserId())
+        User foundUser = userRepository.findByUsername(findBuyerDTO.getBuyerAccount())
                 .orElseThrow(() -> new RuntimeException("User not found"));
         //Skapa en tom lista för hitta order
         List<Order> foundOrder = new ArrayList<>();
         //spare all order i en lista
         List<Order> allOrder = orderRepository.findAll();
         for (Order order : allOrder) {
-            if (order.getBuyerAccount() != null && order.getBuyerAccount().getId().equals(findUserIdDTO.getUserId())) {
+            if (order.getBuyerAccount() != null && foundUser.getUsername().equals(order.getBuyerAccount())) {
                 foundOrder.add(order);
             }
         }
