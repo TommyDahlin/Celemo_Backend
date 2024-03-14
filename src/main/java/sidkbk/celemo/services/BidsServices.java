@@ -96,6 +96,7 @@ public class BidsServices {
                 if (newBid.getMaxPrice() < auctionCurrentBid.getMaxPrice()) {
                     // Raises by 10 if possible
                     if (newBid.getMaxPrice() + 10 <= auctionCurrentBid.getMaxPrice()) {
+                        bidsRepository.save(newBid);
                         auctionCurrentBid.setCurrentPrice(newBid.getMaxPrice() + 10);
                     } else {
                         auctionCurrentBid.setCurrentPrice(auctionCurrentBid.getMaxPrice());
