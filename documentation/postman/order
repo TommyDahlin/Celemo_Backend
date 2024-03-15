@@ -1,0 +1,56 @@
+#######################################################################################################
+    POSTMAN ORDER
+#######################################################################################################
+    DEV//SYSTEM
+supposed to be erased later due to automation
+
+// POST a new order
+http://localhost:8080/api/order/create
+
+{
+    "auctionId": "65f17315b58e2d448262765a",
+    "buyerUsername": "bruddajake"
+}
+
+#######################################################################################################
+    ADMIN
+// Get orders from user by userId
+http://localhost:8080/api/order/find/user-orders/admin
+
+{
+    "buyerAccount": "bruddajake"
+}
+
+#######################################################################################################
+    USER AND ADMIN
+// GET orders from User by userId
+shows less info
+
+http://localhost:8080/api/order/find/user-orders
+
+{
+    "buyerAccount": "bruddajake"
+}
+#######################################################################################################
+    ADMIN ONLY
+// GET--list of all orders
+http://localhost:8080/api/order/find/all
+
+#######################################################################################################
+    ADMIN ONLY
+// GET--one specific order
+http://localhost:8080/api/order/find-one
+inside body
+{
+    "orderId": "65df8703a827142e976e1c13"
+}
+#######################################################################################################
+    DEV//SYSTEM
+    going to get removed later
+// delete one order
+http://localhost:8080/api/order/dev/delete
+inside body
+{
+    "orderId": "65df8703a827142e976e1c13"
+}
+#######################################################################################################

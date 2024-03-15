@@ -3,60 +3,131 @@
 #######################################################################################################
 
 // GET list all reviews
-http://localhost:8080/api/reviews/find
+***********************************
+http://localhost:8080/api/reviews/find/all
 
 #######################################################################################################
 
-// GET list one specific review
-http://localhost:8080/api/reviews/find/:id
-Params
-    Path Varaibles
-        Key : id
-        Value : 65cf838f7af204a728eb2b6c
-        Description : Review ID
+// GET list all reviews WITH paging
+***********************************
+http://localhost:8080/api/reviews/find/all/page/0       <--- Change for page number
+{
+    "pageSize": "2"
+}
+
+#######################################################################################################
+
+// GET list of one specific review
+***********************************
+http://localhost:8080/api/reviews/find-one
+
+Body - raw
+    {
+        "reviewId" : "65d75b87c3c7a5270fc7dded"
+    }
 
 #######################################################################################################
 
 // POST add a review
-http://localhost:8080/api/reviews/post/:created-by-id/:reviewed-account-id
-Params
-    Path Variables
-        Key : created-by-id
-        Value : 65cc95f269ca29e134fe9766
-        Description : User account that creates the review
+***********************************
+http://localhost:8080/api/reviews/create
 
-        Key : reviewed-account-id
-        Value : 65cc95f269ca29e134fe9766
-        Description : Reviewed user account
 Body - raw
     {
-        "grade": 4,
-        "reviewText": "This is an review"
+        "grade": 1-5,
+        "reviewText": " text ",
+        "createdById": " ObjectId ",
+        "reviewedUserId": " ObjectId "
     }
 
 #######################################################################################################
 
 // DELETE Delete a review
-http://localhost:8080/api/reviews/delete/:id
-Params
-    Path Variables
-        Key : id
-        Value : 65d242290dfabbe314edbfa4
-        Description : Review id to delete
+***********************************
+http://localhost:8080/api/reviews/delete
+
+Body - raw
+{
+    "reviewId":" ObjectId "
+}
 
 #######################################################################################################
 
 // PUT Update a review
-http://localhost:8080/api/reviews/put/:id
-Params
-    Path Variables
-        Key : id
-        Value : 65cf838f7af204a728eb2b6c
-        Description : Review ID to update
+***********************************
+http://localhost:8080/api/reviews/update
+
 Body - raw
     {
-        "grade": 4,
-        "reviewText": "This is a review text."
+        "reviewId":"ObjectId",
+        "reviewText": " tour text",
     }
+
+#######################################################################################################
+
+GET - List all reviews for specific REVIEWED user
+***********************************
+http://localhost:8080/api/reviews/find/all-user
+Body - raw
+{
+"userId": "65d755313b0850253b1640bc"
+}
+
+#######################################################################################################
+
+GET - List all reviews for specific REVIEWED user WITH paging
+***********************************
+http://localhost:8080/api/reviews/find/all-user/page/0      <--- Change number for page
+Body - raw
+{
+"userId": "65d755313b0850253b1640bc",
+"pageSize": 3   // Reviews per page. This is optional, 3 is default
+}
+
+#######################################################################################################
+
+GET - List all reviews for a specified user AND sort reviews by Low or High grades.
+***********************************
+http://localhost:8080/api/reviews/find/all-user-sort
+Body - raw
+{
+    "reviewedUserId": "65d755313b0850253b1640bc",
+    "lowOrHigh": "low" // Low or High
+}
+
+#######################################################################################################
+
+GET - List all reviews for a specified user AND sort reviews by Low or High grades WITH paging.
+***********************************
+http://localhost:8080/api/reviews/find/all-user-sort/page/0     <--- Change number for page
+Body - raw
+{
+    "reviewedUserId": "65d755313b0850253b1640bc",
+    "lowOrHigh": "low" // Low or High,
+    "pageSize": 3   // OPTIONAL Reviews per page. Default is 3
+}
+
+#######################################################################################################
+
+GET - all reviews for specific reviewed user with specific grade
+***********************************
+http://localhost:8080/api/reviews/find/all-user-grade
+Body - raw
+{
+    "userId": "65d755313b0850253b1640bc",
+    "grade": 3      // 1-5
+}
+
+#######################################################################################################
+
+GET - all reviews for specific reviewed user WITH specific grade AND paging
+***********************************
+http://localhost:8080/api/reviews/find/all-user-grade/page/0    <--- Change page number
+Body - raw
+{
+    "userId": "65d755313b0850253b1640bc",
+    "grade": 3      // 1-5,
+    "pageSize": 3   // OPTIONAL Reviews per page. Default is 3
+}
 
 #######################################################################################################

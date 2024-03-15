@@ -1,47 +1,85 @@
 package sidkbk.celemo.models;
 
-import org.springframework.cglib.core.Local;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.Instant;
-import java.time.LocalDate;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 @Document(collection = "auctions")
 public class Auction {
     // Everything from here to the comment of bids are required before we can post an auction to the database
     // sellerId is the user that makes the auction, the rest is self-explanatory.
-    @Id
-    public String id;
-    @DBRef
-    public String sellerId;
-    public String title;
-    public String productDescription;
-    public String productPhoto;
-    public String celebrityName;
-    public double startPrice;
 
-    public LocalDate startingDate = LocalDate.now();
-    public LocalDate endDate = LocalDate.now().plusDays(7);
+
+    // jag vet inte om ni någon gång mappar om Enum till strängar men säger det här i alla fall att det bör ni göra
+    // det blir MYCKET lättare i så fall och ni kan enkelt lösa pagination med filtrering om ni skulle vilja det
+    @Id
+    private String id;
+    @NotBlank
+    private String title;
+    @NotBlank
+    private String productDescription;
+    private String productPhoto;
+    private String celebrityName;
+    @NotNull
+    private Double startPrice;
+
+    // Not needed for the body in postman, gets added automatically
+    private LocalDateTime startingDate = LocalDateTime.now();
+    private LocalDateTime endDate = LocalDateTime.now().plusDays(7);
+
+    //private Date startingDate = new Date();
 
     // Bids
-    public double currentPrice;
-    public double endPrice;
+    public Double currentPrice;
+    private Double endPrice = 0d;
+    @DBRef
+    private Bids bid;
 
     // Both booleans have to be true to move on to make an order.
     public boolean isFinished;
-    public boolean hasBids;
+    private boolean hasBids;
 
     // Enum List
     public List<ECategory> categoryList = new ArrayList<>();
 
-    public Auction(){
+    @NotBlank
+    @DBRef
+    private User seller;
 
+    public Auction(){
+    }
+
+
+
+    public void setCurrentPrice(Double currentPrice) {
+        this.currentPrice = currentPrice;
+    }
+
+    public void setEndPrice(Double endPrice) {
+        this.endPrice = endPrice;
+    }
+
+    public Bids getBid() {
+        return bid;
+    }
+
+    public void setBid(Bids bid) {
+        this.bid = bid;
+    }
+
+    public boolean isFinished() {
+        return isFinished;
+    }
+
+    public void setFinished(boolean finished) {
+        isFinished = finished;
     }
 
     public String getId() {
@@ -52,13 +90,7 @@ public class Auction {
         this.id = id;
     }
 
-    public String getSellerId() {
-        return sellerId;
-    }
 
-    public void setSellerId(String sellerId) {
-        this.sellerId = sellerId;
-    }
 
     public String getTitle() {
         return title;
@@ -76,21 +108,6 @@ public class Auction {
         this.celebrityName = celebrityName;
     }
 
-    public LocalDate getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
-    }
-
-    public double getCurrentPrice() {
-        return currentPrice;
-    }
-
-    public void setCurrentPrice(double currentPrice) {
-        this.currentPrice = currentPrice;
-    }
 
     public double getEndPrice() {
         return endPrice;
@@ -114,5 +131,53 @@ public class Auction {
 
     public void setCategoryList(List<ECategory> categoryList) {
         this.categoryList = categoryList;
+    }
+
+    public void setProductDescription(String productDescription) {
+        this.productDescription = productDescription;
+    }
+
+    public String getProductDescription() {
+        return productDescription;
+    }
+
+    public String getProductPhoto() {
+        return productPhoto;
+    }
+
+    public void setProductPhoto(String productPhoto) {
+        this.productPhoto = productPhoto;
+    }
+
+    public Double getStartPrice() {
+        return startPrice;
+    }
+
+    public void setStartPrice(Double startPrice) {
+        this.startPrice = startPrice;
+    }
+
+    public User getSeller() {
+        return seller;
+    }
+
+    public void setSellerId(User seller) {
+        this.seller = seller;
+    }
+
+    public LocalDateTime getStartingDate() {
+        return startingDate;
+    }
+
+    public void setStartingDate(LocalDateTime startingDate) {
+        this.startingDate = startingDate;
+    }
+
+    public LocalDateTime getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDateTime endDate) {
+        this.endDate = endDate;
     }
 }

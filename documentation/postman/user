@@ -1,0 +1,165 @@
+//post
+
+
+http://localhost:8080/api/auth/signup  < ----- Not in user classes but has to do with user so good to be here aswell
+
+{
+    "username": "muppen",
+    "password": "Muppen22",
+    "dateOfBirth": "2011-05-10",
+    "email": "mupp@gmail.com",
+    "firstName": "Mupp",
+    "lastName": "Muppsson",
+    "gender": "MALE",
+    "adress_street": "peterpan gata",
+    "adress_postalCode": "44556",
+    "adress_city": "göteborg"
+}
+
+{
+    "message": "User registered successfully"
+}
+
+****************************************************
+    ADMIN ONLY
+// find
+
+http://localhost:8080/api/user/find/all
+
+****************************************************
+    ADMIN ONLY
+// find
+
+http://localhost:8080/api/user/find-one
+
+{
+"userId": "65d755943b0850253b1640c0"
+}
+
+****************************************************
+    Public
+// get only username and email from all users
+
+http://localhost:8080/api/user/find/all/username-email
+
+****************************************************
+    ADMIN ONLY
+// delete
+
+http://localhost:8080/api/user/delete
+
+{
+"userId": "65d755943b0850253b1640c0"
+}
+
+****************************************************
+    User  ---- Need to fix method to take current user and update itself but not another user.
+// put/:id
+
+http://localhost:8080/api/user/update
+
+Body - raw // userId REQUIRED, rest OPTIONAL
+{
+"userId": "65d755943b0850253b1640c0",
+"username": "New username",
+"dateOfBirth": "1961-07-07",
+"email": "asd@asd.com",
+"firstName": "Bosse",
+"lastName": "Bengtsson",
+"usersRoles": ["ADMIN","USER"],
+"gender": "MALE",
+"adress_street": "Vägen 1",
+"adress_postalCode": 12345,
+"adress_city": "Götlanborg",
+"photo": "dummy23.png",
+"balance": 500
+}
+
+
+############################################################
+    USER
+// get filter using userId ( replace {filter} with ex. username or grade )
+
+http://localhost:8080/api/user/findfilter
+{
+"userId": "65d755943b0850253b1640c0",
+"filter": "username" / "grade"  / "firstname"  / "lastname"
+}
+
+****************************************************
+
+GET - Finished Auctions
+http://localhost:8080/api/user/find/finishedauction
+
+Body - raw
+{
+    "userId": "65d3627e890c42399d67cb84"
+}
+
+****************************************************
+
+GET - Previous Purchase
+http://localhost:8080/api/user/find/previouspurchase
+
+Body - raw
+{
+    "userId": "65d3627e890c42399d67cb84"
+}
+
+****************************************************
+
+
+GET - Find all auctions from specific user
+http://localhost:8080/api/auction/find/all/user
+Body - raw
+
+(example)
+{
+    "userId": "65d771baa9e6823a9c1c27fa"
+}
+
+****************************************************
+
+PUT - Add auction to favourite list
+http://localhost:8080/api/user/favourite/add
+
+Body - raw
+
+{
+    "userId": " ObjectId ",
+    "auctionId": " ObjectId "
+}
+
+****************************************************
+
+GET - get favourite list from userId
+http://localhost:8080/api/user/favourites/all
+
+Body - raw
+
+{
+    "userId": " ObjectId "
+}
+
+****************************************************
+
+DELETE - Delete Auction from userId:s favourite list
+http://localhost:8080/api/user/favourite/delete
+
+Body - raw
+
+{
+    "userId": " ObjectId ",
+    "auctionId": " ObjectId "
+}
+
+****************************************************
+
+// DEV // to test autoremove method to remove an finished auction from users favourite lists
+// This method auto runs at the end of order create.
+http://localhost:8080/api/user/dev/update-users-favourite-list/:auctionId
+Path Variables
+    Key : aucitonId
+    Value : 65e9c79d2aa5fa61f0d71a22
+
+****************************************************

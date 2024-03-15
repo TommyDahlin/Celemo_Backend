@@ -1,74 +1,53 @@
-package sidkbk.celemo.models;
+package sidkbk.celemo.dto.user;
 
 import jakarta.validation.constraints.NotBlank;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
+import sidkbk.celemo.models.EGender;
 
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
-@Document(collection = "account")
-public class Account {
+//HELENA: se kommentar om update i servicen...
 
-    @Id
-    private String id;
-
-/*
+public class UpdateUserDTO {
     @NotBlank
-    //String
-
-    @NotEmpty
-    //List
-
-    @NotEmpty
-    //int
-*/
-    @NotBlank(message = "Username cannot be blank")
+    private String userId;
     private String username;
-    @NotBlank(message = "password cannot be blank")
     private String password;
-    //dateofbirth
-    @NotBlank(message = "dateOfBirth cannot be blank")
     private String dateOfBirth;
-    @NotBlank(message = "email cannot be blank")
     private String email;
-
-    private Enum gender;
-
-    private String photo;
-    @NotBlank(message = "firstName cannot be blank")
     private String firstName;
-    @NotBlank(message = "lastName cannot be blank")
     private String lastName;
-    //@NotEmpty(message = "gender cannot be blank")
-   // private int chooseGender;
-    private Enum role;
-    @NotBlank(message = "adress_street cannot be blank")
+    private Set<String> usersRoles = new HashSet<>();
+    private EGender gender;
     private String adress_street;
-    @NotBlank(message = "adress_postalcode cannot be blank")
     private String adress_postalCode;
-    @NotBlank(message = "adress_city cannot be blank")
     private String adress_city;
-
-    @DBRef
-    private ArrayList<String> favourites = new ArrayList<String>();
-
-
+    private String photo;
     private double balance;
 
-    public Account() {
 
+    public String getUserId() {
+        return userId;
+    }
+    public String getPhoto() {
+        return photo;
     }
 
-
-
-    public void addFavourites (String favouritesId){
-        this.favourites.add(favouritesId);
-    }
-    public void removeFavourites (String favouritesId){
-        this.favourites.remove(favouritesId);
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 
+    public double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
     public String getUsername() {
         return username;
@@ -102,14 +81,6 @@ public class Account {
         this.email = email;
     }
 
-    public String getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(String photo) {
-        this.photo = photo;
-    }
-
     public String getFirstName() {
         return firstName;
     }
@@ -124,6 +95,22 @@ public class Account {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public Set<String> getUsersRoles() {
+        return usersRoles;
+    }
+
+    public void setUsersRoles(Set<String> usersRoles) {
+        this.usersRoles = usersRoles;
+    }
+
+    public EGender getGender() {
+        return gender;
+    }
+
+    public void setGender(EGender gender) {
+        this.gender = gender;
     }
 
     public String getAdress_street() {
@@ -149,25 +136,4 @@ public class Account {
     public void setAdress_city(String adress_city) {
         this.adress_city = adress_city;
     }
-
-    public double getBalance() {
-        return balance;
-    }
-
-    public void setBalance(double balance) {
-        this.balance = balance;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public Enum getGender() {
-        return gender;
-    }
-
-    public Enum getRole() {
-        return role;
-    }
-
 }

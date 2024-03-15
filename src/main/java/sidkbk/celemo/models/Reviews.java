@@ -17,7 +17,7 @@ public class Reviews {
     private String id;
 
     @NotNull(message = "Field cannot be blank!")
-    private Short grade; // 1-5
+    private Double grade; // 1-5
 
     @NotBlank(message = "Field cannot be blank!")
     private String reviewText;
@@ -25,11 +25,12 @@ public class Reviews {
     @CreatedDate
     private Date createdAt = new Date();
 
-    @DBRef
-    private Account createdBy;
 
     @DBRef
-    private Account reviwedUser;
+    private User createdBy;
+
+    @DBRef
+    private User reviewedUser;
 
     // Constructors
     public Reviews() {
@@ -40,7 +41,7 @@ public class Reviews {
         return id;
     }
 
-    public Short getGrade() {
+    public Double getGrade() {
         return grade;
     }
 
@@ -48,20 +49,20 @@ public class Reviews {
         return reviewText;
     }
 
-    public Date getCreatedAt() {
-        return createdAt;
+    public Date getCreatedAt(Date createdAt) {
+        return this.createdAt;
     }
 
-    public Account getCreatedBy() {
+    public User getCreatedBy() {
         return createdBy;
     }
 
-    public Account getReviwedUser() {
-        return reviwedUser;
+    public User getReviewedUser() {
+        return reviewedUser;
     }
 
     // Setters
-    public void setGrade(Short grade) {
+    public void setGrade(Double grade) {
         this.grade = grade;
     }
 
@@ -69,11 +70,11 @@ public class Reviews {
         this.reviewText = reviewText;
     }
 
-    public void setCreatedBy(Account createdBy) {
+    public void setCreatedBy(User createdBy) {
         this.createdBy = createdBy;
     }
 
-    public void setReviwedUser(Account reviwedUser) {
-        this.reviwedUser = reviwedUser;
+    public void setReviewedUser(User reviewedUser) {
+        this.reviewedUser = reviewedUser;
     }
 }

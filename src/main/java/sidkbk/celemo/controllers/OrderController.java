@@ -3,9 +3,13 @@ package sidkbk.celemo.controllers;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import sidkbk.celemo.dto.order.DeleteOrderDTO;
+import sidkbk.celemo.dto.order.FindBuyerDTO;
+import sidkbk.celemo.dto.order.OrderCreationDTO;
+import sidkbk.celemo.dto.order.OrderFoundByIdDTO;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.Order;
 import sidkbk.celemo.services.OrderService;
@@ -19,34 +23,72 @@ public class OrderController {
     @Autowired
     OrderService orderService;
 
-    @PostMapping("/post")
-    public Order createOrder(@RequestBody Order order) {
-        return orderService.createOrder(order);
+// USER
+//////////////////////////////////////////////////////////////////////////////////////
+
+
+    // List of all previousPurchases by User
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @GetMapping("/find/user-orders")
+    public ResponseEntity<?> getPreviousPurchase(@Valid @RequestBody FindBuyerDTO findBuyerDTO) {
+        try{
+            return ResponseEntity.ok(orderService.findOrdersByUserId(findBuyerDTO));
+        } catch (EntityNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
-    @GetMapping("/find")
-    public List<Order> getAllOrders() {
-        return orderService.getAllOrders();
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/find/user-order/admin")
+    public ResponseEntity<?>findAllOrderForOneUser(@Valid @RequestBody FindBuyerDTO findBuyerDTO){
+        List<Order> foundOrder = orderService.findAllOrderForOneUser(findBuyerDTO);
+        if (foundOrder.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no order found");
+        }else {
+            return ResponseEntity.ok().body(foundOrder);
+        }
     }
 
-    @GetMapping("/find/{id}")
-    public Order getOneOrder(@PathVariable("id") String id ) {
-        return orderService.getOneOrder(id);
-    }
+// ADMIN
+//////////////////////////////////////////////////////////////////////////////////////
 
-    @PutMapping("/put/{id}")
-    public ResponseEntity<?> updateOrder(@PathVariable("id") String orderId,
-                                         @Valid @RequestBody Order updatedOrder) {
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/find/all")
+    public ResponseEntity<?> getAllOrders() {
         try {
-            return ResponseEntity.ok(orderService.updateOrder(orderId, updatedOrder));
+            return ResponseEntity.ok(orderService.getAllOrders());
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
-    @DeleteMapping("/delete/{id}")
-    public String deleteOrder(@PathVariable String id) {
-        return orderService.deleteOrder(id);
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/find-one")
+    public ResponseEntity<?> getOneOrder(@Valid @RequestBody OrderFoundByIdDTO orderFoundByIdDTO) {
+        try {
+            return ResponseEntity.ok(orderService.getOneOrder(orderFoundByIdDTO));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
+
+// SYSTEM
+//////////////////////////////////////////////////////////////////////////////////////
+
+    @PostMapping("/create") // --- Remove this line later
+    public ResponseEntity<Order> createOrder(@Valid @RequestBody OrderCreationDTO orderCreationDTO) {
+        Order newOrder = orderService.createOrder(orderCreationDTO);
+        return new ResponseEntity<>(newOrder, HttpStatus.CREATED);
+    }
+
+
+/////////////// REMOVE LATER ///////////////////////
+    @DeleteMapping("/dev/delete")
+    public ResponseEntity<?> deleteOrder(@Valid @RequestBody DeleteOrderDTO deleteOrderDTO) {
+            return orderService.deleteOrder(deleteOrderDTO);
+    }
+
+
+
 }
 

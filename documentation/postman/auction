@@ -1,0 +1,62 @@
+#######################################################################################################
+    POSTMAN AUCTIONS
+#######################################################################################################
+
+POST - Create an auction
+http://localhost:8080/api/auction/create
+Body - raw
+{
+    "sellerId": "65d33bbcf4da3a3f932fe8ec",
+    "title": "Boll",
+    "productDescription": "En fet boll",
+    "productPhoto": "pic.jpg",
+    "celebrityName": "En känd jävel",
+    "startPrice": 400,
+    "categoryList": ["HOCKEY", "BOXING"]
+}
+
+#######################################################################################################
+
+GET - List all auctions
+http://localhost:8080/api/auction/find/all
+
+#######################################################################################################
+
+GET - Find one auction by id
+http://localhost:8080/auction/find-one
+Body - raw
+{
+    "auctionId": "65cf4c97f8e89b4462e5be28"
+}
+
+#######################################################################################################
+
+GET - Find all auctions from specifik user
+http://localhost:8080/api/auction/find/all/user
+Body - raw
+
+(example)
+{
+    "userId": "65d771baa9e6823a9c1c27fa"
+}
+
+#######################################################################################################
+
+PUT - Update an auction
+http://localhost:8080/api/auction/update
+Body - raw
+{
+    "auctionId": "65cf4c97f8e89b4462e5be28",    // REQUIRED
+    "productDescription": "Allan ballan",       // OPTIONAL
+    "productPhoto": "nybild.jpg",               // OPTIONAL
+    "celebrityName": "Olle"                     // OPTIONAL
+}
+
+#######################################################################################################
+
+DELETE - Delete an auction
+http://localhost:8080/api/auction/delete
+Body - raw
+{
+    "auctionId": "65de3f526e99b52d50b43a91"
+}

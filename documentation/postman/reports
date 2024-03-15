@@ -1,0 +1,76 @@
+#######################################################################################################
+    POSTMAN REPORTS
+#######################################################################################################
+
+// GET (list of all reports)
+http://localhost:8080/api/reports/find/all
+
+#######################################################################################################
+
+// GET (list one specific report)
+http://localhost:8080/api/reports/find-one
+
+Body - raw
+(Example):
+
+    {
+        "reportsId": "65e06aa64762283bf1fa470d"
+    }
+
+#######################################################################################################
+
+// POST (report user)
+http://localhost:8080/api/reports/report/user
+
+Body - raw
+(example):
+
+    {
+        "content": "fast delivery",
+        "reportedUserId": "65de2b40c827854debf75e05",
+        "reportingUserId": "65d771baa9e6823a9c1c27fa"
+    }
+
+#######################################################################################################
+    // POST (report auction))
+    http://localhost:8080/api/reports/report/auction
+
+
+    Body - raw
+    (Example):
+
+        {
+            "content": "bad word",
+            "reportingUserId": "65d771baa9e6823a9c1c27fa",
+            "auctionId": "65d7238d6838d5358fc7ff24"
+        }
+
+
+#######################################################################################################
+
+// DELETE Delete a report
+http://localhost:8080/api/reports/delete
+
+Body - raw
+    (Example):
+
+    Body - raw
+
+    {
+        "reportsId": "65d62a83c559f314e151cbc4"
+    }
+
+#######################################################################################################
+
+// PUT Update a report
+http://localhost:8080/api/reports/update
+
+Body - raw
+    (Example):
+
+    {
+        "reportsId": "65e06aa64762283bf1fa470d",
+        "content": "slow delivery"
+    }
+
+#######################################################################################################

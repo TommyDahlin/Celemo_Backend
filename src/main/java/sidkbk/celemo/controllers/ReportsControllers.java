@@ -1,48 +1,86 @@
 package sidkbk.celemo.controllers;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import sidkbk.celemo.models.Reports;
+import sidkbk.celemo.dto.reports.*;
+import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.services.ReportsServices;
 
-import java.util.List;
-
 @RestController
-@RequestMapping(value = "/reports")
+@RequestMapping(value = "/api/reports")
 public class ReportsControllers {
     @Autowired
     ReportsServices reportsServices;
 
-    //Post a new report
-    @PostMapping("/post")
-    public Reports createReport(@RequestBody Reports reports){
-        return reportsServices.createReport(reports);
+// USER
+//////////////////////////////////////////////////////////////////////////////////////
+
+    //Post a new report for a user
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PostMapping("/report/user")
+    public ResponseEntity<?> createReportUser(@Valid @RequestBody ReportsUserDTO rUDTO){
+        try {
+            return reportsServices.createReportUser(rUDTO);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
+
+    //Post a new report for an auction
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PostMapping("/report/auction")
+    public ResponseEntity<?> createReportAuction(@Valid @RequestBody ReportsAuctionDTO rADTO){
+        try {
+            return reportsServices.createReportAuction(rADTO);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+// ADMIN
+//////////////////////////////////////////////////////////////////////////////////////
 
     //Find a report by id
-    @GetMapping("/find/{id}")
-    public Reports findOne(@PathVariable String id){
-        return reportsServices.findOne(id);
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/find-one")
+    public ResponseEntity<?> findOne(@Valid @RequestBody ReportsFindDTO reportsFindDTO) {
+        try {
+            return reportsServices.findOne(reportsFindDTO);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
-
 
     // Find all reports
-    @GetMapping("/find")
-    public List<Reports> findAllReports(){
-        return reportsServices.findAllReports();
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/find/all")
+    public ResponseEntity<?> findAllReports(){
+        try {
+            return ResponseEntity.ok(reportsServices.findAllReports());
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
-
-    // Update by id
-    @PutMapping("/put/{id}")
-    public Reports updateReport(@RequestBody Reports reports, @PathVariable("id") String _id){
-        return reportsServices.updateReport(reports);
+    //update report
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/update")
+    public ResponseEntity<?> updateReport(@RequestBody ReportsPutDTO reportsPutDTO) {
+        try {
+            return reportsServices.updateReport(reportsPutDTO);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
     // Delete by id
-    @DeleteMapping("/delete/{id}")
-    public String deleteReport(@PathVariable String id){
-        return reportsServices.deleteReport(id);
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteReport(@RequestBody ReportsDeleteDTO reportsDeleteDTO) {
+        return reportsServices.deleteReport(reportsDeleteDTO);
     }
-
 }

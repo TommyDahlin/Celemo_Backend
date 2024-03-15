@@ -1,0 +1,37 @@
+#######################################################################################################
+    POSTMAN TRANSACTIONS
+#######################################################################################################
+
+// GET list all transactions
+http://localhost:8080/api/transactions/find/all
+
+#######################################################################################################
+
+// GET list transactions for a specific user
+http://localhost:8080/api/transactions/find/all-user
+Body - raw
+    {
+        "userId": "65d33c51f4da3a3f932fe8ed"
+    }
+
+#######################################################################################################
+
+// POST add a transaction
+http://localhost:8080/api/transactions/create
+
+Body - raw
+    {
+        "userId": "65d33c51f4da3a3f932fe8ed",
+        "transactionAmount": 30
+    }
+
+#######################################################################################################
+
+// DELETE Delete a transaction
+http://localhost:8080/api/transactions/delete
+Body - raw
+{
+    "transactionId": "65dc701005d8dc3c72fa731b"
+}
+
+#######################################################################################################
