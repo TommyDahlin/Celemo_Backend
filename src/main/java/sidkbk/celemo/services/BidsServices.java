@@ -133,7 +133,7 @@ public class BidsServices {
                 if (newBid.getMaxPrice() > auctionCurrentBid.getMaxPrice()) {
 
                     if (auctionCurrentBid.getMaxPrice() + 10 < newBid.getMaxPrice()) {
-                        newBid.setCurrentPrice(auctionCurrentBid.getCurrentPrice() + 10);
+                        newBid.setCurrentPrice(auctionCurrentBid.getMaxPrice() + 10);
                         bidsRepository.save(newBid);
                         foundAuction.setCurrentPrice(newBid.getCurrentPrice());
                         currentBidUser.setBalance(currentBidUser.getBalance() + auctionCurrentBid.getMaxPrice());
