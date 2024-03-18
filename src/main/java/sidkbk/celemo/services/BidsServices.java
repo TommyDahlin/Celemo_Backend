@@ -92,7 +92,7 @@ public class BidsServices {
 
                 User currentBidUser = userRepository.findById(auctionCurrentBid.getUser().getId()).get();
 
-                Bids updatedBid = auctionCurrentBid;
+                Bids updatedBid = new Bids(auctionCurrentBid.getUser(), auctionCurrentBid.getAuctionId(), auctionCurrentBid.getStartPrice(), auctionCurrentBid.getMaxPrice());
 
                 // user loses
                 // checks if new bid is less than the current
