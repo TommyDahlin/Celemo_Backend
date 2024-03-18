@@ -92,8 +92,12 @@ public class BidsServices {
 
                 User currentBidUser = userRepository.findById(auctionCurrentBid.getUser().getId()).get();
 
-                Bids updatedBid = new Bids(auctionCurrentBid.getUser(), auctionCurrentBid.getAuctionId(), auctionCurrentBid.getStartPrice(), auctionCurrentBid.getMaxPrice());
-
+                Bids updatedBid = new Bids();
+                updatedBid.setUser(auctionCurrentBid.getUser());
+                updatedBid.setAuctionId(auctionCurrentBid.getAuctionId());
+                updatedBid.setStartPrice(auctionCurrentBid.getStartPrice());
+                updatedBid.setMaxPrice(auctionCurrentBid.getMaxPrice());
+                //Bids updatedBid = new Bids();
                 // user loses
                 // checks if new bid is less than the current
                 if (newBid.getMaxPrice() < auctionCurrentBid.getMaxPrice()) {
