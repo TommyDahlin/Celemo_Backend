@@ -84,10 +84,11 @@ public class BidsServices {
 
 
         // checks if auction has a bid
-        if (foundAuction.isHasBids() == true){
+        if (foundAuction.isHasBids()){
 
             // checks if user has the same id as the previous user
             if (!foundAuction.getBid().getUser().getId().equals(newBid.getUser().getId())) {
+
                 Bids auctionCurrentBid = bidsRepository.findById(foundAuction.getBid().getId()).get();
 
                 User currentBidUser = userRepository.findById(auctionCurrentBid.getUser().getId()).get();
@@ -96,11 +97,11 @@ public class BidsServices {
                 if (newBid.getMaxPrice() < auctionCurrentBid.getMaxPrice()) {
                     // Raises by 10 if possible
                     if (newBid.getMaxPrice() + 10 <= auctionCurrentBid.getMaxPrice()) {
-                        bidsRepository.save(newBid);
                         auctionCurrentBid.setCurrentPrice(newBid.getMaxPrice() + 10);
                     } else {
                         auctionCurrentBid.setCurrentPrice(auctionCurrentBid.getMaxPrice());
                     }
+                    bidsRepository.save(newBid);
                     bidsRepository.save(auctionCurrentBid);
                     foundAuction.setCurrentPrice(auctionCurrentBid.getCurrentPrice());
                     auctionRepository.save(foundAuction);
@@ -110,6 +111,7 @@ public class BidsServices {
                 if (newBid.getMaxPrice() == auctionCurrentBid.getMaxPrice()) {
                     auctionCurrentBid.setCurrentPrice(auctionCurrentBid.getMaxPrice());
                     foundAuction.setCurrentPrice(auctionCurrentBid.getMaxPrice());
+                    bidsRepository.save(newBid);
                     bidsRepository.save(auctionCurrentBid);
                     auctionRepository.save(foundAuction);
                     return ResponseEntity.ok(newBid.getMaxPrice() + " is as much as the auctions current " + foundAuction.currentPrice +"bids max price. Make a new bid if you want to continue. New price is previous bids max");
@@ -132,6 +134,7 @@ public class BidsServices {
                         // if you cant do 10+ monies to your maxbid
                         newBid.setCurrentPrice(auctionCurrentBid.getCurrentPrice());
                         bidsRepository.save(newBid);
+
                         foundAuction.setCurrentPrice(newBid.getCurrentPrice());
                         currentBidUser.setBalance(currentBidUser.getBalance() + auctionCurrentBid.getMaxPrice());
                         foundAuction.setBid(newBid);
@@ -148,10 +151,13 @@ public class BidsServices {
 
             //send back balance of lost bids
         }else if (!foundAuction.isHasBids()){
-            newBid.setCurrentPrice(newBid.getStartPrice());
+
             foundUser.setBalance(foundUser.getBalance() - newBid.getMaxPrice());
             userRepository.save(foundUser);
+
+            newBid.setCurrentPrice(newBid.getStartPrice());
             bidsRepository.save(newBid);
+
             foundAuction.setBid(newBid);
             foundAuction.setCurrentPrice(newBid.getCurrentPrice());
             foundAuction.setHasBids(true);
@@ -163,6 +169,9 @@ public class BidsServices {
     }
 
 
+    public void checkBids (){
+        
+    }
 
 
 
