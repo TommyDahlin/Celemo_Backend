@@ -39,7 +39,7 @@ public class OrderController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/find/user-order/admin")
+    @GetMapping("/find/user-orders/admin")
     public ResponseEntity<?>findAllOrderForOneUser(@Valid @RequestBody FindBuyerDTO findBuyerDTO){
         List<Order> foundOrder = orderService.findAllOrderForOneUser(findBuyerDTO);
         if (foundOrder.isEmpty()){
