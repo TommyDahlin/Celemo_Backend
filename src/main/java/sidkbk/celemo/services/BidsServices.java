@@ -67,8 +67,7 @@ public class BidsServices {
             newBid.setMaxPrice(bidsDTO.getMaxBid());
         }
         // Check if startBid and maxBid is higher than auction startPrice
-        if (bidsDTO.getStartBid() <= foundAuction.getStartPrice() ||
-                bidsDTO.getMaxBid() <= foundAuction.getStartPrice()) {
+        if (bidsDTO.getStartBid() <= foundAuction.getStartPrice() || bidsDTO.getMaxBid() <= foundAuction.getStartPrice()) {
             throw new RuntimeException("Your bids cannot be lower than auctions starting price...");
         }
 
@@ -92,6 +91,7 @@ public class BidsServices {
                 Bids auctionCurrentBid = bidsRepository.findById(foundAuction.getBid().getId()).get();
 
                 User currentBidUser = userRepository.findById(auctionCurrentBid.getUser().getId()).get();
+
                 // user loses
                 // checks if new bid is less than the current
                 if (newBid.getMaxPrice() < auctionCurrentBid.getMaxPrice()) {
@@ -107,6 +107,7 @@ public class BidsServices {
                     auctionRepository.save(foundAuction);
                     return ResponseEntity.ok(newBid.getMaxPrice() + " is less than auctions current bids max price. New current bid is: " + foundAuction.currentPrice);
                 }
+
                 // if the bids are equal sets the previous/current bid as winner.
                 if (newBid.getMaxPrice() == auctionCurrentBid.getMaxPrice()) {
                     auctionCurrentBid.setCurrentPrice(auctionCurrentBid.getMaxPrice());
@@ -119,6 +120,7 @@ public class BidsServices {
                 // user wins
                 // Checks if you can raise the current price by ten if not still wins
                 if (newBid.getMaxPrice() > auctionCurrentBid.getMaxPrice()) {
+
                     if (auctionCurrentBid.getMaxPrice() + 10 < newBid.getMaxPrice()) {
                         newBid.setCurrentPrice(auctionCurrentBid.getCurrentPrice() + 10);
                         bidsRepository.save(newBid);
@@ -130,12 +132,13 @@ public class BidsServices {
                         foundUser.setBalance(foundUser.getBalance() - newBid.getMaxPrice());
                         userRepository.save(foundUser);
                         return ResponseEntity.ok(newBid.getCurrentPrice() + " you have the current bid.");
-                    }else {
+                    }
+                    else {
                         // if you cant do 10+ monies to your maxbid
-                        newBid.setCurrentPrice(auctionCurrentBid.getCurrentPrice());
+                        newBid.setCurrentPrice(auctionCurrentBid.getMaxPrice());
                         bidsRepository.save(newBid);
 
-                        foundAuction.setCurrentPrice(newBid.getCurrentPrice());
+                        foundAuction.setCurrentPrice(newBid.getMaxPrice());
                         currentBidUser.setBalance(currentBidUser.getBalance() + auctionCurrentBid.getMaxPrice());
                         foundAuction.setBid(newBid);
                         foundUser.setBalance(foundUser.getBalance() - newBid.getMaxPrice());
@@ -162,7 +165,7 @@ public class BidsServices {
             foundAuction.setCurrentPrice(newBid.getCurrentPrice());
             foundAuction.setHasBids(true);
             auctionRepository.save(foundAuction);
-            return ResponseEntity.ok(" Has been created, current price is " + newBid.getCurrentPrice());
+            return ResponseEntity.ok("Bid has been created, current price is " + newBid.getCurrentPrice());
         }
 
         return ResponseEntity.ok("Something went wrong");
@@ -170,7 +173,7 @@ public class BidsServices {
 
 
     public void checkBids (){
-        
+
     }
 
 
