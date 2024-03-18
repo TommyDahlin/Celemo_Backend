@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface OrderRepository extends MongoRepository<Order, String> {
 
-    List<Order> findByBuyerAccount(String buyerAccount);
+    List<Order> findByBuyerUsername(String buyerAccount);
 
 
 }

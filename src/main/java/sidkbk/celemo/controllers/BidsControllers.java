@@ -37,16 +37,7 @@ public class BidsControllers {
         }
     }
 
-    //Update by id
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateBids(@RequestBody BidsDTO bidsDTO, @PathVariable("id") String _id) {
-        try {
-            return  ResponseEntity.ok(bidsServices.updateBids(bidsDTO));
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-    }
+
 
     // find all bid for one user
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
@@ -62,6 +53,17 @@ public class BidsControllers {
 
 // ADMIN
 //////////////////////////////////////////////////////////////////////////////////////
+
+    //Update by id
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> updateBids(@RequestBody BidsDTO bidsDTO, @PathVariable("id") String _id) {
+        try {
+            return  ResponseEntity.ok(bidsServices.updateBids(bidsDTO));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
 
     //Find by BidId
     @PreAuthorize("hasRole('ADMIN')")

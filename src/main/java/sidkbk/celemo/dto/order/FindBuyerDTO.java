@@ -1,13 +1,13 @@
 package sidkbk.celemo.dto.order;
 
 public class FindBuyerDTO {
-    private String buyerAccount;
+    private String buyerUsername;
 
-    public String getBuyerAccount() {
-        return buyerAccount;
+    public String getBuyerUsername() {
+        return buyerUsername;
     }
 
-    public void setBuyerAccount(String buyerAccount) {
-        this.buyerAccount = buyerAccount;
+    public void setBuyerUsername(String buyerUsername) {
+        this.buyerUsername = buyerUsername;
     }
 }
