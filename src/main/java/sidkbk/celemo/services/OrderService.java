@@ -70,7 +70,7 @@ public class OrderService {
     // fine all orders that are bound to one user ID
     public List<Map<String, Object>> findOrdersByUserId(FindBuyerDTO findBuyerDTO) {
         //Tries to find orders by userId
-        List<Order> findOrders = orderRepository.findByBuyerAccount(findBuyerDTO.getBuyerAccount());
+        List<Order> findOrders = orderRepository.findByBuyerUsername(findBuyerDTO.getBuyerUsername());
         // returns the orders it finds that are connected to the userId
         //then it maps thrue the orders and shows only whats inside the .map
         // Tho it dosnt seem to show in the order i put the orderDetails in.
@@ -106,7 +106,7 @@ public class OrderService {
 
     public List<Order> findAllOrderForOneUser(FindBuyerDTO findBuyerDTO) {
         //Find user using id
-        User foundUser = userRepository.findByUsername(findBuyerDTO.getBuyerAccount())
+        User foundUser = userRepository.findByUsername(findBuyerDTO.getBuyerUsername())
                 .orElseThrow(() -> new RuntimeException("User not found"));
         //Skapa en tom lista för hitta order
         List<Order> foundOrder = new ArrayList<>();
