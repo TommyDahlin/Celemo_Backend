@@ -41,8 +41,8 @@ public class OrderService {
 
         Order newOrder = new Order();
         newOrder.setAuction(findAuction);
-        newOrder.setSellerAccount(findAuction.getSeller().getUsernameAndEmail());
-        newOrder.setBuyerAccount(orderCreationDTO.getBuyerUsername());
+        newOrder.setSellerUsername(findAuction.getSeller().getUsernameAndEmail());
+        newOrder.setBuyerUsername(orderCreationDTO.getBuyerUsername());
         newOrder.setProductTitle(findAuction.getTitle());
         newOrder.setEndPrice(findAuction.getEndPrice());
         newOrder.setCreatedAt(orderCreationDTO.getCreatedAt());
@@ -81,8 +81,8 @@ public class OrderService {
                     .map(order -> {
                         Map<String, Object> orderDetails = new HashMap<>();
                         orderDetails.put("ProductTitle:", order.getProductTitle());
-                        orderDetails.put("BuyerUsername", order.getBuyerAccount());
-                        orderDetails.put("SellerUsername", order.getSellerAccount());
+                        orderDetails.put("BuyerUsername", order.getBuyerUsername());
+                        orderDetails.put("SellerUsername", order.getSellerUsername());
                         orderDetails.put("endPrice", order.getEndPrice());
                         orderDetails.put("createdAt", order.getCreatedAt());
                         return orderDetails;
@@ -113,7 +113,7 @@ public class OrderService {
         //spare all order i en lista
         List<Order> allOrder = orderRepository.findAll();
         for (Order order : allOrder) {
-            if (order.getBuyerAccount() != null && foundUser.getUsername().equals(order.getBuyerAccount())) {
+            if (order.getBuyerUsername() != null && foundUser.getUsername().equals(order.getBuyerUsername())) {
                 foundOrder.add(order);
             }
         }

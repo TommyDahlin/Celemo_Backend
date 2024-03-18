@@ -19,9 +19,9 @@ public class Order {
     private Date createdAt = new Date();
 
 
-    private String sellerAccount;
+    private String sellerUsername;
 
-    private String buyerAccount;
+    private String buyerUsername;
     @DBRef
     private Auction auction;
 
@@ -40,11 +40,11 @@ public class Order {
     public String getId() {
         return id;
     }
-    public String getSellerAccount() {
-        return sellerAccount;
+    public String getSellerUsername() {
+        return sellerUsername;
     }
-    public String getBuyerAccount() {
-        return buyerAccount;
+    public String getBuyerUsername() {
+        return buyerUsername;
     }
     public Auction getAuction() {
         return auction;
@@ -69,11 +69,11 @@ public class Order {
     public void setAuction(Auction auction) {
         this.auction = auction;
     }
-    public void setBuyerAccount(String buyerAccount) {
-        this.buyerAccount = buyerAccount;
+    public void setBuyerUsername(String buyerUsername) {
+        this.buyerUsername = buyerUsername;
     }
-    public void setSellerAccount(String sellerAccount) {
-        this.sellerAccount = sellerAccount;
+    public void setSellerUsername(String sellerUsername) {
+        this.sellerUsername = sellerUsername;
     }
     public void setProductTitle(String productTitle) {
         this.productTitle = productTitle;

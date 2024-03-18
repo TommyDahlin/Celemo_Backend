@@ -18,7 +18,7 @@ http://localhost:8080/api/order/create
 http://localhost:8080/api/order/find/user-orders/admin
 
 {
-    "buyerAccount": "bruddajake"
+    "buyerUsername": "bruddajake"
 }
 
 #######################################################################################################
@@ -29,7 +29,7 @@ shows less info
 http://localhost:8080/api/order/find/user-orders
 
 {
-    "buyerAccount": "bruddajake"
+    "buyerUsername": "bruddajake"
 }
 #######################################################################################################
     ADMIN ONLY
