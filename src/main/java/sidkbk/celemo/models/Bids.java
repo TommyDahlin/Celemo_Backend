@@ -28,6 +28,9 @@ public class Bids {
     public Bids() {
     }
 
+    public Bids(User user, String auctionId, double startPrice, double maxPrice) {
+    }
+
 
     public String getId() {
         return id;
