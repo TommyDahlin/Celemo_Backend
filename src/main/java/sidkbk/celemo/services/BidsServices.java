@@ -104,7 +104,7 @@ public class BidsServices {
                     } else {
                         auctionCurrentBid.setCurrentPrice(auctionCurrentBid.getMaxPrice());
                     }
-                    
+
                     bidsRepository.save(newBid);
                    // bidsRepository.save(auctionCurrentBid);
                     bidsRepository.save(updatedBid);
@@ -118,7 +118,7 @@ public class BidsServices {
                     auctionCurrentBid.setCurrentPrice(auctionCurrentBid.getMaxPrice());
                     foundAuction.setCurrentPrice(auctionCurrentBid.getMaxPrice());
                     bidsRepository.save(newBid);
-                    bidsRepository.save(auctionCurrentBid);
+                    bidsRepository.save(updatedBid);
                     auctionRepository.save(foundAuction);
                     return ResponseEntity.ok(newBid.getMaxPrice() + " is as much as the auctions current " + foundAuction.currentPrice + " bids max price. Make a new bid if you want to continue. New price is previous bids max");
                 }
