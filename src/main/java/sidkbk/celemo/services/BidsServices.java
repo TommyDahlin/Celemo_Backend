@@ -92,18 +92,23 @@ public class BidsServices {
 
                 User currentBidUser = userRepository.findById(auctionCurrentBid.getUser().getId()).get();
 
+                Bids updatedBid = auctionCurrentBid;
+
                 // user loses
                 // checks if new bid is less than the current
                 if (newBid.getMaxPrice() < auctionCurrentBid.getMaxPrice()) {
                     // Raises by 10 if possible
                     if (newBid.getMaxPrice() + 10 <= auctionCurrentBid.getMaxPrice()) {
-                        auctionCurrentBid.setCurrentPrice(newBid.getMaxPrice() + 10);
+                        //auctionCurrentBid.setCurrentPrice(newBid.getMaxPrice() + 10);
+                        updatedBid.setCurrentPrice(newBid.getMaxPrice() + 10);
                     } else {
                         auctionCurrentBid.setCurrentPrice(auctionCurrentBid.getMaxPrice());
                     }
+                    
                     bidsRepository.save(newBid);
-                    bidsRepository.save(auctionCurrentBid);
-                    foundAuction.setCurrentPrice(auctionCurrentBid.getCurrentPrice());
+                   // bidsRepository.save(auctionCurrentBid);
+                    bidsRepository.save(updatedBid);
+                    foundAuction.setCurrentPrice(updatedBid.getCurrentPrice());
                     auctionRepository.save(foundAuction);
                     return ResponseEntity.ok(newBid.getMaxPrice() + " is less than auctions current bids max price. New current bid is: " + foundAuction.currentPrice);
                 }
@@ -115,7 +120,7 @@ public class BidsServices {
                     bidsRepository.save(newBid);
                     bidsRepository.save(auctionCurrentBid);
                     auctionRepository.save(foundAuction);
-                    return ResponseEntity.ok(newBid.getMaxPrice() + " is as much as the auctions current " + foundAuction.currentPrice +"bids max price. Make a new bid if you want to continue. New price is previous bids max");
+                    return ResponseEntity.ok(newBid.getMaxPrice() + " is as much as the auctions current " + foundAuction.currentPrice + " bids max price. Make a new bid if you want to continue. New price is previous bids max");
                 }
                 // user wins
                 // Checks if you can raise the current price by ten if not still wins
