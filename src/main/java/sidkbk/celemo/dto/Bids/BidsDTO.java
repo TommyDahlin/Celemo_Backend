@@ -7,14 +7,30 @@ public class BidsDTO {
 
     // Data transfer object/ User and Auction
 
+    private String id;
     @NotBlank
     private Double startBid;
-    private Double maxBid;
+    private Double maxBid = 0.0;
 
     private String userId;
 
     private String auctionId;
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setStartBid(Double startBid) {
+        this.startBid = startBid;
+    }
+
+    public void setMaxBid(Double maxBid) {
+        this.maxBid = maxBid;
+    }
 
     public String getUserId() {
         return userId;
