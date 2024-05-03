@@ -13,12 +13,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import sidkbk.celemo.security.jwt.AuthTokenFilter;
 import sidkbk.celemo.security.jwt.AuthenticationEntryJwt;
 import sidkbk.celemo.security.services.UserDetailsServiceImpl;
 
-@CrossOrigin(origins = "http://localhost:5173/", allowedHeaders = "*", allowCredentials = "true")
+
 @Configuration
 @EnableMethodSecurity
 public class WebSecurityConfig {
