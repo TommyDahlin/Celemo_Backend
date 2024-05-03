@@ -80,8 +80,9 @@ public class UserController {
         return userService.deleteUserFavouritesById(deleteUserFavouritesDTO);
     }
     // find/get using id
+    // Changed from GET to POST
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    @GetMapping ("/find-one")
+    @PostMapping ("/find-one")
     public ResponseEntity<User> getUserById(@Valid @RequestBody FindUserIdDTO findUserIdDTO){
         Optional<User> user = userService.getUserById(findUserIdDTO);
         return user.map(ResponseEntity::ok)
