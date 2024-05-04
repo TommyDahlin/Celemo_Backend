@@ -54,6 +54,7 @@ public class AuctionController {
     }
 
     // Get all auctions from user
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping("/find/all/user")
     public ResponseEntity<?> getAllAuctionsFromUser(@Valid @RequestBody FindUserIdDTO findUserIdDTO) {
 
