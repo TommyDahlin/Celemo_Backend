@@ -33,7 +33,8 @@ public class SearchController {
     }
 
     // Search with pagination
-    @GetMapping("/page/{pagenumber}")
+    // Changed GET to POST
+    @PostMapping("/page/{pagenumber}")
     public ResponseEntity<?> searchPage(@PathVariable("pagenumber") int pageNr,
                                         @Valid @RequestBody SearchDTO searchDTO) {
         List<Auction> foundAuctions = searchService.searchPage(pageNr, searchDTO);
