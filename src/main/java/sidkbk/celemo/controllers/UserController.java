@@ -81,6 +81,7 @@ public class UserController {
     }
     // find/get using id
     // Changed from GET to POST
+    @CrossOrigin(origins = "http://localhost:5173/", allowedHeaders = "*", allowCredentials = "true")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PostMapping ("/find-one")
     public ResponseEntity<User> getUserById(@Valid @RequestBody FindUserIdDTO findUserIdDTO){

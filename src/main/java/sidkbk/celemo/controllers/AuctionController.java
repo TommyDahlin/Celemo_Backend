@@ -55,6 +55,7 @@ public class AuctionController {
 
     // Get all auctions from user
     // CHANGED GET to POST
+    @CrossOrigin(origins = "http://localhost:5173/", allowedHeaders = "*", allowCredentials = "true")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PostMapping("/find/all/user")
     public ResponseEntity<?> getAllAuctionsFromUser(@Valid @RequestBody FindUserIdDTO findUserIdDTO) {
