@@ -54,8 +54,9 @@ public class AuctionController {
     }
 
     // Get all auctions from user
+    // CHANGED GET to POST
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    @GetMapping("/find/all/user")
+    @PostMapping("/find/all/user")
     public ResponseEntity<?> getAllAuctionsFromUser(@Valid @RequestBody FindUserIdDTO findUserIdDTO) {
 
         List<Auction> foundAuctions = auctionService.getAllAuctionsFromUser(findUserIdDTO);
