@@ -16,6 +16,8 @@ import sidkbk.celemo.services.AuctionService;
 
 import java.util.List;
 
+
+@CrossOrigin(origins = "http://localhost:5173/", allowedHeaders = "*", allowCredentials = "true")
 @RestController
 @RequestMapping(value = "/api/auction")
 public class AuctionController {
@@ -52,7 +54,10 @@ public class AuctionController {
     }
 
     // Get all auctions from user
-    @GetMapping("/find/all/user")
+    // CHANGED GET to POST
+    @CrossOrigin(origins = "http://localhost:5173/", allowedHeaders = "*", allowCredentials = "true")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PostMapping("/find/all/user")
     public ResponseEntity<?> getAllAuctionsFromUser(@Valid @RequestBody FindUserIdDTO findUserIdDTO) {
 
         List<Auction> foundAuctions = auctionService.getAllAuctionsFromUser(findUserIdDTO);
@@ -82,6 +87,20 @@ public class AuctionController {
         return auctionService.deleteAuction(auctionIdDTO);
     }
 
+    // GET one auction
+
+    @CrossOrigin(origins = "http://localhost:5173/", allowedHeaders = "*", allowCredentials = "true")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+    @PostMapping("/find-one")
+    public ResponseEntity<?> getAuction(@Valid @RequestBody AuctionIdDTO auctionIdDTO) {
+        try {
+            return ResponseEntity.ok(auctionService.getOneAuction(auctionIdDTO));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+
 // ADMIN
 //////////////////////////////////////////////////////////////////////////////////////
 
@@ -96,16 +115,6 @@ public class AuctionController {
         }
     }
 
-    // GET one auction
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/find-one")
-    public ResponseEntity<?> getAuction(@Valid @RequestBody AuctionIdDTO auctionIdDTO) {
-        try {
-            return ResponseEntity.ok(auctionService.getOneAuction(auctionIdDTO));
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-    }
 
 
     //REMOVE BEFORE PRODUCTION

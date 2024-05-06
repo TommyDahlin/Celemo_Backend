@@ -13,7 +13,7 @@ import sidkbk.celemo.models.Reviews;
 import sidkbk.celemo.services.ReviewsService;
 
 import java.util.List;
-
+@CrossOrigin(origins = "http://localhost:5173/", allowedHeaders = "*", allowCredentials = "true")
 @RestController
 @RequestMapping("/api/reviews")
 public class ReviewsController {

@@ -15,7 +15,7 @@ import sidkbk.celemo.models.Bids;
 import sidkbk.celemo.services.BidsServices;
 
 import java.util.List;
-
+@CrossOrigin(origins = "http://localhost:5173/", allowedHeaders = "*", allowCredentials = "true")
 @RestController
 @RequestMapping(value = "/api/bids")
 public class BidsControllers {

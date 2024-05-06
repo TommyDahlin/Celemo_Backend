@@ -1,6 +1,7 @@
 package sidkbk.celemo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -50,8 +51,12 @@ public class SearchService {
 
     public List<Auction> searchPage(int pageNr, SearchDTO searchDTO) {
         Pageable paging = PageRequest.of(pageNr, searchDTO.getPageSize());
-        List<Auction> foundAuctions;
-        if (searchDTO.getSearch().toUpperCase().equals(searchDTO.getSearch())) {
+        List<Auction> foundAuctions = new ArrayList<>();
+        if (searchDTO.getSearch().isEmpty()) {
+            Page<Auction> page = auctionRepository.findAll(PageRequest.of(pageNr, searchDTO.getPageSize()));
+            foundAuctions = page.toList();
+
+        } else if (searchDTO.getSearch().toUpperCase().equals(searchDTO.getSearch())) {
             foundAuctions = auctionRepository.findByCategoryListContains(searchDTO.getSearch(),paging);
         } else {
             foundAuctions = auctionRepository.findByTitleContainsIgnoreCase(searchDTO.getSearch(), paging);

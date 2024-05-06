@@ -10,7 +10,7 @@ import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.services.SearchService;
 
 import java.util.List;
-
+@CrossOrigin(origins = "http://localhost:5173/", allowedHeaders = "*", allowCredentials = "true")
 @RestController
 @RequestMapping("/api/search")
 public class SearchController {
@@ -33,7 +33,8 @@ public class SearchController {
     }
 
     // Search with pagination
-    @GetMapping("/page/{pagenumber}")
+    // Changed GET to POST
+    @PostMapping("/page/{pagenumber}")
     public ResponseEntity<?> searchPage(@PathVariable("pagenumber") int pageNr,
                                         @Valid @RequestBody SearchDTO searchDTO) {
         List<Auction> foundAuctions = searchService.searchPage(pageNr, searchDTO);

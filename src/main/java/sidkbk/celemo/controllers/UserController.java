@@ -14,7 +14,7 @@ import sidkbk.celemo.services.UserService;
 
 import java.util.Optional;
 
-
+@CrossOrigin(origins = "http://localhost:5173/", allowedHeaders = "*", allowCredentials = "true")
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
@@ -80,8 +80,10 @@ public class UserController {
         return userService.deleteUserFavouritesById(deleteUserFavouritesDTO);
     }
     // find/get using id
+    // Changed from GET to POST
+    @CrossOrigin(origins = "http://localhost:5173/", allowedHeaders = "*", allowCredentials = "true")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    @GetMapping ("/find-one")
+    @PostMapping ("/find-one")
     public ResponseEntity<User> getUserById(@Valid @RequestBody FindUserIdDTO findUserIdDTO){
         Optional<User> user = userService.getUserById(findUserIdDTO);
         return user.map(ResponseEntity::ok)
