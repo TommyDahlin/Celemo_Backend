@@ -25,7 +25,8 @@ public class ReviewsController {
 //////////////////////////////////////////////////////////////////////////////////////
 
     // GET all reviews for specific reviewed user
-    @GetMapping("/find/all-user")
+    // SUPPOSED TO BE A GET
+    @PostMapping("/find/all-user")
     public ResponseEntity<?> allReviewsForSpecificReviewedUser(@Valid @RequestBody FindUserIdDTO findUserIdDTO) {
         List<Reviews> foundReviews = reviewsService.allReviewsForSpecificReviewedUser(findUserIdDTO);
 
