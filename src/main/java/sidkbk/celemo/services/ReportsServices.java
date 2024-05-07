@@ -64,8 +64,8 @@ public class ReportsServices {
     }
 
     //get , find one report
-    public ResponseEntity<?> findOne(ReportsFindDTO reportsFindDTO) {
-        Reports foundReport = reportsRepository.findById(reportsFindDTO.getReportsId())
+    public ResponseEntity<?> findOne(String reportsId) {
+        Reports foundReport = reportsRepository.findById(reportsId)
                 .orElseThrow(() -> new RuntimeException("Order was not found"));
         return ResponseEntity.ok(foundReport);
     }

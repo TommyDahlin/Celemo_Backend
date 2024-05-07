@@ -5,7 +5,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import sidkbk.celemo.dto.search.SearchDTO;
 import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.models.ECategory;
 import sidkbk.celemo.repositories.AuctionRepository;
@@ -20,28 +19,28 @@ public class SearchService {
     AuctionRepository auctionRepository;
 
     // Search
-    public List<Auction> search(SearchDTO searchDTO) {
+    public List<Auction> search(String search) {
         List<Auction> allAuctions = auctionRepository.findAll(); // Temp add all auctions to a list.
         List<Auction> foundAuctions = new ArrayList<>(); // List to return when something is found.
         // Check first if search term is a ENUM Category, therefore check if search is uppercase.
-        if (searchDTO.getSearch().toUpperCase().equals(searchDTO.getSearch())) {
+        if (search.toUpperCase().equals(search)) {
             for (Auction auction : allAuctions) { // Loop all auctions
                 // Temp add categories to current auction loop
                 List<ECategory> foundCategories = auction.categoryList;
                 // Loop through all categories in the current auction loop and if category match search
                 // add that auction to foundAuctions
                 for (ECategory cat : foundCategories) {
-                    if (cat.name().equals(searchDTO.getSearch())) {
+                    if (cat.name().equals(search)) {
                         foundAuctions.add(auction);
                     }
                 }
             }
             return foundAuctions;
         }
-        if (!searchDTO.getSearch().toUpperCase().equals(searchDTO.getSearch())) { // If "search" is not all uppercase
+        if (!search.toUpperCase().equals(search)) { // If "search" is not all uppercase
             for (Auction auction : allAuctions) { // Loop all auctions
                 // If auction title contains any word of the "search"
-                if (auction.getTitle().toLowerCase().contains(searchDTO.getSearch().toLowerCase())) {
+                if (auction.getTitle().toLowerCase().contains(search.toLowerCase())) {
                     foundAuctions.add(auction);
                 }
             }
@@ -49,17 +48,17 @@ public class SearchService {
         return foundAuctions;
     }
 
-    public List<Auction> searchPage(int pageNr, SearchDTO searchDTO) {
-        Pageable paging = PageRequest.of(pageNr, searchDTO.getPageSize());
+    public List<Auction> searchPage(String search, int pageSize,  int pageNr) {
+        Pageable paging = PageRequest.of(pageNr, pageSize);
         List<Auction> foundAuctions = new ArrayList<>();
-        if (searchDTO.getSearch().isEmpty()) {
-            Page<Auction> page = auctionRepository.findAll(PageRequest.of(pageNr, searchDTO.getPageSize()));
+        if (search.isEmpty()) {
+            Page<Auction> page = auctionRepository.findAll(PageRequest.of(pageNr, pageSize));
             foundAuctions = page.toList();
 
-        } else if (searchDTO.getSearch().toUpperCase().equals(searchDTO.getSearch())) {
-            foundAuctions = auctionRepository.findByCategoryListContains(searchDTO.getSearch(),paging);
+        } else if (search.toUpperCase().equals(search)) {
+            foundAuctions = auctionRepository.findByCategoryListContains(search,paging);
         } else {
-            foundAuctions = auctionRepository.findByTitleContainsIgnoreCase(searchDTO.getSearch(), paging);
+            foundAuctions = auctionRepository.findByTitleContainsIgnoreCase(search, paging);
         }
 
         return foundAuctions;
