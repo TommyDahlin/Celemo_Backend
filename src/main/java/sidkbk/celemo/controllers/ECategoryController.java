@@ -19,13 +19,10 @@ public class ECategoryController {
     @Autowired
     ECategoryService ECategoryService;
 
-
+    // should be an auth on this?
+    // or is it prevented by auction auth?
     @GetMapping("/find")
     public List<ECategory> getCategory() {
-
         return ECategoryService.getCategory();
     }
-
-
-
 }
