@@ -7,15 +7,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import sidkbk.celemo.dto.order.DeleteOrderDTO;
-import sidkbk.celemo.dto.order.FindBuyerDTO;
 import sidkbk.celemo.dto.order.OrderCreationDTO;
-import sidkbk.celemo.dto.order.OrderFoundByIdDTO;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.Order;
 import sidkbk.celemo.services.OrderService;
 
 import java.util.List;
-@CrossOrigin(origins = "http://localhost:5173/", allowedHeaders = "*", allowCredentials = "true")
+
+/*@CrossOrigin(origins = "http://localhost:5173/", allowedHeaders = "*", allowCredentials = "true")*/
 @RestController
 @RequestMapping(value = "/api/order")
 public class OrderController {
@@ -27,21 +26,21 @@ public class OrderController {
 //////////////////////////////////////////////////////////////////////////////////////
 
 
-    // List of all previousPurchases by User
+    // List of all previousPurchases by byer username
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    @GetMapping("/find/user-orders")
-    public ResponseEntity<?> getPreviousPurchase(@Valid @RequestBody FindBuyerDTO findBuyerDTO) {
+    @GetMapping("/find/user-orders/{byerUsername}")
+    public ResponseEntity<?> getPreviousPurchase(@PathVariable("byerUsername") String byerUsername) {
         try{
-            return ResponseEntity.ok(orderService.findOrdersByUserId(findBuyerDTO));
+            return ResponseEntity.ok(orderService.findOrdersByUserId(byerUsername));
         } catch (EntityNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/find/user-orders/admin")
-    public ResponseEntity<?>findAllOrderForOneUser(@Valid @RequestBody FindBuyerDTO findBuyerDTO){
-        List<Order> foundOrder = orderService.findAllOrderForOneUser(findBuyerDTO);
+    @GetMapping("/find/user-orders/admin/{byerUsername}")
+    public ResponseEntity<?>findAllOrderForOneUser(@PathVariable("byerUsername") String byerUsername){
+        List<Order> foundOrder = orderService.findAllOrderForOneUser(byerUsername);
         if (foundOrder.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no order found");
         }else {
@@ -63,10 +62,10 @@ public class OrderController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/find-one")
-    public ResponseEntity<?> getOneOrder(@Valid @RequestBody OrderFoundByIdDTO orderFoundByIdDTO) {
+    @GetMapping("/find-one/{orderId}")
+    public ResponseEntity<?> getOneOrder(@PathVariable("orderId") String orderId) {
         try {
-            return ResponseEntity.ok(orderService.getOneOrder(orderFoundByIdDTO));
+            return ResponseEntity.ok(orderService.getOneOrder(orderId));
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }

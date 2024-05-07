@@ -15,11 +15,11 @@ Body - raw
 #######################################################################################################
 
 GET - find all bid for one user
-http://localhost:8080/api/bids/find/all-user
-Body - raw
-{
-    "userId": "65d755873b0850253b1640be"
-}
+http://localhost:8080/api/bids/find/all-user/:userId
+
+Path Variable
+    userId: "65d755873b0850253b1640be"
+
 
 #######################################################################################################
 
@@ -37,21 +37,12 @@ http://localhost:8080/api/bids/update/{id}
 
 #######################################################################################################
 
-GET - Find all from user id
-http://localhost:8080/api/bids/find/all-user
-
-{
-    "userId": "ObjectId"
-}
-
-#######################################################################################################
-
 GET - Find one
-http://localhost:8080/api/bids/find-one
+http://localhost:8080/api/bids/find-one/:bidId
 
-{
-    "bidId": "ObjectId"
-}
+Path Variable
+    bidId: "ObjectId"
+
 
 #######################################################################################################
 
@@ -61,11 +52,11 @@ http://localhost:8080/api/bids/find/all
 #######################################################################################################
 
 GET - Find from auction
-http://localhost:8080/api/bids/find/byauction
+http://localhost:8080/api/bids/find/byauction/:auctionId
 
-{
-    "auctionId": "ObjectId"
-}
+Path Variable
+    auctionId: "ObjectId"
+
 
 #######################################################################################################
 

@@ -15,22 +15,22 @@ http://localhost:8080/api/order/create
 #######################################################################################################
     ADMIN
 // Get orders from user by userId
-http://localhost:8080/api/order/find/user-orders/admin
+http://localhost:8080/api/order/find/user-orders/admin/:byerUsername
 
-{
-    "buyerUsername": "bruddajake"
-}
+Path Variable
+    buyerUsername: "bruddajake"
+
 
 #######################################################################################################
     USER AND ADMIN
 // GET orders from User by userId
 shows less info
 
-http://localhost:8080/api/order/find/user-orders
+http://localhost:8080/api/order/find/user-orders/:byerUsername
 
-{
-    "buyerUsername": "bruddajake"
-}
+Path Variable
+    buyerUsername: "bruddajake"
+
 #######################################################################################################
     ADMIN ONLY
 // GET--list of all orders
@@ -39,11 +39,11 @@ http://localhost:8080/api/order/find/all
 #######################################################################################################
     ADMIN ONLY
 // GET--one specific order
-http://localhost:8080/api/order/find-one
-inside body
-{
-    "orderId": "65df8703a827142e976e1c13"
-}
+http://localhost:8080/api/order/find-one/:orderId
+
+Path Variable
+    orderId: "65df8703a827142e976e1c13"
+
 #######################################################################################################
     DEV//SYSTEM
     going to get removed later
