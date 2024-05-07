@@ -89,7 +89,7 @@ public class AuctionController {
 
     // GET one auction
 
-    @CrossOrigin(origins = "http://localhost:5173/", allowedHeaders = "*", allowCredentials = "true")
+    //@CrossOrigin(origins = "http://localhost:5173/", allowedHeaders = "*", allowCredentials = "true")
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @PostMapping("/find-one")
     public ResponseEntity<?> getAuction(@Valid @RequestBody AuctionIdDTO auctionIdDTO) {
