@@ -65,15 +65,15 @@ public class UserService {
     }
 
     //find user variable with filter. For example : grade
-    public String getUserFilter(FindUserIdandFilterDTO findUserIdandFilterDTO) { //userId and filter, filter can be grade, username, firstName, lastName
-        User user = userRepository.findById(findUserIdandFilterDTO.getUserId()).get();
-        return user.getFilter(findUserIdandFilterDTO.getFilter());
+    public String getUserFilter(String userId, String filter) { //userId and filter, filter can be grade, username, firstName, lastName
+        User user = userRepository.findById(userId).get();
+        return user.getFilter(filter);
 
     }
 
     // get/find user account using id
-    public Optional<User> getUserById(FindUserIdDTO findUserIdDTO) {
-        return userRepository.findById(findUserIdDTO.getUserId());
+    public Optional<User> getUserById(String userId) {
+        return userRepository.findById(userId);
     }
 
 
@@ -124,21 +124,18 @@ public class UserService {
     }
 
 
-    public ResponseEntity<?> getUserFavouritesById(FindUserFavouritesDTO findUserFavouritesDTO) {
-        User user = userRepository.findById(findUserFavouritesDTO.getUserId()) //find user with dto userId
-                .orElseThrow(() -> new RuntimeException("User does not exist"));// if user cant be found
+    public ResponseEntity<?> getUserFavouritesById(String userId) {
+        User user = userRepository.findById(userId).get(); //find user with dto userId
         return ResponseEntity.ok(user.getFavouriteAuctions());//get favouriteAuction List
 
     }
 
-    public ResponseEntity<?> setUserFavouritesById(ModifyUserFavouritesDTO favouritesDTO) {
-        User foundUser = userRepository.findById(favouritesDTO.getUserId())// find user with dto userId
-                .orElseThrow(() -> new RuntimeException("User does not exist")); // if user cant be found
-        Auction foundAuction = auctionRepository.findById(favouritesDTO.getAuctionId())// find auction with dto auctionId
-                .orElseThrow(() -> new RuntimeException("Auction does not exist"));// if auction cant be found
+    public ResponseEntity<?> setUserFavouritesById(String userId, String auctionId) {
+        User foundUser = userRepository.findById(userId).get();// find user with dto userId
+        Auction foundAuction = auctionRepository.findById(auctionId).get();// find auction with dto auctionId
 
         for (Auction auction : foundUser.getFavouriteAuctions()) {
-            if (auction.getId().equals(favouritesDTO.getAuctionId())) {
+            if (auction.getId().equals(auctionId)) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Auction already exist in favourites list...");
             }
         }
@@ -147,14 +144,13 @@ public class UserService {
         return ResponseEntity.ok("Auction was added to favourite list.");
     }
 
-    public ResponseEntity<?> deleteUserFavouritesById(ModifyUserFavouritesDTO deleteFavouritesDto) {
-        User foundUser = userRepository.findById(deleteFavouritesDto.getUserId())
-                .orElseThrow(() -> new RuntimeException("User does not exist"));
+    public ResponseEntity<?> deleteUserFavouritesById(String userId, String auctionId) {
+        User foundUser = userRepository.findById(userId).get();
 
         // Loop through favorite list of user
         for (Auction auction : foundUser.getFavouriteAuctions()) {
             // If current auction id in loop match id in DTO
-            if (auction.getId().equals(deleteFavouritesDto.getAuctionId())) {
+            if (auction.getId().equals(auctionId)) {
                 // Save found auction before removing, this was necessary otherwise it doesnt work
                 Auction foundAuctionToRemove = auction;
                 foundUser.getFavouriteAuctions().remove(foundAuctionToRemove);
