@@ -51,7 +51,7 @@ public class SearchService {
     public List<Auction> searchPage(String search, int pageSize,  int pageNr) {
         Pageable paging = PageRequest.of(pageNr, pageSize);
         List<Auction> foundAuctions = new ArrayList<>();
-        if (search.isEmpty()) {
+        if (search.equals("getall")) {
             Page<Auction> page = auctionRepository.findAll(PageRequest.of(pageNr, pageSize));
             foundAuctions = page.toList();
 
