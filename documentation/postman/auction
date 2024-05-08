@@ -23,22 +23,22 @@ http://localhost:8080/api/auction/find/all
 #######################################################################################################
 
 GET - Find one auction by id
-http://localhost:8080/auction/find-one
-Body - raw
-{
-    "auctionId": "65cf4c97f8e89b4462e5be28"
-}
+http://localhost:8080/auction/find-one/:auctionId
+
+Path Variable
+    auctionId: "65cf4c97f8e89b4462e5be28"
+
 
 #######################################################################################################
 
 GET - Find all auctions from specifik user
-http://localhost:8080/api/auction/find/all/user
+http://localhost:8080/api/auction/find/all/user/:userId
 Body - raw
 
-(example)
-{
-    "userId": "65d771baa9e6823a9c1c27fa"
-}
+Path Variable
+
+    userId: "65d771baa9e6823a9c1c27fa"
+
 
 #######################################################################################################
 

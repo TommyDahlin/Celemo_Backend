@@ -5,14 +5,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import sidkbk.celemo.dto.Bids.BidsDTO;
 import sidkbk.celemo.dto.Bids.FindBidIdDTO;
-import sidkbk.celemo.dto.auctions.AuctionIdDTO;
-import sidkbk.celemo.dto.user.FindUserIdDTO;
 import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.models.Bids;
 import sidkbk.celemo.models.User;
 import sidkbk.celemo.repositories.AuctionRepository;
 import sidkbk.celemo.repositories.BidsRepository;
 import sidkbk.celemo.repositories.UserRepository;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -190,8 +189,8 @@ public class BidsServices {
 
 
 //Find a bids by id
-    public Bids findOne(FindBidIdDTO findBidIdDTO){
-        return bidsRepository.findById(findBidIdDTO.getbidId()).get();
+    public Bids findOne(String bidId){
+        return bidsRepository.findById(bidId).get();
     }
 
 // delete a bids
@@ -212,9 +211,9 @@ public class BidsServices {
         return bidsRepository.save(newUpdate);
     }
 
-    public List<Bids> findAllBidsForUser(FindUserIdDTO findUserIdDTO){
+    public List<Bids> findAllBidsForUser(String userId){
         // Find user
-        userRepository.findById(findUserIdDTO.getUserId())
+        userRepository.findById(userId)
                 .orElseThrow(()->new RuntimeException("User not found"));
         // Skapa en tom lista för hittade bids
         List<Bids> foundBids = new ArrayList<>();
@@ -222,14 +221,14 @@ public class BidsServices {
         List<Bids> allBids = bidsRepository.findAll();
         // For loop igenom alla bids och kolla efter bids som matchar med userid
         for (Bids bids : allBids){
-            if (bids.getUser() != null && bids.getUser().getId().equals(findUserIdDTO.getUserId())) {
+            if (bids.getUser() != null && bids.getUser().getId().equals(userId)) {
                 foundBids.add(bids);
             }
         }
         return foundBids;
     }
 
-    public List<Bids> findByAuction(AuctionIdDTO auctionIdDTO) {
-        return bidsRepository.findBidsByAuctionId(auctionIdDTO.getAuctionId());
+    public List<Bids> findByAuction(String auctionId) {
+        return bidsRepository.findBidsByAuctionId(auctionId);
     }
 }

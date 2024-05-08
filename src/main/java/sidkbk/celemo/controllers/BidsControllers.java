@@ -8,14 +8,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import sidkbk.celemo.dto.Bids.BidsDTO;
 import sidkbk.celemo.dto.Bids.FindBidIdDTO;
-import sidkbk.celemo.dto.auctions.AuctionIdDTO;
-import sidkbk.celemo.dto.user.FindUserIdDTO;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.Bids;
 import sidkbk.celemo.services.BidsServices;
 
 import java.util.List;
-@CrossOrigin(origins = "http://localhost:5173/", allowedHeaders = "*", allowCredentials = "true")
+/*@CrossOrigin(origins = "http://localhost:5173/", allowedHeaders = "*", allowCredentials = "true")*/
 @RestController
 @RequestMapping(value = "/api/bids")
 public class BidsControllers {
@@ -41,9 +39,9 @@ public class BidsControllers {
 
     // find all bid for one user
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    @GetMapping("/find/all-user")
-    public ResponseEntity<?> findAllBidsForUser(@Valid @RequestBody FindUserIdDTO findUserIdDTO){
-        List<Bids> foundBids = bidsServices.findAllBidsForUser(findUserIdDTO);
+    @GetMapping("/find/all-user/{userId}")
+    public ResponseEntity<?> findAllBidsForUser(@Valid @PathVariable("userId") String userId){
+        List<Bids> foundBids = bidsServices.findAllBidsForUser(userId);
         if (foundBids.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no bids found");
         }else{
@@ -67,10 +65,10 @@ public class BidsControllers {
 
     //Find by BidId
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/find-one")
-    public ResponseEntity<?> findOne(@Valid @RequestBody FindBidIdDTO findBidIdDTO){
+    @GetMapping("/find-one/{bidId}")
+    public ResponseEntity<?> findOne(@Valid @PathVariable("bidId") String bidId){
         try {
-            return ResponseEntity.ok(bidsServices.findOne(findBidIdDTO));
+            return ResponseEntity.ok(bidsServices.findOne(bidId));
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
@@ -86,10 +84,11 @@ public class BidsControllers {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
+    // GET all bids on an auction
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    @GetMapping("/find/byauction")
-    public ResponseEntity<?> findByAuction(@RequestBody AuctionIdDTO auctionIdDTO) {
-        List<Bids> foundByAuction = bidsServices.findByAuction(auctionIdDTO);
+    @GetMapping("/find/byauction/{auctionId}")
+    public ResponseEntity<?> findByAuction(@PathVariable("auctionId") String auctionId) {
+        List<Bids> foundByAuction = bidsServices.findByAuction(auctionId);
         if (foundByAuction == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Could not find any bids");
         } else {

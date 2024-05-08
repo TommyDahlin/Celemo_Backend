@@ -7,13 +7,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import sidkbk.celemo.dto.Reviews.*;
-import sidkbk.celemo.dto.user.FindUserIdDTO;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.Reviews;
 import sidkbk.celemo.services.ReviewsService;
 
 import java.util.List;
-@CrossOrigin(origins = "http://localhost:5173/", allowedHeaders = "*", allowCredentials = "true")
+/*@CrossOrigin(origins = "http://localhost:5173/", allowedHeaders = "*", allowCredentials = "true")*/
 @RestController
 @RequestMapping("/api/reviews")
 public class ReviewsController {
@@ -23,12 +22,11 @@ public class ReviewsController {
 
 // PUBLIC
 //////////////////////////////////////////////////////////////////////////////////////
-
+@CrossOrigin(origins = "http://localhost:5173/", allowedHeaders = "*", allowCredentials = "true")
     // GET all reviews for specific reviewed user
-    // SUPPOSED TO BE A GET
-    @PostMapping("/find/all-user")
-    public ResponseEntity<?> allReviewsForSpecificReviewedUser(@Valid @RequestBody FindUserIdDTO findUserIdDTO) {
-        List<Reviews> foundReviews = reviewsService.allReviewsForSpecificReviewedUser(findUserIdDTO);
+    @GetMapping("/find/all-user/{userId}")
+    public ResponseEntity<?> allReviewsForSpecificReviewedUser(@PathVariable("userId") String userId) {
+        List<Reviews> foundReviews = reviewsService.allReviewsForSpecificReviewedUser(userId);
 
         if (foundReviews.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User is not reviewed...");
@@ -38,11 +36,12 @@ public class ReviewsController {
     }
 
     // GET all reviews for specific reviewed user WITH paging
-    @GetMapping("/find/all-user/page/{pagenumber}")
+    @GetMapping("/find/all-user/{reviewedUserId}/{pageSize}/page/{pagenumber}")
     public ResponseEntity<?> allReviewsForSpecificReviewedUserPage(
-            @PathVariable("pagenumber") int pageNr,
-            @Valid @RequestBody ReviewsAllPagingUserDTO reviewsAllPagingUserDTO) {
-        List<Reviews> foundReviews = reviewsService.allReviewsForSpecificReviewedUserPage(pageNr, reviewsAllPagingUserDTO);
+            @PathVariable("reviewedUserId") String reviewedUserId,
+            @PathVariable("pageSize") int pageSize,
+            @PathVariable("pagenumber") int pageNr) {
+        List<Reviews> foundReviews = reviewsService.allReviewsForSpecificReviewedUserPage(reviewedUserId, pageSize, pageNr);
 
         if (foundReviews.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User is not reviewed or empty page...");
@@ -52,9 +51,11 @@ public class ReviewsController {
     }
 
     // GET List all reviews for a specified user AND sort reviews by Low or High grades
-    @GetMapping("/find/all-user-sort")
-    public ResponseEntity<?> reviewedUserSortReviews(@Valid @RequestBody ReviewsSortLowHighDTO reviewsSortLowHighDTO) {
-        List<Reviews> foundReviews = reviewsService.reviewedUserSortReviews(reviewsSortLowHighDTO);
+    @GetMapping("/find/all-user-sort/{reviewedUserId}/{HIGH-or-LOW}")
+    public ResponseEntity<?> reviewedUserSortReviews(
+            @PathVariable("reviewedUserId") String reviewedUserId,
+            @PathVariable("HIGH-or-LOW") String highLow ) {
+        List<Reviews> foundReviews = reviewsService.reviewedUserSortReviews(reviewedUserId, highLow);
         if (foundReviews.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No reviews found for user...");
         } else {
@@ -63,11 +64,13 @@ public class ReviewsController {
     }
 
     // GET List all reviews for a specified user AND sort reviews by Low or High grades WITH paging
-    @GetMapping("/find/all-user-sort/page/{pagenumber}")
+    @GetMapping("/find/all-user-sort/{reviewedUserId}/{pageSize}/{HIGH-or-LOW}/page/{pagenumber}")
     public ResponseEntity<?> reviewedUserSortReviewsPage(
-            @PathVariable("pagenumber") int pageNr,
-            @Valid @RequestBody ReviewsSortLowHighDTO reviewsSortLowHighDTO) {
-        List<Reviews> foundReviews = reviewsService.reviewedUserSortReviewsPage(pageNr, reviewsSortLowHighDTO);
+            @PathVariable("reviewedUserId") String reviewedUserId,
+            @PathVariable("HIGH-or-LOW") String highLow,
+            @PathVariable("pageSize") int pageSize,
+            @PathVariable("pagenumber") int pageNr) {
+        List<Reviews> foundReviews = reviewsService.reviewedUserSortReviewsPage(reviewedUserId, highLow, pageSize, pageNr);
         if (foundReviews.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No reviews found for user...");
         } else {
@@ -76,17 +79,20 @@ public class ReviewsController {
     }
 
     // GET all reviews for specific reviewed user with specific grade
-    @GetMapping("/find/all-user-grade")
-    public ResponseEntity<?> reviewedUserSortByGrade(@Valid @RequestBody ReviewsGetByGradeDTO reviewsGetByGradesDTO) {
-        return reviewsService.reviewedUserSortByGrade(reviewsGetByGradesDTO);
+    @GetMapping("/find/all-user-grade/{reviewedUserId}/{grade}")
+    public ResponseEntity<?> reviewedUserSortByGrade(@PathVariable("reviewedUserId") String reviewedUserId,
+                                                     @PathVariable("grade") int grade) {
+        return reviewsService.reviewedUserSortByGrade(reviewedUserId, grade);
     }
 
     // GET all reviews for specific reviewed user with specific grade WITH paging
-    @GetMapping("/find/all-user-grade/page/{pagenumber}")
+    @GetMapping("/find/all-user-grade/{reviewedUserId}/{grade}/{pageSize}/page/{pagenumber}")
     public ResponseEntity<?> reviewedUserSortByGradeAndPage(
-            @PathVariable("pagenumber") int pageNr,
-            @Valid @RequestBody ReviewsGetByGradeDTO reviewsGetByGradesDTO) {
-        return reviewsService.reviewedUserSortByGradeAndPage(pageNr, reviewsGetByGradesDTO);
+            @PathVariable("reviewedUserId") String reviewedUserId,
+            @PathVariable("grade") int grade,
+            @PathVariable("pageSize") int pageSize,
+            @PathVariable("pagenumber") int pageNr ) {
+        return reviewsService.reviewedUserSortByGradeAndPage(reviewedUserId, grade, pageSize, pageNr);
     }
 
 // USER
@@ -124,11 +130,11 @@ public class ReviewsController {
 
     // GET all reviews WITH paging
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/find/all/page/{pagenumber}")
+    @GetMapping("/find/all/{pageSize}/page/{pagenumber}")
     public ResponseEntity<?> listAllReviewsPage(@PathVariable("pagenumber") int pageNr,
-                                                @RequestBody ReviewsPageSizeDTO reviewsPageSizeDTO) {
+                                                @PathVariable("pageSize") int pageSize) {
         try {
-            return ResponseEntity.ok(reviewsService.listAllReviewsPage(pageNr, reviewsPageSizeDTO));
+            return ResponseEntity.ok(reviewsService.listAllReviewsPage(pageSize, pageNr));
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
@@ -136,10 +142,10 @@ public class ReviewsController {
 
     // GET one specific review
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/find-one")
-    public ResponseEntity<?> listOneSpecificReview(@Valid @RequestBody ReviewsFindDTO reviewsFindDTO) {
+    @GetMapping("/find-one/{reviewId}")
+    public ResponseEntity<?> listOneSpecificReview(@PathVariable("reviewId") String reviewId) {
         try {
-            return reviewsService.listOneSpecificReview(reviewsFindDTO);
+            return reviewsService.listOneSpecificReview(reviewId);
         }  catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }

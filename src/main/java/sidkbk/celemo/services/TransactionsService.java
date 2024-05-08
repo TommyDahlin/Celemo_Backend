@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import sidkbk.celemo.dto.transactions.DeleteTransactionDTO;
-import sidkbk.celemo.dto.transactions.FindTransactionsForUserDTO;
 import sidkbk.celemo.dto.transactions.TransactionsCreationDTO;
 import sidkbk.celemo.models.Transactions;
 import sidkbk.celemo.models.User;
@@ -49,9 +48,9 @@ public class TransactionsService {
     }
 
     // List all transactions for a specific user
-    public ResponseEntity<?> findTransactions(FindTransactionsForUserDTO findTransactionsForUserDTO) {
+    public ResponseEntity<?> findTransactions(String userId) {
         // Check if user exists
-        User foundUser = userRepository.findById(findTransactionsForUserDTO.getUserId()).orElseThrow(
+        User foundUser = userRepository.findById(userId).orElseThrow(
                 () -> new RuntimeException("User not found"));
         // Temp save all transactions
         List<Transactions> allTransactions = transactionsRepo.findAll();

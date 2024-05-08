@@ -30,11 +30,8 @@ http://localhost:8080/api/user/find/all
     ADMIN ONLY
 // find
 
-http://localhost:8080/api/user/find-one
+http://localhost:8080/api/user/find-one/:userId
 
-{
-"userId": "65d755943b0850253b1640c0"
-}
 
 ****************************************************
     Public
@@ -80,21 +77,15 @@ Body - raw // userId REQUIRED, rest OPTIONAL
     USER
 // get filter using userId ( replace {filter} with ex. username or grade )
 
-http://localhost:8080/api/user/findfilter
-{
-"userId": "65d755943b0850253b1640c0",
-"filter": "username" / "grade"  / "firstname"  / "lastname"
-}
+http://localhost:8080/api/user/:userId/:filter
+
 
 ****************************************************
 
 GET - Finished Auctions
-http://localhost:8080/api/user/find/finishedauction
+http://localhost:8080/api/user/find/finishedauction/:userId
 
-Body - raw
-{
-    "userId": "65d3627e890c42399d67cb84"
-}
+
 
 ****************************************************
 
@@ -110,48 +101,31 @@ Body - raw
 
 
 GET - Find all auctions from specific user
-http://localhost:8080/api/auction/find/all/user
-Body - raw
+http://localhost:8080/api/auction/find/all/:userId
 
-(example)
-{
-    "userId": "65d771baa9e6823a9c1c27fa"
-}
+
+
 
 ****************************************************
 
 PUT - Add auction to favourite list
-http://localhost:8080/api/user/favourite/add
+http://localhost:8080/api/user/favourite/add/:userID/:auctionId
 
-Body - raw
 
-{
-    "userId": " ObjectId ",
-    "auctionId": " ObjectId "
-}
 
 ****************************************************
 
 GET - get favourite list from userId
-http://localhost:8080/api/user/favourites/all
+http://localhost:8080/api/user/favourites/all/:userId
 
-Body - raw
 
-{
-    "userId": " ObjectId "
-}
 
 ****************************************************
 
 DELETE - Delete Auction from userId:s favourite list
-http://localhost:8080/api/user/favourite/delete
+http://localhost:8080/api/user/favourite/delete/:userID/:auctionId
 
-Body - raw
 
-{
-    "userId": " ObjectId ",
-    "auctionId": " ObjectId "
-}
 
 ****************************************************
 

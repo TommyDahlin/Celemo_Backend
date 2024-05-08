@@ -19,12 +19,11 @@ http://localhost:8080/api/reviews/find/all/page/0       <--- Change for page num
 
 // GET list of one specific review
 ***********************************
-http://localhost:8080/api/reviews/find-one
+http://localhost:8080/api/reviews/find-one/:reviewId
 
-Body - raw
-    {
-        "reviewId" : "65d75b87c3c7a5270fc7dded"
-    }
+Path Variable
+        reviewId : "65d75b87c3c7a5270fc7dded"
+
 
 #######################################################################################################
 
@@ -67,67 +66,71 @@ Body - raw
 
 GET - List all reviews for specific REVIEWED user
 ***********************************
-http://localhost:8080/api/reviews/find/all-user
-Body - raw
-{
-"userId": "65d755313b0850253b1640bc"
-}
+http://localhost:8080/api/reviews/find/all-user/:userId
+
+Path Variable
+    userId: "65d755313b0850253b1640bc"
+
 
 #######################################################################################################
 
 GET - List all reviews for specific REVIEWED user WITH paging
 ***********************************
-http://localhost:8080/api/reviews/find/all-user/page/0      <--- Change number for page
-Body - raw
-{
-"userId": "65d755313b0850253b1640bc",
-"pageSize": 3   // Reviews per page. This is optional, 3 is default
-}
+http://localhost:8080/api/reviews/find/all-user/:reviewedUserId/:pageSize/page/:pageNr
+
+Path Variable
+    reviewedUserId: "65d755313b0850253b1640bc",
+    pageSize: 3   // Reviews per page.
+    pageNr: 0
+
 
 #######################################################################################################
 
 GET - List all reviews for a specified user AND sort reviews by Low or High grades.
 ***********************************
-http://localhost:8080/api/reviews/find/all-user-sort
-Body - raw
-{
-    "reviewedUserId": "65d755313b0850253b1640bc",
-    "lowOrHigh": "low" // Low or High
-}
+http://localhost:8080/api/reviews/find/all-user-sort/:reviewedUserId/:HIGH-or-LOW
+
+Path Variable
+    reviewedUserId: "65d755313b0850253b1640bc",
+    HIGH-or-LOW: "LOW" // LOW or HIGH
+
 
 #######################################################################################################
 
 GET - List all reviews for a specified user AND sort reviews by Low or High grades WITH paging.
 ***********************************
-http://localhost:8080/api/reviews/find/all-user-sort/page/0     <--- Change number for page
-Body - raw
-{
-    "reviewedUserId": "65d755313b0850253b1640bc",
-    "lowOrHigh": "low" // Low or High,
-    "pageSize": 3   // OPTIONAL Reviews per page. Default is 3
-}
+http://localhost:8080/api/reviews/find/all-user-sort/:reviewedUserId/:pageSize/:HIGH-or-LOW/page/:pagenumber
+
+Path Variable
+    reviewedUserId: "65d755313b0850253b1640bc",
+    pageSize: 3   // Reviews per page.
+    lowOrHigh: LOW // LOW or HIGH,
+    pagenumber: 0
+
+
 
 #######################################################################################################
 
 GET - all reviews for specific reviewed user with specific grade
 ***********************************
-http://localhost:8080/api/reviews/find/all-user-grade
-Body - raw
-{
-    "userId": "65d755313b0850253b1640bc",
-    "grade": 3      // 1-5
-}
+http://localhost:8080/api/reviews/find/all-user-grade/:reviewedUserId/:grade
+
+Path Variable
+    reviewedUserId: "65d755313b0850253b1640bc",
+    grade: 3      // 1-5
+
 
 #######################################################################################################
 
 GET - all reviews for specific reviewed user WITH specific grade AND paging
 ***********************************
-http://localhost:8080/api/reviews/find/all-user-grade/page/0    <--- Change page number
-Body - raw
-{
-    "userId": "65d755313b0850253b1640bc",
-    "grade": 3      // 1-5,
-    "pageSize": 3   // OPTIONAL Reviews per page. Default is 3
-}
+http://localhost:8080/api/reviews/find/all-user-grade/:reviewedUserId/:grade/:pageSize/page/:pagenumber
+
+Path Variable
+    reviewedUserId: "65d755313b0850253b1640bc",
+    grade: 3      // 1-5,
+    pageSize: 3   // OPTIONAL Reviews per page.
+    pagenumber: 0
+
 
 #######################################################################################################

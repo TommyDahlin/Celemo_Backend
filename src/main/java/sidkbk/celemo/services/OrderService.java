@@ -5,9 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import sidkbk.celemo.dto.order.DeleteOrderDTO;
-import sidkbk.celemo.dto.order.FindBuyerDTO;
 import sidkbk.celemo.dto.order.OrderCreationDTO;
-import sidkbk.celemo.dto.order.OrderFoundByIdDTO;
 import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.models.Order;
 import sidkbk.celemo.models.User;
@@ -63,14 +61,14 @@ public class OrderService {
 
 
     // Find one specific order by orderId
-    public Optional<Order> getOneOrder(OrderFoundByIdDTO orderFoundByIdDTO) {
-        return orderRepository.findById(orderFoundByIdDTO.getOrderId());
+    public Optional<Order> getOneOrder(String orderId) {
+        return orderRepository.findById(orderId);
     }
 
-    // fine all orders that are bound to one user ID
-    public List<Map<String, Object>> findOrdersByUserId(FindBuyerDTO findBuyerDTO) {
+    // find all orders that are bound to one user ID
+    public List<Map<String, Object>> findOrdersByUserId(String byerUsername) {
         //Tries to find orders by userId
-        List<Order> findOrders = orderRepository.findByBuyerUsername(findBuyerDTO.getBuyerUsername());
+        List<Order> findOrders = orderRepository.findByBuyerUsername(byerUsername);
         // returns the orders it finds that are connected to the userId
         //then it maps thrue the orders and shows only whats inside the .map
         // Tho it dosnt seem to show in the order i put the orderDetails in.
@@ -104,9 +102,9 @@ public class OrderService {
     }
 
 
-    public List<Order> findAllOrderForOneUser(FindBuyerDTO findBuyerDTO) {
+    public List<Order> findAllOrderForOneUser(String byerUsername) {
         //Find user using id
-        User foundUser = userRepository.findByUsername(findBuyerDTO.getBuyerUsername())
+        User foundUser = userRepository.findByUsername(byerUsername)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         //Skapa en tom lista för hitta order
         List<Order> foundOrder = new ArrayList<>();

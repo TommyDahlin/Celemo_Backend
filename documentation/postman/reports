@@ -8,14 +8,11 @@ http://localhost:8080/api/reports/find/all
 #######################################################################################################
 
 // GET (list one specific report)
-http://localhost:8080/api/reports/find-one
+http://localhost:8080/api/reports/find-one/:reportsId
 
-Body - raw
-(Example):
+Path Variable
+        reportsId: "65e06aa64762283bf1fa470d"
 
-    {
-        "reportsId": "65e06aa64762283bf1fa470d"
-    }
 
 #######################################################################################################
 

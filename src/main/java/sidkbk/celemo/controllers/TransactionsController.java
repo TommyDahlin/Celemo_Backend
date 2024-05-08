@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import sidkbk.celemo.dto.transactions.DeleteTransactionDTO;
-import sidkbk.celemo.dto.transactions.FindTransactionsForUserDTO;
 import sidkbk.celemo.dto.transactions.TransactionsCreationDTO;
 import sidkbk.celemo.services.TransactionsService;
 @CrossOrigin(origins = "http://localhost:5173/", allowedHeaders = "*", allowCredentials = "true")
@@ -22,9 +21,9 @@ public class TransactionsController {
 
     // GET list of specific users all transactions
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    @GetMapping("/find/all-user")
-    public ResponseEntity<?> findTransactions(@Valid @RequestBody FindTransactionsForUserDTO findTransactionsForUserDTO) {
-        return transactionsService.findTransactions(findTransactionsForUserDTO);
+    @GetMapping("/find/all-user/{userId}")
+    public ResponseEntity<?> findTransactions(@PathVariable("userId") String userId) {
+        return transactionsService.findTransactions(userId);
     }
 
 // ADMIN

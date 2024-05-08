@@ -46,10 +46,10 @@ public class ReportsControllers {
 
     //Find a report by id
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/find-one")
-    public ResponseEntity<?> findOne(@Valid @RequestBody ReportsFindDTO reportsFindDTO) {
+    @GetMapping("/find-one/{reportsId}")
+    public ResponseEntity<?> findOne(@PathVariable("reportsId") String reportsId) {
         try {
-            return reportsServices.findOne(reportsFindDTO);
+            return reportsServices.findOne(reportsId);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
