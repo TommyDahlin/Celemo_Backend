@@ -6,17 +6,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import sidkbk.celemo.dto.order.PreviousPurchaseFromOrderDTO;
 import sidkbk.celemo.dto.user.*;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.User;
 import sidkbk.celemo.services.AuctionService;
-import sidkbk.celemo.services.OrderService;
 import sidkbk.celemo.services.UserService;
 
 import java.util.Optional;
 
-
+@CrossOrigin(origins = "http://localhost:5173/", allowedHeaders = "*", allowCredentials = "true")
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
@@ -81,6 +79,16 @@ public class UserController {
     public ResponseEntity<?> deleteUserFavouritesById(@Valid @RequestBody ModifyUserFavouritesDTO deleteUserFavouritesDTO){
         return userService.deleteUserFavouritesById(deleteUserFavouritesDTO);
     }
+    // find/get using id
+    // Changed from GET to POST
+    @CrossOrigin(origins = "http://localhost:5173/", allowedHeaders = "*", allowCredentials = "true")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PostMapping ("/find-one")
+    public ResponseEntity<User> getUserById(@Valid @RequestBody FindUserIdDTO findUserIdDTO){
+        Optional<User> user = userService.getUserById(findUserIdDTO);
+        return user.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
 
 
 // ADMIN
@@ -116,15 +124,6 @@ public class UserController {
         }catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
-    }
-
-    // find/get using id
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping ("/find-one")
-    public ResponseEntity<User> getUserById(@Valid @RequestBody FindUserIdDTO findUserIdDTO){
-        Optional<User> user = userService.getUserById(findUserIdDTO);
-        return user.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     // delete account

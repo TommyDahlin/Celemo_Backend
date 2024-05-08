@@ -13,7 +13,7 @@ import sidkbk.celemo.models.Reviews;
 import sidkbk.celemo.services.ReviewsService;
 
 import java.util.List;
-
+@CrossOrigin(origins = "http://localhost:5173/", allowedHeaders = "*", allowCredentials = "true")
 @RestController
 @RequestMapping("/api/reviews")
 public class ReviewsController {
@@ -25,7 +25,8 @@ public class ReviewsController {
 //////////////////////////////////////////////////////////////////////////////////////
 
     // GET all reviews for specific reviewed user
-    @GetMapping("/find/all-user")
+    // SUPPOSED TO BE A GET
+    @PostMapping("/find/all-user")
     public ResponseEntity<?> allReviewsForSpecificReviewedUser(@Valid @RequestBody FindUserIdDTO findUserIdDTO) {
         List<Reviews> foundReviews = reviewsService.allReviewsForSpecificReviewedUser(findUserIdDTO);
 

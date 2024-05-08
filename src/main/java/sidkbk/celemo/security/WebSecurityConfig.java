@@ -17,6 +17,7 @@ import sidkbk.celemo.security.jwt.AuthTokenFilter;
 import sidkbk.celemo.security.jwt.AuthenticationEntryJwt;
 import sidkbk.celemo.security.services.UserDetailsServiceImpl;
 
+
 @Configuration
 @EnableMethodSecurity
 public class WebSecurityConfig {

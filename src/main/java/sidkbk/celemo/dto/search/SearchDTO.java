@@ -1,10 +1,8 @@
 package sidkbk.celemo.dto.search;
 
-import jakarta.validation.constraints.NotEmpty;
-
 public class SearchDTO{
 
-    @NotEmpty(message = "ERROR - Enter search value!")
+    /*@NotEmpty(message = "ERROR - Enter search value!")*/
     private String search;
 
     private short pageSize = 5; // OPTIONAL
