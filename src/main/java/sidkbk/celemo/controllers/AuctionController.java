@@ -27,6 +27,7 @@ public class AuctionController {
 // PUBLIC
 //////////////////////////////////////////////////////////////////////////////////////
 
+    @CrossOrigin(origins = "http://localhost:5173/", allowedHeaders = "*", allowCredentials = "true")
     // Get all auctions
     @GetMapping("/find/all")
     public ResponseEntity<?> getAllAuctions() {
@@ -51,7 +52,7 @@ public class AuctionController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
-
+    @CrossOrigin(origins = "http://localhost:5173/", allowedHeaders = "*", allowCredentials = "true")
     // Get all auctions from user
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping("/find/all/user/{userId}")
@@ -83,7 +84,7 @@ public class AuctionController {
     public ResponseEntity<?> deleteAuction(@Valid @RequestBody AuctionIdDTO auctionIdDTO) {
         return auctionService.deleteAuction(auctionIdDTO);
     }
-
+    @CrossOrigin(origins = "http://localhost:5173/", allowedHeaders = "*", allowCredentials = "true")
     // GET one auction
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @GetMapping("/find-one/{auctionId}")

@@ -14,7 +14,7 @@ import sidkbk.celemo.services.UserService;
 
 import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:5173/", allowedHeaders = "*", allowCredentials = "true")
+
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
@@ -81,7 +81,7 @@ public class UserController {
     }
     // find/get using id
     // Changed from GET to POST
-
+    @CrossOrigin(origins = "http://localhost:5173/", allowedHeaders = "*", allowCredentials = "true")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping ("/find-one/{userId}")
     public ResponseEntity<User> getUserById(
