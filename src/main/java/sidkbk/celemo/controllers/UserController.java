@@ -63,7 +63,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
-
+    @CrossOrigin(origins = "http://localhost:5173/", allowedHeaders = "*", allowCredentials = "true")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping ("/favourites/all/{userId}")
     public ResponseEntity<?> getUserFavouritesById(@PathVariable("userId") String userId){
