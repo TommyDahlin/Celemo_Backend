@@ -130,12 +130,12 @@ public class UserService {
 
     }
 
-    public ResponseEntity<?> setUserFavouritesById(String userId, String auctionId) {
-        User foundUser = userRepository.findById(userId).get();// find user with dto userId
-        Auction foundAuction = auctionRepository.findById(auctionId).get();// find auction with dto auctionId
+    public ResponseEntity<?> setUserFavouritesById(ModifyUserFavouritesDTO addUserFavouritesDTO) {
+        User foundUser = userRepository.findById(addUserFavouritesDTO.getUserId()).get();// find user with dto userId
+        Auction foundAuction = auctionRepository.findById(addUserFavouritesDTO.getAuctionId()).get();// find auction with dto auctionId
 
         for (Auction auction : foundUser.getFavouriteAuctions()) {
-            if (auction.getId().equals(auctionId)) {
+            if (auction.getId().equals(addUserFavouritesDTO.getAuctionId())) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Auction already exist in favourites list...");
             }
         }
@@ -144,13 +144,13 @@ public class UserService {
         return ResponseEntity.ok("Auction was added to favourite list.");
     }
 
-    public ResponseEntity<?> deleteUserFavouritesById(String userId, String auctionId) {
-        User foundUser = userRepository.findById(userId).get();
+    public ResponseEntity<?> deleteUserFavouritesById(ModifyUserFavouritesDTO deleteUserFavouritesDTO) {
+        User foundUser = userRepository.findById(deleteUserFavouritesDTO.getUserId()).get();
 
         // Loop through favorite list of user
         for (Auction auction : foundUser.getFavouriteAuctions()) {
             // If current auction id in loop match id in DTO
-            if (auction.getId().equals(auctionId)) {
+            if (auction.getId().equals(deleteUserFavouritesDTO.getAuctionId())) {
                 // Save found auction before removing, this was necessary otherwise it doesnt work
                 Auction foundAuctionToRemove = auction;
                 foundUser.getFavouriteAuctions().remove(foundAuctionToRemove);
