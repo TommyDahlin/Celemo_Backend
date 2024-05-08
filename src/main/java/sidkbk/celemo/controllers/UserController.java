@@ -31,10 +31,10 @@ public class UserController {
 
     // Lists all active listings by UserID
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    @GetMapping("/find/activeauction")
-    public ResponseEntity<?> getActiveAuction(@Valid @RequestBody FindUserIdDTO findUserIdDTO){
+    @GetMapping("/find/activeauction/{userId}")
+    public ResponseEntity<?> getActiveAuction(@PathVariable("userId") String userId){
         try {
-            return ResponseEntity.ok(auctionService.getActiveAuction(findUserIdDTO));
+            return ResponseEntity.ok(auctionService.getActiveAuction(userId));
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
@@ -44,10 +44,10 @@ public class UserController {
 
     // find finished auction
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    @GetMapping("/find/finishedauction")
-    public ResponseEntity<?> getFinishedAuction(@Valid @RequestBody FindUserIdDTO findUserIdDTO){
+    @GetMapping("/find/finishedauction/{userId}")
+    public ResponseEntity<?> getFinishedAuction(@PathVariable("userId") String userId){
         try {
-            return ResponseEntity.ok(auctionService.getFinishedAuctions(findUserIdDTO));
+            return ResponseEntity.ok(auctionService.getFinishedAuctions(userId));
         } catch (EntityNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
@@ -65,27 +65,29 @@ public class UserController {
     }
 
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    @GetMapping ("/favourites/all")
-    public ResponseEntity<?> getUserFavouritesById(@Valid @RequestBody FindUserFavouritesDTO favouritesDTO){
-        return userService.getUserFavouritesById(favouritesDTO);
+    @GetMapping ("/favourites/all/{userId}")
+    public ResponseEntity<?> getUserFavouritesById(@PathVariable("userId") String userId){
+        return userService.getUserFavouritesById(userId);
     }
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    @PutMapping ("/favourite/add")
-    public ResponseEntity<?> setUserFavouritesById(@Valid @RequestBody ModifyUserFavouritesDTO addUserFavouritesDTO){
-        return userService.setUserFavouritesById(addUserFavouritesDTO);
+    @PutMapping ("/favourite/add/{userId}/{auctionId}")
+    public ResponseEntity<?> setUserFavouritesById(@PathVariable("userId") String userId, @PathVariable("auctionId") String auctionId){
+        return userService.setUserFavouritesById(userId, auctionId);
     }
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    @DeleteMapping ("/favourite/delete")
-    public ResponseEntity<?> deleteUserFavouritesById(@Valid @RequestBody ModifyUserFavouritesDTO deleteUserFavouritesDTO){
-        return userService.deleteUserFavouritesById(deleteUserFavouritesDTO);
+    @DeleteMapping ("/favourite/delete/{userId}/{auctionId}")
+    public ResponseEntity<?> deleteUserFavouritesById(@PathVariable("userId") String userId, @PathVariable("auctionId") String auctionId){
+        return userService.deleteUserFavouritesById(userId,auctionId);
     }
     // find/get using id
     // Changed from GET to POST
-    @CrossOrigin(origins = "http://localhost:5173/", allowedHeaders = "*", allowCredentials = "true")
+
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    @PostMapping ("/find-one")
-    public ResponseEntity<User> getUserById(@Valid @RequestBody FindUserIdDTO findUserIdDTO){
-        Optional<User> user = userService.getUserById(findUserIdDTO);
+    @GetMapping ("/find-one/{userId}")
+    public ResponseEntity<User> getUserById(
+            @PathVariable("userId") String userId
+        ){
+        Optional<User> user = userService.getUserById(userId);
         return user.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -117,11 +119,13 @@ public class UserController {
 
     //get average grade, find user by id, filter out what you want to get from a user
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    @GetMapping("/findfilter")
-    public ResponseEntity<?> getUserFilter(@Valid @RequestBody FindUserIdandFilterDTO findUserIdandFilterDTO){
+    @GetMapping("/findfilter/{userId}/{filter}")
+    public ResponseEntity<?> getUserFilter(
+            @PathVariable("userId") String userId, @PathVariable("filter") String filter
+    ){
         try {
-            return ResponseEntity.ok(userService.getUserFilter(findUserIdandFilterDTO));
-        }catch (EntityNotFoundException e) {
+            return ResponseEntity.ok(userService.getUserFilter(userId, filter));
+        } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }

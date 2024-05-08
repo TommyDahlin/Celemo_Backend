@@ -106,21 +106,21 @@ public class AuctionService {
                 }).orElseThrow(() -> new RuntimeException("Auction not found"));
     }
     // Takes all auctions in repository, checks for "isFinished" flag, if true skips, if false adds.
-    public List<Auction> getActiveAuction(FindUserIdDTO findUserIdDTO){
+    public List<Auction> getActiveAuction(String userId){
         List<Auction> auctionList = auctionRepository.findAll();
         List<Auction> activeAuctionList = new ArrayList<>();
         for (int i = 0; i < auctionList.size(); i++) {
-            if (!auctionList.get(i).isFinished && Objects.equals(auctionList.get(i).getSeller().getId(), findUserIdDTO.getUserId())){
+            if (!auctionList.get(i).isFinished && Objects.equals(auctionList.get(i).getSeller().getId(), userId)){
                 activeAuctionList.add(auctionList.get(i));
             }
         }
         return activeAuctionList;
     }
-    public List<Auction> getFinishedAuctions(FindUserIdDTO findUserIdDTO){
+    public List<Auction> getFinishedAuctions(String userId){
         List<Auction> auctionList = auctionRepository.findAll();
         List<Auction> finishedAuctionList = new ArrayList<>();
         for (int i = 0; i < auctionList.size(); i++) {
-            if (auctionList.get(i).isFinished && Objects.equals(auctionList.get(i).getSeller().getId(), findUserIdDTO.getUserId())){
+            if (auctionList.get(i).isFinished && Objects.equals(auctionList.get(i).getSeller().getId(), userId)){
                 finishedAuctionList.add(auctionList.get(i));
             }
         }
