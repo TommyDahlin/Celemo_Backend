@@ -70,14 +70,14 @@ public class UserController {
         return userService.getUserFavouritesById(userId);
     }
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    @PutMapping ("/favourite/add/{userId}/{auctionId}")
-    public ResponseEntity<?> setUserFavouritesById(@PathVariable("userId") String userId, @PathVariable("auctionId") String auctionId){
-        return userService.setUserFavouritesById(userId, auctionId);
+    @PutMapping ("/favourite/add")
+    public ResponseEntity<?> setUserFavouritesById(@Valid @RequestBody ModifyUserFavouritesDTO addUserFavouritesDTO){
+        return userService.setUserFavouritesById(addUserFavouritesDTO);
     }
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    @DeleteMapping ("/favourite/delete/{userId}/{auctionId}")
-    public ResponseEntity<?> deleteUserFavouritesById(@PathVariable("userId") String userId, @PathVariable("auctionId") String auctionId){
-        return userService.deleteUserFavouritesById(userId,auctionId);
+    @DeleteMapping ("/favourite/delete")
+    public ResponseEntity<?> deleteUserFavouritesById(@Valid @RequestBody ModifyUserFavouritesDTO deleteUserFavouritesDTO){
+        return userService.deleteUserFavouritesById(deleteUserFavouritesDTO);
     }
     // find/get using id
     // Changed from GET to POST
