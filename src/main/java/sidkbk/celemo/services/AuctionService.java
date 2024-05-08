@@ -55,8 +55,8 @@ public class AuctionService {
     }
 
     // get All auctions from User
-    public List<Auction> getAllAuctionsFromUser(FindUserIdDTO findUserIdDTO) {
-        return auctionRepository.findAuctionBySeller(findUserIdDTO.getUserId());
+    public List<Auction> getAllAuctionsFromUser(String userId) {
+        return auctionRepository.findAuctionBySeller(userId);
     }
 
     // method to show less info on one specific auction
@@ -85,8 +85,8 @@ public class AuctionService {
 
 
 
-    public Auction getOneAuction(AuctionIdDTO auctionIdDTO){
-        return auctionRepository.findById(auctionIdDTO.getAuctionId()).get();
+    public Auction getOneAuction(String auctionId){
+        return auctionRepository.findById(auctionId).get();
     }
 
     // PUT

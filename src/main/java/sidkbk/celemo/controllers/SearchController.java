@@ -1,11 +1,9 @@
 package sidkbk.celemo.controllers;
 
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sidkbk.celemo.dto.search.SearchDTO;
 import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.services.SearchService;
 
@@ -22,9 +20,9 @@ public class SearchController {
 //////////////////////////////////////////////////////////////////////////////////////
 
     // Search function
-    @GetMapping("/")
-    public ResponseEntity<?> search(@Valid @RequestBody SearchDTO searchDTO) {
-        List<Auction> foundAuctions = searchService.search(searchDTO);
+    @GetMapping("/{search}")
+    public ResponseEntity<?> search(@PathVariable("search") String search) {
+        List<Auction> foundAuctions = searchService.search(search);
         if (foundAuctions.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nothing found!");
         } else {
@@ -33,11 +31,11 @@ public class SearchController {
     }
 
     // Search with pagination
-    // Changed GET to POST
-    @PostMapping("/page/{pagenumber}")
-    public ResponseEntity<?> searchPage(@PathVariable("pagenumber") int pageNr,
-                                        @Valid @RequestBody SearchDTO searchDTO) {
-        List<Auction> foundAuctions = searchService.searchPage(pageNr, searchDTO);
+    @GetMapping("/{search}/{pageSize}/page/{pagenumber}")
+    public ResponseEntity<?> searchPage(@PathVariable("search") String search,
+                                        @PathVariable("pageSize") int pageSize,
+                                        @PathVariable("pagenumber") int pageNr) {
+        List<Auction> foundAuctions = searchService.searchPage(search, pageSize, pageNr);
         if (foundAuctions.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nothing found!");
         }

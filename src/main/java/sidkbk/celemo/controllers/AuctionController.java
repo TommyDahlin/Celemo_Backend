@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import sidkbk.celemo.dto.auctions.AuctionCreationDTO;
 import sidkbk.celemo.dto.auctions.AuctionIdDTO;
 import sidkbk.celemo.dto.auctions.AuctionUpdateDTO;
-import sidkbk.celemo.dto.user.FindUserIdDTO;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.services.AuctionService;
@@ -17,7 +16,7 @@ import sidkbk.celemo.services.AuctionService;
 import java.util.List;
 
 
-@CrossOrigin(origins = "http://localhost:5173/", allowedHeaders = "*", allowCredentials = "true")
+/*@CrossOrigin(origins = "http://localhost:5173/", allowedHeaders = "*", allowCredentials = "true")*/
 @RestController
 @RequestMapping(value = "/api/auction")
 public class AuctionController {
@@ -54,13 +53,11 @@ public class AuctionController {
     }
 
     // Get all auctions from user
-    // CHANGED GET to POST
-    @CrossOrigin(origins = "http://localhost:5173/", allowedHeaders = "*", allowCredentials = "true")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    @PostMapping("/find/all/user")
-    public ResponseEntity<?> getAllAuctionsFromUser(@Valid @RequestBody FindUserIdDTO findUserIdDTO) {
+    @GetMapping("/find/all/user/{userId}")
+    public ResponseEntity<?> getAllAuctionsFromUser(@PathVariable("userId") String userId) {
 
-        List<Auction> foundAuctions = auctionService.getAllAuctionsFromUser(findUserIdDTO);
+        List<Auction> foundAuctions = auctionService.getAllAuctionsFromUser(userId);
         if (foundAuctions.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User does not have any auctions...");
         } else {
@@ -88,13 +85,11 @@ public class AuctionController {
     }
 
     // GET one auction
-
-    //@CrossOrigin(origins = "http://localhost:5173/", allowedHeaders = "*", allowCredentials = "true")
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
-    @PostMapping("/find-one")
-    public ResponseEntity<?> getAuction(@Valid @RequestBody AuctionIdDTO auctionIdDTO) {
+    @GetMapping("/find-one/{auctionId}")
+    public ResponseEntity<?> getAuction(@PathVariable("auctionId") String auctionId) {
         try {
-            return ResponseEntity.ok(auctionService.getOneAuction(auctionIdDTO));
+            return ResponseEntity.ok(auctionService.getOneAuction(auctionId));
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
