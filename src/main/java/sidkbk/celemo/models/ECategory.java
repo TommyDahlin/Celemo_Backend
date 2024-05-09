@@ -13,5 +13,6 @@ public enum ECategory {
     GOLF,
     NBA,
     MMA,
+    CRICKET,
     OTHER
 }
