@@ -46,6 +46,7 @@ public class AuthController {
     JwtUtils jwtUtils;
 
     // sign in
+    @CrossOrigin(origins = "http://localhost:5173/", allowedHeaders = "*", allowCredentials = "true")
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody SigninRequest signinRequest){
         Authentication authentication = authenticationManager.authenticate(
