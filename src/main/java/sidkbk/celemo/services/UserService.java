@@ -4,6 +4,7 @@ package sidkbk.celemo.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import sidkbk.celemo.dto.user.*;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
@@ -36,6 +37,8 @@ public class UserService {
     AuctionRepository auctionRepository;
     @Autowired
     OrderRepository orderRepository;
+    @Autowired
+    PasswordEncoder encoder;
 
 
     // HELENA:
@@ -84,7 +87,7 @@ public class UserService {
         return userRepository.findById(updateUserDTO.getUserId())
                 .map(existingUser -> {
                     Optional.ofNullable(updateUserDTO.getUsername()).ifPresent(existingUser::setUsername);
-                    Optional.ofNullable(updateUserDTO.getPassword()).ifPresent(existingUser::setPassword);
+                    Optional.ofNullable(encoder.encode(updateUserDTO.getPassword())).ifPresent(existingUser::setPassword);
                     Optional.ofNullable(updateUserDTO.getDateOfBirth()).ifPresent(existingUser::setDateOfBirth);
                     Optional.ofNullable(updateUserDTO.getEmail()).ifPresent(existingUser::setEmail);
                     Optional.ofNullable(updateUserDTO.getFirstName()).ifPresent(existingUser::setFirstName);

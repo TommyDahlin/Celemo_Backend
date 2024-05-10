@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import sidkbk.celemo.dto.user.*;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
@@ -12,6 +13,7 @@ import sidkbk.celemo.models.User;
 import sidkbk.celemo.services.AuctionService;
 import sidkbk.celemo.services.UserService;
 
+import java.beans.Encoder;
 import java.util.Optional;
 
 
@@ -23,6 +25,7 @@ public class UserController {
     private UserService userService;
     @Autowired
     private AuctionService auctionService;
+
 
 
 
