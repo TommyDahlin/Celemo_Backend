@@ -44,6 +44,8 @@ public class UserController {
 
     }
 
+    @GetMapping("/pubprofile/{userId}")
+    public ResponseEntity<?>
 
     // find finished auction
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
