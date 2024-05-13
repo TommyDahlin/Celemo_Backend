@@ -3,7 +3,15 @@ public class PublicUserDTO {
     private String username;
     private String adress_city;
     private double grade;
+    private String photo;
 
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
 
     public String getUsername() {
         return username;
