@@ -79,6 +79,17 @@ public class UserService {
         return userRepository.findById(userId);
     }
 
+    public PublicUserDTO getPublicUser(String userId) {
+        PublicUserDTO publicUserDTO = new PublicUserDTO();
+        Optional<User> user = userRepository.findById(userId);
+
+        publicUserDTO.setUsername(user.get().getUsername());
+        publicUserDTO.setAdress_city(user.get().getAdress_city());
+        publicUserDTO.setGrade(user.get().getGrade());
+
+        return publicUserDTO;
+    }
+
 
     // PUT/update user account. checks that new value isn't empty before adding. If something is empty then it will throw EntityNotFoundException
     public User updateUser(UpdateUserDTO updateUserDTO) {

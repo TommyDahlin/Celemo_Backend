@@ -34,6 +34,11 @@ http://localhost:8080/api/user/find-one/:userId
 
 
 ****************************************************
+    PUBLIC
+http://localhost:8080/api/user/public-user/{userId}")
+    Get public Profile for when someone visits another persons profile.
+****************************************************
+
     Public
 // get only username and email from all users
 

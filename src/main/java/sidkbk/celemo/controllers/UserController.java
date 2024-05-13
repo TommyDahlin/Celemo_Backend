@@ -8,6 +8,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import sidkbk.celemo.dto.user.DeleteUserDTO;
 import sidkbk.celemo.dto.user.ModifyUserFavouritesDTO;
+import sidkbk.celemo.dto.user.PublicUserDTO;
 import sidkbk.celemo.dto.user.UpdateUserDTO;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.User;
@@ -44,8 +45,6 @@ public class UserController {
 
     }
 
-    @GetMapping("/pubprofile/{userId}")
-    public ResponseEntity<?>
 
     // find finished auction
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
@@ -95,6 +94,12 @@ public class UserController {
         Optional<User> user = userService.getUserById(userId);
         return user.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/public-user/{userId}")
+    public PublicUserDTO getPublicUser(@Valid @PathVariable("userId") String userId){
+        PublicUserDTO publicUserDTO = userService.getPublicUser(userId);
+        return publicUserDTO;
     }
 
 
