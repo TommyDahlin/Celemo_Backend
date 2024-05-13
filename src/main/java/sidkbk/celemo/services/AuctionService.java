@@ -46,6 +46,7 @@ public class AuctionService {
         newAuction.setProductPhoto(auctionCreationDTO.getProductPhoto());
         newAuction.setCelebrityName(auctionCreationDTO.getCelebrityName());
         newAuction.setStartPrice(auctionCreationDTO.getStartPrice());
+        newAuction.setCurrentPrice(newAuction.getStartPrice());
         newAuction.setCategoryList(auctionCreationDTO.getCategoryList());
         return auctionRepository.save(newAuction);
     }
