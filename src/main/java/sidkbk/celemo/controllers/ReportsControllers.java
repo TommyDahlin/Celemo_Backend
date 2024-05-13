@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import sidkbk.celemo.dto.reports.*;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.services.ReportsServices;
-@CrossOrigin(origins = "http://localhost:5173/", allowedHeaders = "*", allowCredentials = "true")
+
 @RestController
 @RequestMapping(value = "/api/reports")
 public class ReportsControllers {

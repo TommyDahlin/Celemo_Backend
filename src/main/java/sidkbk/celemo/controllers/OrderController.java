@@ -14,7 +14,7 @@ import sidkbk.celemo.services.OrderService;
 
 import java.util.List;
 
-/*@CrossOrigin(origins = "http://localhost:5173/", allowedHeaders = "*", allowCredentials = "true")*/
+
 @RestController
 @RequestMapping(value = "/api/order")
 public class OrderController {

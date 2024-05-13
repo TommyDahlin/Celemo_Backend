@@ -12,7 +12,7 @@ import sidkbk.celemo.models.Reviews;
 import sidkbk.celemo.services.ReviewsService;
 
 import java.util.List;
-/*@CrossOrigin(origins = "http://localhost:5173/", allowedHeaders = "*", allowCredentials = "true")*/
+
 @RestController
 @RequestMapping("/api/reviews")
 public class ReviewsController {
@@ -22,7 +22,7 @@ public class ReviewsController {
 
 // PUBLIC
 //////////////////////////////////////////////////////////////////////////////////////
-@CrossOrigin(origins = "http://localhost:5173/", allowedHeaders = "*", allowCredentials = "true")
+
     // GET all reviews for specific reviewed user
     @GetMapping("/find/all-user/{userId}")
     public ResponseEntity<?> allReviewsForSpecificReviewedUser(@PathVariable("userId") String userId) {

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import sidkbk.celemo.dto.transactions.DeleteTransactionDTO;
 import sidkbk.celemo.dto.transactions.TransactionsCreationDTO;
 import sidkbk.celemo.services.TransactionsService;
-@CrossOrigin(origins = "http://localhost:5173/", allowedHeaders = "*", allowCredentials = "true")
+
 @RestController
 @RequestMapping("/api/transactions")
 public class TransactionsController {
