@@ -22,6 +22,9 @@ public class SearchService {
     public List<Auction> search(String search) {
         List<Auction> allAuctions = auctionRepository.findAll(); // Temp add all auctions to a list.
         List<Auction> foundAuctions = new ArrayList<>(); // List to return when something is found.
+        if (search.equals("getall")) {
+           foundAuctions = allAuctions;
+        }
         // Check first if search term is a ENUM Category, therefore check if search is uppercase.
         if (search.toUpperCase().equals(search)) {
             for (Auction auction : allAuctions) { // Loop all auctions
@@ -37,7 +40,7 @@ public class SearchService {
             }
             return foundAuctions;
         }
-        if (!search.toUpperCase().equals(search)) { // If "search" is not all uppercase
+        else { // If "search" is not all uppercase
             for (Auction auction : allAuctions) { // Loop all auctions
                 // If auction title contains any word of the "search"
                 if (auction.getTitle().toLowerCase().contains(search.toLowerCase())) {
