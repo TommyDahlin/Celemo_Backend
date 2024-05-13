@@ -5,15 +5,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import sidkbk.celemo.dto.user.*;
+import sidkbk.celemo.dto.user.DeleteUserDTO;
+import sidkbk.celemo.dto.user.ModifyUserFavouritesDTO;
+import sidkbk.celemo.dto.user.UpdateUserDTO;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.User;
 import sidkbk.celemo.services.AuctionService;
 import sidkbk.celemo.services.UserService;
 
-import java.beans.Encoder;
 import java.util.Optional;
 
 
@@ -68,7 +68,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
-    @CrossOrigin(origins = "http://localhost:5173/", allowedHeaders = "*", allowCredentials = "true")
+
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping ("/favourites/all/{userId}")
     public ResponseEntity<?> getUserFavouritesById(@PathVariable("userId") String userId){
@@ -86,7 +86,7 @@ public class UserController {
     }
     // find/get using id
     // Changed from GET to POST
-    @CrossOrigin(origins = "http://localhost:5173/", allowedHeaders = "*", allowCredentials = "true")
+
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping ("/find-one/{userId}")
     public ResponseEntity<User> getUserById(

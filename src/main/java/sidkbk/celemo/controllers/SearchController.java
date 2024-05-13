@@ -8,7 +8,7 @@ import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.services.SearchService;
 
 import java.util.List;
-@CrossOrigin(origins = "http://localhost:5173/", allowedHeaders = "*", allowCredentials = "true")
+
 @RestController
 @RequestMapping("/api/search")
 public class SearchController {
