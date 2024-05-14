@@ -95,6 +95,15 @@ public class BidsControllers {
             return ResponseEntity.ok(foundByAuction);
         }
     }
+    @GetMapping("/find/bidsamount/{auctionId}")
+    public ResponseEntity<?> findAmountBids(@PathVariable("auctionId") String auctionId) {
+        List<Bids> foundByAuction = bidsServices.findByAuction(auctionId);
+        if (foundByAuction == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Could not find any bids");
+        } else {
+            return ResponseEntity.ok(foundByAuction.size());
+        }
+    }
 
     //Delete by id
     @PreAuthorize("hasRole('ADMIN')")

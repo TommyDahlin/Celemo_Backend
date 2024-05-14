@@ -36,7 +36,15 @@ public class Auction {
 
     //private Date startingDate = new Date();
 
+    public int getCounter() {
+        return counter;
+    }
 
+    public void setCounter(int counter) {
+        this.counter = counter;
+    }
+
+    private int counter = 0;
 
     // String
     public Double currentPrice;

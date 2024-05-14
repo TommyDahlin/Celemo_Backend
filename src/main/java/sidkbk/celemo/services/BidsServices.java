@@ -116,6 +116,7 @@ public class BidsServices {
                     bidsRepository.save(updatedBid);
                     foundAuction.setCurrentPrice(updatedBid.getCurrentPrice());
                     foundAuction.setBid(updatedBid.getId());
+                    foundAuction.setCounter(foundAuction.getCounter() + 1);
                     auctionRepository.save(foundAuction);
                     return ResponseEntity.ok(newBid.getMaxPrice() + " is less than auctions current bids max price. New current bid is: " + foundAuction.currentPrice);
                 }
@@ -127,6 +128,7 @@ public class BidsServices {
                     bidsRepository.save(newBid);
                     bidsRepository.save(updatedBid);
                     foundAuction.setBid(updatedBid.getId());
+                    foundAuction.setCounter(foundAuction.getCounter() + 1);
                     auctionRepository.save(foundAuction);
                     return ResponseEntity.ok(newBid.getMaxPrice() + " is as much as the auctions current " + foundAuction.currentPrice + " bids max price. Make a new bid if you want to continue. New price is previous bids max");
                 }
@@ -140,6 +142,7 @@ public class BidsServices {
                         foundAuction.setCurrentPrice(newBid.getCurrentPrice());
                         currentBidUser.get().setBalance(currentBidUser.get().getBalance() + auctionCurrentBid.getMaxPrice());
                         foundAuction.setBid(newBid.getId());
+                        foundAuction.setCounter(foundAuction.getCounter() + 1);
                         auctionRepository.save(foundAuction);
                         userRepository.save(currentBidUser.get());
                         foundUser.setBalance(foundUser.getBalance() - newBid.getMaxPrice());
@@ -157,6 +160,7 @@ public class BidsServices {
                         foundUser.setBalance(foundUser.getBalance() - newBid.getMaxPrice());
                         userRepository.save(currentBidUser.get());
                         userRepository.save(foundUser);
+                        foundAuction.setCounter(foundAuction.getCounter() + 1);
                         auctionRepository.save(foundAuction);
                         return ResponseEntity.ok(newBid.getCurrentPrice() + " you have the current bid.");
                     }
@@ -177,6 +181,7 @@ public class BidsServices {
             foundAuction.setBid(newBid.getId());
             foundAuction.setCurrentPrice(newBid.getCurrentPrice());
             foundAuction.setHasBids(true);
+            foundAuction.setCounter(foundAuction.getCounter() + 1);
             auctionRepository.save(foundAuction);
             return ResponseEntity.ok("Bid has been created, current price is " + newBid.getCurrentPrice());
         }
