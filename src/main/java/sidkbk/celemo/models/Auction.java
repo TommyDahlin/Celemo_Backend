@@ -36,6 +36,8 @@ public class Auction {
 
     //private Date startingDate = new Date();
 
+
+
     // String
     public Double currentPrice;
     private Double endPrice = 0d;
@@ -55,7 +57,9 @@ public class Auction {
     public Auction(){
     }
 
-
+    public Double getCurrentPrice() {
+        return currentPrice;
+    }
 
     public void setCurrentPrice(Double currentPrice) {
         this.currentPrice = currentPrice;

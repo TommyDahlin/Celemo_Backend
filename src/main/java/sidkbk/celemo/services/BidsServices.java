@@ -66,8 +66,8 @@ public class BidsServices {
             newBid.setMaxPrice(bidsDTO.getMaxBid());
         }
         // Check if startBid and maxBid is higher than auction startPrice
-        if (bidsDTO.getStartBid() <= foundAuction.getStartPrice() || bidsDTO.getMaxBid() <= foundAuction.getStartPrice()) {
-            throw new RuntimeException("Your bids cannot be lower than auctions starting price...");
+        if (bidsDTO.getStartBid() <= foundAuction.getStartPrice() || bidsDTO.getMaxBid() <= foundAuction.getStartPrice() || bidsDTO.getStartBid() <= foundAuction.getCurrentPrice() + 10) {
+            throw new RuntimeException("Your bids cannot be lower than auctions starting price or current price.");
         }
 
         // Checks if users balance is valid
@@ -97,9 +97,7 @@ public class BidsServices {
                 updatedBid.setAuctionId(auctionCurrentBid.getAuctionId());
                 updatedBid.setStartPrice(auctionCurrentBid.getStartPrice());
                 updatedBid.setMaxPrice(auctionCurrentBid.getMaxPrice());
-                if (auctionCurrentBid.getStartPrice() <= bidsDTO.getStartBid()){
-                    return ResponseEntity.ok("Du kan ju inte buda under för fan");
-                }
+
                 //Bids updatedBid = new Bids();
 
                 // user loses
