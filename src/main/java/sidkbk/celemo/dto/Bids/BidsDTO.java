@@ -10,7 +10,7 @@ public class BidsDTO {
     private String id;
     @NotBlank
     private Double startBid;
-    private Double maxBid = 0.0;
+    private Double maxBid;
     @NotBlank
     private String userId;
     @NotBlank

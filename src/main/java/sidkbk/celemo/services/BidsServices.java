@@ -58,6 +58,7 @@ public class BidsServices {
 
         newBid.setStartPrice(bidsDTO.getStartBid());
         newBid.setAuctionId(bidsDTO.getAuctionId());
+
         if (bidsDTO.getMaxBid() == 0) {
             newBid.setMaxPrice(newBid.getStartPrice());
             bidsDTO.setMaxBid(bidsDTO.getStartBid());
@@ -75,7 +76,7 @@ public class BidsServices {
         }
 
         // Checks if users balance is less than starting bid
-        if (newBid.getStartPrice() > foundUser.getBalance()){
+        if (bidsDTO.getStartBid() > foundUser.getBalance()){
             throw new RuntimeException("Your bid cannot be higher than your balance. Your current balance is "
                     + foundUser.getBalance() + "Your current bid is " + bidsDTO.getStartBid() + ".");
         }
