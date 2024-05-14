@@ -79,6 +79,7 @@ public class AuctionService {
                 })
                 // If no auction is found it returns an empty list.
                 .orElse(Collections.emptyList());
+
     }
 
 
