@@ -37,9 +37,12 @@ public class OrderService {
         Auction findAuction = auctionRepository.findById(orderCreationDTO.getAuctionId())
                 .orElseThrow(() -> new RuntimeException("Auction not found!"));
 
+        User seller = userRepository.findById(findAuction.getSeller())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
         Order newOrder = new Order();
         newOrder.setAuction(findAuction);
-        newOrder.setSellerUsername(findAuction.getSeller().getUsernameAndEmail());
+        newOrder.setSellerUsername(seller.getUsernameAndEmail());
         newOrder.setBuyerUsername(orderCreationDTO.getBuyerUsername());
         newOrder.setProductTitle(findAuction.getTitle());
         newOrder.setEndPrice(findAuction.getEndPrice());

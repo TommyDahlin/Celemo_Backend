@@ -13,9 +13,7 @@ public class Bids {
     @Id
     private String id;
 
-
-    @DBRef
-    private User user; // this could be a problem
+    private String user; // this could be a problem
 
 
     private String auctionId; // This i a String because otherwise we get infinte recursion error
@@ -28,7 +26,7 @@ public class Bids {
     public Bids() {
     }
 
-    public Bids(User user, String auctionId, double startPrice, double maxPrice) {
+    public Bids(String user, String auctionId, double startPrice, double maxPrice) {
     }
 
 
@@ -37,11 +35,11 @@ public class Bids {
     }
 
 
-    public User getUser() {
+    public String getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(String user) {
         this.user = user;
     }
 

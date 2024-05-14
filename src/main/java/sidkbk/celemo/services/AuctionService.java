@@ -37,8 +37,8 @@ public class AuctionService {
                 .orElseThrow(() -> new RuntimeException("Couldn't find user."));
         Auction newAuction = new Auction();
         newAuction.setCurrentPrice(newAuction.getStartPrice());
-        newAuction.setSellerId(userRepository.findById(auctionCreationDTO.getSellerId()).get());
-        newAuction.setSellerId(findUser); //Detta måste ändras för att inte få inf-rec
+        newAuction.setSellerId(auctionCreationDTO.getSellerId());
+        newAuction.setSellerId(findUser.getId()); //Detta måste ändras för att inte få inf-rec
         newAuction.setTitle(auctionCreationDTO.getTitle());
         newAuction.setProductDescription(auctionCreationDTO.getProductDescription());
         newAuction.setProductPhoto(auctionCreationDTO.getProductPhoto());
@@ -109,7 +109,7 @@ public class AuctionService {
         List<Auction> auctionList = auctionRepository.findAll();
         List<Auction> activeAuctionList = new ArrayList<>();
         for (int i = 0; i < auctionList.size(); i++) {
-            if (!auctionList.get(i).isFinished && Objects.equals(auctionList.get(i).getSeller().getId(), userId)){
+            if (!auctionList.get(i).isFinished && Objects.equals(auctionList.get(i).getSeller(), userId)){
                 activeAuctionList.add(auctionList.get(i));
             }
         }
@@ -119,7 +119,7 @@ public class AuctionService {
         List<Auction> auctionList = auctionRepository.findAll();
         List<Auction> finishedAuctionList = new ArrayList<>();
         for (int i = 0; i < auctionList.size(); i++) {
-            if (auctionList.get(i).isFinished && Objects.equals(auctionList.get(i).getSeller().getId(), userId)){
+            if (auctionList.get(i).isFinished && Objects.equals(auctionList.get(i).getSeller(), userId)){
                 finishedAuctionList.add(auctionList.get(i));
             }
         }

@@ -36,11 +36,11 @@ public class Auction {
 
     //private Date startingDate = new Date();
 
-    // Bids
+    // String
     public Double currentPrice;
     private Double endPrice = 0d;
-    @DBRef
-    private Bids bid; // this could be a problem
+
+    private String bid; // this could be a problem
 
     // Both booleans have to be true to move on to make an order.
     public boolean isFinished;
@@ -50,8 +50,7 @@ public class Auction {
     public List<ECategory> categoryList = new ArrayList<>();
 
     @NotBlank
-    @DBRef
-    private User seller; // this could be a problem
+    private String seller; // this could be a problem
 
     public Auction(){
     }
@@ -66,11 +65,11 @@ public class Auction {
         this.endPrice = endPrice;
     }
 
-    public Bids getBid() {
+    public String getBid() {
         return bid;
     }
 
-    public void setBid(Bids bid) {
+    public void setBid(String bid) {
         this.bid = bid;
     }
 
@@ -157,11 +156,11 @@ public class Auction {
         this.startPrice = startPrice;
     }
 
-    public User getSeller() {
+    public String getSeller() {
         return seller;
     }
 
-    public void setSellerId(User seller) {
+    public void setSellerId(String seller) {
         this.seller = seller;
     }
 
