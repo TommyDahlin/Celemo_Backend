@@ -97,6 +97,9 @@ public class BidsServices {
                 updatedBid.setAuctionId(auctionCurrentBid.getAuctionId());
                 updatedBid.setStartPrice(auctionCurrentBid.getStartPrice());
                 updatedBid.setMaxPrice(auctionCurrentBid.getMaxPrice());
+                if (auctionCurrentBid.getStartPrice() <= bidsDTO.getStartBid()){
+                    return ResponseEntity.ok("Du kan ju inte buda under för fan");
+                }
                 //Bids updatedBid = new Bids();
 
                 // user loses
