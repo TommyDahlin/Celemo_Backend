@@ -11,9 +11,9 @@ public class BidsDTO {
     @NotBlank
     private Double startBid;
     private Double maxBid = 0.0;
-
+    @NotBlank
     private String userId;
-
+    @NotBlank
     private String auctionId;
 
     public String getId() {

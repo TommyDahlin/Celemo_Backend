@@ -54,8 +54,6 @@ public class BidsServices {
         // sets user found from DTO ID
         newBid.setUser(foundUser);
 
-        // sets auction from found bid on auction which might try to find the bid from the auction and the auction has the bid
-        // newBid.setAuction(foundAuction);
 
         newBid.setStartPrice(bidsDTO.getStartBid());
         newBid.setAuctionId(bidsDTO.getAuctionId());
@@ -74,15 +72,16 @@ public class BidsServices {
         if (bidsDTO.getMaxBid() > foundUser.getBalance()){
             throw new RuntimeException("Your max bid can not be higher than " + foundUser.getBalance() + " , your current balance.");
         }
+
         // Checks if users balance is less than starting bid
-        if (foundUser.getBalance() < newBid.getStartPrice()){
+        if (newBid.getStartPrice() > foundUser.getBalance()){
             throw new RuntimeException("Your bid cannot be higher than your balance. Your current balance is "
                     + foundUser.getBalance() + "Your current bid is " + bidsDTO.getStartBid() + ".");
         }
 
 
         // checks if auction has a bid
-        if (foundAuction.isHasBids()){
+        if (foundAuction.isHasBids() && foundAuction.getBid() != null){
 
             // checks if user has the same id as the previous user
             if (!foundAuction.getBid().getUser().getId().equals(newBid.getUser().getId())) {
@@ -97,6 +96,7 @@ public class BidsServices {
                 updatedBid.setStartPrice(auctionCurrentBid.getStartPrice());
                 updatedBid.setMaxPrice(auctionCurrentBid.getMaxPrice());
                 //Bids updatedBid = new Bids();
+
                 // user loses
                 // checks if new bid is less than the current
                 if (newBid.getMaxPrice() < auctionCurrentBid.getMaxPrice()) {
@@ -163,7 +163,7 @@ public class BidsServices {
             }
 
             //send back balance of lost bids
-        }else if (!foundAuction.isHasBids()){
+        }else {
 
             foundUser.setBalance(foundUser.getBalance() - newBid.getMaxPrice());
             userRepository.save(foundUser);
