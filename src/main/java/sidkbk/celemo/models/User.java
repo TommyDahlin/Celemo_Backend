@@ -86,7 +86,7 @@ public class User {
 
     public void addToFav(Auction auction) {
         favouriteAuctions.add(auction);
-    }
+    } // this could be a problem
 
     public void removeFromFav(Auction auction) {
 

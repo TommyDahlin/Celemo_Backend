@@ -26,13 +26,13 @@ public class Reports {
 
 
     @DBRef
-    private User reportingUserId;
+    private User reportingUserId; // this could be a problem
 
     @DBRef
-    private User reportedUserId;
+    private User reportedUserId; // this could be a problem
 
     @DBRef
-    private Auction auction;
+    private Auction auction; // this could be a problem
 
     public Reports() {
     }

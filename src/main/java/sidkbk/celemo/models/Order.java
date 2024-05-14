@@ -23,7 +23,7 @@ public class Order {
 
     private String buyerUsername;
     @DBRef
-    private Auction auction;
+    private Auction auction; // this could be a problem
 
 
 

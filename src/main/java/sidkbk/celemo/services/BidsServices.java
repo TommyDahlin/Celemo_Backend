@@ -43,7 +43,7 @@ public class BidsServices {
                 .orElseThrow(()-> new RuntimeException("User does not exist!"));
         // gets DTO, checks auction id from auction-repo
         Auction foundAuction = auctionRepository.findById(bidsDTO.getAuctionId())
-                .orElseThrow(()-> new RuntimeException("Auction does not exist!"));
+                .orElseThrow(()-> new RuntimeException("Auction does not exist!")); // This might be a problem
         // auction owner check
         User auctionOwner = userRepository.findById(foundAuction.getSeller().getId()).get();
         if (foundUser.getUsername().equals(auctionOwner.getUsername())) {
@@ -52,7 +52,7 @@ public class BidsServices {
         // makes new bid object
         Bids newBid = new Bids();
         // sets user found from DTO ID
-        newBid.setUser(foundUser);
+        newBid.setUser(foundUser); // This might be a problem
 
 
         newBid.setStartPrice(bidsDTO.getStartBid());

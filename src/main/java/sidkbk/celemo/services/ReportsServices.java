@@ -26,9 +26,9 @@ public class ReportsServices {
 
     //post , create report for user
     public ResponseEntity<Reports> createReportUser(ReportsUserDTO reportsDTO) {
-        User foundReportedUser = userRepository.findById(reportsDTO.getReportedUserId())
+        User foundReportedUser = userRepository.findById(reportsDTO.getReportedUserId()) // this could be a problem
                 .orElseThrow(() -> new RuntimeException("User does not exist!"));
-        User foundReportingUser = userRepository.findById(reportsDTO.getReportingUserId())
+        User foundReportingUser = userRepository.findById(reportsDTO.getReportingUserId()) // this could be a problem
                 .orElseThrow(() -> new RuntimeException("User does not exist!"));
         //reportsDTO.setReportedUserId(reportsDTO.getReportingUserId());
         //reportsDTO.setReportingUserId(reportsDTO.getReportingUserId());
@@ -43,16 +43,16 @@ public class ReportsServices {
 
     //post , create report for auction
     public ResponseEntity<?> createReportAuction(ReportsAuctionDTO reportsAuctionDTO) {
-        User foundReportingAuction = userRepository.findById(reportsAuctionDTO.getReportingUserId())
+        User foundReportingAuction = userRepository.findById(reportsAuctionDTO.getReportingUserId()) // this could be a problem
                 .orElseThrow(() -> new RuntimeException("Auction does not exist!"));
-        Auction foundAuction = auctionRepository.findById(reportsAuctionDTO.getAuctionId())
+        Auction foundAuction = auctionRepository.findById(reportsAuctionDTO.getAuctionId()) // this could be a problem
                 .orElseThrow(() -> new RuntimeException("Auction does not exist!"));
         //reportsAuctionDTO.setReportingUserId(reportsAuctionDTO.getReportingUserId());
         //reportsAuctionDTO.setAuction(reportsAuctionDTO.getAuction());
 
         Reports newReport = new Reports();
         newReport.setReportingUserId(foundReportingAuction);
-        newReport.setAuction(foundAuction);
+        newReport.setAuction(foundAuction); // this could be a problem
         newReport.setContent(reportsAuctionDTO.getContent());
 
         return ResponseEntity.ok(reportsRepository.save(newReport));

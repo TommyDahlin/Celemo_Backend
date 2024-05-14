@@ -15,7 +15,7 @@ public class Bids {
 
 
     @DBRef
-    private User user;
+    private User user; // this could be a problem
 
 
     private String auctionId; // This i a String because otherwise we get infinte recursion error

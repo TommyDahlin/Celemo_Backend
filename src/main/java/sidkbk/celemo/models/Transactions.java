@@ -15,7 +15,7 @@ public class Transactions {
     private String id;
 
     @DBRef
-    private User user;
+    private User user; // this could be a problem
 
     private Double transactionAmount;
 

@@ -54,8 +54,8 @@ public class ReviewsService {
         Reviews newReview = new Reviews();
         newReview.setGrade(reviewsDTO.getGrade());
         newReview.setReviewText(reviewsDTO.getReviewText());
-        newReview.setCreatedBy(createdBy);
-        newReview.setReviewedUser(reviewedUser);
+        newReview.setCreatedBy(createdBy); // this could be a problem
+        newReview.setReviewedUser(reviewedUser); // this could be a problem
         reviewsRepo.save(newReview);
         updateAverageGrade(reviewedUser.getId());
         return newReview;

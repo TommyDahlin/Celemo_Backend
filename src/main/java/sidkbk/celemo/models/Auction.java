@@ -40,7 +40,7 @@ public class Auction {
     public Double currentPrice;
     private Double endPrice = 0d;
     @DBRef
-    private Bids bid;
+    private Bids bid; // this could be a problem
 
     // Both booleans have to be true to move on to make an order.
     public boolean isFinished;
@@ -51,7 +51,7 @@ public class Auction {
 
     @NotBlank
     @DBRef
-    private User seller;
+    private User seller; // this could be a problem
 
     public Auction(){
     }

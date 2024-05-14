@@ -27,10 +27,10 @@ public class Reviews {
 
 
     @DBRef
-    private User createdBy;
+    private User createdBy; // this could be a problem
 
     @DBRef
-    private User reviewedUser;
+    private User reviewedUser; // this could be a problem
 
     // Constructors
     public Reviews() {
