@@ -7,14 +7,12 @@ import org.springframework.stereotype.Service;
 import sidkbk.celemo.dto.auctions.AuctionCreationDTO;
 import sidkbk.celemo.dto.auctions.AuctionIdDTO;
 import sidkbk.celemo.dto.auctions.AuctionUpdateDTO;
-import sidkbk.celemo.dto.user.FindUserIdDTO;
 import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.models.User;
 import sidkbk.celemo.repositories.AuctionRepository;
 import sidkbk.celemo.repositories.BidsRepository;
 import sidkbk.celemo.repositories.OrderRepository;
 import sidkbk.celemo.repositories.UserRepository;
-
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -61,9 +59,9 @@ public class AuctionService {
     }
 
     // method to show less info on one specific auction
-    public List<String> getOneAuctionTimeleft(AuctionIdDTO auctionIdDTO) {
+    public List<String> getOneAuctionTimeleft(String auctionId) {
         // tries to find an auction by auctionId in the repo
-        Optional<Auction> oneSpecificAuction = auctionRepository.findById(auctionIdDTO.getAuctionId());
+        Optional<Auction> oneSpecificAuction = auctionRepository.findById(auctionId);
         // If the auction is found it continues.
         return oneSpecificAuction
                 .map(auction -> {
@@ -75,9 +73,8 @@ public class AuctionService {
                     // had to check this up on forums aswell.
                     //This returns a list of details as Strings
                     return List.of(
-                            "Auction ends in" + " " +timeLeft + ":" + "Days",
-                            "Current price on Auction is:" + " " + auction.currentPrice,
-                            "Auction ends at:" + " " + auction.getEndDate()
+                            "Auction ends in " + timeLeft + " Days",
+                            "Auction ends at: " + auction.getEndDate()
                     );
                 })
                 // If no auction is found it returns an empty list.

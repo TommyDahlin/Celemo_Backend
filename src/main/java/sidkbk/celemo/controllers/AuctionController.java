@@ -97,20 +97,20 @@ public class AuctionController {
     }
 
 
-// ADMIN
-//////////////////////////////////////////////////////////////////////////////////////
+
 
     // GET one auction
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    @GetMapping("/find-one/timeleft")
-    public ResponseEntity<?> getOneAuctionTimeleft(@Valid @RequestBody AuctionIdDTO auctionIdDTO) {
+    @GetMapping("/find-one/timeleft/{auctionId}")
+    public ResponseEntity<?> getOneAuctionTimeleft(@PathVariable String auctionId) {
         try {
-            return ResponseEntity.ok(auctionService.getOneAuctionTimeleft(auctionIdDTO));
+            return ResponseEntity.ok(auctionService.getOneAuctionTimeleft(auctionId));
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
-
+// ADMIN
+//////////////////////////////////////////////////////////////////////////////////////
 
 
     //REMOVE BEFORE PRODUCTION
