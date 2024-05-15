@@ -86,7 +86,6 @@ public class UserController {
     // find/get using id
     // Changed from GET to POST
 
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping ("/find-one/{userId}")
     public ResponseEntity<User> getUserById(
             @PathVariable("userId") String userId
