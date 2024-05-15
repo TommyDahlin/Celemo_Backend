@@ -57,13 +57,13 @@ public class ReviewsService {
         newReview.setCreatedBy(createdBy); // this could be a problem
         newReview.setReviewedUser(reviewedUser); // this could be a problem
         reviewsRepo.save(newReview);
-        updateAverageGrade(reviewedUser.getId());
+        updateAverageGrade(reviewsDTO.getReviewedUserId());
         return newReview;
     }
 
 
     public void updateAverageGrade(String userId){
-        List<Reviews> allReviews = reviewsRepo.findAll(); // list all reviews
+        List<Reviews> allReviews = reviewsRepo.findByReviewedUser_Id(userId); // list all reviews
         User user = userRepository.findById(userId).get(); //get reviews with reviewedUser
         List<Double> reviewGrade = new ArrayList<>(); //create a new list to fill with
         for (Reviews reviews : allReviews) { //checks each review if the reviewedUserId matches with id

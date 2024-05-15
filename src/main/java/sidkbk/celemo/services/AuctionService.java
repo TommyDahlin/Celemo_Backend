@@ -41,7 +41,7 @@ public class AuctionService {
         newAuction.setSellerId(findUser.getId()); //Detta måste ändras för att inte få inf-rec
         newAuction.setTitle(auctionCreationDTO.getTitle());
         newAuction.setProductDescription(auctionCreationDTO.getProductDescription());
-        newAuction.setProductPhoto(auctionCreationDTO.getProductPhoto());
+        newAuction.setProductPhoto(auctionCreationDTO.getProductPhoto()); // NEEDS BETTER SOLUTION
         newAuction.setCelebrityName(auctionCreationDTO.getCelebrityName());
         newAuction.setStartPrice(auctionCreationDTO.getStartPrice());
         newAuction.setCurrentPrice(newAuction.getStartPrice());
