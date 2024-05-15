@@ -14,7 +14,7 @@ public class AuctionCreationDTO {
     private String title;
     @NotBlank
     private String productDescription;
-    @NotBlank
+
     private String productPhoto;
     @NotBlank
     private String celebrityName;
