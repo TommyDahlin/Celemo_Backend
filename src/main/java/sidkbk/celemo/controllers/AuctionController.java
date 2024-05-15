@@ -98,8 +98,7 @@ public class AuctionController {
 
 
 
-    // GET one auction
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    // GET one auction with time left
     @GetMapping("/find-one/timeleft/{auctionId}")
     public ResponseEntity<?> getOneAuctionTimeleft(@PathVariable String auctionId) {
         try {
