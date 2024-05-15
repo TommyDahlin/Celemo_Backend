@@ -86,7 +86,6 @@ public class AuctionController {
     }
 
     // GET one auction
-    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @GetMapping("/find-one/{auctionId}")
     public ResponseEntity<?> getAuction(@PathVariable("auctionId") String auctionId) {
         try {
