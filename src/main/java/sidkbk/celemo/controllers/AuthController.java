@@ -129,6 +129,11 @@ public class AuthController {
         return ResponseEntity.ok(new MessageResponse("User registered successfully"));
     }
 
+    @PostMapping("logout")
+    public ResponseEntity<?> logoutUser () {
+        ResponseCookie jwtCookie = jwtUtils.getCleanJwtCookie();
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString()).body("Logged out successfully");
+    }
 
 
 }
