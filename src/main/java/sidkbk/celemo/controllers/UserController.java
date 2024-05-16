@@ -58,10 +58,10 @@ public class UserController {
     }
 
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    @PutMapping("/update")
-    public ResponseEntity<?> updateUser(@Valid @RequestBody UpdateUserDTO updateUserDTO){
+    @PutMapping("/update/{userId}")
+    public ResponseEntity<?> updateUser(@Valid @RequestBody UpdateUserDTO updateUserDTO, @PathVariable("userId") String userId){
         try{
-            User updatedUser = userService.updateUser(updateUserDTO);
+            User updatedUser = userService.updateUser(userId, updateUserDTO);
             return ResponseEntity.ok(updatedUser);
         } catch (EntityNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

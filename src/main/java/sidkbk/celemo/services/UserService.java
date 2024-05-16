@@ -92,13 +92,17 @@ public class UserService {
 
 
     // PUT/update user account. checks that new value isn't empty before adding. If something is empty then it will throw EntityNotFoundException
-    public User updateUser(UpdateUserDTO updateUserDTO) {
+    public User updateUser(String userId, UpdateUserDTO updateUserDTO) {
         Set<Role> roles = new HashSet<>();
         Set<String> strRoles = updateUserDTO.getUsersRoles();
+        if (updateUserDTO.getPassword() != null){
+        String encodedPassword = encoder.encode(updateUserDTO.getPassword());
+        updateUserDTO.setPassword(encodedPassword);
+        }
         return userRepository.findById(updateUserDTO.getUserId())
                 .map(existingUser -> {
                     Optional.ofNullable(updateUserDTO.getUsername()).ifPresent(existingUser::setUsername);
-                    Optional.ofNullable(encoder.encode(updateUserDTO.getPassword())).ifPresent(existingUser::setPassword);
+                    Optional.ofNullable(updateUserDTO.getPassword()).ifPresent(existingUser::setPassword);
                     Optional.ofNullable(updateUserDTO.getDateOfBirth()).ifPresent(existingUser::setDateOfBirth);
                     Optional.ofNullable(updateUserDTO.getEmail()).ifPresent(existingUser::setEmail);
                     Optional.ofNullable(updateUserDTO.getFirstName()).ifPresent(existingUser::setFirstName);
