@@ -64,7 +64,6 @@ public class BidsControllers {
     }
 
     //Find by BidId
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/find-one/{bidId}")
     public ResponseEntity<?> findOne(@Valid @PathVariable("bidId") String bidId){
         try {
