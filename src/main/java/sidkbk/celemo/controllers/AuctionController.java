@@ -16,7 +16,6 @@ import sidkbk.celemo.services.AuctionService;
 import java.util.List;
 
 
-
 @RestController
 @RequestMapping(value = "/api/auction")
 public class AuctionController {
@@ -37,6 +36,19 @@ public class AuctionController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
+    // Get all auctions from user
+
+    @GetMapping("/find/all/user/{userId}")
+    public ResponseEntity<?> getAllAuctionsFromUser(@PathVariable("userId") String userId) {
+
+        List<Auction> foundAuctions = auctionService.getAllAuctionsFromUser(userId);
+        if (foundAuctions.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User does not have any auctions...");
+        } else {
+            return ResponseEntity.ok(foundAuctions);
+        }
+
+    }
 
 
 // USER
@@ -53,19 +65,7 @@ public class AuctionController {
         }
     }
 
-    // Get all auctions from user
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    @GetMapping("/find/all/user/{userId}")
-    public ResponseEntity<?> getAllAuctionsFromUser(@PathVariable("userId") String userId) {
 
-        List<Auction> foundAuctions = auctionService.getAllAuctionsFromUser(userId);
-        if (foundAuctions.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User does not have any auctions...");
-        } else {
-            return ResponseEntity.ok(foundAuctions);
-        }
-
-    }
 
     // PUT update an auction
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
