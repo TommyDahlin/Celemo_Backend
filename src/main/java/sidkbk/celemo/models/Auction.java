@@ -32,7 +32,7 @@ public class Auction {
 
     // Not needed for the body in postman, gets added automatically
     private LocalDateTime startingDate = LocalDateTime.now();
-    private LocalDateTime endDate = LocalDateTime.now().plusDays(7);
+    private LocalDateTime endDate;
 
     //private Date startingDate = new Date();
 

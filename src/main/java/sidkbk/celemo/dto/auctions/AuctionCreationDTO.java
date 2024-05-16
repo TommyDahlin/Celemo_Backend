@@ -14,18 +14,27 @@ public class AuctionCreationDTO {
     private String title;
     @NotBlank
     private String productDescription;
-
     private String productPhoto;
     @NotBlank
     private String celebrityName;
     @NotNull
     private Double startPrice;
+
+
+    int endDate;
     @NotEmpty
     private List<ECategory> categoryList = new ArrayList<>();
     @NotBlank
     private String sellerId;
 
 
+    public int getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(int endDate) {
+        this.endDate = endDate;
+    }
     // Getters
     public String getSellerId() {
         return sellerId;

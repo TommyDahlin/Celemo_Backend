@@ -14,6 +14,7 @@ import sidkbk.celemo.repositories.BidsRepository;
 import sidkbk.celemo.repositories.OrderRepository;
 import sidkbk.celemo.repositories.UserRepository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -46,6 +47,9 @@ public class AuctionService {
         newAuction.setStartPrice(auctionCreationDTO.getStartPrice());
         newAuction.setCurrentPrice(newAuction.getStartPrice());
         newAuction.setCategoryList(auctionCreationDTO.getCategoryList());
+
+        newAuction.setEndDate(LocalDateTime.now().plusDays(auctionCreationDTO.getEndDate()));
+
         return auctionRepository.save(newAuction);
     }
     // READ ALL
