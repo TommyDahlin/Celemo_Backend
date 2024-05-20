@@ -19,10 +19,7 @@ import sidkbk.celemo.repositories.RoleRepository;
 import sidkbk.celemo.repositories.UserRepository;
 
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static sidkbk.celemo.models.ERole.ROLE_BANNED;
@@ -103,6 +100,7 @@ public class UserService {
         // Gets user from DTO
         Optional<User> user = userRepository.findById(banUserDTO.getUserId());
         // Makes new Set for roles
+
         Set<Role> roles = new HashSet<>();
         String msg;
         // Removes all current roles

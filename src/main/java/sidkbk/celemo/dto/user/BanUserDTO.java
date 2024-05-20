@@ -9,12 +9,6 @@ import java.util.Set;
 public class BanUserDTO {
     @NotBlank
     private String userId;
-
-    public Set<String> getUsersRoles() {
-        return usersRoles;
-    }
-
-    private Set<String> usersRoles = new HashSet<>();
     public String getUserId() {
         return userId;
     }
