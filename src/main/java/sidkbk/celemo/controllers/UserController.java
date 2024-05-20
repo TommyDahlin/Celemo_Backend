@@ -6,10 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import sidkbk.celemo.dto.user.DeleteUserDTO;
-import sidkbk.celemo.dto.user.ModifyUserFavouritesDTO;
-import sidkbk.celemo.dto.user.PublicUserDTO;
-import sidkbk.celemo.dto.user.UpdateUserDTO;
+import sidkbk.celemo.dto.user.*;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.User;
 import sidkbk.celemo.services.AuctionService;
@@ -85,6 +82,19 @@ public class UserController {
     }
     // find/get using id
     // Changed from GET to POST
+
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/admin/ban")
+    public ResponseEntity<?> banUserById(@Valid @RequestBody BanUserDTO banUserDTO){
+        return userService.banUser(banUserDTO);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/admin/unban")
+    public ResponseEntity<?> unBanUserById(@Valid @RequestBody BanUserDTO banUserDTO){
+        return userService.unBanUser(banUserDTO);
+    }
 
     @GetMapping ("/find-one/{userId}")
     public ResponseEntity<User> getUserById(

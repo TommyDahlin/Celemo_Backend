@@ -25,6 +25,9 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static sidkbk.celemo.models.ERole.ROLE_BANNED;
+import static sidkbk.celemo.models.ERole.ROLE_USER;
+
 @Service
 public class UserService {
     @Autowired
@@ -74,6 +77,47 @@ public class UserService {
 
     }
 
+        // Ban user function
+    public ResponseEntity<String> banUser(BanUserDTO banUserDTO){
+
+        // Gets user from DTO
+        Optional<User> user = userRepository.findById(banUserDTO.getUserId());
+        // Makes new Set for roles
+        Set<Role> roles = new HashSet<>();
+        String msg;
+        // If statement to check if user is banned or User, and sets to the opposite (Banned -> user, user -> banned)
+        // Removes all current roles
+            user.get().setRoles(null);
+            Role userRole = roleRepository.findByName(ERole.ROLE_BANNED)
+                    .orElseThrow(() -> new RuntimeException("Error: role is not found"));
+            roles.add(userRole);
+            msg = "User was banned.";
+        // Sets the role that it got and saves.
+        user.get().setRoles(roles);
+        userRepository.save(user.get());
+        return ResponseEntity.ok(msg);
+    }
+
+    // Unban user function
+    public ResponseEntity<String> unBanUser(BanUserDTO banUserDTO){
+        // Gets user from DTO
+        Optional<User> user = userRepository.findById(banUserDTO.getUserId());
+        // Makes new Set for roles
+        Set<Role> roles = new HashSet<>();
+        String msg;
+        // Removes all current roles
+        user.get().setRoles(null);
+        Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+                .orElseThrow(() -> new RuntimeException("Error: role is not found"));
+
+        roles.add(userRole);
+        msg = "User was unbanned.";
+        // Sets the role that it got and saves.
+        user.get().setRoles(roles);
+        userRepository.save(user.get());
+        return ResponseEntity.ok(msg);
+    }
+
     // get/find user account using id
     public Optional<User> getUserById(String userId) {
         return userRepository.findById(userId);
@@ -93,8 +137,10 @@ public class UserService {
 
     // PUT/update user account. checks that new value isn't empty before adding. If something is empty then it will throw EntityNotFoundException
     public User updateUser(String userId, UpdateUserDTO updateUserDTO) {
+
         Set<Role> roles = new HashSet<>();
         Set<String> strRoles = updateUserDTO.getUsersRoles();
+
         if (updateUserDTO.getPassword() != null){
         String encodedPassword = encoder.encode(updateUserDTO.getPassword());
         updateUserDTO.setPassword(encodedPassword);

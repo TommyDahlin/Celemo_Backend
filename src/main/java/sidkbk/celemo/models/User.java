@@ -135,6 +135,10 @@ public class User {
 
     }
 
+    public boolean userHasRole(Role role){
+        return roles.contains(role);
+    }
+
 
     public String getUsername() {
         return username;
