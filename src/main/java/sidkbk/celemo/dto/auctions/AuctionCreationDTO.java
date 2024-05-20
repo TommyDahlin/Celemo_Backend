@@ -19,15 +19,11 @@ public class AuctionCreationDTO {
     private String celebrityName;
     @NotNull
     private Double startPrice;
-
-
     int endDate;
     @NotEmpty
     private List<ECategory> categoryList = new ArrayList<>();
     @NotBlank
     private String sellerId;
-
-
     public int getEndDate() {
         return endDate;
     }
