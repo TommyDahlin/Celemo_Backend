@@ -9,21 +9,13 @@ import org.springframework.stereotype.Service;
 import sidkbk.celemo.dto.user.*;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
 import sidkbk.celemo.models.*;
-
-
 import sidkbk.celemo.repositories.*;
 
-import sidkbk.celemo.repositories.AuctionRepository;
-import sidkbk.celemo.repositories.ReviewsRepo;
-import sidkbk.celemo.repositories.RoleRepository;
-import sidkbk.celemo.repositories.UserRepository;
-
-
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
-
-import static sidkbk.celemo.models.ERole.ROLE_BANNED;
-import static sidkbk.celemo.models.ERole.ROLE_USER;
 
 @Service
 public class UserService {
@@ -128,6 +120,7 @@ public class UserService {
         publicUserDTO.setUsername(user.get().getUsername());
         publicUserDTO.setAdress_city(user.get().getAdress_city());
         publicUserDTO.setGrade(user.get().getGrade());
+        publicUserDTO.setPhoto(user.get().getPhoto());
 
         return publicUserDTO;
     }
