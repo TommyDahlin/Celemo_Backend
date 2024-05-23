@@ -61,7 +61,7 @@ public class User {
     private List<Auction> favouriteAuctions = new ArrayList<>();
 
 
-    private double balance = 0d;
+    private double balance = 10000.0;
 
     private double grade = 0d;
 

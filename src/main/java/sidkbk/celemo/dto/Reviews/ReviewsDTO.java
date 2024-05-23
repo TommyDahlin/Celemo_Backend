@@ -7,7 +7,6 @@ public class ReviewsDTO {
 
     @NotNull(message = "grade cannot be blank")
     private Double grade;
-
     @NotBlank(message = "reviewText cannot be blank")
     private String reviewText;
     @NotBlank(message = "createById cannot be blank")
