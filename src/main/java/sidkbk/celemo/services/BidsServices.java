@@ -55,7 +55,6 @@ public class BidsServices {
         // sets user found from DTO ID
         newBid.setUser(foundUser.getId()); // This might be a problem
 
-
         newBid.setStartPrice(bidsDTO.getStartBid());
         newBid.setAuctionId(bidsDTO.getAuctionId());
 
@@ -81,7 +80,6 @@ public class BidsServices {
                     + foundUser.getBalance() + "Your current bid is " + bidsDTO.getStartBid() + ".");
         }
 
-
         // checks if auction has a bid
         if (foundAuction.isHasBids() && foundAuction.getBid() != null){
 
@@ -99,7 +97,7 @@ public class BidsServices {
                 updatedBid.setMaxPrice(auctionCurrentBid.getMaxPrice());
 
                 //Bids updatedBid = new Bids();
-
+                //fork
                 // user loses
                 // checks if new bid is less than the current
                 if (newBid.getMaxPrice() < auctionCurrentBid.getMaxPrice()) {
