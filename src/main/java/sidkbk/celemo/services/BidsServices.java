@@ -39,46 +39,25 @@ public class BidsServices {
 
     // Create a bids using price, userId and listingId
     public ResponseEntity<?> createBids(BidsDTO bidsDTO){
+
         // gets DTO, checks user from user-repo
-        User foundUser = userRepository.findById(bidsDTO.getUserId())
-                .orElseThrow(()-> new RuntimeException("User does not exist!"));
+        User foundUser = foundUserCheck(bidsDTO);
         // gets DTO, checks auction id from auction-repo
-        Auction foundAuction = auctionRepository.findById(bidsDTO.getAuctionId())
-                .orElseThrow(()-> new RuntimeException("Auction does not exist!")); // This might be a problem
+        Auction foundAuction = foundAuctionCheck(bidsDTO);
         // auction owner check
-        Optional<User> auctionOwner = userRepository.findById(foundAuction.getSeller());
-        if (foundUser.getUsername().equals(auctionOwner.get().getUsername())) {
-            throw new RuntimeException("You can't bid on your own auction");
-        }
+        checkAuctionOwner(foundAuction, foundUser);
+
         // makes new bid object
         Bids newBid = new Bids();
         // sets user found from DTO ID
-        newBid.setUser(foundUser.getId()); // This might be a problem
+        newBid.setUser(foundUser.getId());
 
         newBid.setStartPrice(bidsDTO.getStartBid());
         newBid.setAuctionId(bidsDTO.getAuctionId());
 
-        if (bidsDTO.getMaxBid() == 0) {
-            newBid.setMaxPrice(newBid.getStartPrice());
-            bidsDTO.setMaxBid(bidsDTO.getStartBid());
-        } else {
-            newBid.setMaxPrice(bidsDTO.getMaxBid());
-        }
-        // Check if startBid and maxBid is higher than auction startPrice
-        if (bidsDTO.getStartBid() <= foundAuction.getStartPrice() || bidsDTO.getMaxBid() <= foundAuction.getStartPrice() || bidsDTO.getStartBid() <= foundAuction.getCurrentPrice() + 10) {
-            throw new RuntimeException("Your bids cannot be lower than auctions starting price or current price.");
-        }
+        bidPriceCheck(bidsDTO, newBid);
 
-        // Checks if users balance is valid
-        if (bidsDTO.getMaxBid() > foundUser.getBalance()){
-            throw new RuntimeException("Your max bid can not be higher than " + foundUser.getBalance() + " , your current balance.");
-        }
-
-        // Checks if users balance is less than starting bid
-        if (bidsDTO.getStartBid() > foundUser.getBalance()){
-            throw new RuntimeException("Your bid cannot be higher than your balance. Your current balance is "
-                    + foundUser.getBalance() + "Your current bid is " + bidsDTO.getStartBid() + ".");
-        }
+        bidOkCheck(bidsDTO, foundAuction, foundUser);
 
         // checks if auction has a bid
         if (foundAuction.isHasBids() && foundAuction.getBid() != null){
@@ -96,8 +75,7 @@ public class BidsServices {
                 updatedBid.setStartPrice(auctionCurrentBid.getStartPrice());
                 updatedBid.setMaxPrice(auctionCurrentBid.getMaxPrice());
 
-                //Bids updatedBid = new Bids();
-                //fork
+
                 // user loses
                 // checks if new bid is less than the current
                 if (newBid.getMaxPrice() < auctionCurrentBid.getMaxPrice()) {
@@ -188,11 +166,49 @@ public class BidsServices {
     }
 
 
-    public void checkBids (){
-
+    public Bids bidPriceCheck (BidsDTO bidsDTO, Bids newBid){
+        if (bidsDTO.getMaxBid() == 0) {
+            newBid.setMaxPrice(newBid.getStartPrice());
+            bidsDTO.setMaxBid(bidsDTO.getStartBid());
+        } else {
+            newBid.setMaxPrice(bidsDTO.getMaxBid());
+        }
+        return newBid;
     }
+    public User foundUserCheck(BidsDTO bidsDTO){
+        // gets DTO, checks user from user-repo
+        User foundUser = userRepository.findById(bidsDTO.getUserId())
+                .orElseThrow(()-> new RuntimeException("User does not exist!"));
+       return foundUser;
+        }
+    public Auction foundAuctionCheck(BidsDTO bidsDTO){
+        Auction foundAuction = auctionRepository.findById(bidsDTO.getAuctionId())
+                .orElseThrow(()-> new RuntimeException("Auction does not exist!")); // This might be a problem
+        return foundAuction;
+    }
+    public void checkAuctionOwner(Auction foundAuction, User foundUser){
+        Optional<User> auctionOwner = userRepository.findById(foundAuction.getSeller());
+        if (foundUser.getUsername().equals(auctionOwner.get().getUsername())) {
+            throw new RuntimeException("You can't bid on your own auction");
+        }
+    }
+    public void bidOkCheck(BidsDTO bidsDTO, Auction foundAuction, User foundUser){
+        // Check if startBid and maxBid is higher than auction startPrice
+        if (bidsDTO.getStartBid() <= foundAuction.getStartPrice() || bidsDTO.getMaxBid() <= foundAuction.getStartPrice() || bidsDTO.getStartBid() <= foundAuction.getCurrentPrice() + 10) {
+            throw new RuntimeException("Your bids cannot be lower than auctions starting price or current price.");
+        }
 
+        // Checks if users balance is valid
+        if (bidsDTO.getMaxBid() > foundUser.getBalance()){
+            throw new RuntimeException("Your max bid can not be higher than " + foundUser.getBalance() + " , your current balance.");
+        }
 
+        // Checks if users balance is less than starting bid
+        if (bidsDTO.getStartBid() > foundUser.getBalance()){
+            throw new RuntimeException("Your bid cannot be higher than your balance. Your current balance is "
+                    + foundUser.getBalance() + "Your current bid is " + bidsDTO.getStartBid() + ".");
+        }
+    }
 
 //Find a bids by id
     public Bids findOne(String bidId){
@@ -205,7 +221,7 @@ public class BidsServices {
         return "Deleted successfully!";
     }
 
-// update a bids
+// update a bid
     public Bids updateBids(BidsDTO bidsDTO) {
         User foundUser = userRepository.findById(bidsDTO.getUserId())
                 .orElseThrow(() -> new RuntimeException("User does not exist!"));
