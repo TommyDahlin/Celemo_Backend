@@ -68,7 +68,7 @@ public class BidsServices {
                 Bids auctionCurrentBid = bidsRepository.findById(foundAuction.getBid()).get();
 
                 Optional<User> currentBidUser = userRepository.findById(auctionCurrentBid.getUser());
-
+                e
                 Bids updatedBid = new Bids();
                 updatedBid.setUser(auctionCurrentBid.getUser());
                 updatedBid.setAuctionId(auctionCurrentBid.getAuctionId());
