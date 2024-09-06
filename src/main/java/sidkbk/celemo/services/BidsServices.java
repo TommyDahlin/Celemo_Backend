@@ -62,19 +62,14 @@ public class BidsServices {
         // checks if auction has a bid
         if (foundAuction.isHasBids() && foundAuction.getBid() != null){
 
-            // checks if user has the same id as the previous user
+            // checks if user has the same id as the owner of the auction
             if (!foundAuction.getSeller().equals(newBid.getUser())) {
-
+                // Gets the current bid from auction.
                 Bids auctionCurrentBid = bidsRepository.findById(foundAuction.getBid()).get();
-
+                // Gets the user from the current bid from auction.
                 Optional<User> currentBidUser = userRepository.findById(auctionCurrentBid.getUser());
-
-                Bids updatedBid = new Bids();
-                updatedBid.setUser(auctionCurrentBid.getUser());
-                updatedBid.setAuctionId(auctionCurrentBid.getAuctionId());
-                updatedBid.setStartPrice(auctionCurrentBid.getStartPrice());
-                updatedBid.setMaxPrice(auctionCurrentBid.getMaxPrice());
-
+                // Creates an updated bid.
+                Bids updatedBid = new Bids(auctionCurrentBid.getUser(), auctionCurrentBid.getAuctionId(), auctionCurrentBid.getStartPrice(),auctionCurrentBid.getMaxPrice());
 
                 // user loses
                 // checks if new bid is less than the current
@@ -86,7 +81,6 @@ public class BidsServices {
                     } else {
                         updatedBid.setCurrentPrice(auctionCurrentBid.getMaxPrice());
                     }
-
                     bidsRepository.save(newBid);
                    // bidsRepository.save(auctionCurrentBid);
                     bidsRepository.save(updatedBid);

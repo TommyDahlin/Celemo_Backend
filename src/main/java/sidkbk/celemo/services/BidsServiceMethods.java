@@ -65,4 +65,5 @@ public class BidsServiceMethods {
                     + foundUser.getBalance() + "Your current bid is " + bidsDTO.getStartBid() + ".");
         }
     }
+
 }
