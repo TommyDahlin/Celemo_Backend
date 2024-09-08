@@ -71,10 +71,16 @@ public class AuctionService {
                 .map(auction -> {
                     // get the current date to be able to calculate the time between that and endDate
                     LocalDateTime currentTime = LocalDateTime.now();
-                    // this i had to look up on forums.
+                    // this code will change the finish to true if the time is end, and will remove the auction.
+                    if (currentTime.isAfter(auction.getEndDate())){
+                        auction.setFinished(true);
+                        auctionRepository.deleteById(auction.getId());
+                    }
+
+                    // this I had to look up on forums.
                     // it calculates the time left until the auctions end date but in days.
                  long timeLeft = currentTime.until(auction.getEndDate(), ChronoUnit.DAYS);
-                    // had to check this up on forums aswell.
+                    // had to check this up on forums as well.
                     //This returns a list of details as Strings
                     return List.of(
                             "Auction ends in " + timeLeft + " Days",
@@ -83,8 +89,9 @@ public class AuctionService {
                 })
                 // If no auction is found it returns an empty list.
                 .orElse(Collections.emptyList());
-
     }
+
+
 
 
 
@@ -143,4 +150,6 @@ public class AuctionService {
     public void deleteAllAuctions(){
         auctionRepository.deleteAll();
     }
+
+
 }
