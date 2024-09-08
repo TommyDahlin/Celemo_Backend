@@ -14,7 +14,6 @@ import sidkbk.celemo.repositories.BidsRepository;
 import sidkbk.celemo.repositories.OrderRepository;
 import sidkbk.celemo.repositories.UserRepository;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -74,7 +73,9 @@ public class AuctionService {
                     // this code will change the finish to true if the time is end, and will remove the auction.
                     if (currentTime.isAfter(auction.getEndDate())){
                         auction.setFinished(true);
-                        auctionRepository.deleteById(auction.getId());
+                        // Denna funktionen är utkommenterad för att den är alldeles för förödande.
+                        // Det behövs en diskussion kring hur detta ska fungera.
+                        /*auctionRepository.deleteById(auction.getId());*/
                     }
 
                     // this I had to look up on forums.
