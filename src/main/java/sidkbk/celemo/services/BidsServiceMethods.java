@@ -1,6 +1,7 @@
 package sidkbk.celemo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import sidkbk.celemo.dto.Bids.BidsDTO;
 import sidkbk.celemo.models.Auction;
@@ -19,10 +20,10 @@ public class BidsServiceMethods {
     BidsRepository bidsRepository;
 
     @Autowired
-    static AuctionRepository auctionRepository;
+    AuctionRepository auctionRepository;
 
     @Autowired
-    static UserRepository userRepository;
+     UserRepository userRepository;
 
 
     public static Bids bidPriceCheck(BidsDTO bidsDTO, Bids newBid){
@@ -34,24 +35,15 @@ public class BidsServiceMethods {
         }
         return newBid;
     }
-    public static User foundUserCheck(BidsDTO bidsDTO){
-        // gets DTO, checks user from user-repo
-        User foundUser = userRepository.findById(bidsDTO.getUserId())
-                .orElseThrow(()-> new RuntimeException("User does not exist!"));
-        return foundUser;
-    }
-    public static Auction foundAuctionCheck(BidsDTO bidsDTO){
-        Auction foundAuction = auctionRepository.findById(bidsDTO.getAuctionId())
-                .orElseThrow(()-> new RuntimeException("Auction does not exist!")); // This might be a problem
-        return foundAuction;
-    }
-    public static void checkAuctionOwner(Auction foundAuction, User foundUser){
+
+    public void checkAuctionOwner(Auction foundAuction, User foundUser){
         Optional<User> auctionOwner = userRepository.findById(foundAuction.getSeller());
         if (foundUser.getUsername().equals(auctionOwner.get().getUsername())) {
             throw new RuntimeException("You can't bid on your own auction");
         }
     }
-    public static void bidOkCheck(BidsDTO bidsDTO, Auction foundAuction, User foundUser){
+
+    public void bidOkCheck(BidsDTO bidsDTO, Auction foundAuction, User foundUser){
         // Check if startBid and maxBid is higher than auction startPrice
         if (bidsDTO.getStartBid() <= foundAuction.getStartPrice() || bidsDTO.getMaxBid() <= foundAuction.getStartPrice() || bidsDTO.getStartBid() <= foundAuction.getCurrentPrice() + 10) {
             throw new RuntimeException("Your bids cannot be lower than auctions starting price or current price.");
@@ -68,5 +60,71 @@ public class BidsServiceMethods {
                     + foundUser.getBalance() + "Your current bid is " + bidsDTO.getStartBid() + ".");
         }
     }
+    public int bidWinCheck(Bids auctionCurrentBid, Bids newBid){
+        int caseNmr = 0;
+        if (auctionCurrentBid.getMaxPrice() > newBid.getMaxPrice()){
+            caseNmr = 1;
+        } else if (auctionCurrentBid.getMaxPrice() == newBid.getMaxPrice()) {
+            caseNmr = 2;
+        }else if (auctionCurrentBid.getMaxPrice() < newBid.getMaxPrice()){
+            caseNmr = 3;
+        }
+        return caseNmr;
+    }
+    public ResponseEntity<?> userLoses(Bids newBid, Bids auctionCurrentBid, Bids updatedBid, Auction foundAuction){
+        if (newBid.getMaxPrice() < auctionCurrentBid.getMaxPrice()) {
+            // Raises by 10 if possible
+            if (newBid.getMaxPrice() + 10 <= auctionCurrentBid.getMaxPrice()) {
+                updatedBid.setCurrentPrice(newBid.getMaxPrice() + 10);
+            } else {
+                updatedBid.setCurrentPrice(auctionCurrentBid.getMaxPrice());
+            }
+            bidsRepository.save(newBid);
+            bidsRepository.save(updatedBid);
+            foundAuction.setCurrentPrice(updatedBid.getCurrentPrice());
+            foundAuction.setBid(updatedBid.getId());
+            foundAuction.setCounter(foundAuction.getCounter() + 1);
+            auctionRepository.save(foundAuction);
+    }
+        return ResponseEntity.ok(newBid.getMaxPrice() + " is less than auctions current bids max price. New current bid is: " + foundAuction.currentPrice);
+    }
+    public ResponseEntity<?> userMatchesBid(Bids newBid, Bids auctionCurrentBid, Bids updatedBid, Auction foundAuction){
+        auctionCurrentBid.setCurrentPrice(auctionCurrentBid.getMaxPrice());
+        foundAuction.setCurrentPrice(auctionCurrentBid.getMaxPrice());
+        bidsRepository.save(newBid);
+        bidsRepository.save(updatedBid);
+        foundAuction.setBid(updatedBid.getId());
+        foundAuction.setCounter(foundAuction.getCounter() + 1);
+        auctionRepository.save(foundAuction);
+    return ResponseEntity.ok(newBid.getMaxPrice() + " is as much as the auctions current " + foundAuction.currentPrice + " bids max price. Make a new bid if you want to continue. New price is previous bids max");
+    }
+    public ResponseEntity<?> userWins(Bids newBid, Bids auctionCurrentBid, Optional<User> currentBidUser, Auction foundAuction, User foundUser){
+        if (auctionCurrentBid.getMaxPrice() + 10 < newBid.getMaxPrice()) {
+            newBid.setCurrentPrice(auctionCurrentBid.getMaxPrice() + 10);
+            bidsRepository.save(newBid);
+            foundAuction.setCurrentPrice(newBid.getCurrentPrice());
+            currentBidUser.get().setBalance(currentBidUser.get().getBalance() + auctionCurrentBid.getMaxPrice());
+            foundAuction.setBid(newBid.getId());
+            foundAuction.setCounter(foundAuction.getCounter() + 1);
+            auctionRepository.save(foundAuction);
+            userRepository.save(currentBidUser.get());
+            foundUser.setBalance(foundUser.getBalance() - newBid.getMaxPrice());
+            userRepository.save(foundUser);
+        }
+        else {
+            // if you cant do 10+ monies to your maxbid
+            newBid.setCurrentPrice(auctionCurrentBid.getMaxPrice());
+            bidsRepository.save(newBid);
 
+            foundAuction.setCurrentPrice(newBid.getMaxPrice());
+            currentBidUser.get().setBalance((currentBidUser.get().getBalance() + auctionCurrentBid.getMaxPrice()));
+            foundAuction.setBid(newBid.getId());
+            foundUser.setBalance(foundUser.getBalance() - newBid.getMaxPrice());
+            userRepository.save(currentBidUser.get());
+            userRepository.save(foundUser);
+            foundAuction.setCounter(foundAuction.getCounter() + 1);
+            auctionRepository.save(foundAuction);
+        }
+        return ResponseEntity.ok(newBid.getCurrentPrice() + " you have the current bid.");
+    }
 }
