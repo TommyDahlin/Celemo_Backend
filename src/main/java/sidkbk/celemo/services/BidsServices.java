@@ -53,11 +53,16 @@ public class BidsServices {
         newBid.setUser(foundUser.getId());
         newBid.setStartPrice(bidsDTO.getStartBid());
         newBid.setAuctionId(bidsDTO.getAuctionId());
+        // Checks if price is higher or lower than previous bid
         BidsServiceMethods.bidPriceCheck(bidsDTO, newBid);
+        // Checks 3 things unfortunately,
+        // 1. Check if startBid and maxBid is higher than auction startPrice,
+        // 2. Checks if users balance is valid,
+        // 3. Checks if users balance is less than starting bid
         bidsServiceMethods.bidOkCheck(bidsDTO, foundAuction, foundUser);
         // checks if auction has a bid
         if (foundAuction.isHasBids() && foundAuction.getBid() != null) {
-            // checks if user has the same id as the owner of the auction
+            // checks if user has the same id as the owner of the auction. auction owner is not supposed to be able to bid on their own auction.
             if (foundAuction.getSeller().equals(newBid.getUser())) {
                 return ResponseEntity.ok("You can't bid on your own auction!");
             } else {
@@ -65,10 +70,11 @@ public class BidsServices {
                 Bids auctionCurrentBid = bidsRepository.findById(foundAuction.getBid()).get();
                 // Gets the user from the current bid from auction.
                 Optional<User> currentBidUser = userRepository.findById(auctionCurrentBid.getUser());
-                // Creates an updated bid.
+                // Checks if userID is the same as previous bidder.
                 if (currentBidUser.get().getId().equals(newBid.getUser())){
                     return ResponseEntity.ok("You can't bid twice in a row.");
                 }
+                // Creates an updated bid.
                 Bids updatedBid = new Bids(auctionCurrentBid.getUser(), auctionCurrentBid.getAuctionId(), auctionCurrentBid.getStartPrice(), auctionCurrentBid.getMaxPrice());
                 // Switch check method compares Maxbid from both auctions, depending on who wins moves to the correct case.
                 switch (bidsServiceMethods.bidWinCheck(auctionCurrentBid, newBid)) {
@@ -84,10 +90,12 @@ public class BidsServices {
                 }
             }
         }   else {
+            // There are no previous bidders and the user has put a valid bid, wins automatically.
             bidsServiceMethods.noPreviousBidsWin(foundUser, newBid, foundAuction);
         return ResponseEntity.ok("Bid has been created, current price is " + newBid.getCurrentPrice());
             }
-        return ResponseEntity.ok("Something went wrong");
+        // If something happens outside of the scope this snaps it up to say something went wrong and we need to look further into it.
+        return ResponseEntity.ok("Something went wrong. Contact admin. 244 Toaster in bath.");
     }
 
 //Find a bids by id
