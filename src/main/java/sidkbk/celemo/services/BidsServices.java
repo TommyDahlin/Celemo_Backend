@@ -59,13 +59,16 @@ public class BidsServices {
         if (foundAuction.isHasBids() && foundAuction.getBid() != null) {
             // checks if user has the same id as the owner of the auction
             if (foundAuction.getSeller().equals(newBid.getUser())) {
-                return ResponseEntity.ok("You can't bid twice in a row.");
+                return ResponseEntity.ok("You can't bid on your own auction!");
             } else {
                 // Gets the current bid from auction.
                 Bids auctionCurrentBid = bidsRepository.findById(foundAuction.getBid()).get();
                 // Gets the user from the current bid from auction.
                 Optional<User> currentBidUser = userRepository.findById(auctionCurrentBid.getUser());
                 // Creates an updated bid.
+                if (currentBidUser.get().getId().equals(newBid.getUser())){
+                    return ResponseEntity.ok("You can't bid twice in a row.");
+                }
                 Bids updatedBid = new Bids(auctionCurrentBid.getUser(), auctionCurrentBid.getAuctionId(), auctionCurrentBid.getStartPrice(), auctionCurrentBid.getMaxPrice());
                 // Switch check method compares Maxbid from both auctions, depending on who wins moves to the correct case.
                 switch (bidsServiceMethods.bidWinCheck(auctionCurrentBid, newBid)) {
