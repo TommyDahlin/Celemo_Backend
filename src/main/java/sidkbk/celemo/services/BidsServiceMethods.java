@@ -14,6 +14,7 @@ import java.util.Optional;
 
 @Service
 public class BidsServiceMethods {
+
     @Autowired
     BidsRepository bidsRepository;
 
@@ -22,6 +23,8 @@ public class BidsServiceMethods {
 
     @Autowired
     static UserRepository userRepository;
+
+
     public static Bids bidPriceCheck(BidsDTO bidsDTO, Bids newBid){
         if (bidsDTO.getMaxBid() == 0) {
             newBid.setMaxPrice(newBid.getStartPrice());
