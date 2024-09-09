@@ -35,7 +35,7 @@ public class AuctionService {
     public Auction createAuction(AuctionCreationDTO auctionCreationDTO) {
         User findUser = userRepository.findById(auctionCreationDTO.getSellerId())
                 .orElseThrow(() -> new RuntimeException("Couldn't find user."));
-        Auction newAuction = new Auction();
+        /*Auction newAuction = new Auction();
         newAuction.setCurrentPrice(newAuction.getStartPrice());
         newAuction.setSellerId(auctionCreationDTO.getSellerId());
         newAuction.setSellerId(findUser.getId()); //Detta måste ändras för att inte få inf-rec
@@ -46,8 +46,19 @@ public class AuctionService {
         newAuction.setStartPrice(auctionCreationDTO.getStartPrice());
         newAuction.setCurrentPrice(newAuction.getStartPrice());
         newAuction.setCategoryList(auctionCreationDTO.getCategoryList());
+        newAuction.setEndDate(LocalDateTime.now().plusDays(auctionCreationDTO.getEndDate()));*/
 
-        newAuction.setEndDate(LocalDateTime.now().plusDays(auctionCreationDTO.getEndDate()));
+        Auction newAuction = new Auction.AuctionBuilder()
+                .setTitle(auctionCreationDTO.getTitle())
+                .setProductDescription(auctionCreationDTO.getProductDescription())
+                .setProductPhoto(auctionCreationDTO.getProductPhoto())
+                .setCelebrityName(auctionCreationDTO.getCelebrityName())
+                .setStartPrice(auctionCreationDTO.getStartPrice())
+                .setEndDate(LocalDateTime.now().plusDays(auctionCreationDTO.getEndDate()))
+                .setCategoryList(auctionCreationDTO.getCategoryList())
+                .setSellerId(auctionCreationDTO.getSellerId())
+                .build();
+
 
         return auctionRepository.save(newAuction);
     }

@@ -24,13 +24,7 @@ public class AuctionCreationDTO {
     private List<ECategory> categoryList = new ArrayList<>();
     @NotBlank
     private String sellerId;
-    public int getEndDate() {
-        return endDate;
-    }
 
-    public void setEndDate(int endDate) {
-        this.endDate = endDate;
-    }
     // Getters
     public String getSellerId() {
         return sellerId;
@@ -52,6 +46,9 @@ public class AuctionCreationDTO {
     }
     public List<ECategory> getCategoryList() {
         return categoryList;
+    }
+    public int getEndDate() {
+        return endDate;
     }
 
     // Setters
@@ -75,5 +72,8 @@ public class AuctionCreationDTO {
     }
     public void setCategoryList(List<ECategory> categoryList) {
         this.categoryList = categoryList;
+    }
+    public void setEndDate(int endDate) {
+        this.endDate = endDate;
     }
 }
