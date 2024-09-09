@@ -115,7 +115,6 @@ public class BidsServiceMethods {
             // if you cant do 10+ monies to your maxbid
             newBid.setCurrentPrice(auctionCurrentBid.getMaxPrice());
             bidsRepository.save(newBid);
-
             foundAuction.setCurrentPrice(newBid.getMaxPrice());
             currentBidUser.get().setBalance((currentBidUser.get().getBalance() + auctionCurrentBid.getMaxPrice()));
             foundAuction.setBid(newBid.getId());
@@ -126,5 +125,16 @@ public class BidsServiceMethods {
             auctionRepository.save(foundAuction);
         }
         return ResponseEntity.ok(newBid.getCurrentPrice() + " you have the current bid.");
+    }
+    public void noPreviousBidsWin(User foundUser, Bids newBid, Auction foundAuction){
+        foundUser.setBalance(foundUser.getBalance() - newBid.getMaxPrice());
+        userRepository.save(foundUser);
+        newBid.setCurrentPrice(newBid.getStartPrice());
+        bidsRepository.save(newBid);
+        foundAuction.setBid(newBid.getId());
+        foundAuction.setCurrentPrice(newBid.getCurrentPrice());
+        foundAuction.setHasBids(true);
+        foundAuction.setCounter(foundAuction.getCounter() + 1);
+        auctionRepository.save(foundAuction);
     }
 }

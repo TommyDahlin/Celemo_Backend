@@ -39,7 +39,6 @@ public class BidsServices {
 
     // Create a bids using price, userId and listingId
     public ResponseEntity<?> createBids(BidsDTO bidsDTO) {
-
         // gets DTO, checks user from user-repo
         User foundUser = userRepository.findById(bidsDTO.getUserId())
                 .orElseThrow(() -> new RuntimeException("User does not exist!"));
@@ -48,25 +47,20 @@ public class BidsServices {
                 .orElseThrow(() -> new RuntimeException("Auction does not exist!"));
         // auction owner check
         bidsServiceMethods.checkAuctionOwner(foundAuction, foundUser);
-
         // makes new bid object
         Bids newBid = new Bids();
         // sets user found from DTO ID
         newBid.setUser(foundUser.getId());
         newBid.setStartPrice(bidsDTO.getStartBid());
         newBid.setAuctionId(bidsDTO.getAuctionId());
-
         BidsServiceMethods.bidPriceCheck(bidsDTO, newBid);
-
         bidsServiceMethods.bidOkCheck(bidsDTO, foundAuction, foundUser);
         // checks if auction has a bid
         if (foundAuction.isHasBids() && foundAuction.getBid() != null) {
-
             // checks if user has the same id as the owner of the auction
             if (foundAuction.getSeller().equals(newBid.getUser())) {
                 return ResponseEntity.ok("You can't bid twice in a row.");
             } else {
-
                 // Gets the current bid from auction.
                 Bids auctionCurrentBid = bidsRepository.findById(foundAuction.getBid()).get();
                 // Gets the user from the current bid from auction.
@@ -85,22 +79,14 @@ public class BidsServices {
                     case 3:
                         bidsServiceMethods.userWins(newBid, auctionCurrentBid, currentBidUser, foundAuction, foundUser);
                 }
-                //send back balance of lost bids
-                foundUser.setBalance(foundUser.getBalance() - newBid.getMaxPrice());
-                userRepository.save(foundUser);
-                newBid.setCurrentPrice(newBid.getStartPrice());
-                bidsRepository.save(newBid);
-                foundAuction.setBid(newBid.getId());
-                foundAuction.setCurrentPrice(newBid.getCurrentPrice());
-                foundAuction.setHasBids(true);
-                foundAuction.setCounter(foundAuction.getCounter() + 1);
-                auctionRepository.save(foundAuction);
-                return ResponseEntity.ok("Bid has been created, current price is " + newBid.getCurrentPrice());
             }
-
-        }
+        }   else {
+            bidsServiceMethods.noPreviousBidsWin(foundUser, newBid, foundAuction);
+        return ResponseEntity.ok("Bid has been created, current price is " + newBid.getCurrentPrice());
+            }
         return ResponseEntity.ok("Something went wrong");
     }
+
 //Find a bids by id
     public Bids findOne(String bidId){
         return bidsRepository.findById(bidId).get();
