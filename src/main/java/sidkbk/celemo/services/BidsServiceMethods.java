@@ -61,17 +61,22 @@ public class BidsServiceMethods {
         }
     }
     public int bidWinCheck(Bids auctionCurrentBid, Bids newBid){
+        // This is the case determinator to check the prices of the current bid and users new bid
         int caseNmr = 0;
+        // User Loses because his max price is less than the current bids max price.
         if (auctionCurrentBid.getMaxPrice() > newBid.getMaxPrice()){
             caseNmr = 1;
+            // elif for if they have the same price.
         } else if (auctionCurrentBid.getMaxPrice() == newBid.getMaxPrice()) {
             caseNmr = 2;
+            // case for if the new bid wins.
         }else if (auctionCurrentBid.getMaxPrice() < newBid.getMaxPrice()){
             caseNmr = 3;
         }
         return caseNmr;
     }
     public ResponseEntity<?> userLoses(Bids newBid, Bids auctionCurrentBid, Bids updatedBid, Auction foundAuction){
+        // Method for telling the user that his bid lost, and his balance is not changed.
         if (newBid.getMaxPrice() < auctionCurrentBid.getMaxPrice()) {
             // Raises by 10 if possible
             if (newBid.getMaxPrice() + 10 <= auctionCurrentBid.getMaxPrice()) {
@@ -89,6 +94,7 @@ public class BidsServiceMethods {
         return ResponseEntity.ok(newBid.getMaxPrice() + " is less than auctions current bids max price. New current bid is: " + foundAuction.currentPrice);
     }
     public ResponseEntity<?> userMatchesBid(Bids newBid, Bids auctionCurrentBid, Bids updatedBid, Auction foundAuction){
+        // Method for telling the user that his bid matched, current bid on the auction wins ,and his balance is not changed.
         auctionCurrentBid.setCurrentPrice(auctionCurrentBid.getMaxPrice());
         foundAuction.setCurrentPrice(auctionCurrentBid.getMaxPrice());
         bidsRepository.save(newBid);
@@ -99,6 +105,7 @@ public class BidsServiceMethods {
     return ResponseEntity.ok(newBid.getMaxPrice() + " is as much as the auctions current " + foundAuction.currentPrice + " bids max price. Make a new bid if you want to continue. New price is previous bids max");
     }
     public ResponseEntity<?> userWins(Bids newBid, Bids auctionCurrentBid, Optional<User> currentBidUser, Auction foundAuction, User foundUser){
+        // Method for telling the user that his bid won, and his balance is changed.
         if (auctionCurrentBid.getMaxPrice() + 10 < newBid.getMaxPrice()) {
             newBid.setCurrentPrice(auctionCurrentBid.getMaxPrice() + 10);
             bidsRepository.save(newBid);
@@ -112,7 +119,7 @@ public class BidsServiceMethods {
             userRepository.save(foundUser);
         }
         else {
-            // if you cant do 10+ monies to your maxbid
+            // Your bid was higher but if you can't do +10 currency you still win and gets put to max price.
             newBid.setCurrentPrice(auctionCurrentBid.getMaxPrice());
             bidsRepository.save(newBid);
             foundAuction.setCurrentPrice(newBid.getMaxPrice());
@@ -127,6 +134,7 @@ public class BidsServiceMethods {
         return ResponseEntity.ok(newBid.getCurrentPrice() + " you have the current bid.");
     }
     public void noPreviousBidsWin(User foundUser, Bids newBid, Auction foundAuction){
+        // Method for telling the user that his bid won because no previous bids were on the auction, and his balance is changed.
         foundUser.setBalance(foundUser.getBalance() - newBid.getMaxPrice());
         userRepository.save(foundUser);
         newBid.setCurrentPrice(newBid.getStartPrice());
