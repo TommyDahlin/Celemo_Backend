@@ -49,7 +49,7 @@ public class BidsServices {
         bidsServiceMethods.checkAuctionOwner(foundAuction, foundUser);
         // makes new bid object
         Bids newBid = new Bids();
-        // sets user found from DTO ID
+        // sets user found from DTO userID
         newBid.setUser(foundUser.getId());
         newBid.setStartPrice(bidsDTO.getStartBid());
         newBid.setAuctionId(bidsDTO.getAuctionId());
@@ -94,7 +94,7 @@ public class BidsServices {
             bidsServiceMethods.noPreviousBidsWin(foundUser, newBid, foundAuction);
         return ResponseEntity.ok("Bid has been created, current price is " + newBid.getCurrentPrice());
             }
-        // If something happens outside of the scope this snaps it up to say something went wrong and we need to look further into it.
+        // If something happens outside the scope this snaps it up to say something went wrong and we need to look further into it.
         return ResponseEntity.ok("Something went wrong. Contact admin. 244 Toaster in bath.");
     }
 

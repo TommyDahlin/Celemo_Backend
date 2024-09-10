@@ -19,3 +19,5 @@ Har brutit ur många rader till egna metoder och brutit ur dem till en egen klas
 Hittade en If-sats som kunde vändas på för att göra koden mer läsbar.
 
 Lagt till mycket kommentarer om vad en metod gör i BidsService och i BidsServiceMethods.
+
+Försökt följa DRY, SOLID och KISS principerna så gott jag kan.
