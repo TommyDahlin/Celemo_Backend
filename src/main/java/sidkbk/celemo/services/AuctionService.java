@@ -46,7 +46,6 @@ public class AuctionService {
         newAuction.setStartPrice(auctionCreationDTO.getStartPrice());
         newAuction.setCurrentPrice(newAuction.getStartPrice());
         newAuction.setCategoryList(auctionCreationDTO.getCategoryList());
-
         newAuction.setEndDate(LocalDateTime.now().plusDays(auctionCreationDTO.getEndDate()));
 
         return auctionRepository.save(newAuction);

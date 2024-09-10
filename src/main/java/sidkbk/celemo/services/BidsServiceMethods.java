@@ -26,7 +26,7 @@ public class BidsServiceMethods {
      UserRepository userRepository;
 
 
-    public static Bids bidPriceCheck(BidsDTO bidsDTO, Bids newBid){
+    public static Bids bidMaxPriceCheck(BidsDTO bidsDTO, Bids newBid){
         if (bidsDTO.getMaxBid() == 0) {
             newBid.setMaxPrice(newBid.getStartPrice());
             bidsDTO.setMaxBid(bidsDTO.getStartBid());
@@ -107,25 +107,41 @@ public class BidsServiceMethods {
     public ResponseEntity<?> userWins(Bids newBid, Bids auctionCurrentBid, Optional<User> currentBidUser, Auction foundAuction, User foundUser){
         // Method for telling the user that his bid won, and his balance is changed.
         if (auctionCurrentBid.getMaxPrice() + 10 < newBid.getMaxPrice()) {
+            // Sets currentprice on the new bid to previous bid + 10
             newBid.setCurrentPrice(auctionCurrentBid.getMaxPrice() + 10);
-            bidsRepository.save(newBid);
+
+            // Sets auctions current price
             foundAuction.setCurrentPrice(newBid.getCurrentPrice());
+            // Gives back balance from previous winning bid user
             currentBidUser.get().setBalance(currentBidUser.get().getBalance() + auctionCurrentBid.getMaxPrice());
+            // sets auctions bid to newBids id
             foundAuction.setBid(newBid.getId());
+            // increases counter by 1
             foundAuction.setCounter(foundAuction.getCounter() + 1);
+            checkBidBeforeSave(newBid);
+            // Saves newBid
+            bidsRepository.save(newBid);
+            // Saves auction
             auctionRepository.save(foundAuction);
+            // saves currentBidUser to save balance.
             userRepository.save(currentBidUser.get());
+            // Changes balance from new winner of bid.
             foundUser.setBalance(foundUser.getBalance() - newBid.getMaxPrice());
+            // Saves user that won.
             userRepository.save(foundUser);
         }
         else {
             // Your bid was higher but if you can't do +10 currency you still win and gets put to max price.
             newBid.setCurrentPrice(auctionCurrentBid.getMaxPrice());
-            bidsRepository.save(newBid);
+
             foundAuction.setCurrentPrice(newBid.getMaxPrice());
             currentBidUser.get().setBalance((currentBidUser.get().getBalance() + auctionCurrentBid.getMaxPrice()));
             foundAuction.setBid(newBid.getId());
             foundUser.setBalance(foundUser.getBalance() - newBid.getMaxPrice());
+
+            checkBidBeforeSave(newBid);
+
+            bidsRepository.save(newBid);
             userRepository.save(currentBidUser.get());
             userRepository.save(foundUser);
             foundAuction.setCounter(foundAuction.getCounter() + 1);
@@ -140,9 +156,15 @@ public class BidsServiceMethods {
         newBid.setCurrentPrice(newBid.getStartPrice());
         bidsRepository.save(newBid);
         foundAuction.setBid(newBid.getId());
-        foundAuction.setCurrentPrice(newBid.getCurrentPrice());
+        // auction price gets set directly from first startprice instead of a method that i use if there's already a bid.
+        foundAuction.setCurrentPrice(foundAuction.getCurrentPrice() + 10);
         foundAuction.setHasBids(true);
         foundAuction.setCounter(foundAuction.getCounter() + 1);
         auctionRepository.save(foundAuction);
+    }
+    public void checkBidBeforeSave(Bids newBid){
+        if (newBid.getUser().equals(null) || newBid.getAuctionId().equals(null) || newBid.getStartPrice() == 0.0 || newBid.getMaxPrice() == 0.0 || newBid.getCurrentPrice() == 0.0) {
+            ResponseEntity.ok("Something is null wrong.");
+        }
     }
 }

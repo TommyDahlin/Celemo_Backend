@@ -11,7 +11,7 @@ import sidkbk.celemo.models.User;
 import sidkbk.celemo.repositories.AuctionRepository;
 import sidkbk.celemo.repositories.BidsRepository;
 import sidkbk.celemo.repositories.UserRepository;
-import sidkbk.celemo.services.BidsServiceMethods;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -54,7 +54,7 @@ public class BidsServices {
         newBid.setStartPrice(bidsDTO.getStartBid());
         newBid.setAuctionId(bidsDTO.getAuctionId());
         // Checks if price is higher or lower than previous bid
-        BidsServiceMethods.bidPriceCheck(bidsDTO, newBid);
+        BidsServiceMethods.bidMaxPriceCheck(bidsDTO, newBid);
         // Checks 3 things unfortunately,
         // 1. Check if startBid and maxBid is higher than auction startPrice,
         // 2. Checks if users balance is valid,
@@ -71,31 +71,32 @@ public class BidsServices {
                 // Gets the user from the current bid from auction.
                 Optional<User> currentBidUser = userRepository.findById(auctionCurrentBid.getUser());
                 // Checks if userID is the same as previous bidder.
-                if (currentBidUser.get().getId().equals(newBid.getUser())){
+                if (currentBidUser.get().getId().equals(newBid.getUser()) || newBid.getUser().equals(currentBidUser.get().getId())) {
                     return ResponseEntity.ok("You can't bid twice in a row.");
-                }
-                // Creates an updated bid.
-                Bids updatedBid = new Bids(auctionCurrentBid.getUser(), auctionCurrentBid.getAuctionId(), auctionCurrentBid.getStartPrice(), auctionCurrentBid.getMaxPrice());
-                // Switch check method compares Maxbid from both auctions, depending on who wins moves to the correct case.
-                switch (bidsServiceMethods.bidWinCheck(auctionCurrentBid, newBid)) {
-                    // User Loses max bid.
-                    case 1:
-                        bidsServiceMethods.userLoses(newBid, auctionCurrentBid, updatedBid, foundAuction);
-                        // User max bid Matches competing max bid
-                    case 2:
-                        bidsServiceMethods.userMatchesBid(newBid, auctionCurrentBid, updatedBid, foundAuction);
-                        // User Wins.
-                    case 3:
-                        bidsServiceMethods.userWins(newBid, auctionCurrentBid, currentBidUser, foundAuction, foundUser);
+                } else {
+                    // Creates an updated bid.
+                    Bids updatedBid = new Bids(auctionCurrentBid.getUser(), auctionCurrentBid.getAuctionId(), auctionCurrentBid.getStartPrice(), auctionCurrentBid.getMaxPrice());
+                    // Switch check method compares Maxbid from both auctions, depending on who wins moves to the correct case.
+                    switch (bidsServiceMethods.bidWinCheck(auctionCurrentBid, newBid)) {
+                        // User Loses max bid.
+                        case 1:
+                            bidsServiceMethods.userLoses(newBid, auctionCurrentBid, updatedBid, foundAuction);
+                            // User max bid Matches competing max bid
+                        case 2:
+                            bidsServiceMethods.userMatchesBid(newBid, auctionCurrentBid, updatedBid, foundAuction);
+                            // User Wins.
+                        case 3:
+                            bidsServiceMethods.userWins(newBid, auctionCurrentBid, currentBidUser, foundAuction, foundUser);
+                    }
                 }
             }
         }   else {
             // There are no previous bidders and the user has put a valid bid, wins automatically.
             bidsServiceMethods.noPreviousBidsWin(foundUser, newBid, foundAuction);
-        return ResponseEntity.ok("Bid has been created, current price is " + newBid.getCurrentPrice());
+        return ResponseEntity.ok("Bid has been created, current price is " + foundAuction.getCurrentPrice());
             }
         // If something happens outside the scope this snaps it up to say something went wrong and we need to look further into it.
-        return ResponseEntity.ok("Something went wrong. Contact admin. 244 Toaster in bath.");
+        return ResponseEntity.ok("Something went wrong. Contact admin. Error code 244: Toaster in bath.");
     }
 
 //Find a bids by id
