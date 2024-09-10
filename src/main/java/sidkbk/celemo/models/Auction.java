@@ -54,6 +54,7 @@ public class Auction {
         this.productPhoto = builder.productPhoto;
         this.celebrityName = builder.celebrityName;
         this.startPrice = builder.startPrice;
+        this.currentPrice = builder.currentPrice;
         this.endDate = builder.endDate;
         this.categoryList = builder.categoryList;
         this.seller = builder.sellerId;
@@ -200,31 +201,12 @@ public class Auction {
         private String productPhoto;
         private String celebrityName;
         private Double startPrice;
+        private Double currentPrice;
         private LocalDateTime endDate;
         private List<ECategory> categoryList;
         private String sellerId;
 
-        // Constructor
-        /*public AuctionBuilder(String title,
-                           String productDescription,
-                           String productPhoto,
-                           String celebrityName,
-                           Double startPrice,
-                           LocalDateTime endDate,
-                           List<ECategory> categoryList,
-                           String sellerId) {
-            this.title = title;
-            this.productDescription = productDescription;
-            this.productPhoto = productPhoto;
-            this.celebrityName = celebrityName;
-            this.startPrice = startPrice;
-            this.endDate = endDate;
-            this.categoryList = categoryList;
-            this.sellerId = sellerId;
-        }*/
-
-
-        // Builders
+        // Setters
         public AuctionBuilder setTitle(String title) {
             this.title = title;
             return this;
@@ -243,6 +225,10 @@ public class Auction {
         }
         public AuctionBuilder setStartPrice(Double startPrice) {
             this.startPrice = startPrice;
+            return this;
+        }
+        public AuctionBuilder setCurrentPrice(Double currentPrice) {
+            this.currentPrice = currentPrice;
             return this;
         }
         public AuctionBuilder setEndDate(LocalDateTime endDate) {
