@@ -10,10 +10,12 @@ med hänsyn till principer så som t.ex. SOLID och DRY (Don’t Repeat Yourself)
 Leverans: Förbättrad kodbas med kommentarer som beskriver de
 förändringar som gjorts och motiveringen bakom dem.
 
+Johan gjorde ett väldigt bra AktivitetsDiagram som följde metoden jättebra och jag använde det för att bryta ut vissa metoder.
+
 Saker jag gjort:
 
-Har brutit ur många rader till egna metoder för att det ska vara mer läsbart och lättare att underhålla.
+Har brutit ur många rader till egna metoder och brutit ur dem till en egen klass för att det ska vara mer läsbart och lättare att underhålla.
 
 Hittade en If-sats som kunde vändas på för att göra koden mer läsbar.
 
-Lagt till mycket kommentarer om vad en metod gör och i BidsServiceMethods, där jag lagt de flesta nya metoderna har jag även kommenterat.
+Lagt till mycket kommentarer om vad en metod gör i BidsService och i BidsServiceMethods.
