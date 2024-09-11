@@ -45,8 +45,8 @@ public class BidsServiceMethods {
 
     public void bidOkCheck(BidsDTO bidsDTO, Auction foundAuction, User foundUser){
         // Check if startBid and maxBid is higher than auction startPrice
-        if (bidsDTO.getStartBid() <= foundAuction.getStartPrice() || bidsDTO.getMaxBid() <= foundAuction.getStartPrice() || bidsDTO.getStartBid() <= foundAuction.getCurrentPrice() + 10) {
-            throw new RuntimeException("Your bids cannot be lower than auctions starting price or current price.");
+        if (bidsDTO.getMaxBid() <= foundAuction.getStartPrice() || bidsDTO.getStartBid() <= foundAuction.getCurrentPrice() + 10) {
+            throw new RuntimeException("Your bids cannot be the same or lower than auctions starting price or current price.");
         }
 
         // Checks if users balance is valid
@@ -75,9 +75,9 @@ public class BidsServiceMethods {
         }
         return caseNmr;
     }
-    public ResponseEntity<?> userLoses(Bids newBid, Bids auctionCurrentBid, Bids updatedBid, Auction foundAuction){
+    public ResponseEntity<?> userLoses(Bids newBid, Bids auctionCurrentBid, Auction foundAuction){
+        Bids updatedBid = auctionCurrentBid;
         // Method for telling the user that his bid lost, and his balance is not changed.
-        if (newBid.getMaxPrice() < auctionCurrentBid.getMaxPrice()) {
             // Raises by 10 if possible
             if (newBid.getMaxPrice() + 10 <= auctionCurrentBid.getMaxPrice()) {
                 updatedBid.setCurrentPrice(newBid.getMaxPrice() + 10);
@@ -90,11 +90,11 @@ public class BidsServiceMethods {
             foundAuction.setBid(updatedBid.getId());
             foundAuction.setCounter(foundAuction.getCounter() + 1);
             auctionRepository.save(foundAuction);
-    }
         return ResponseEntity.ok(newBid.getMaxPrice() + " is less than auctions current bids max price. New current bid is: " + foundAuction.currentPrice);
     }
-    public ResponseEntity<?> userMatchesBid(Bids newBid, Bids auctionCurrentBid, Bids updatedBid, Auction foundAuction){
+    public ResponseEntity<?> userMatchesBid(Bids newBid, Bids auctionCurrentBid, Auction foundAuction){
         // Method for telling the user that his bid matched, current bid on the auction wins ,and his balance is not changed.
+        Bids updatedBid = auctionCurrentBid;
         auctionCurrentBid.setCurrentPrice(auctionCurrentBid.getMaxPrice());
         foundAuction.setCurrentPrice(auctionCurrentBid.getMaxPrice());
         bidsRepository.save(newBid);
@@ -109,7 +109,6 @@ public class BidsServiceMethods {
         if (auctionCurrentBid.getMaxPrice() + 10 < newBid.getMaxPrice()) {
             // Sets currentprice on the new bid to previous bid + 10
             newBid.setCurrentPrice(auctionCurrentBid.getMaxPrice() + 10);
-
             // Sets auctions current price
             foundAuction.setCurrentPrice(newBid.getCurrentPrice());
             // Gives back balance from previous winning bid user
