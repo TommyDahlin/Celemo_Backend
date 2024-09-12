@@ -45,7 +45,7 @@ public class BidsServiceMethods {
 
     public void bidOkCheck(BidsDTO bidsDTO, Auction foundAuction, User foundUser){
         // Check if startBid and maxBid is higher than auction startPrice
-        if (bidsDTO.getMaxBid() <= foundAuction.getStartPrice() || bidsDTO.getStartBid() <= foundAuction.getCurrentPrice() + 10) {
+        if (bidsDTO.getMaxBid() <= foundAuction.getStartPrice()) {
             throw new RuntimeException("Your bids cannot be the same or lower than auctions starting price or current price.");
         }
 
@@ -75,7 +75,7 @@ public class BidsServiceMethods {
         }
         return caseNmr;
     }
-    public ResponseEntity<?> userLoses(Bids newBid, Bids auctionCurrentBid, Auction foundAuction){
+    public void userLoses(Bids newBid, Bids auctionCurrentBid, Auction foundAuction){
         Bids updatedBid = auctionCurrentBid;
         // Method for telling the user that his bid lost, and his balance is not changed.
             // Raises by 10 if possible
@@ -90,9 +90,8 @@ public class BidsServiceMethods {
             foundAuction.setBid(updatedBid.getId());
             foundAuction.setCounter(foundAuction.getCounter() + 1);
             auctionRepository.save(foundAuction);
-        return ResponseEntity.ok(newBid.getMaxPrice() + " is less than auctions current bids max price. New current bid is: " + foundAuction.currentPrice);
     }
-    public ResponseEntity<?> userMatchesBid(Bids newBid, Bids auctionCurrentBid, Auction foundAuction){
+    public void userMatchesBid(Bids newBid, Bids auctionCurrentBid, Auction foundAuction){
         // Method for telling the user that his bid matched, current bid on the auction wins ,and his balance is not changed.
         Bids updatedBid = auctionCurrentBid;
         auctionCurrentBid.setCurrentPrice(auctionCurrentBid.getMaxPrice());
@@ -102,9 +101,8 @@ public class BidsServiceMethods {
         foundAuction.setBid(updatedBid.getId());
         foundAuction.setCounter(foundAuction.getCounter() + 1);
         auctionRepository.save(foundAuction);
-    return ResponseEntity.ok(newBid.getMaxPrice() + " is as much as the auctions current " + foundAuction.currentPrice + " bids max price. Make a new bid if you want to continue. New price is previous bids max");
     }
-    public ResponseEntity<?> userWins(Bids newBid, Bids auctionCurrentBid, Optional<User> currentBidUser, Auction foundAuction, User foundUser){
+    public void userWins(Bids newBid, Bids auctionCurrentBid, Optional<User> currentBidUser, Auction foundAuction, User foundUser){
         // Method for telling the user that his bid won, and his balance is changed.
         if (auctionCurrentBid.getMaxPrice() + 10 < newBid.getMaxPrice()) {
             // Sets currentprice on the new bid to previous bid + 10
@@ -146,13 +144,12 @@ public class BidsServiceMethods {
             foundAuction.setCounter(foundAuction.getCounter() + 1);
             auctionRepository.save(foundAuction);
         }
-        return ResponseEntity.ok(newBid.getCurrentPrice() + " you have the current bid.");
     }
     public void noPreviousBidsWin(User foundUser, Bids newBid, Auction foundAuction){
         // Method for telling the user that his bid won because no previous bids were on the auction, and his balance is changed.
         foundUser.setBalance(foundUser.getBalance() - newBid.getMaxPrice());
         userRepository.save(foundUser);
-        newBid.setCurrentPrice(newBid.getStartPrice());
+        newBid.setCurrentPrice(foundAuction.getCurrentPrice() + 10);
         bidsRepository.save(newBid);
         foundAuction.setBid(newBid.getId());
         // auction price gets set directly from first startprice instead of a method that i use if there's already a bid.
@@ -162,8 +159,8 @@ public class BidsServiceMethods {
         auctionRepository.save(foundAuction);
     }
     public void checkBidBeforeSave(Bids newBid){
-        if (newBid.getUser().equals(null) || newBid.getAuctionId().equals(null) || newBid.getStartPrice() == 0.0 || newBid.getMaxPrice() == 0.0 || newBid.getCurrentPrice() == 0.0) {
-            ResponseEntity.ok("Something is null wrong.");
+        if (newBid.getUser() == null || newBid.getAuctionId() == null || newBid.getStartPrice() == 0.0 || newBid.getMaxPrice() == 0.0 || newBid.getCurrentPrice() == 0.0) {
+            ResponseEntity.ok("Something is null wrong. checkBidBeforeSave()");
         }
     }
 }
