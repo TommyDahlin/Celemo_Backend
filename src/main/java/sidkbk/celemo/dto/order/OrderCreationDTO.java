@@ -9,7 +9,6 @@ public class OrderCreationDTO {
 
     private String auctionId;
     private String sellerId;
-    private String buyerId;
 }
 
 

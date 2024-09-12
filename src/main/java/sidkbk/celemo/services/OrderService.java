@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import sidkbk.celemo.dto.order.DeleteOrderDTO;
 import sidkbk.celemo.dto.order.OrderCreationDTO;
 import sidkbk.celemo.models.Auction;
+import sidkbk.celemo.models.Bids;
 import sidkbk.celemo.models.Order;
 import sidkbk.celemo.models.User;
 import sidkbk.celemo.repositories.AuctionRepository;
@@ -40,12 +41,15 @@ public class OrderService {
         User seller = userRepository.findById(orderCreationDTO.getSellerId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        User buyer = userRepository.findById(orderCreationDTO.getBuyerId())
+        Bids winningBid = bidsRepository.findById(foundAuction.getBid())
+                .orElseThrow(() -> new RuntimeException("Bid not found"));
+
+        User buyer = userRepository.findById(winningBid.getUser())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         Order newOrder = new Order.OrderBuilder()
                 .auctionId(orderCreationDTO.getAuctionId())
-                .buyerId(orderCreationDTO.getBuyerId())
+                .buyerId(buyer.getId())
                 .sellerId(orderCreationDTO.getSellerId())
                 .sellerFullName(seller.getFirstName() + " " + seller.getLastName())
                 .buyerFullName(buyer.getFirstName() + " " + buyer.getLastName())
