@@ -1,7 +1,9 @@
 package sidkbk.celemo.models;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.Date;
@@ -21,15 +23,20 @@ public class Order {
 
     private String sellerFullName;
 
-    private String buyerID;
+    private String buyerId;
 
     private String buyerFullName;
 
-    private Date createdDate;
-
     private String productTitle;
 
-    private Double endPrice;       //endPrice * 0.97
+    private Double endPrice;
 
     private Double commission;   // endPrice * 0.03
+
+    @CreatedDate
+    private Date createdDate;
+
+    public static class OrderBuilder {
+        public OrderBuilder () {}
+    }
 }
