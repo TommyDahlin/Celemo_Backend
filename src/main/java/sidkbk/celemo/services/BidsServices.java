@@ -80,18 +80,16 @@ public class BidsServices {
                         // User Loses max bid.
                         case 1:
                             bidsServiceMethods.userLoses(newBid, auctionCurrentBid, foundAuction);
-                            return ResponseEntity.ok(newBid.getMaxPrice() + " is less than auctions current bids max price. New current bid is: " + foundAuction.currentPrice);
-
+                            break;
                         // User max bid Matches competing max bid
                         case 2:
                             bidsServiceMethods.userMatchesBid(newBid, auctionCurrentBid, foundAuction);
-                            return ResponseEntity.ok(newBid.getMaxPrice() + " is as much as the auctions current " + foundAuction.currentPrice + " bids max price. Make a new bid if you want to continue. New price is previous bids max");
-
+                            break;
                         // User Wins.
                         case 3:
                             bidsServiceMethods.userWins(newBid, auctionCurrentBid, currentBidUser, foundAuction, foundUser);
-                            return ResponseEntity.ok(newBid.getCurrentPrice() + " you have the current bid.");
-                    }
+                            break;
+                        }
                 }
             }
         }
