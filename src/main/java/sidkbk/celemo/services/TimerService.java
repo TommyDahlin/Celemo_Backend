@@ -20,6 +20,7 @@ public class TimerService {
         List<Auction> allAuctions = auctionRepository.findAll();
         for (Auction auction : allAuctions) {
             if (auction.getEndDate().isBefore(LocalDateTime.now()) && !auction.isFinished) {
+                auction.setEndPrice(auction.getCurrentPrice());
                 auction.setFinished(true);
                 auctionRepository.save(auction);
                 System.out.println(auction.getId() + " set to finished");
