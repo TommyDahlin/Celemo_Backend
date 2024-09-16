@@ -52,7 +52,7 @@ public class BidsServices {
         // sets user found from DTO userID
         newBid.setUser(foundUser.getId());
         newBid.setStartPrice(bidsDTO.getStartBid());
-        newBid.setAuctionId(bidsDTO.getAuctionId());
+        newBid.setAuctionId(foundAuction.getId());
         // Checks if price is higher or lower than previous bid
         newBid = BidsServiceMethods.bidMaxPriceCheck(bidsDTO, newBid);
         // Checks 3 things unfortunately,
