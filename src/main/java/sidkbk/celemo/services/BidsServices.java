@@ -2,6 +2,7 @@ package sidkbk.celemo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import sidkbk.celemo.dto.Bids.BidsDTO;
 import sidkbk.celemo.dto.Bids.FindBidIdDTO;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+
 @Service
 public class BidsServices {
 
@@ -29,6 +31,16 @@ public class BidsServices {
     UserRepository userRepository;
 
 
+
+    private final SimpMessagingTemplate messagingTemplate;
+    // en klass i spring som används för att skicka meddelanden via websocket.
+    // den gör det möjligt att programatiskt skicka meddelanden till specifika destinationer,
+    // exempelvis till alla prenumeranter på en viss kanal (/topic) eller direkt till
+    // en specifik användare (/user).
+
+    public BidsServices(SimpMessagingTemplate messagingTemplate) {
+        this.messagingTemplate = messagingTemplate;
+    }
 
 
 // Find all bids
@@ -181,6 +193,15 @@ public class BidsServices {
             foundAuction.setHasBids(true);
             foundAuction.setCounter(foundAuction.getCounter() + 1);
             auctionRepository.save(foundAuction);
+
+            // skicka notis till ägare av auktion
+            // har inte med det i clienten utan bara testat på user (bidder)
+            messagingTemplate.convertAndSendToUser(
+                    //foundAuction.getSeller()
+                    foundUser.getId(),
+                    "/private",
+                    "A new bid of " + newBid.getCurrentPrice() + " has been placed on your auction: " + foundAuction.getId()
+            );
             return ResponseEntity.ok("Bid has been created, current price is " + newBid.getCurrentPrice());
         }
 
