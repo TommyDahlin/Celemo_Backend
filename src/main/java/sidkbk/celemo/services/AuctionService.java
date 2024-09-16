@@ -22,7 +22,7 @@ import java.util.*;
 @Service
 public class AuctionService {
     @Autowired
-    static AuctionRepository auctionRepository;
+    AuctionRepository auctionRepository;
     @Autowired
     UserRepository userRepository;
     @Autowired
@@ -151,13 +151,5 @@ public class AuctionService {
         auctionRepository.deleteAll();
     }
 
-    public static void checkAuctionEndTime() {
-        List<Auction> allAuctions = auctionRepository.findAll();
-        for (Auction auction : allAuctions) {
-            if (auction.getEndDate().isBefore(LocalDateTime.now())) {
-                auction.setFinished(true);
-                System.out.println("an acution set to finished");
-            }
-        }
-    }
+
 }
