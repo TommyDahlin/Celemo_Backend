@@ -15,8 +15,8 @@ import sidkbk.celemo.repositories.BidsRepository;
 import sidkbk.celemo.repositories.OrderRepository;
 import sidkbk.celemo.repositories.UserRepository;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OrderService {
@@ -38,7 +38,7 @@ public class OrderService {
         Auction foundAuction = auctionRepository.findById(orderCreationDTO.getAuctionId())
                 .orElseThrow(() -> new RuntimeException("Auction not found!"));
 
-        User seller = userRepository.findById(orderCreationDTO.getSellerId())
+        User seller = userRepository.findById(foundAuction.getSeller())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         Bids winningBid = bidsRepository.findById(foundAuction.getBid())
@@ -50,7 +50,7 @@ public class OrderService {
         Order newOrder = new Order.OrderBuilder()
                 .auctionId(orderCreationDTO.getAuctionId())
                 .buyerId(buyer.getId())
-                .sellerId(orderCreationDTO.getSellerId())
+                .sellerId(foundAuction.getSeller())
                 .sellerFullName(seller.getFirstName() + " " + seller.getLastName())
                 .buyerFullName(buyer.getFirstName() + " " + buyer.getLastName())
                 .productTitle(foundAuction.getTitle())

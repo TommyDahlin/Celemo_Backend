@@ -8,7 +8,6 @@ import lombok.Setter;
 public class OrderCreationDTO {
 
     private String auctionId;
-    private String sellerId;
 }
 
 
