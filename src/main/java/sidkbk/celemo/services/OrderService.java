@@ -1,6 +1,5 @@
 package sidkbk.celemo.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -21,16 +20,24 @@ import java.util.Optional;
 @Service
 public class OrderService {
 
-    @Autowired
-    OrderRepository orderRepository;
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    AuctionRepository auctionRepository;
-    @Autowired
-    BidsRepository bidsRepository;
-    @Autowired
-    UserService userService;
+    private final OrderRepository orderRepository;
+    private final UserRepository userRepository;
+    private final AuctionRepository auctionRepository;
+    private final BidsRepository bidsRepository;
+    private final UserService userService;
+
+    public OrderService(OrderRepository orderRepository,
+                        UserRepository userRepository,
+                        AuctionRepository auctionRepository,
+                        BidsRepository bidsRepository,
+                        UserService userService) {
+        this.orderRepository = orderRepository;
+        this.userRepository = userRepository;
+        this.auctionRepository = auctionRepository;
+        this.bidsRepository = bidsRepository;
+        this.userService = userService;
+    }
+
 
 
     // CREATE AN ORDER
