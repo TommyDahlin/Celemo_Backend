@@ -1,7 +1,6 @@
 package sidkbk.celemo.services;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import sidkbk.celemo.models.Auction;
@@ -12,8 +11,11 @@ import java.util.List;
 @Service
 public class TimerService {
 
-    @Autowired
-    AuctionRepository auctionRepository;
+    private final AuctionRepository auctionRepository;
+
+    public TimerService(AuctionRepository auctionRepository) {
+        this.auctionRepository = auctionRepository;
+    }
 
     @Scheduled(fixedDelay = 5000, initialDelay = 5 * 1000)
     public void checkAuctionEndTime() {
