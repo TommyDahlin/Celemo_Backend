@@ -67,8 +67,9 @@ public class OrderService {
 
         // Run method to remove finished acution from users favourite lists.
         userService.removeFavouriteAuctionFromUsers(foundAuction.getId());
+        orderRepository.save(newOrder);
         System.out.println("Order created: " + newOrder.getId());
-        return orderRepository.save(newOrder);
+        return newOrder;
     }
 
     // Find one specific order by orderId

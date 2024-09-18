@@ -5,7 +5,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import sidkbk.celemo.dto.order.OrderCreationDTO;
 import sidkbk.celemo.models.Auction;
-import sidkbk.celemo.models.Order;
 import sidkbk.celemo.repositories.AuctionRepository;
 import sidkbk.celemo.repositories.BidsRepository;
 import sidkbk.celemo.repositories.OrderRepository;
@@ -46,12 +45,14 @@ public class TimerService {
                 auction.setEndPrice(auction.getCurrentPrice());
                 auction.setFinished(true);
                 auctionRepository.save(auction);
-                System.out.println(auction.getId() + " set to finished");
+                System.out.print("Auction: " + auction.getId() + " set to finished. ");
 
                 if(auction.isFinished && auction.isHasBids()) {
-                    OrderCreationDTO orderCreationDTO = null;
+                    OrderCreationDTO orderCreationDTO = new OrderCreationDTO();
                     orderCreationDTO.setAuctionId(auction.getId());
                     orderService.createOrder(orderCreationDTO);
+                } else {
+                    System.out.println("Auction has no bids, order not created.");
                 }
             }
         }
