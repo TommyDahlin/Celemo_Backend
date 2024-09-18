@@ -45,6 +45,7 @@ public class BidsServices {
         // gets DTO, checks auction id from auction-repo
         Auction foundAuction = auctionRepository.findById(bidsDTO.getAuctionId())
                 .orElseThrow(() -> new RuntimeException("Auction does not exist!"));
+        bidsServiceMethods.checkFinished(foundAuction);
         // auction owner check
         bidsServiceMethods.checkAuctionOwner(foundAuction, foundUser);
         // makes new bid object

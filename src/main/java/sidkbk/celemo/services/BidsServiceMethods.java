@@ -42,6 +42,11 @@ public class BidsServiceMethods {
             throw new RuntimeException("You can't bid on your own auction");
         }
     }
+    public void checkFinished(Auction foundAuction){
+        if (foundAuction.isFinished()){
+            ResponseEntity.ok("You can't bid on a finished auction.");
+        }
+    }
 
     public void bidOkCheck(BidsDTO bidsDTO, Auction foundAuction, User foundUser){
         // Check if startBid and maxBid is higher than auction startPrice
