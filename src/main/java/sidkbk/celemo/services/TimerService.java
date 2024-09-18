@@ -36,17 +36,19 @@ public class TimerService {
 
     OrderService orderService;
 
-
-    @Scheduled(fixedDelay = 5000, initialDelay = 5 * 1000)
+    // Scheduled method to check if an auctions end time has passed, then set the auction to finished.
+    @Scheduled(fixedDelay = 20 * 1000, initialDelay = 20 * 1000)
     public void checkAuctionEndTime() {
         List<Auction> allAuctions = auctionRepository.findAll();
         for (Auction auction : allAuctions) {
+            // If current time has passed end time
             if (auction.getEndDate().isBefore(LocalDateTime.now()) && !auction.isFinished) {
                 auction.setEndPrice(auction.getCurrentPrice());
                 auction.setFinished(true);
                 auctionRepository.save(auction);
                 System.out.print("Auction: " + auction.getId() + " set to finished. ");
 
+                // If auction is finished AND has bids THEN create an Order.
                 if(auction.isFinished && auction.isHasBids()) {
                     OrderCreationDTO orderCreationDTO = new OrderCreationDTO();
                     orderCreationDTO.setAuctionId(auction.getId());
