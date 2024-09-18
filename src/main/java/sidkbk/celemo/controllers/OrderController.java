@@ -64,7 +64,7 @@ public class OrderController {
 // SYSTEM
 //////////////////////////////////////////////////////////////////////////////////////
 
-    @PostMapping("/create") // --- Remove this line later
+    @PostMapping("/create") // --- Test metod för Postman
     public ResponseEntity<Order> createOrder(@Valid @RequestBody OrderCreationDTO orderCreationDTO) {
         Order newOrder = orderService.createOrder(orderCreationDTO);
         return new ResponseEntity<>(newOrder, HttpStatus.CREATED);
