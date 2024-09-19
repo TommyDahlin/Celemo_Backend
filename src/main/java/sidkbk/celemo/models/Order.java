@@ -1,17 +1,18 @@
 package sidkbk.celemo.models;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import sidkbk.celemo.repositories.CelemoObject;
+
 import java.util.Date;
 
 @Getter
 @Builder
 @Document(collection = "orders")
-public class Order {
+public class Order implements CelemoObject {
 
     // Variables
     @Id

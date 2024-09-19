@@ -4,13 +4,14 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import sidkbk.celemo.repositories.CelemoObject;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Document(collection = "auctions")
-public class Auction {
+public class Auction implements CelemoObject {
     // Everything from here to the comment of bids are required before we can post an auction to the database
     // sellerId is the user that makes the auction, the rest is self-explanatory.
     // jag vet inte om ni någon gång mappar om Enum till strängar men säger det här i alla fall att det bör ni göra

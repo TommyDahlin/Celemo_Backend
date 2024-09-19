@@ -5,12 +5,13 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import sidkbk.celemo.repositories.CelemoObject;
 
 import java.util.*;
 import java.util.regex.Pattern;
 
 @Document(collection = "users")
-public class User {
+public class User implements CelemoObject {
 
 
     @Id

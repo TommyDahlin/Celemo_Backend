@@ -1,11 +1,11 @@
 package sidkbk.celemo.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import sidkbk.celemo.dto.order.DeleteOrderDTO;
 import sidkbk.celemo.dto.order.OrderCreationDTO;
+import sidkbk.celemo.helper.ObjectHelper;
 import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.models.Bids;
 import sidkbk.celemo.models.Order;
@@ -26,34 +26,41 @@ public class OrderService {
     private final AuctionRepository auctionRepository;
     private final BidsRepository bidsRepository;
     private final UserService userService;
+    private final ObjectHelper objectHelper;
 
     public OrderService(OrderRepository orderRepository,
                         UserRepository userRepository,
                         AuctionRepository auctionRepository,
                         BidsRepository bidsRepository,
-                        UserService userService) {
+                        UserService userService,
+                        ObjectHelper objectHelper) {
         this.orderRepository = orderRepository;
         this.userRepository = userRepository;
         this.auctionRepository = auctionRepository;
         this.bidsRepository = bidsRepository;
         this.userService = userService;
+        this.objectHelper = objectHelper;
     }
 
 
 
     // CREATE AN ORDER
     public Order createOrder(OrderCreationDTO orderCreationDTO) {
-        Auction foundAuction = auctionRepository.findById(orderCreationDTO.getAuctionId())
-                .orElseThrow(() -> new RuntimeException("Auction not found!"));
+        /*Auction foundAuction = auctionRepository.findById(orderCreationDTO.getAuctionId())
+                .orElseThrow(() -> new RuntimeException("Auction not found!"));*/
+        Auction foundAuction = (Auction) objectHelper.findObject("auction", orderCreationDTO.getAuctionId());
 
-        User seller = userRepository.findById(foundAuction.getSeller())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        /*User seller = userRepository.findById(foundAuction.getSeller())
+                .orElseThrow(() -> new RuntimeException("User not found"));*/
+        User seller = (User) objectHelper.findObject("user", foundAuction.getSeller());
 
-        Bids winningBid = bidsRepository.findById(foundAuction.getBid())
-                .orElseThrow(() -> new RuntimeException("Bid not found"));
+        /*Bids winningBid = bidsRepository.findById(foundAuction.getBid())
+                .orElseThrow(() -> new RuntimeException("Bid not found"));*/
+        Bids winningBid = (Bids) objectHelper.findObject("bids", foundAuction.getBid());
 
-        User buyer = userRepository.findById(winningBid.getUser())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        /*User buyer = userRepository.findById(winningBid.getUser())
+                .orElseThrow(() -> new RuntimeException("User not found"));*/
+        User buyer = (User) objectHelper.findObject("user", winningBid.getUser());
 
         // Builder pattern
         Order newOrder = new Order.OrderBuilder()
