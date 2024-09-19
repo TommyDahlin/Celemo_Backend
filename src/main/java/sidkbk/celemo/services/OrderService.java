@@ -1,5 +1,6 @@
 package sidkbk.celemo.services;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -54,6 +55,7 @@ public class OrderService {
         User buyer = userRepository.findById(winningBid.getUser())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
+        // Builder pattern
         Order newOrder = new Order.OrderBuilder()
                 .auctionId(orderCreationDTO.getAuctionId())
                 .buyerId(buyer.getId())
@@ -68,7 +70,9 @@ public class OrderService {
         // Run method to remove finished acution from users favourite lists.
         userService.removeFavouriteAuctionFromUsers(foundAuction.getId());
 
-        return orderRepository.save(newOrder);
+        orderRepository.save(newOrder);
+        System.out.println("Order created: " + newOrder.getId());
+        return newOrder;
     }
 
     // Find one specific order by orderId
