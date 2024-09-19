@@ -7,10 +7,10 @@ import org.springframework.stereotype.Service;
 import sidkbk.celemo.dto.auctions.AuctionCreationDTO;
 import sidkbk.celemo.dto.auctions.AuctionIdDTO;
 import sidkbk.celemo.dto.auctions.AuctionUpdateDTO;
-import sidkbk.celemo.helper.ObjectHelper;
 import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.models.User;
 import sidkbk.celemo.repositories.AuctionRepository;
+import sidkbk.celemo.repositories.UserRepository;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -24,12 +24,11 @@ public class AuctionService {
     @Autowired
     UserService userService;
     @Autowired
-    ObjectHelper objectHelper;
+    UserRepository userRepository;
 
     public Auction createAuction(AuctionCreationDTO auctionCreationDTO) {
-        /*User findUser = userRepository.findById(auctionCreationDTO.getSellerId())
-                .orElseThrow(() -> new RuntimeException("Couldn't find user."));*/
-        User findUser = (User) objectHelper.findObject("user", auctionCreationDTO.getSellerId());
+        User findUser = userRepository.findById(auctionCreationDTO.getSellerId())
+                .orElseThrow(() -> new RuntimeException("Couldn't find user."));
 
 
         Auction newAuction = new Auction.AuctionBuilder()
