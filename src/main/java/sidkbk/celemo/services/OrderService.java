@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import sidkbk.celemo.dto.order.DeleteOrderDTO;
 import sidkbk.celemo.dto.order.OrderCreationDTO;
 import sidkbk.celemo.models.Auction;
+import sidkbk.celemo.models.Bids;
 import sidkbk.celemo.models.Order;
 import sidkbk.celemo.models.User;
 import sidkbk.celemo.repositories.AuctionRepository;
@@ -14,86 +15,77 @@ import sidkbk.celemo.repositories.BidsRepository;
 import sidkbk.celemo.repositories.OrderRepository;
 import sidkbk.celemo.repositories.UserRepository;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OrderService {
 
-    @Autowired
-    OrderRepository orderRepository;
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    AuctionRepository auctionRepository;
-    @Autowired
-    BidsRepository bidsRepository;
-    @Autowired
-    UserService userService;
+    private final OrderRepository orderRepository;
+    private final UserRepository userRepository;
+    private final AuctionRepository auctionRepository;
+    private final BidsRepository bidsRepository;
+    private final UserService userService;
+
+    public OrderService(OrderRepository orderRepository,
+                        UserRepository userRepository,
+                        AuctionRepository auctionRepository,
+                        BidsRepository bidsRepository,
+                        UserService userService) {
+        this.orderRepository = orderRepository;
+        this.userRepository = userRepository;
+        this.auctionRepository = auctionRepository;
+        this.bidsRepository = bidsRepository;
+        this.userService = userService;
+    }
 
 
 
+    // CREATE AN ORDER
     public Order createOrder(OrderCreationDTO orderCreationDTO) {
-        Auction findAuction = auctionRepository.findById(orderCreationDTO.getAuctionId())
+        Auction foundAuction = auctionRepository.findById(orderCreationDTO.getAuctionId())
                 .orElseThrow(() -> new RuntimeException("Auction not found!"));
 
-        User seller = userRepository.findById(findAuction.getSeller())
+        User seller = userRepository.findById(foundAuction.getSeller())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        Order newOrder = new Order();
-        newOrder.setAuction(findAuction);
-        newOrder.setSellerUsername(seller.getUsernameAndEmail());
-        newOrder.setBuyerUsername(orderCreationDTO.getBuyerUsername());
-        newOrder.setProductTitle(findAuction.getTitle());
-        newOrder.setEndPrice(findAuction.getEndPrice());
-        newOrder.setCreatedAt(orderCreationDTO.getCreatedAt());
+        Bids winningBid = bidsRepository.findById(foundAuction.getBid())
+                .orElseThrow(() -> new RuntimeException("Bid not found"));
+
+        User buyer = userRepository.findById(winningBid.getUser())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Builder pattern
+        Order newOrder = new Order.OrderBuilder()
+                .auctionId(orderCreationDTO.getAuctionId())
+                .buyerId(buyer.getId())
+                .sellerId(foundAuction.getSeller())
+                .sellerFullName(seller.getFirstName() + " " + seller.getLastName())
+                .buyerFullName(buyer.getFirstName() + " " + buyer.getLastName())
+                .productTitle(foundAuction.getTitle())
+                .commission(foundAuction.getEndPrice() * 0.03)
+                .endPrice(foundAuction.getEndPrice())
+                .build();
 
         // Run method to remove finished acution from users favourite lists.
-        userService.removeFavouriteAuctionFromUsers(findAuction.getId());
+        userService.removeFavouriteAuctionFromUsers(foundAuction.getId());
 
-        findAuction.setFinished(true);
-        auctionRepository.save(findAuction);
-
-        return orderRepository.save(newOrder);
+        orderRepository.save(newOrder);
+        System.out.println("Order created: " + newOrder.getId());
+        return newOrder;
     }
-
-    // READ ALL ORDERS
-    public List<Order> getAllOrders() {
-        return orderRepository.findAll();
-    }
-
 
     // Find one specific order by orderId
     public Optional<Order> getOneOrder(String orderId) {
         return orderRepository.findById(orderId);
     }
 
-    // find all orders that are bound to one user ID
-    public List<Map<String, Object>> findOrdersByUserId(String byerUsername) {
-        //Tries to find orders by userId
-        List<Order> findOrders = orderRepository.findByBuyerUsername(byerUsername);
-        // returns the orders it finds that are connected to the userId
-        //then it maps thrue the orders and shows only whats inside the .map
-        // Tho it dosnt seem to show in the order i put the orderDetails in.
-        if(findOrders.isEmpty()){
-            throw new RuntimeException("no orders exists or incorrect id given");
-        } else {
-            return findOrders.stream()
-                    .map(order -> {
-                        Map<String, Object> orderDetails = new HashMap<>();
-                        orderDetails.put("ProductTitle:", order.getProductTitle());
-                        orderDetails.put("BuyerUsername", order.getBuyerUsername());
-                        orderDetails.put("SellerUsername", order.getSellerUsername());
-                        orderDetails.put("endPrice", order.getEndPrice());
-                        orderDetails.put("createdAt", order.getCreatedAt());
-                        return orderDetails;
-                    })
-                    //then it adds it to a list.
-                    .collect(Collectors.toList());
-
-        }
+    // Find all orders for one user
+    public List<Order> findAllOrdersOneUser(String buyerId) {
+        return orderRepository.findOrderByBuyerId(buyerId);
     }
 
+    // Admin
     // Delete one order by orderId
     public ResponseEntity<?> deleteOrder(DeleteOrderDTO deleteOrderDTO) {
         //tries to find the orderId , if found it gets deleted
@@ -104,22 +96,12 @@ public class OrderService {
         return ResponseEntity.status(HttpStatus.OK).body("Order was deleted successfully!");
     }
 
-
-    public List<Order> findAllOrderForOneUser(String byerUsername) {
-        //Find user using id
-        User foundUser = userRepository.findByUsername(byerUsername)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        //Skapa en tom lista för hitta order
-        List<Order> foundOrder = new ArrayList<>();
-        //spare all order i en lista
-        List<Order> allOrder = orderRepository.findAll();
-        for (Order order : allOrder) {
-            if (order.getBuyerUsername() != null && foundUser.getUsername().equals(order.getBuyerUsername())) {
-                foundOrder.add(order);
-            }
-        }
-        return allOrder;
+    // Admin
+    // READ ALL ORDERS
+    public List<Order> getAllOrders() {
+        return orderRepository.findAll();
     }
+
 
 
 }

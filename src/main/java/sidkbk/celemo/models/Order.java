@@ -1,87 +1,42 @@
 package sidkbk.celemo.models;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-
 import java.util.Date;
 
+@Getter
+@Builder
 @Document(collection = "orders")
 public class Order {
 
+    // Variables
     @Id
     private String id;
 
+    private String auctionId;
+
+    private String sellerId;
+
+    private String sellerFullName;
+
+    private String buyerId;
+
+    private String buyerFullName;
+
     private String productTitle;
-    private double endPrice;
+
+    private Double endPrice;
+
+    private Double commission;   // endPrice * 0.03
+
     @CreatedDate
-    private Date createdAt = new Date();
+    private Date createdDate;
 
-
-    private String sellerUsername;
-
-    private String buyerUsername;
-    @DBRef
-    private Auction auction; // this could be a problem
-
-
-
-
-
-
-
-
-    public Order() {
-    }
-
-
-
-    public String getId() {
-        return id;
-    }
-    public String getSellerUsername() {
-        return sellerUsername;
-    }
-    public String getBuyerUsername() {
-        return buyerUsername;
-    }
-    public Auction getAuction() {
-        return auction;
-    }
-    public String getProductTitle() {
-        return productTitle;
-    }
-    public double getEndPrice() {
-        return endPrice;
-    }
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-
-
-
-
-    public void setEndPrice(double endPrice) {
-        this.endPrice = endPrice;
-    }
-    public void setAuction(Auction auction) {
-        this.auction = auction;
-    }
-    public void setBuyerUsername(String buyerUsername) {
-        this.buyerUsername = buyerUsername;
-    }
-    public void setSellerUsername(String sellerUsername) {
-        this.sellerUsername = sellerUsername;
-    }
-    public void setProductTitle(String productTitle) {
-        this.productTitle = productTitle;
-    }
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-    public void setId(String id) {
-        this.id = id;
+    public static class OrderBuilder {
+        public OrderBuilder () {}
     }
 }
