@@ -198,9 +198,19 @@ public class BidsServices {
             // har inte med det i clienten utan bara testat på user (bidder)
             messagingTemplate.convertAndSendToUser(
                     //foundAuction.getSeller()
-                    foundUser.getId(),
+                    foundAuction.getSeller(),
                     "/private",
                     "A new bid of " + newBid.getCurrentPrice() + " has been placed on your auction: " + foundAuction.getId()
+            );
+
+
+            // skicka notis till högsta budgivare
+            messagingTemplate.convertAndSendToUser(
+                    // convertAndSendToUser riktar meddelandet till användarens privata kanal (/private)
+                    // med information om att budet blev = success!
+                    foundUser.getId(),
+                    "/private",
+                    "You have successfully placed a bid of " + bidsDTO.getStartBid() + " on auction: " + foundAuction.getTitle()
             );
             return ResponseEntity.ok("Bid has been created, current price is " + newBid.getCurrentPrice());
         }
