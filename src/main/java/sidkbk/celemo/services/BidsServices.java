@@ -29,11 +29,14 @@ public class BidsServices {
     @Autowired
     UserRepository userRepository;
 
-    @Autowired
-    private SimpMessagingTemplate messagingTemplate;
+    private final SimpMessagingTemplate messagingTemplate;
+
+    private BidsServices(SimpMessagingTemplate messagingTemplate) {
+        this.messagingTemplate = messagingTemplate;
+    }
 
 
-// Find all bids
+    // Find all bids
     public List<Bids>findAllBids(){
         return bidsRepository.findAll();
     }
@@ -137,7 +140,7 @@ public class BidsServices {
                 if (newBid.getMaxPrice() > auctionCurrentBid.getMaxPrice()) {
 
                     // Skickar notis till usern att budet inte va högt nog
-                    sendOutbidNotification(foundUser, foundAuction);
+                    sendBidNotifications(foundAuction, foundUser, currentBidUser.orElse(null), newBid);
 
                     if (auctionCurrentBid.getMaxPrice() + 10 < newBid.getMaxPrice()) {
                         newBid.setCurrentPrice(auctionCurrentBid.getMaxPrice() + 10);
@@ -194,45 +197,72 @@ public class BidsServices {
 
             //Skickar Notification till auktionens 'gare och den nuvarande budgivaren
             sendBidNotifications(foundAuction, foundUser, null, newBid);
+
             return ResponseEntity.ok("Bid has been created, current price is " + newBid.getCurrentPrice());
         }
 
         return ResponseEntity.ok("Something went wrong");
     }
 
-
-    private void sendBidNotifications(Auction auction, User bidder, User previousBidder, Bids bid) {
-        // Notify auction owner
-//        messagingTemplate.convertAndSendToUser(
-//                auction.getOwner().getUsername(),
-//                "/private",
-//                "A new bid of " + bid.getMaxPrice() + " has been placed on your auction: " + auction.getTitle()
-//        );
-
-        // Notify current bidder
+    public void sendBidNotifications(Auction auction, User bidder, User previousBidder, Bids bid) {
+        // Logga vad som skickas till ägaren av auktionen
+        System.out.println("Sending notification to auction owner: " + auction.getOwner().getUsername());
         messagingTemplate.convertAndSendToUser(
-                bidder.getUsername(),
+                auction.getOwner().getId(),
+                "/private",
+                "A new bid of " + bid.getCurrentPrice() + " has been placed on your auction: " + auction.getTitle()
+        );
+
+        // Logga vad som skickas till den nuvarande budgivaren
+        System.out.println("Sending notification to bidder: " + bidder.getUsername());
+        messagingTemplate.convertAndSendToUser(
+                bidder.getId(),
                 "/private",
                 "You have successfully placed a bid of " + bid.getMaxPrice() + " on auction: " + auction.getTitle()
         );
 
-        // If there was a previous highest bidder, notify them they've been outbid
+        // Om det finns en föregående budgivare, logga och skicka meddelandet
         if (previousBidder != null) {
+            System.out.println("Sending notification to previous bidder: " + previousBidder.getUsername());
             messagingTemplate.convertAndSendToUser(
-                    previousBidder.getUsername(),
+                    previousBidder.getId(),
                     "/private",
                     "You have been outbid on auction: " + auction.getTitle() + ". The current bid is now " + bid.getMaxPrice()
             );
         }
     }
+//    public void sendBidNotifications(Auction auction, User bidder, User previousBidder, Bids bid) {
+//        // Notify auction owner
+//        messagingTemplate.convertAndSendToUser(
+//                auction.getOwner().getUsername(),
+//                "/private",
+//                "A new bid of " + bid.getCurrentPrice() + " has been placed on your auction: " + auction.getTitle()
+//        );
+//
+//        // Notify current bidder
+//        messagingTemplate.convertAndSendToUser(
+//                bidder.getUsername(),
+//                "/private",
+//                "You have successfully placed a bid of " + bid.getMaxPrice() + " on auction: " + auction.getTitle()
+//        );
+//
+//        // If there was a previous highest bidder, notify them they've been outbid
+//        if (previousBidder != null) {
+//            messagingTemplate.convertAndSendToUser(
+//                    previousBidder.getUsername(),
+//                    "/private",
+//                    "You have been outbid on auction: " + auction.getTitle() + ". The current bid is now " + bid.getMaxPrice()
+//            );
+//        }
+//    }
 
-    private void sendOutbidNotification(User bidder, Auction auction) {
-        messagingTemplate.convertAndSendToUser(
-                bidder.getUsername(),
-                "/private",
-                "Your bid was not high enough. You have been outbid on auction: " + auction.getTitle()
-        );
-    }
+//    public void sendOutbidNotification(User bidder, Auction auction) {
+//        messagingTemplate.convertAndSendToUser(
+//                bidder.getId(),
+//                "/private",
+//                "Your bid was not high enough. You have been outbid on auction: " + auction.getTitle()
+//        );
+//    }
 
 
     public void checkBids (){

@@ -26,6 +26,14 @@ public class Auction {
     @NotNull
     private Double startPrice;
 
+    //test Message sent with websocket!!!!!!!!!!!!!!!!
+    private User owner;
+
+
+
+
+
+
     // Not needed for the body in postman, gets added automatically
     private LocalDateTime startingDate = LocalDateTime.now();
     private LocalDateTime endDate;
@@ -59,7 +67,12 @@ public class Auction {
         this.categoryList = builder.categoryList;
         this.seller = builder.sellerId;
     }
-
+// =========================================================================
+    // TEST MEASSGE WEBSOCKET!!!!!!!!!!!!!!!
+    public Auction(User owner) {
+        this.owner = owner;
+    }
+// =========================================================================
     // Getters & Setters ===============================================
     public Double getCurrentPrice() {
         return currentPrice;
@@ -193,6 +206,23 @@ public class Auction {
     public void setCounter(int counter) {
         this.counter = counter;
     }
+
+
+
+
+
+    // ==========TEST WEBSOCKET MESSAGE==============
+    public User getOwner() {
+        return owner;
+    }
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
+
+
+
+
+
 
     public static class AuctionBuilder {
         // Variables

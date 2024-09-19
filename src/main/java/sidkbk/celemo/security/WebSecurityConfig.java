@@ -16,6 +16,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import sidkbk.celemo.security.jwt.AuthTokenFilter;
 import sidkbk.celemo.security.jwt.AuthenticationEntryJwt;
 import sidkbk.celemo.security.services.UserDetailsServiceImpl;
@@ -25,6 +26,7 @@ import java.util.Arrays;
 
 @Configuration
 @EnableMethodSecurity
+@EnableWebSocketMessageBroker
 public class WebSecurityConfig {
     @Autowired
     UserDetailsServiceImpl userDetailsService;
