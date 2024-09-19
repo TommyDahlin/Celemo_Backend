@@ -30,14 +30,14 @@ public class BidsServices {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    BidsServiceMethods bidsServiceMethods;
+
     private final SimpMessagingTemplate messagingTemplate;
 
     private BidsServices(SimpMessagingTemplate messagingTemplate) {
         this.messagingTemplate = messagingTemplate;
     }
-
-    @Autowired
-    BidsServiceMethods bidsServiceMethods;
 
     // Find all bids
     public List<Bids>findAllBids(){
@@ -100,7 +100,11 @@ public class BidsServices {
                             break;
                         }
                 }
+                if (currentBidUser.isPresent()) {
+                    sendBidNotifications(foundAuction, foundUser, currentBidUser.get(), newBid);
+                }
             }
+
         }
             // There are no previous bidders and the user has put a valid bid, wins automatically.
             bidsServiceMethods.noPreviousBidsWin(foundUser, newBid, foundAuction);
@@ -151,4 +155,35 @@ public class BidsServices {
     public List<Bids> findByAuction(String auctionId) {
         return bidsRepository.findBidsByAuctionId(auctionId);
     }
+
+    public void sendBidNotifications(Auction auction, User bidder, User previousBidder, Bids bid) {
+        // Logga vad som skickas till ägaren av auktionen
+        System.out.println("Sending notification to auction owner: " + auction.getOwner().getUsername());
+        messagingTemplate.convertAndSendToUser(
+                auction.getOwner().getId(),
+                "/private",
+                "A new bid of " + bid.getCurrentPrice() + " has been placed on your auction: " + auction.getTitle()
+        );
+
+        // Logga vad som skickas till den nuvarande budgivaren
+        System.out.println("Sending notification to bidder: " + bidder.getUsername());
+        messagingTemplate.convertAndSendToUser(
+                bidder.getId(),
+                "/private",
+                "You have successfully placed a bid of " + bid.getMaxPrice() + " on auction: " + auction.getTitle()
+        );
+
+        // Om det finns en föregående budgivare, logga och skicka meddelandet
+        if (previousBidder != null) {
+            System.out.println("Sending notification to previous bidder: " + previousBidder.getUsername());
+            messagingTemplate.convertAndSendToUser(
+                    previousBidder.getId(),
+                    "/private",
+                    "You have been outbid on auction: " + auction.getTitle() + ". The current bid is now " + bid.getMaxPrice()
+            );
+        }
+    }
+
+
+
 }
