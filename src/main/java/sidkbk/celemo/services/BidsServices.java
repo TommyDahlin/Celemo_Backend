@@ -231,39 +231,6 @@ public class BidsServices {
             );
         }
     }
-//    public void sendBidNotifications(Auction auction, User bidder, User previousBidder, Bids bid) {
-//        // Notify auction owner
-//        messagingTemplate.convertAndSendToUser(
-//                auction.getOwner().getUsername(),
-//                "/private",
-//                "A new bid of " + bid.getCurrentPrice() + " has been placed on your auction: " + auction.getTitle()
-//        );
-//
-//        // Notify current bidder
-//        messagingTemplate.convertAndSendToUser(
-//                bidder.getUsername(),
-//                "/private",
-//                "You have successfully placed a bid of " + bid.getMaxPrice() + " on auction: " + auction.getTitle()
-//        );
-//
-//        // If there was a previous highest bidder, notify them they've been outbid
-//        if (previousBidder != null) {
-//            messagingTemplate.convertAndSendToUser(
-//                    previousBidder.getUsername(),
-//                    "/private",
-//                    "You have been outbid on auction: " + auction.getTitle() + ". The current bid is now " + bid.getMaxPrice()
-//            );
-//        }
-//    }
-
-//    public void sendOutbidNotification(User bidder, Auction auction) {
-//        messagingTemplate.convertAndSendToUser(
-//                bidder.getId(),
-//                "/private",
-//                "Your bid was not high enough. You have been outbid on auction: " + auction.getTitle()
-//        );
-//    }
-
 
     public void checkBids (){
 
