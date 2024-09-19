@@ -18,10 +18,26 @@ public class Notification {
 
     private String toUserId;
 
-    public Notification(NotificationBuilder builder) {
+    public Notification() {}
 
-        this.title = builder.getTitle();
-        this.toUserId = builder.getToUserId();
+    public Notification(NotificationBuilder builder) {
+        this.title = builder.title;
+        this.toUserId = builder.toUserId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+    public String getToUserId() {
+        return toUserId;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
     public static class NotificationBuilder {
@@ -29,6 +45,8 @@ public class Notification {
 
         private String title;
 
+
+        //  ta bort
         public NotificationBuilder(String toUserId, String title) {
             this.toUserId = toUserId;
             this.title = title;
@@ -38,17 +56,13 @@ public class Notification {
             return new Notification(this);
         }
 
-        public String getToUserId() {
-            return toUserId;
-        }
+
 
         public void setToUserId(String toUserId) {
             this.toUserId = toUserId;
         }
 
-        public String getTitle() {
-            return title;
-        }
+
 
         public void setTitle(String title) {
             this.title = title;

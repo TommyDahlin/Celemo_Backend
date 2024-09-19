@@ -30,6 +30,9 @@ public class BidsServices {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    NotificationService notificationService;
+
 
 
     private final SimpMessagingTemplate messagingTemplate;
@@ -212,6 +215,10 @@ public class BidsServices {
                     "/private",
                     "You have successfully placed a bid of " + bidsDTO.getStartBid() + " on auction: " + foundAuction.getTitle()
             );
+                    notificationService.createNotifUser(foundAuction.getSeller(), "A bid has been placed on your auction");
+
+
+
             return ResponseEntity.ok("Bid has been created, current price is " + newBid.getCurrentPrice());
         }
 

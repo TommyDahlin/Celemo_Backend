@@ -3,7 +3,6 @@ package sidkbk.celemo.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import sidkbk.celemo.dto.notification.NotifCreateDTO;
 import sidkbk.celemo.models.Notification;
 import sidkbk.celemo.models.User;
 import sidkbk.celemo.repositories.NotificationRepository;
@@ -20,16 +19,17 @@ public class NotificationService {
     UserRepository userRepository;
 
     //post , create notification for user
-    public ResponseEntity<Notification> createNotifUser(NotifCreateDTO notifDTO) {
-        User foundUser = userRepository.findById(notifDTO.getToUserId()) // this could be a problem
+    public ResponseEntity<Notification> createNotifUser(String toUserId, String title) {
+        System.out.println(toUserId);
+        User foundUser = userRepository.findById(toUserId)
                 .orElseThrow(() -> new RuntimeException("User does not exist!"));
-        Notification notif = new Notification.NotificationBuilder();
-
+        Notification notif = new Notification.NotificationBuilder(toUserId,title).build();
 
         return ResponseEntity.ok(notificationRepository.save(notif));
     }
 
     // get All notifications from User
+
     public List<Notification> getAllNotificationsFromUser(String userId) {
         User foundUser = userRepository.findById(userId).orElseThrow(
                 () -> new RuntimeException("User not found"));
@@ -45,6 +45,16 @@ public class NotificationService {
         }
         return foundNotif;
     }
+
+
+
+
+/*
+    public void getAllNotificationsFromUser(String userId) {
+        notificationRepository.findNotifByToUserId(userId);
+    }
+
+ */
     // delete All notifications from User
     public void deleteAllNotificationsFromUser(String userId) {
         User foundUser = userRepository.findById(userId).orElseThrow(
