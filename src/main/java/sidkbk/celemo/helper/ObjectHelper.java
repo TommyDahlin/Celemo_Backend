@@ -13,7 +13,12 @@ public class ObjectHelper {
     private final ReviewsRepo reviewsRepository;
     private final UserRepository userRepository;
 
-    public ObjectHelper(AuctionRepository auctionRepository, BidsRepository bidsRepository, OrderRepository orderRepository, ReportsRepository reportsRepository, ReviewsRepo reviewsRepository, UserRepository userRepository) {
+    public ObjectHelper(AuctionRepository auctionRepository,
+                        BidsRepository bidsRepository,
+                        OrderRepository orderRepository,
+                        ReportsRepository reportsRepository,
+                        ReviewsRepo reviewsRepository,
+                        UserRepository userRepository) {
         this.auctionRepository = auctionRepository;
         this.bidsRepository = bidsRepository;
         this.orderRepository = orderRepository;
@@ -35,17 +40,23 @@ public class ObjectHelper {
         String caseName = whatToFind.toLowerCase();
         switch (caseName) {
             case "auction":
-                return auctionRepository.findById(id).orElseThrow(() -> new RuntimeException("Auction not found"));
+                return auctionRepository.findById(id)
+                        .orElseThrow(() -> new RuntimeException("Auction not found"));
             case "bids":
-                return bidsRepository.findById(id).orElseThrow(() -> new RuntimeException("Bid not found"));
+                return bidsRepository.findById(id)
+                        .orElseThrow(() -> new RuntimeException("Bid not found"));
             case "order":
-                return orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Order not found"));
+                return orderRepository.findById(id)
+                        .orElseThrow(() -> new RuntimeException("Order not found"));
             case "reports":
-                return reportsRepository.findById(id).orElseThrow(() -> new RuntimeException("Report not found"));
+                return reportsRepository.findById(id)
+                        .orElseThrow(() -> new RuntimeException("Report not found"));
             case "reviews":
-                return reviewsRepository.findById(id).orElseThrow(() -> new RuntimeException("Review not found"));
+                return reviewsRepository.findById(id)
+                        .orElseThrow(() -> new RuntimeException("Review not found"));
             case "user":
-                return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+                return userRepository.findById(id)
+                        .orElseThrow(() -> new RuntimeException("User not found"));
             default:
                 return null;
         }

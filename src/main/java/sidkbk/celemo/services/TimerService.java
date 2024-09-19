@@ -24,11 +24,9 @@ public class TimerService {
     @Scheduled(fixedDelay = (20 * 1000), initialDelay = (5 * 1000))
     public void checkAuctionEndTime() {
         List<Auction> allAuctions = auctionRepository.findAll();
-        System.out.println("test");
         for (Auction auction : allAuctions) {
             // If current time has passed end time
             if (auction.getEndDate().isBefore(LocalDateTime.now()) && !auction.isFinished) {
-                System.out.println("test2");
                 auction.setEndPrice(auction.getCurrentPrice());
                 auction.setFinished(true);
                 auctionRepository.save(auction);

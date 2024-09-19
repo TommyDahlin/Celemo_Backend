@@ -42,24 +42,12 @@ public class OrderService {
         this.objectHelper = objectHelper;
     }
 
-
-
     // CREATE AN ORDER
     public Order createOrder(OrderCreationDTO orderCreationDTO) {
-        /*Auction foundAuction = auctionRepository.findById(orderCreationDTO.getAuctionId())
-                .orElseThrow(() -> new RuntimeException("Auction not found!"));*/
+
         Auction foundAuction = (Auction) objectHelper.findObject("auction", orderCreationDTO.getAuctionId());
-
-        /*User seller = userRepository.findById(foundAuction.getSeller())
-                .orElseThrow(() -> new RuntimeException("User not found"));*/
         User seller = (User) objectHelper.findObject("user", foundAuction.getSeller());
-
-        /*Bids winningBid = bidsRepository.findById(foundAuction.getBid())
-                .orElseThrow(() -> new RuntimeException("Bid not found"));*/
         Bids winningBid = (Bids) objectHelper.findObject("bids", foundAuction.getBid());
-
-        /*User buyer = userRepository.findById(winningBid.getUser())
-                .orElseThrow(() -> new RuntimeException("User not found"));*/
         User buyer = (User) objectHelper.findObject("user", winningBid.getUser());
 
         // Builder pattern

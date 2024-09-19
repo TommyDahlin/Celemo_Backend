@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import sidkbk.celemo.dto.Bids.BidsDTO;
 import sidkbk.celemo.dto.Bids.FindBidIdDTO;
-import sidkbk.celemo.helper.ObjectHelper;
 import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.models.Bids;
 import sidkbk.celemo.models.User;
@@ -29,8 +28,6 @@ public class BidsServices {
     UserRepository userRepository;
     @Autowired
     BidsServiceMethods bidsServiceMethods;
-    @Autowired
-    ObjectHelper objectHelper;
 
 // Find all bids
     public List<Bids>findAllBids(){
