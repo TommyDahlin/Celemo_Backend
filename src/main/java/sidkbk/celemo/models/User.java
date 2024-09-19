@@ -94,6 +94,9 @@ public class User {
     }
 
 
+
+
+
     //return variable and change to string if necessary
     public String getFilter(String filter) {
         filter.toLowerCase();
