@@ -68,7 +68,6 @@ public class WebSecurityConfig {
                         auth.requestMatchers("/api/**").permitAll()
                                 .requestMatchers("/ws/**").permitAll()
                                 .requestMatchers("/error").permitAll()
-                                .anyRequest().authenticated()
                 );
 
         http.authenticationProvider(authenticationProvider());

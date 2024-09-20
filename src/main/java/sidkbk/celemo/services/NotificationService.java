@@ -8,7 +8,6 @@ import sidkbk.celemo.models.User;
 import sidkbk.celemo.repositories.NotificationRepository;
 import sidkbk.celemo.repositories.UserRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,13 +22,14 @@ public class NotificationService {
         System.out.println(toUserId);
         User foundUser = userRepository.findById(toUserId)
                 .orElseThrow(() -> new RuntimeException("User does not exist!"));
-        Notification notif = new Notification.NotificationBuilder(toUserId,title).build();
+        Notification notif = new Notification.NotificationBuilder(toUserId, title).build();
 
         return ResponseEntity.ok(notificationRepository.save(notif));
     }
 
     // get All notifications from User
 
+    /*
     public List<Notification> getAllNotificationsFromUser(String userId) {
         User foundUser = userRepository.findById(userId).orElseThrow(
                 () -> new RuntimeException("User not found"));
@@ -47,14 +47,25 @@ public class NotificationService {
     }
 
 
+*/
+
+    public List<Notification> getAllNotificationsFromUser(String userId) {
+
+        User foundUser = userRepository.findById(userId).orElseThrow(
+                () -> new RuntimeException("User not found"));
+
+        return notificationRepository.findByToUserId(foundUser.getId());
+
+    }
 
 
 /*
     public void getAllNotificationsFromUser(String userId) {
-        notificationRepository.findNotifByToUserId(userId);
+        notificationRepository.findAllByToUserId(userId);
     }
 
  */
+
     // delete All notifications from User
     public void deleteAllNotificationsFromUser(String userId) {
         User foundUser = userRepository.findById(userId).orElseThrow(
@@ -63,7 +74,7 @@ public class NotificationService {
         // Spara alla notiser i en lista
         List<Notification> allNotif = notificationRepository.findAll();
         // For loop genom alla notiser och kolla efter notiser som matchar med userid
-        for (Notification notif : allNotif){
+        for (Notification notif : allNotif) {
             if (notif.getToUserId().equals(userId)) {
                 notificationRepository.deleteById(notif.getId());
             }

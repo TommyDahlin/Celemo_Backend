@@ -5,7 +5,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sidkbk.celemo.exceptions.EntityNotFoundException;
+import sidkbk.celemo.models.Notification;
 import sidkbk.celemo.services.NotificationService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/notif")
@@ -16,15 +19,11 @@ public class NotificationController {
 
     // Get all auctions from userid
     @GetMapping("/find/all/user/{userId}")
-    public void getAllNotifFromUser(@PathVariable("userId") String userId) {
-
-        try{
-            notificationService.getAllNotificationsFromUser(userId);
-        }catch (EntityNotFoundException e){
-            ResponseEntity.status(HttpStatus.NOT_FOUND).body("User does not have any notifications...");
-        }
+    public List<Notification> getAllNotifFromUser(@PathVariable("userId") String userId) {
 
 
+
+           return notificationService.getAllNotificationsFromUser(userId);
 
     }
     // Delete all auctions from userid
