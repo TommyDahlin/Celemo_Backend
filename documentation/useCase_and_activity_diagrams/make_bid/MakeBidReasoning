@@ -1,0 +1,23 @@
+Refaktorering: Budgivningsfunktionen.
+
+Detta gjordes av Tommy eftersom jag hade mest insikt i hur koden fungerade.
+
+Mål: Förbättra kodens struktur och kvalitet genom refaktorering.
+
+Aktivitet: Analysera befintlig kod och refaktorera delar som kan förbättras
+med hänsyn till principer så som t.ex. SOLID och DRY (Don’t Repeat Yourself).
+
+Leverans: Förbättrad kodbas med kommentarer som beskriver de
+förändringar som gjorts och motiveringen bakom dem.
+
+Johan gjorde ett väldigt bra AktivitetsDiagram som följde metoden jättebra och jag använde det för att bryta ut vissa metoder.
+
+Saker jag gjort:
+
+Har brutit ur många rader till egna metoder och brutit ur dem till en egen klass för att det ska vara mer läsbart och lättare att underhålla.
+
+Hittade en If-sats som kunde vändas på för att göra koden mer läsbar.
+
+Lagt till mycket kommentarer om vad en metod gör i BidsService och i BidsServiceMethods.
+
+Försökt följa DRY, SOLID och KISS principerna så gott jag kan.

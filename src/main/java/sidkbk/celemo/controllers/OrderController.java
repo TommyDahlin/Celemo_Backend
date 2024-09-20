@@ -26,27 +26,17 @@ public class OrderController {
 //////////////////////////////////////////////////////////////////////////////////////
 
 
-    // List of all previousPurchases by byer username
+    // List all orders for one user
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    @GetMapping("/find/user-orders/{byerUsername}")
-    public ResponseEntity<?> getPreviousPurchase(@PathVariable("byerUsername") String byerUsername) {
+    @GetMapping("/find/user-orders/{buyerId}")
+    public ResponseEntity<?> getPreviousPurchase(@PathVariable("buyerId") String buyerId) {
         try{
-            return ResponseEntity.ok(orderService.findOrdersByUserId(byerUsername));
+            return ResponseEntity.ok(orderService.findAllOrdersOneUser(buyerId));
         } catch (EntityNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/find/user-orders/admin/{byerUsername}")
-    public ResponseEntity<?>findAllOrderForOneUser(@PathVariable("byerUsername") String byerUsername){
-        List<Order> foundOrder = orderService.findAllOrderForOneUser(byerUsername);
-        if (foundOrder.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no order found");
-        }else {
-            return ResponseEntity.ok().body(foundOrder);
-        }
-    }
 
 // ADMIN
 //////////////////////////////////////////////////////////////////////////////////////
@@ -74,7 +64,7 @@ public class OrderController {
 // SYSTEM
 //////////////////////////////////////////////////////////////////////////////////////
 
-    @PostMapping("/create") // --- Remove this line later
+    @PostMapping("/create") // --- Test metod för Postman
     public ResponseEntity<Order> createOrder(@Valid @RequestBody OrderCreationDTO orderCreationDTO) {
         Order newOrder = orderService.createOrder(orderCreationDTO);
         return new ResponseEntity<>(newOrder, HttpStatus.CREATED);

@@ -29,6 +29,7 @@ public class BidsServices {
 
     @Autowired
     UserRepository userRepository;
+<<<<<<< HEAD
 
     @Autowired
     NotificationService notificationService;
@@ -39,6 +40,10 @@ public class BidsServices {
     // den gör det möjligt att programatiskt skicka meddelanden till specifika destinationer,
     // exempelvis till alla prenumeranter på en viss kanal (/topic) eller direkt till
     // en specifik användare (/user).
+=======
+    @Autowired
+    BidsServiceMethods bidsServiceMethods;
+>>>>>>> devOOAD
 
     public BidsServices(SimpMessagingTemplate messagingTemplate) {
         this.messagingTemplate = messagingTemplate;
@@ -58,18 +63,20 @@ public class BidsServices {
                 .orElseThrow(() -> new RuntimeException("User does not exist!"));
         // gets DTO, checks auction id from auction-repo
         Auction foundAuction = auctionRepository.findById(bidsDTO.getAuctionId())
+<<<<<<< HEAD
                 .orElseThrow(() -> new RuntimeException("Auction does not exist!")); // This might be a problem
+=======
+                .orElseThrow(() -> new RuntimeException("Auction does not exist!"));
+        bidsServiceMethods.checkFinished(foundAuction);
+>>>>>>> devOOAD
         // auction owner check
-        Optional<User> auctionOwner = userRepository.findById(foundAuction.getSeller());
-        if (foundUser.getUsername().equals(auctionOwner.get().getUsername())) {
-            throw new RuntimeException("You can't bid on your own auction");
-        }
+        bidsServiceMethods.checkAuctionOwner(foundAuction, foundUser);
         // makes new bid object
         Bids newBid = new Bids();
-        // sets user found from DTO ID
-        newBid.setUser(foundUser.getId()); // This might be a problem
-
+        // sets user found from DTO userID
+        newBid.setUser(foundUser.getId());
         newBid.setStartPrice(bidsDTO.getStartBid());
+<<<<<<< HEAD
         newBid.setAuctionId(bidsDTO.getAuctionId());
 
         if (bidsDTO.getMaxBid() == 0) {
@@ -176,9 +183,49 @@ public class BidsServices {
                         return ResponseEntity.ok(newBid.getCurrentPrice() + " you have the current bid.");
                     }
                 }
+=======
+        newBid.setAuctionId(foundAuction.getId());
+        // Checks if price is higher or lower than previous bid
+        newBid = BidsServiceMethods.bidMaxPriceCheck(bidsDTO, newBid);
+        // Checks 3 things unfortunately,
+        // 1. Check if startBid and maxBid is higher than auction startPrice,
+        // 2. Checks if users balance is valid,
+        // 3. Checks if users balance is less than starting bid
+        bidsServiceMethods.bidOkCheck(bidsDTO, foundAuction, foundUser);
+        // checks if auction has a bid
+        if (foundAuction.isHasBids() && foundAuction.getBid() != null) {
+            // checks if user has the same id as the owner of the auction. auction owner is not supposed to be able to bid on their own auction.
+            if (foundAuction.getSeller().equals(newBid.getUser())) {
+                return ResponseEntity.ok("You can't bid on your own auction!");
+>>>>>>> devOOAD
             } else {
-                return ResponseEntity.ok("You can't bid twice in a row.");
+                // Gets the current bid from auction.
+                Bids auctionCurrentBid = bidsRepository.findById(foundAuction.getBid()).get();
+                // Gets the user from the current bid from auction.
+                Optional<User> currentBidUser = userRepository.findById(auctionCurrentBid.getUser());
+                // Checks if userID is the same as previous bidder.
+                if (currentBidUser.get().getId().equals(newBid.getUser()) || newBid.getUser().equals(currentBidUser.get().getId())) {
+                    return ResponseEntity.ok("You can't bid twice in a row.");
+                } else {
+
+                    // Switch check method compares Maxbid from both auctions, depending on who wins moves to the correct case.
+                    switch (bidsServiceMethods.bidWinCheck(auctionCurrentBid, newBid)) {
+                        // User Loses max bid.
+                        case 1:
+                            bidsServiceMethods.userLoses(newBid, auctionCurrentBid, foundAuction);
+                            break;
+                        // User max bid Matches competing max bid
+                        case 2:
+                            bidsServiceMethods.userMatchesBid(newBid, auctionCurrentBid, foundAuction);
+                            break;
+                        // User Wins.
+                        case 3:
+                            bidsServiceMethods.userWins(newBid, auctionCurrentBid, currentBidUser, foundAuction, foundUser);
+                            break;
+                        }
+                }
             }
+<<<<<<< HEAD
 
             //send back balance of lost bids
         } else {
@@ -219,12 +266,16 @@ public class BidsServices {
 
 
             return ResponseEntity.ok("Bid has been created, current price is " + newBid.getCurrentPrice());
+=======
+>>>>>>> devOOAD
         }
-
-        return ResponseEntity.ok("Something went wrong");
+            // There are no previous bidders and the user has put a valid bid, wins automatically.
+            bidsServiceMethods.noPreviousBidsWin(foundUser, newBid, foundAuction);
+            return ResponseEntity.ok("Bid has been created, current price is " + foundAuction.getCurrentPrice());
     }
 
 
+<<<<<<< HEAD
     public void checkBids() {
 
     }
@@ -232,6 +283,10 @@ public class BidsServices {
 
     //Find a bids by id
     public Bids findOne(String bidId) {
+=======
+//Find a bids by id
+    public Bids findOne(String bidId){
+>>>>>>> devOOAD
         return bidsRepository.findById(bidId).get();
     }
 
@@ -241,7 +296,11 @@ public class BidsServices {
         return "Deleted successfully!";
     }
 
+<<<<<<< HEAD
     // update a bids
+=======
+// update a bid
+>>>>>>> devOOAD
     public Bids updateBids(BidsDTO bidsDTO) {
         User foundUser = userRepository.findById(bidsDTO.getUserId())
                 .orElseThrow(() -> new RuntimeException("User does not exist!"));
