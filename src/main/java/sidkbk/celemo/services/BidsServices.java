@@ -35,7 +35,8 @@ public class BidsServices {
 
     private final SimpMessagingTemplate messagingTemplate;
 
-    private BidsServices(SimpMessagingTemplate messagingTemplate) {
+    @Autowired
+    public BidsServices(SimpMessagingTemplate messagingTemplate) {
         this.messagingTemplate = messagingTemplate;
     }
 
@@ -100,9 +101,9 @@ public class BidsServices {
                             break;
                         }
                 }
-                if (currentBidUser.isPresent()) {
-                    sendBidNotifications(foundAuction, foundUser, currentBidUser.get(), newBid);
-                }
+
+                    sendBidNotifications(foundAuction, foundUser, currentBidUser.orElse(null), auctionCurrentBid);
+
             }
 
         }
