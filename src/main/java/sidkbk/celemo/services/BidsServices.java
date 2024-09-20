@@ -34,7 +34,6 @@ public class BidsServices {
     NotificationService notificationService;
 
 
-
     private final SimpMessagingTemplate messagingTemplate;
     // en klass i spring som används för att skicka meddelanden via websocket.
     // den gör det möjligt att programatiskt skicka meddelanden till specifika destinationer,
@@ -46,20 +45,20 @@ public class BidsServices {
     }
 
 
-// Find all bids
-    public List<Bids>findAllBids(){
+    // Find all bids
+    public List<Bids> findAllBids() {
         return bidsRepository.findAll();
     }
 
 
     // Create a bids using price, userId and listingId
-    public ResponseEntity<?> createBids(BidsDTO bidsDTO){
+    public ResponseEntity<?> createBids(BidsDTO bidsDTO) {
         // gets DTO, checks user from user-repo
         User foundUser = userRepository.findById(bidsDTO.getUserId())
-                .orElseThrow(()-> new RuntimeException("User does not exist!"));
+                .orElseThrow(() -> new RuntimeException("User does not exist!"));
         // gets DTO, checks auction id from auction-repo
         Auction foundAuction = auctionRepository.findById(bidsDTO.getAuctionId())
-                .orElseThrow(()-> new RuntimeException("Auction does not exist!")); // This might be a problem
+                .orElseThrow(() -> new RuntimeException("Auction does not exist!")); // This might be a problem
         // auction owner check
         Optional<User> auctionOwner = userRepository.findById(foundAuction.getSeller());
         if (foundUser.getUsername().equals(auctionOwner.get().getUsername())) {
@@ -85,18 +84,18 @@ public class BidsServices {
         }
 
         // Checks if users balance is valid
-        if (bidsDTO.getMaxBid() > foundUser.getBalance()){
+        if (bidsDTO.getMaxBid() > foundUser.getBalance()) {
             throw new RuntimeException("Your max bid can not be higher than " + foundUser.getBalance() + " , your current balance.");
         }
 
         // Checks if users balance is less than starting bid
-        if (bidsDTO.getStartBid() > foundUser.getBalance()){
+        if (bidsDTO.getStartBid() > foundUser.getBalance()) {
             throw new RuntimeException("Your bid cannot be higher than your balance. Your current balance is "
                     + foundUser.getBalance() + "Your current bid is " + bidsDTO.getStartBid() + ".");
         }
 
         // checks if auction has a bid
-        if (foundAuction.isHasBids() && foundAuction.getBid() != null){
+        if (foundAuction.isHasBids() && foundAuction.getBid() != null) {
 
             // checks if user has the same id as the previous user
             if (!foundAuction.getSeller().equals(newBid.getUser())) {
@@ -125,7 +124,7 @@ public class BidsServices {
                     }
 
                     bidsRepository.save(newBid);
-                   // bidsRepository.save(auctionCurrentBid);
+                    // bidsRepository.save(auctionCurrentBid);
                     bidsRepository.save(updatedBid);
                     foundAuction.setCurrentPrice(updatedBid.getCurrentPrice());
                     foundAuction.setBid(updatedBid.getId());
@@ -161,8 +160,7 @@ public class BidsServices {
                         foundUser.setBalance(foundUser.getBalance() - newBid.getMaxPrice());
                         userRepository.save(foundUser);
                         return ResponseEntity.ok(newBid.getCurrentPrice() + " you have the current bid.");
-                    }
-                    else {
+                    } else {
                         // if you cant do 10+ monies to your maxbid
                         newBid.setCurrentPrice(auctionCurrentBid.getMaxPrice());
                         bidsRepository.save(newBid);
@@ -183,7 +181,7 @@ public class BidsServices {
             }
 
             //send back balance of lost bids
-        }else {
+        } else {
 
             foundUser.setBalance(foundUser.getBalance() - newBid.getMaxPrice());
             userRepository.save(foundUser);
@@ -215,8 +213,9 @@ public class BidsServices {
                     "/private",
                     "You have successfully placed a bid of " + bidsDTO.getStartBid() + " on auction: " + foundAuction.getTitle()
             );
-                    notificationService.createNotifUser(foundAuction.getSeller(), "A bid has been placed on your auction");
 
+
+            notificationService.createNotifUser(foundAuction.getSeller(), "A bid has been placed on your auction");
 
 
             return ResponseEntity.ok("Bid has been created, current price is " + newBid.getCurrentPrice());
@@ -226,24 +225,23 @@ public class BidsServices {
     }
 
 
-    public void checkBids (){
+    public void checkBids() {
 
     }
 
 
-
-//Find a bids by id
-    public Bids findOne(String bidId){
+    //Find a bids by id
+    public Bids findOne(String bidId) {
         return bidsRepository.findById(bidId).get();
     }
 
-// delete a bids
-    public String deleteBids(FindBidIdDTO findBidIdDTO){
+    // delete a bids
+    public String deleteBids(FindBidIdDTO findBidIdDTO) {
         bidsRepository.deleteById(findBidIdDTO.getbidId());
         return "Deleted successfully!";
     }
 
-// update a bids
+    // update a bids
     public Bids updateBids(BidsDTO bidsDTO) {
         User foundUser = userRepository.findById(bidsDTO.getUserId())
                 .orElseThrow(() -> new RuntimeException("User does not exist!"));
@@ -255,16 +253,16 @@ public class BidsServices {
         return bidsRepository.save(newUpdate);
     }
 
-    public List<Bids> findAllBidsForUser(String userId){
+    public List<Bids> findAllBidsForUser(String userId) {
         // Find user
         userRepository.findById(userId)
-                .orElseThrow(()->new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException("User not found"));
         // Skapa en tom lista för hittade bids
         List<Bids> foundBids = new ArrayList<>();
         // Spara alla bids i en lista
         List<Bids> allBids = bidsRepository.findAll();
         // For loop igenom alla bids och kolla efter bids som matchar med userid
-        for (Bids bids : allBids){
+        for (Bids bids : allBids) {
             if (bids.getUser() != null && bids.getUser().equals(userId)) {
                 foundBids.add(bids);
             }
