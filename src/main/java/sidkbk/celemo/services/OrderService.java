@@ -62,7 +62,7 @@ public class OrderService {
                 .endPrice(foundAuction.getEndPrice())
                 .build();
 
-        // Run method to remove finished acution from users favourite lists.
+        // Run method to remove finished auction from users favourite lists.
         userService.removeFavouriteAuctionFromUsers(foundAuction.getId());
 
         orderRepository.save(newOrder);

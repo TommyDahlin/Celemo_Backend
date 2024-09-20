@@ -1,6 +1,7 @@
 package sidkbk.celemo.helper;
 
 import org.springframework.stereotype.Service;
+import sidkbk.celemo.exceptions.ObjectNotFound;
 import sidkbk.celemo.models.*;
 import sidkbk.celemo.repositories.*;
 
@@ -40,32 +41,32 @@ public class ObjectFinder {
 
     public Auction findAuctionById(String id) {
         return auctionRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Auction not found"));
+                .orElseThrow(() -> new ObjectNotFound("Auction not found"));
     }
 
     public Bids findBidById(String id) {
         return bidsRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Bid not found"));
+                .orElseThrow(() -> new ObjectNotFound("Bid not found"));
     }
 
     public Order findOrderById(String id) {
         return orderRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
+                .orElseThrow(() -> new ObjectNotFound("Order not found"));
     }
 
     public Reports findReportById(String id) {
         return reportsRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Report not found"));
+                .orElseThrow(() -> new ObjectNotFound("Report not found"));
     }
 
     public Reviews findReviewById(String id) {
         return reviewsRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Review not found"));
+                .orElseThrow(() -> new ObjectNotFound("Review not found"));
     }
 
     public User findUserById(String id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ObjectNotFound("User not found"));
     }
 
 }
