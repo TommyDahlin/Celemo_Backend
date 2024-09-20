@@ -82,20 +82,27 @@ public class BidsServiceHelper {
 
     public ResponseEntity<?> userLoses(Bids newBid, Bids auctionCurrentBid, Auction foundAuction) {
         Bids updatedBid = auctionCurrentBid;
+        // Message variable to change what it says depending on if you match or lose bid.
+        String message = "";
         // Method for telling the user that his bid lost, and his balance is not changed.
         // Raises by 10 if possible
-        if (newBid.getMaxPrice() + 10 <= auctionCurrentBid.getMaxPrice()) {
+        if (newBid.getMaxPrice() + 10 < auctionCurrentBid.getMaxPrice()) {
             updatedBid.setCurrentPrice(newBid.getMaxPrice() + 10);
+            message = " is less than auctions current bids max price. New current bid is: ";
+        } else if (newBid.getMaxPrice() == auctionCurrentBid.getMaxPrice()) {
+            updatedBid.setCurrentPrice(newBid.getMaxPrice());
+            message = " is the same as the current max bid, previous bidder wins. Current Price is:  ";
         } else {
-            updatedBid.setCurrentPrice(auctionCurrentBid.getMaxPrice());
+            updatedBid.setCurrentPrice(newBid.getMaxPrice());
+            message = " is less than auctions current bids max price. New current bid is: ";
         }
-        bidsRepository.save(newBid);
-        bidsRepository.save(updatedBid);
         foundAuction.setCurrentPrice(updatedBid.getCurrentPrice());
         foundAuction.setBid(updatedBid.getId());
         foundAuction.setCounter(foundAuction.getCounter() + 1);
+        bidsRepository.save(newBid);
+        bidsRepository.save(updatedBid);
         auctionRepository.save(foundAuction);
-        return ResponseEntity.ok(newBid.getMaxPrice() + " is less than auctions current bids max price. New current bid is: " + foundAuction.currentPrice);
+        return ResponseEntity.ok(newBid.getMaxPrice() + message + foundAuction.currentPrice);
     }
 
     public ResponseEntity<?> userWins(Bids newBid, Bids auctionCurrentBid, Optional<User> currentBidUser, Auction foundAuction, User foundUser) {

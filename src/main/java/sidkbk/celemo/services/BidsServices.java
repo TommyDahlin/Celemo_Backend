@@ -80,6 +80,7 @@ public class BidsServices {
                     switch (bidsServiceHelper.bidWinCheck(auctionCurrentBid, newBid)) {
                         // User Loses max bid.
                         case 1:
+                            // User loses or matches.
                             bidsServiceHelper.userLoses(newBid, auctionCurrentBid, foundAuction);
                             break;
                         // User Wins.
