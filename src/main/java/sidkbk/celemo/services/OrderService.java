@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import sidkbk.celemo.dto.order.DeleteOrderDTO;
 import sidkbk.celemo.dto.order.OrderCreationDTO;
-import sidkbk.celemo.helper.ObjectHelper;
+import sidkbk.celemo.helper.ObjectFinder;
 import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.models.Bids;
 import sidkbk.celemo.models.Order;
@@ -26,29 +26,29 @@ public class OrderService {
     private final AuctionRepository auctionRepository;
     private final BidsRepository bidsRepository;
     private final UserService userService;
-    private final ObjectHelper objectHelper;
+    private final ObjectFinder objectFinder;
 
     public OrderService(OrderRepository orderRepository,
                         UserRepository userRepository,
                         AuctionRepository auctionRepository,
                         BidsRepository bidsRepository,
                         UserService userService,
-                        ObjectHelper objectHelper) {
+                        ObjectFinder objectFinder) {
         this.orderRepository = orderRepository;
         this.userRepository = userRepository;
         this.auctionRepository = auctionRepository;
         this.bidsRepository = bidsRepository;
         this.userService = userService;
-        this.objectHelper = objectHelper;
+        this.objectFinder = objectFinder;
     }
 
     // CREATE AN ORDER
     public Order createOrder(OrderCreationDTO orderCreationDTO) {
 
-        Auction foundAuction = (Auction) objectHelper.findObject("auction", orderCreationDTO.getAuctionId());
-        User seller = (User) objectHelper.findObject("user", foundAuction.getSeller());
-        Bids winningBid = (Bids) objectHelper.findObject("bids", foundAuction.getBid());
-        User buyer = (User) objectHelper.findObject("user", winningBid.getUser());
+        Auction foundAuction = objectFinder.findAuctionById(orderCreationDTO.getAuctionId());
+        User seller = objectFinder.findUserById(foundAuction.getSeller());
+        Bids winningBid = objectFinder.findBidById(foundAuction.getBid());
+        User buyer = objectFinder.findUserById(winningBid.getUser());
 
         // Builder pattern
         Order newOrder = new Order.OrderBuilder()

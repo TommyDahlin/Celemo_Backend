@@ -3,13 +3,12 @@ package sidkbk.celemo.models;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import sidkbk.celemo.repositories.CelemoObject;
 
 import java.time.LocalDate;
 
 
 @Document(collection = "bids")
-public class Bids implements CelemoObject {
+public class Bids {
 
 
     @Id
