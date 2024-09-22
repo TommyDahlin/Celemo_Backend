@@ -2,7 +2,9 @@ package sidkbk.celemo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
+import org.w3c.dom.ls.LSOutput;
 import sidkbk.celemo.dto.Bids.BidsDTO;
 import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.models.Bids;
@@ -24,6 +26,12 @@ public class BidsServiceMethods {
 
     @Autowired
      UserRepository userRepository;
+
+    private final SimpMessagingTemplate messagingTemplate;
+    @Autowired
+    private BidsServiceMethods(SimpMessagingTemplate messagingTemplate) {
+        this.messagingTemplate = messagingTemplate;
+    }
 
 
     public static Bids bidMaxPriceCheck(BidsDTO bidsDTO, Bids newBid){
@@ -136,6 +144,9 @@ public class BidsServiceMethods {
             foundUser.setBalance(foundUser.getBalance() - newBid.getMaxPrice());
             // Saves user that won.
             userRepository.save(foundUser);
+//            sendBidNotifications(foundAuction, foundUser, currentBidUser.get().getId(), auctionCurrentBid);
+
+
             return ResponseEntity.ok(newBid.getCurrentPrice() + " you have the current bid.");
 
         }
@@ -155,6 +166,23 @@ public class BidsServiceMethods {
             userRepository.save(foundUser);
             foundAuction.setCounter(foundAuction.getCounter() + 1);
             auctionRepository.save(foundAuction);
+
+            // Skicka meddelande till nuvarande budgivaren (den nya vinnaren)
+            messagingTemplate.convertAndSendToUser(
+                    auctionCurrentBid.getId(),
+                    "/private",
+                    "Grattis! Du har nu det högsta budet på auktionen '" + foundAuction.getTitle() +
+                            "' med ett bud på " + newBid.getCurrentPrice() + "."
+            );
+
+            // Skicka meddelande till tidigare budgivaren (den som blev överbudad)
+            messagingTemplate.convertAndSendToUser(
+                    foundUser.getId(),
+                    "/private",
+                    "Du har blivit överbudad på auktionen '" + foundAuction.getTitle() + "'. " +
+                            "Det nuvarande budet är " + newBid.getCurrentPrice() + "."
+            );
+
             return ResponseEntity.ok(newBid.getCurrentPrice() + " you have the current bid.");
 
         }
@@ -177,4 +205,32 @@ public class BidsServiceMethods {
             ResponseEntity.ok("Something is null wrong. checkBidBeforeSave()");
         }
     }
+
+//    public void sendBidNotifications(Auction auction, User bidder, String previousBidder, Bids bid) {
+//        // Logga vad som skickas till ägaren av auktionen
+//        System.out.println("Sending notification to auction owner: " + auction.getOwner().getUsername());
+//        messagingTemplate.convertAndSendToUser(
+//                auction.getOwner().getId(),
+//                "/private",
+//                "A new bid of " + bid.getCurrentPrice() + " has been placed on your auction: " + auction.getTitle()
+//        );
+//
+//        // Logga vad som skickas till den nuvarande budgivaren
+//        System.out.println("Sending notification to bidder: " + bidder.getUsername());
+//        messagingTemplate.convertAndSendToUser(
+//                bidder.getId(),
+//                "/private",
+//                "You have successfully placed a bid of " + bid.getMaxPrice() + " on auction: " + auction.getTitle()
+//        );
+//
+//        // Om det finns en föregående budgivare, logga och skicka meddelandet
+//        if (previousBidder != null) {
+//            System.out.println("Sending notification to previous bidder: " + previousBidder);
+//            messagingTemplate.convertAndSendToUser(
+//                    previousBidder,
+//                    "/private",
+//                    "You have been outbid on auction: " + auction.getTitle() + ". The current bid is now " + bid.getMaxPrice()
+//            );
+//        }
+//    }
 }
