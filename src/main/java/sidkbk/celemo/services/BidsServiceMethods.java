@@ -196,7 +196,7 @@ public class BidsServiceMethods {
             );
             messagingTemplate.convertAndSendToUser(
                     //foundAuction.getSeller()
-                    auctionCurrentBid.getUser(),
+                    currentBidUser.get().getId(),
                     "/private",
                     "You've been outbid with " + newBid.getCurrentPrice() + " on auction: " + foundAuction.getTitle()
             );

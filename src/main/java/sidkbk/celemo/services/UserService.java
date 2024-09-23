@@ -4,6 +4,8 @@ package sidkbk.celemo.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import sidkbk.celemo.dto.user.*;
@@ -67,17 +69,29 @@ public class UserService {
     }
 
 
-    public ResponseEntity<?> isUserLoggedIn(String username) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (!(authentication instanceof AnonymousAuthenticationToken)) {
-            String currentUserName = authentication.getName();
-            return currentUserName;
-        } else {
-            throw RuntimeException("No User")
+    public void currentUserName(@AuthenticationPrincipal User customUser) {
+        System.out.println(customUser.getUsername());
+        if (customUser.getUsername() == null) {
+            System.out.println("null");
         }
     }
 
      */
+
+    public void isUserLoggedIn() {
+        User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        boolean isOnline = false;
+
+        if (principal instanceof UserDetails) {
+            // If the user is authenticated
+            String loggedInUsername = ((UserDetails) principal).getUsername();
+            System.out.println(loggedInUsername);
+            isOnline = true;
+        }
+
+        System.out.println(isOnline);
+    }
 
     //find user variable with filter. For example : grade
     public String getUserFilter(String userId, String filter) { //userId and filter, filter can be grade, username, firstName, lastName
