@@ -13,8 +13,8 @@ public class EmailHandler {
 
 
     // anropa från timerService
-    public String sendMail(String mail) {
-        sendSimpleMessage(mail, "Celemo info", "En av dina auktioner har avslutats.");
+    public String sendMail(String mail, String auctionName, double price) {
+        sendSimpleMessage(mail, "Celemo info", "En av dina auktioner har avslutats: " + auctionName + " såldes för: " + price);
         return "E-post skickat!";
     }
 

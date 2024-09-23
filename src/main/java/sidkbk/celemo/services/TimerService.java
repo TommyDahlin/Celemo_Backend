@@ -7,7 +7,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import sidkbk.celemo.Mail.EmailHandler;
 import sidkbk.celemo.dto.order.OrderCreationDTO;
+import sidkbk.celemo.helper.LoggedInUsers;
 import sidkbk.celemo.models.Auction;
+import sidkbk.celemo.models.User;
 import sidkbk.celemo.repositories.AuctionRepository;
 import sidkbk.celemo.repositories.BidsRepository;
 import sidkbk.celemo.repositories.OrderRepository;
@@ -15,6 +17,7 @@ import sidkbk.celemo.repositories.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TimerService {
@@ -57,8 +60,7 @@ public class TimerService {
     // Scheduled method to check if an auctions end time has passed, then set the auction to finished.
     @Scheduled(fixedDelay = 20 * 1000, initialDelay = 5 * 1000)
     public void checkAuctionEndTime() {
-        System.out.println("passerar emailhandler");
-        emailHandler.sendMail("johan@johnsson-net.se");
+
 
         List<Auction> allAuctions = auctionRepository.findAll();
         for (Auction auction : allAuctions) {
@@ -71,21 +73,19 @@ public class TimerService {
                 // your auction has ended (to owner)
                 // skicka notis till ägare av auktion
 
+                if (LoggedInUsers.userList.containsKey(auction.getSeller())) {
+                    messagingTemplate.convertAndSendToUser(
+                            //foundAuction.getSeller()
+                            auction.getSeller(),
+                            "/private",
+                            "Your auction has ended. Title: " + auction.getTitle()
+                    );
+                } else {
+                    Optional<User> seller = userRepository.findById(auction.getSeller());
+                    // skicka mail
+                    emailHandler.sendMail(seller.get().getEmail(), auction.getTitle(), auction.getEndPrice());
+                }
 
-                messagingTemplate.convertAndSendToUser(
-                        //foundAuction.getSeller()
-                        auction.getSeller(),
-                        "/private",
-                        "Your auction has ended. Title: " + auction.getTitle()
-                );
-
-                /*
-                Optional<User> seller = userRepository.findById(auction.getSeller());
-
-                // skicka mail
-                emailHandler.sendMail(seller.get().getEmail());
-
-                 */
 
             }
 
