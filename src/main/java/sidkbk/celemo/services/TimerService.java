@@ -69,57 +69,44 @@ public class TimerService {
                 auction.setEndPrice(auction.getCurrentPrice());
                 auction.setFinished(true);
                 auctionRepository.save(auction);
+                System.out.print("Auction: " + auction.getId() + " set to finished. ");
 
-                // your auction has ended (to owner)
-                // skicka notis till ägare av auktion
+                // If auction is finished AND has bids THEN create an Order.
+                if (auction.isFinished && auction.isHasBids()) {
+                    OrderCreationDTO orderCreationDTO = new OrderCreationDTO();
+                    orderCreationDTO.setAuctionId(auction.getId());
+                    orderService.createOrder(orderCreationDTO);
 
-                if (LoggedInUsers.userList.containsKey(auction.getSeller())) {
-                    messagingTemplate.convertAndSendToUser(
-                            //foundAuction.getSeller()
-                            auction.getSeller(),
-                            "/private",
-                            "Your auction has ended. Title: " + auction.getTitle()
-                    );
+                    // order has been created
+
+                    // skicka notis till ägare av auktion
+
+
+                    if (LoggedInUsers.userList.containsKey(auction.getSeller())) {
+                        messagingTemplate.convertAndSendToUser(
+                                //foundAuction.getSeller()
+                                auction.getSeller(),
+                                "/private",
+                                "Your auction has ended. Title: " + auction.getTitle()
+                        );
+                    } else {
+                        Optional<User> seller = userRepository.findById(auction.getSeller());
+                        // skicka mail
+                        System.out.println("mail skickat till: " + seller.get().getEmail());
+                        emailHandler.sendMail(seller.get().getEmail(), auction.getTitle(), auction.getEndPrice());
+                    }
                 } else {
-                    Optional<User> seller = userRepository.findById(auction.getSeller());
-                    // skicka mail
-                    emailHandler.sendMail(seller.get().getEmail(), auction.getTitle(), auction.getEndPrice());
+                    System.out.println("Auction has no bids, order not created.");
                 }
 
-
-            }
-
-            notificationService.createNotifUser(auction.getSeller(), "Your auction has ended. Title: " + auction.getTitle());
+                //notificationService.createNotifUser(auction.getSeller(), "Your auction has ended. Title: " + auction.getTitle());
 
 
-            System.out.print("Auction: " + auction.getId() + " set to finished. ");
-
-            // If auction is finished AND has bids THEN create an Order.
-            if (auction.isFinished && auction.isHasBids()) {
-                OrderCreationDTO orderCreationDTO = new OrderCreationDTO();
-                orderCreationDTO.setAuctionId(auction.getId());
-                orderService.createOrder(orderCreationDTO);
-
-                // order has been created
-
-                // your auction has ended (to owner)
-                // skicka notis till ägare av auktion
-                // har inte med det i clienten utan bara testat på user (bidder)
-                messagingTemplate.convertAndSendToUser(
-                        //foundAuction.getSeller()
-                        auction.getSeller(),
-                        "/private",
-                        "Your auction has ended and order has been created. Title: " + auction.getTitle()
-                );
-
-                notificationService.createNotifUser(auction.getSeller(), "Your auction has ended and order has been created. Title: " + auction.getTitle());
+                //notificationService.createNotifUser(auction.getSeller(), "Your auction has ended and order has been created. Title: " + auction.getTitle());
 
 
-            } else {
-                System.out.println("Auction has no bids, order not created.");
             }
         }
     }
+
 }
-
-
