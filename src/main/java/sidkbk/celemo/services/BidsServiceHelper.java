@@ -141,7 +141,7 @@ public class BidsServiceHelper {
         newBid.setCurrentPrice(foundAuction.getCurrentPrice() + 10);
         foundAuction.setBid(newBid.getId());
         // auction price gets set directly from first startprice instead of a method that i use if there's already a bid.
-        foundAuction.setCurrentPrice(foundAuction.getCurrentPrice() + 10);
+        foundAuction.setCurrentPrice(newBid.getCurrentPrice());
         foundAuction.setHasBids(true);
         foundAuction.setCounter(foundAuction.getCounter() + 1);
         bidsRepository.save(newBid);
