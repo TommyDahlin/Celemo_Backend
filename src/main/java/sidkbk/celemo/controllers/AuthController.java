@@ -9,9 +9,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import sidkbk.celemo.helper.LoggedInUsers;
 import sidkbk.celemo.models.EGender;
 import sidkbk.celemo.models.ERole;
 import sidkbk.celemo.models.Role;
@@ -31,7 +34,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 
-
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -48,7 +50,7 @@ public class AuthController {
 
     // sign in
     @PostMapping("/signin")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody SigninRequest signinRequest, HttpServletResponse response){
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody SigninRequest signinRequest, HttpServletResponse response) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(signinRequest.getUsername(), signinRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -66,6 +68,9 @@ public class AuthController {
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
 
+        System.out.println(userDetails.getId());
+        LoggedInUsers.userList.put(userDetails.getId(), userDetails.getUsername());
+
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
                 .body(new UserInfoResponse(userDetails.getId(),
                         userDetails.getUsername(),
@@ -73,9 +78,36 @@ public class AuthController {
                         roles));
     }
 
+
+    public ResponseEntity<?> isUserLoggedIn(String username) {
+
+        SecurityContext context = SecurityContextHolder.getContext();
+        Authentication authentication = context.getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+        if (userDetails.getUsername() == username) {
+            return ResponseEntity.ok(true);
+        } else {
+            return ResponseEntity.ok(false);
+        }
+
+/*
+        Authentication authentication2 = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication2 != null) {
+            Object principal = authentication.getPrincipal();
+            System.out.println(principal);
+        } else {
+            throw new RuntimeException("no user found");
+        }
+
+ */
+
+    }
+
+
     // sign up/register new user
     @PostMapping("/signup")
-    public ResponseEntity<?> signupUser(@Valid @RequestBody SignupRequest signupRequest){
+    public ResponseEntity<?> signupUser(@Valid @RequestBody SignupRequest signupRequest) {
         if (userRepository.existsByUsername((signupRequest.getUsername()))) {
             return ResponseEntity
                     .badRequest()
@@ -129,9 +161,13 @@ public class AuthController {
         return ResponseEntity.ok(new MessageResponse("User registered successfully"));
     }
 
-    @PostMapping("logout")
-    public ResponseEntity<?> logoutUser () {
+    @PostMapping("/logout/{userId}")
+    public ResponseEntity<?> logoutUser(@PathVariable String userId) {
+        System.out.println(userId);
+        LoggedInUsers.userList.remove(userId);
         ResponseCookie jwtCookie = jwtUtils.getCleanJwtCookie();
+
+
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString()).body("Logged out successfully");
     }
 

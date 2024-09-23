@@ -118,8 +118,6 @@ public class User {
     }
 
 
-    // det här ingår i Security genom BCrypt, jättebra att ni tänker på det men kom ihåg
-    // att fundera över vad ni lägger er tid på nästa gång
     public void isPasswordCorrect(User user) {
 
 

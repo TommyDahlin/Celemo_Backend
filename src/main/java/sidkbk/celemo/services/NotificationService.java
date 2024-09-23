@@ -9,6 +9,7 @@ import sidkbk.celemo.repositories.NotificationRepository;
 import sidkbk.celemo.repositories.UserRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class NotificationService {
@@ -51,10 +52,9 @@ public class NotificationService {
 
     public List<Notification> getAllNotificationsFromUser(String userId) {
 
-        User foundUser = userRepository.findById(userId).orElseThrow(
-                () -> new RuntimeException("User not found"));
+        Optional<User> foundUser = userRepository.findById(userId);
 
-        return notificationRepository.findByToUserId(foundUser.getId());
+        return notificationRepository.findByToUserId(foundUser.get().getId());
 
     }
 
