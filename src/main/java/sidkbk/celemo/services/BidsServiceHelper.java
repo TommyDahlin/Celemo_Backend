@@ -95,11 +95,11 @@ public class BidsServiceHelper {
             updatedBid.setCurrentPrice(newBid.getMaxPrice());
             message = " is less than auctions current bids max price. New current bid is: ";
         }
+        bidsRepository.save(updatedBid);
         foundAuction.setCurrentPrice(updatedBid.getCurrentPrice());
         foundAuction.setBid(updatedBid.getId());
         foundAuction.setCounter(foundAuction.getCounter() + 1);
         bidsRepository.save(newBid);
-        bidsRepository.save(updatedBid);
         auctionRepository.save(foundAuction);
         return ResponseEntity.ok(newBid.getMaxPrice() + message + foundAuction.currentPrice);
     }
@@ -136,8 +136,8 @@ public class BidsServiceHelper {
         foundUser.setBalance(foundUser.getBalance() - newBid.getMaxPrice());
         newBid.setCurrentPrice(foundAuction.getCurrentPrice() + 10);
         // auction price gets set directly from first startprice instead of a method that i use if there's already a bid.
-        checkBidBeforeSave(newBid);
         bidsRepository.save(newBid);
+        checkBidBeforeSave(newBid);
         foundAuction.setBid(newBid.getId());
         foundAuction.setCurrentPrice(newBid.getCurrentPrice());
         foundAuction.setHasBids(true);
@@ -147,7 +147,7 @@ public class BidsServiceHelper {
         return ResponseEntity.ok("Current price is: " + foundAuction.currentPrice);
     }
     public void checkBidBeforeSave(Bids newBid){
-        if (newBid.getUser() == null || newBid.getAuctionId() == null || newBid.getStartPrice() == 0.0 || newBid.getMaxPrice() == 0.0 || newBid.getCurrentPrice() == 0.0) {
+        if (newBid.getId() == null || newBid.getUser() == null || newBid.getAuctionId() == null || newBid.getStartPrice() == 0.0 || newBid.getMaxPrice() == 0.0 || newBid.getCurrentPrice() == 0.0) {
             ResponseEntity.ok("Something is null wrong. checkBidBeforeSave()");
         }
     }
