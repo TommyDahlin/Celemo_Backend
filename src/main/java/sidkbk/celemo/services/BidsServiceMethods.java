@@ -26,6 +26,7 @@ public class BidsServiceMethods {
     @Autowired
     UserRepository userRepository;
 
+
     private final SimpMessagingTemplate messagingTemplate;
 
     public BidsServiceMethods(SimpMessagingTemplate messagingTemplate) {
@@ -106,6 +107,7 @@ public class BidsServiceMethods {
         foundAuction.setCounter(foundAuction.getCounter() + 1);
         auctionRepository.save(foundAuction);
 
+
         // någon hade ett högre maxbud så därför har någon budat över dig
 
         messagingTemplate.convertAndSendToUser(
@@ -115,6 +117,7 @@ public class BidsServiceMethods {
                 "/private",
                 "You've been outbid with " + newBid.getCurrentPrice() + " on auction: " + foundAuction.getTitle()
         );
+
 
         return ResponseEntity.ok(newBid.getMaxPrice() + " is less than auctions current bids max price. New current bid is: " + foundAuction.currentPrice);
 
@@ -221,12 +224,13 @@ public class BidsServiceMethods {
         // Method for telling the user that his bid won because no previous bids were on the auction, and his balance is changed.
         foundUser.setBalance(foundUser.getBalance() - newBid.getMaxPrice());
         newBid.setCurrentPrice(foundAuction.getCurrentPrice() + 10);
+        bidsRepository.save(newBid);
         foundAuction.setBid(newBid.getId());
         // auction price gets set directly from first startprice instead of a method that i use if there's already a bid.
         foundAuction.setCurrentPrice(foundAuction.getCurrentPrice() + 10);
         foundAuction.setHasBids(true);
         foundAuction.setCounter(foundAuction.getCounter() + 1);
-        bidsRepository.save(newBid);
+
         userRepository.save(foundUser);
         auctionRepository.save(foundAuction);
 
