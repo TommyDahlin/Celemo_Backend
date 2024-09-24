@@ -22,10 +22,8 @@ public class BidsServices {
 
     @Autowired
     BidsRepository bidsRepository;
-
     @Autowired
     AuctionRepository auctionRepository;
-
     @Autowired
     UserRepository userRepository;
     @Autowired
