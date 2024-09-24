@@ -59,7 +59,7 @@ public class BidsServices {
         // 1. Check if startBid and maxBid is higher than auction startPrice,
         // 2. Checks if users balance is valid,
         // 3. Checks if users balance is less than starting bid
-        bidsServiceHelper.bidOkCheck(bidsDTO, foundAuction);
+        bidsServiceHelper.startPriceCheck(bidsDTO, foundAuction);
         bidsServiceHelper.checkUserBalance(foundUser, bidsDTO);
         // checks if auction has a bid
         if (foundAuction.isHasBids() && foundAuction.getBid() != null) {

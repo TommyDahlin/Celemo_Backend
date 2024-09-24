@@ -28,6 +28,7 @@ public class BidsServiceHelper {
 
     public static Bids bidMaxPriceCheck(BidsDTO bidsDTO, Bids newBid) {
         if (bidsDTO.getMaxBid() == 0) {
+            // if maxbid is empty sets it to startprice.
             newBid.setMaxPrice(newBid.getStartPrice());
             bidsDTO.setMaxBid(bidsDTO.getStartBid());
         } else {
@@ -36,19 +37,18 @@ public class BidsServiceHelper {
         return newBid;
     }
 
+    // bid has to go through all these checks to be eligible to be saved.
     public void checkAuctionOwner(Auction foundAuction, User foundUser) {
         if (foundUser.getId().equals(foundAuction.getSeller())) {
             throw new RuntimeException("You can't bid on your own auction");
         }
     }
-
     public void checkFinished(Auction foundAuction) {
         if (foundAuction.isFinished()) {
             throw new RuntimeException("You can't bid on a finished auction.");
         }
     }
-
-    public void bidOkCheck(BidsDTO bidsDTO, Auction foundAuction) {
+    public void startPriceCheck(BidsDTO bidsDTO, Auction foundAuction) {
         // Check if startBid and maxBid is higher than auction startPrice
         if (bidsDTO.getMaxBid() <= foundAuction.getStartPrice()) {
             throw new RuntimeException("Your bids cannot be the same or lower than auctions starting price or current price.");
@@ -60,7 +60,11 @@ public class BidsServiceHelper {
             throw new RuntimeException("Your bid lack sufficient funds. \n Your current balance " + foundUser.getBalance() + " Your start bid: " + bidsDTO.getStartBid() + "\n Your max bid: " + bidsDTO.getMaxBid());
         }
     }
-
+    public void checkBidBeforeSave(Bids newBid){
+        if (newBid.getId() == null || newBid.getUser() == null || newBid.getAuctionId() == null || newBid.getStartPrice() == 0.0 || newBid.getMaxPrice() == 0.0 || newBid.getCurrentPrice() == 0.0) {
+            ResponseEntity.ok("Something is null wrong. checkBidBeforeSave()");
+        }
+    }
 
     public int bidWinCheck(Bids auctionCurrentBid, Bids newBid) {
         // This is the case determinator to check the prices of the current bid and users new bid
@@ -79,7 +83,6 @@ public class BidsServiceHelper {
         Bids updatedBid = auctionCurrentBid;
         // Message variable to change what it says depending on if you match or lose bid.
         String message;
-        // Method for telling the user that his bid lost, and his balance is not changed.
         // Raises by 10 if possible
         if (newBid.getMaxPrice() + 10 < auctionCurrentBid.getMaxPrice()) {
             updatedBid.setCurrentPrice(newBid.getMaxPrice() + 10);
@@ -142,9 +145,5 @@ public class BidsServiceHelper {
         auctionRepository.save(foundAuction);
         return ResponseEntity.ok("Current price is: " + foundAuction.currentPrice);
     }
-    public void checkBidBeforeSave(Bids newBid){
-        if (newBid.getId() == null || newBid.getUser() == null || newBid.getAuctionId() == null || newBid.getStartPrice() == 0.0 || newBid.getMaxPrice() == 0.0 || newBid.getCurrentPrice() == 0.0) {
-            ResponseEntity.ok("Something is null wrong. checkBidBeforeSave()");
-        }
-    }
+
 }
