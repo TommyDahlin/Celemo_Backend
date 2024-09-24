@@ -3,21 +3,12 @@ package sidkbk.celemo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import sidkbk.celemo.Mail.EmailHandler;
-import sidkbk.celemo.dto.order.OrderCreationDTO;
-import sidkbk.celemo.helper.LoggedInUsers;
-import sidkbk.celemo.models.Auction;
-import sidkbk.celemo.models.User;
 import sidkbk.celemo.repositories.AuctionRepository;
 import sidkbk.celemo.repositories.BidsRepository;
 import sidkbk.celemo.repositories.OrderRepository;
 import sidkbk.celemo.repositories.UserRepository;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class TimerService {
@@ -58,7 +49,9 @@ public class TimerService {
 
 
     // Scheduled method to check if an auctions end time has passed, then set the auction to finished.
-    @Scheduled(fixedDelay = 20 * 1000, initialDelay = 5 * 1000)
+
+    /*@Scheduled(fixedDelay = 20 * 1000, initialDelay = 20 * 1000)
+
     public void checkAuctionEndTime() {
 
 
@@ -106,7 +99,13 @@ public class TimerService {
 
 
             }
+
+
         }
-    }
+
+     */
+
 
 }
+
+
