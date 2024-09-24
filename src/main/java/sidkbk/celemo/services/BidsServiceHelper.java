@@ -37,8 +37,7 @@ public class BidsServiceHelper {
     }
 
     public void checkAuctionOwner(Auction foundAuction, User foundUser) {
-        Optional<User> auctionOwner = userRepository.findById(foundAuction.getSeller());
-        if (foundUser.getUsername().equals(auctionOwner.get().getUsername())) {
+        if (foundUser.getId().equals(foundAuction.getSeller())) {
             throw new RuntimeException("You can't bid on your own auction");
         }
     }
@@ -83,7 +82,7 @@ public class BidsServiceHelper {
     public ResponseEntity<?> userLoses(Bids newBid, Bids auctionCurrentBid, Auction foundAuction) {
         Bids updatedBid = auctionCurrentBid;
         // Message variable to change what it says depending on if you match or lose bid.
-        String message = "";
+        String message;
         // Method for telling the user that his bid lost, and his balance is not changed.
         // Raises by 10 if possible
         if (newBid.getMaxPrice() + 10 < auctionCurrentBid.getMaxPrice()) {

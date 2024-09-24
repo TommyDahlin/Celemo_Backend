@@ -39,21 +39,17 @@ public class BidsServices {
 
     // Create a bids using price, userId and listingId
     public ResponseEntity<?> createBids(BidsDTO bidsDTO) {
-        // gets DTO, checks user from user-repo
-        User foundUser = userRepository.findById(bidsDTO.getUserId())
-                .orElseThrow(() -> new RuntimeException("User does not exist!"));
         // gets DTO, checks auction id from auction-repo
         Auction foundAuction = auctionRepository.findById(bidsDTO.getAuctionId())
                 .orElseThrow(() -> new RuntimeException("Auction does not exist!"));
         bidsServiceHelper.checkFinished(foundAuction);
+        // gets DTO, checks user from user-repo
+        User foundUser = userRepository.findById(bidsDTO.getUserId())
+                .orElseThrow(() -> new RuntimeException("User does not exist!"));
         // auction owner check
         bidsServiceHelper.checkAuctionOwner(foundAuction, foundUser);
         // makes new bid object
-        Bids newBid = new Bids();
-        // sets user found from DTO userID
-        newBid.setUser(foundUser.getId());
-        newBid.setStartPrice(bidsDTO.getStartBid());
-        newBid.setAuctionId(foundAuction.getId());
+        Bids newBid = new Bids(foundUser.getId(), foundAuction.getId(), bidsDTO.getStartBid(), bidsDTO.getMaxBid());
         // Checks if price is higher or lower than previous bid
         newBid = BidsServiceHelper.bidMaxPriceCheck(bidsDTO, newBid);
         // Checks 3 things unfortunately,
