@@ -10,8 +10,6 @@ import sidkbk.celemo.dto.auctions.AuctionUpdateDTO;
 import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.models.User;
 import sidkbk.celemo.repositories.AuctionRepository;
-import sidkbk.celemo.repositories.BidsRepository;
-import sidkbk.celemo.repositories.OrderRepository;
 import sidkbk.celemo.repositories.UserRepository;
 
 import java.time.LocalDateTime;
@@ -24,17 +22,14 @@ public class AuctionService {
     @Autowired
     AuctionRepository auctionRepository;
     @Autowired
-    UserRepository userRepository;
-    @Autowired
-    BidsRepository bidsRepository;
-    @Autowired
-    OrderRepository orderRepository;
-    @Autowired
     UserService userService;
+    @Autowired
+    UserRepository userRepository;
 
     public Auction createAuction(AuctionCreationDTO auctionCreationDTO) {
         User findUser = userRepository.findById(auctionCreationDTO.getSellerId())
                 .orElseThrow(() -> new RuntimeException("Couldn't find user."));
+
 
         Auction newAuction = new Auction.AuctionBuilder()
                 .setTitle(auctionCreationDTO.getTitle())
