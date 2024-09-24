@@ -1,7 +1,6 @@
 package sidkbk.celemo.services;
 
 
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import sidkbk.celemo.dto.order.OrderCreationDTO;
 import sidkbk.celemo.models.Auction;
@@ -21,7 +20,9 @@ public class TimerService {
     }
 
     // Scheduled method to check if an auctions end time has passed, then set the auction to finished.
-    @Scheduled(fixedDelay = (20 * 1000), initialDelay = (5 * 1000))
+
+    /*@Scheduled(fixedDelay = 20 * 1000, initialDelay = 20 * 1000)*/
+
     public void checkAuctionEndTime() {
         List<Auction> allAuctions = auctionRepository.findAll();
         for (Auction auction : allAuctions) {
