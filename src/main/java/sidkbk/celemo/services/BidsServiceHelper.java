@@ -48,23 +48,19 @@ public class BidsServiceHelper {
         }
     }
 
-    public void bidOkCheck(BidsDTO bidsDTO, Auction foundAuction, User foundUser) {
+    public void bidOkCheck(BidsDTO bidsDTO, Auction foundAuction) {
         // Check if startBid and maxBid is higher than auction startPrice
         if (bidsDTO.getMaxBid() <= foundAuction.getStartPrice()) {
             throw new RuntimeException("Your bids cannot be the same or lower than auctions starting price or current price.");
         }
-
+    }
+        public void checkUserBalance(User foundUser, BidsDTO bidsDTO){
         // Checks if users balance is valid
-        if (bidsDTO.getMaxBid() > foundUser.getBalance()) {
-            throw new RuntimeException("Your max bid can not be higher than " + foundUser.getBalance() + " , your current balance.");
-        }
-
-        // Checks if users balance is less than starting bid
-        if (bidsDTO.getStartBid() > foundUser.getBalance()) {
-            throw new RuntimeException("Your bid cannot be higher than your balance. Your current balance is "
-                    + foundUser.getBalance() + "Your current bid is " + bidsDTO.getStartBid() + ".");
+        if (bidsDTO.getMaxBid() > foundUser.getBalance() || bidsDTO.getStartBid() > foundUser.getBalance()) {
+            throw new RuntimeException("Your bid lack sufficient funds. \n Your current balance " + foundUser.getBalance() + " Your start bid: " + bidsDTO.getStartBid() + "\n Your max bid: " + bidsDTO.getMaxBid());
         }
     }
+
 
     public int bidWinCheck(Bids auctionCurrentBid, Bids newBid) {
         // This is the case determinator to check the prices of the current bid and users new bid

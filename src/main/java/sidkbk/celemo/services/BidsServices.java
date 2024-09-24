@@ -59,7 +59,8 @@ public class BidsServices {
         // 1. Check if startBid and maxBid is higher than auction startPrice,
         // 2. Checks if users balance is valid,
         // 3. Checks if users balance is less than starting bid
-        bidsServiceHelper.bidOkCheck(bidsDTO, foundAuction, foundUser);
+        bidsServiceHelper.bidOkCheck(bidsDTO, foundAuction);
+        bidsServiceHelper.checkUserBalance(foundUser, bidsDTO);
         // checks if auction has a bid
         if (foundAuction.isHasBids() && foundAuction.getBid() != null) {
             // checks if user has the same id as the owner of the auction. auction owner is not supposed to be able to bid on their own auction.
