@@ -115,6 +115,8 @@ public class BidsServiceHelper {
             newBid.setCurrentPrice(auctionCurrentBid.getMaxPrice());
         }
         // Sets auctions current price
+        checkBidBeforeSave(newBid);
+        bidsRepository.save(newBid);
         foundAuction.setCurrentPrice(newBid.getCurrentPrice());
         // Gives back balance from previous winning bid user
         currentBidUser.get().setBalance(currentBidUser.get().getBalance() + auctionCurrentBid.getMaxPrice());
@@ -124,28 +126,25 @@ public class BidsServiceHelper {
         foundAuction.setCounter(foundAuction.getCounter() + 1);
         // Changes balance from new winner of bid.
         foundUser.setBalance(foundUser.getBalance() - newBid.getMaxPrice());
-        checkBidBeforeSave(newBid);
-        wonAuctionSave(newBid, currentBidUser, foundUser, foundAuction);
-        return ResponseEntity.ok(newBid.getCurrentPrice() + " you have the current bid.");
-    }
-    public void wonAuctionSave(Bids newBid, Optional<User> currentBidUser, User foundUser, Auction foundAuction) {
-        bidsRepository.save(newBid);
         userRepository.save(currentBidUser.get());
         userRepository.save(foundUser);
         auctionRepository.save(foundAuction);
+        return ResponseEntity.ok(newBid.getCurrentPrice() + " you have the current bid.");
     }
-    public void noPreviousBidsWin(User foundUser, Bids newBid, Auction foundAuction){
+    public ResponseEntity<?> noPreviousBidsWin(User foundUser, Bids newBid, Auction foundAuction){
         // Method for telling the user that his bid won because no previous bids were on the auction, and his balance is changed.
         foundUser.setBalance(foundUser.getBalance() - newBid.getMaxPrice());
         newBid.setCurrentPrice(foundAuction.getCurrentPrice() + 10);
-        foundAuction.setBid(newBid.getId());
         // auction price gets set directly from first startprice instead of a method that i use if there's already a bid.
+        checkBidBeforeSave(newBid);
+        bidsRepository.save(newBid);
+        foundAuction.setBid(newBid.getId());
         foundAuction.setCurrentPrice(newBid.getCurrentPrice());
         foundAuction.setHasBids(true);
         foundAuction.setCounter(foundAuction.getCounter() + 1);
-        bidsRepository.save(newBid);
         userRepository.save(foundUser);
         auctionRepository.save(foundAuction);
+        return ResponseEntity.ok("Current price is: " + foundAuction.currentPrice);
     }
     public void checkBidBeforeSave(Bids newBid){
         if (newBid.getUser() == null || newBid.getAuctionId() == null || newBid.getStartPrice() == 0.0 || newBid.getMaxPrice() == 0.0 || newBid.getCurrentPrice() == 0.0) {

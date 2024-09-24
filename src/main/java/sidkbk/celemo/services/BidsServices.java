@@ -49,7 +49,10 @@ public class BidsServices {
         // auction owner check
         bidsServiceHelper.checkAuctionOwner(foundAuction, foundUser);
         // makes new bid object
-        Bids newBid = new Bids(foundUser.getId(), foundAuction.getId(), bidsDTO.getStartBid(), bidsDTO.getMaxBid());
+        Bids newBid = new Bids();
+        newBid.setUser(foundUser.getId());
+        newBid.setStartPrice(bidsDTO.getStartBid());
+        newBid.setAuctionId(bidsDTO.getAuctionId());
         // Checks if price is higher or lower than previous bid
         newBid = BidsServiceHelper.bidMaxPriceCheck(bidsDTO, newBid);
         // Checks 3 things unfortunately,
@@ -89,7 +92,7 @@ public class BidsServices {
         }
             // There are no previous bidders and the user has put a valid bid, wins automatically.
             bidsServiceHelper.noPreviousBidsWin(foundUser, newBid, foundAuction);
-            return ResponseEntity.ok("Bid has been created, current price is " + foundAuction.getCurrentPrice());
+            return ResponseEntity.ok("finished");
     }
 
 
