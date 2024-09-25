@@ -6,6 +6,7 @@ Follow these steps to set up and run the Celemo backend locally:
 
 - Open a terminal and navigate to the directory where you want to clone the project.
 - Run the following command to clone the repository:
+
 ![bild](https://github.com/user-attachments/assets/3db769bb-0fe7-4cdf-9e27-fedeaf6310e8)
 - Open IntelliJ IDEA (or your preferred IDE) and navigate to the folder containing the cloned repository.
 
