@@ -68,7 +68,7 @@ public class AuthController {
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
 
-        System.out.println(userDetails.getId());
+        //adderar användaren till userList för att kunna vgöra om användaren ska få notis via websocket eller mail
         LoggedInUsers.userList.put(userDetails.getId(), userDetails.getUsername());
 
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
