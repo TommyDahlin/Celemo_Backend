@@ -187,24 +187,23 @@ public class BidsServiceMethods {
             auctionRepository.save(foundAuction);
 
             // your bid was placed successfully
-            // your bid was placed successfully
             // skicka notis till ägare av auktion
 
             messagingTemplate.convertAndSendToUser(
-                    //foundAuction.getSeller()
+
                     foundAuction.getSeller(),
                     "/private",
                     "A new bid of " + newBid.getCurrentPrice() + " has been placed on your auction: " + foundAuction.getId()
             );
             messagingTemplate.convertAndSendToUser(
-                    //foundAuction.getSeller()
+
                     currentBidUser.get().getId(),
                     "/private",
                     "You've been outbid with " + newBid.getCurrentPrice() + " on auction: " + foundAuction.getTitle()
             );
 
 
-// skicka notis till högsta budgivare
+            // skicka notis till högsta budgivare
             messagingTemplate.convertAndSendToUser(
 
                     foundUser.getId(),
@@ -243,7 +242,7 @@ public class BidsServiceMethods {
         );
 
 
-// skicka notis till högsta budgivare
+        // skicka notis till högsta budgivare
         messagingTemplate.convertAndSendToUser(
 
                 foundUser.getId(),
