@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import sidkbk.celemo.dto.Bids.BidsDTO;
+import sidkbk.celemo.helper.ObjectFinder;
 import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.models.Bids;
 import sidkbk.celemo.models.User;
@@ -26,10 +27,13 @@ public class BidsServiceHelper {
     @Autowired
     UserRepository userRepository;
 
+    private final ObjectFinder objectFinder;
+
 
     private final SimpMessagingTemplate messagingTemplate;
 
-    public BidsServiceHelper(SimpMessagingTemplate messagingTemplate) {
+    public BidsServiceHelper(ObjectFinder objectFinder, SimpMessagingTemplate messagingTemplate) {
+        this.objectFinder = objectFinder;
         this.messagingTemplate = messagingTemplate;
     }
 
@@ -181,7 +185,7 @@ public class BidsServiceHelper {
 
                     foundAuction.getSeller(),
                     "/private",
-                    "A new bid of " + newBid.getCurrentPrice() + " has been placed on your auction: " + foundAuction.getId()
+                    "A new bid of " + newBid.getCurrentPrice() + " has been placed by: " + objectFinder.findUserById(newBid.getUser()).getUsername() + " on your auction: " + foundAuction.getTitle()
             );
             messagingTemplate.convertAndSendToUser(
 
@@ -226,7 +230,7 @@ public class BidsServiceHelper {
                 //foundAuction.getSeller()
                 foundAuction.getSeller(),
                 "/private",
-                "A new bid of " + newBid.getCurrentPrice() + " has been placed on your auction: " + foundAuction.getId()
+                "A new bid of " + newBid.getCurrentPrice() + " has been placed by: " + objectFinder.findUserById(newBid.getUser()).getUsername() + " on your auction: " + foundAuction.getTitle()
         );
 
 
