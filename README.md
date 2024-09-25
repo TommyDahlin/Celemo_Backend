@@ -23,7 +23,8 @@ folder.
 
 - Open the ![bild](https://github.com/user-attachments/assets/010c77cf-8a0e-4ac6-9fc8-5c0a071075ee) file and add the following lines:
 
-  ![bild](https://github.com/user-attachments/assets/8479fd18-a43c-4f75-807a-d7c1849e0969)
+  ![bild](https://github.com/user-attachments/assets/89b30501-b728-4345-b477-e1b3d64fc308)
+  
 - Replace {your value} with the appropriate sensitive values, such as your MongoDB URI, JWT secret, and cookie name.
 
 ### 4. Build and Run the Application
