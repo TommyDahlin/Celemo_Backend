@@ -23,15 +23,13 @@ public class BidsServices {
 
     @Autowired
     BidsRepository bidsRepository;
-
     @Autowired
     AuctionRepository auctionRepository;
-
     @Autowired
     UserRepository userRepository;
 
     @Autowired
-    BidsServiceMethods bidsServiceMethods;
+    BidsServiceHelper bidsServiceHelper;
 
     private final SimpMessagingTemplate messagingTemplate;
 
@@ -47,28 +45,27 @@ public class BidsServices {
 
     // Create a bids using price, userId and listingId
     public ResponseEntity<?> createBids(BidsDTO bidsDTO) {
-        // gets DTO, checks user from user-repo
-        User foundUser = userRepository.findById(bidsDTO.getUserId())
-                .orElseThrow(() -> new RuntimeException("User does not exist!"));
         // gets DTO, checks auction id from auction-repo
         Auction foundAuction = auctionRepository.findById(bidsDTO.getAuctionId())
                 .orElseThrow(() -> new RuntimeException("Auction does not exist!"));
-        bidsServiceMethods.checkFinished(foundAuction);
+        bidsServiceHelper.checkFinished(foundAuction);
+        // gets DTO, checks user from user-repo
+        User foundUser = userRepository.findById(bidsDTO.getUserId())
+                .orElseThrow(() -> new RuntimeException("User does not exist!"));
         // auction owner check
-        bidsServiceMethods.checkAuctionOwner(foundAuction, foundUser);
+        bidsServiceHelper.checkAuctionOwner(foundAuction, foundUser);
         // makes new bid object
         Bids newBid = new Bids();
-        // sets user found from DTO userID
         newBid.setUser(foundUser.getId());
         newBid.setStartPrice(bidsDTO.getStartBid());
-        newBid.setAuctionId(foundAuction.getId());
+        newBid.setAuctionId(bidsDTO.getAuctionId());
         // Checks if price is higher or lower than previous bid
-        newBid = BidsServiceMethods.bidMaxPriceCheck(bidsDTO, newBid);
+        newBid = BidsServiceHelper.bidMaxPriceCheck(bidsDTO, newBid);
         // Checks 3 things unfortunately,
         // 1. Check if startBid and maxBid is higher than auction startPrice,
         // 2. Checks if users balance is valid,
         // 3. Checks if users balance is less than starting bid
-        bidsServiceMethods.bidOkCheck(bidsDTO, foundAuction, foundUser);
+        bidsServiceHelper.bidOkCheck(bidsDTO, foundAuction, foundUser);
         // checks if auction has a bid
         if (foundAuction.isHasBids() && foundAuction.getBid() != null) {
             // checks if user has the same id as the owner of the auction. auction owner is not supposed to be able to bid on their own auction.
@@ -85,26 +82,25 @@ public class BidsServices {
                 } else {
 
                     // Switch check method compares Maxbid from both auctions, depending on who wins moves to the correct case.
-                    switch (bidsServiceMethods.bidWinCheck(auctionCurrentBid, newBid)) {
+                    switch (bidsServiceHelper.bidWinCheck(auctionCurrentBid, newBid)) {
                         // User Loses max bid.
                         case 1:
-                            bidsServiceMethods.userLoses(newBid, auctionCurrentBid, foundAuction);
-                            break;
-                        // User max bid Matches competing max bid
-                        case 2:
-                            bidsServiceMethods.userMatchesBid(newBid, auctionCurrentBid, foundAuction);
+                            // User loses or matches.
+                            bidsServiceHelper.userLoses(newBid, auctionCurrentBid, foundAuction);
                             break;
                         // User Wins.
-                        case 3:
-                            bidsServiceMethods.userWins(newBid, auctionCurrentBid, currentBidUser, foundAuction, foundUser);
+                        case 2:
+                            bidsServiceHelper.userWins(newBid, auctionCurrentBid, currentBidUser, foundAuction, foundUser);
                             break;
                     }
                 }
             }
         }
+
         // There are no previous bidders and the user has put a valid bid, wins automatically.
-        bidsServiceMethods.noPreviousBidsWin(foundUser, newBid, foundAuction);
-        return ResponseEntity.ok("Bid has been created, current price is " + foundAuction.getCurrentPrice());
+        bidsServiceHelper.noPreviousBidsWin(foundUser, newBid, foundAuction);
+        return ResponseEntity.ok("finished");
+
     }
 
 

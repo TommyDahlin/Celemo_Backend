@@ -9,8 +9,6 @@ import sidkbk.celemo.helper.LoggedInUsers;
 import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.models.User;
 import sidkbk.celemo.repositories.AuctionRepository;
-import sidkbk.celemo.repositories.BidsRepository;
-import sidkbk.celemo.repositories.OrderRepository;
 import sidkbk.celemo.repositories.UserRepository;
 
 import java.time.LocalDateTime;
@@ -21,35 +19,21 @@ import java.util.Optional;
 public class TimerService {
 
     private final AuctionRepository auctionRepository;
-    private final OrderRepository orderRepository;
-    private final UserRepository userRepository;
-    private final BidsRepository bidsRepository;
-    private final UserService userService;
-    private final EmailHandler emailHandler;
+    private final OrderService orderService;
 
+    private final UserRepository userRepository;
+    private final EmailHandler emailHandler;
 
     private final SimpMessagingTemplate messagingTemplate;
 
 
-    public TimerService(OrderRepository orderRepository,
-                        UserRepository userRepository,
-                        AuctionRepository auctionRepository,
-                        BidsRepository bidsRepository,
-                        UserService userService,
-                        SimpMessagingTemplate messagingTemplate,
-                        EmailHandler emailHandler) {
-        this.orderRepository = orderRepository;
-        this.userRepository = userRepository;
+    public TimerService(AuctionRepository auctionRepository, OrderService orderService, UserRepository userRepository, EmailHandler emailHandler, SimpMessagingTemplate messagingTemplate) {
         this.auctionRepository = auctionRepository;
-        this.bidsRepository = bidsRepository;
-        this.userService = userService;
-        this.orderService = new OrderService(orderRepository, userRepository, auctionRepository, bidsRepository, userService);
-        this.messagingTemplate = messagingTemplate;
+        this.orderService = orderService;
+        this.userRepository = userRepository;
         this.emailHandler = emailHandler;
+        this.messagingTemplate = messagingTemplate;
     }
-
-
-    OrderService orderService;
 
 
     // Scheduled method to check if an auctions end time has passed, then set the auction to finished.
