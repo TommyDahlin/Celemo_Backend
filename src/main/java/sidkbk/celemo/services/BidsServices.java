@@ -30,10 +30,6 @@ public class BidsServices {
     @Autowired
     UserRepository userRepository;
 
-
-    @Autowired
-    NotificationService notificationService;
-
     @Autowired
     BidsServiceMethods bidsServiceMethods;
 

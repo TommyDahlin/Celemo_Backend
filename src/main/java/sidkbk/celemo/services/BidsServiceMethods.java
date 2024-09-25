@@ -111,8 +111,7 @@ public class BidsServiceMethods {
         // någon hade ett högre maxbud så därför har någon budat över dig
 
         messagingTemplate.convertAndSendToUser(
-                // convertAndSendToUser riktar meddelandet till användarens privata kanal (/private)
-                // med information om att budet blev = success!
+
                 auctionCurrentBid.getUser(),
                 "/private",
                 "You've been outbid with " + newBid.getCurrentPrice() + " on auction: " + foundAuction.getTitle()
@@ -207,8 +206,7 @@ public class BidsServiceMethods {
 
 // skicka notis till högsta budgivare
             messagingTemplate.convertAndSendToUser(
-                    // convertAndSendToUser riktar meddelandet till användarens privata kanal (/private)
-                    // med information om att budet blev = success!
+
                     foundUser.getId(),
                     "/private",
                     "You have successfully placed a bid of " + newBid.getCurrentPrice() + " on auction: " + foundAuction.getTitle()
@@ -237,7 +235,6 @@ public class BidsServiceMethods {
 
         // your bid was placed successfully
         // skicka notis till ägare av auktion
-// har inte med det i clienten utan bara testat på user (bidder)
         messagingTemplate.convertAndSendToUser(
                 //foundAuction.getSeller()
                 foundAuction.getSeller(),
@@ -248,8 +245,7 @@ public class BidsServiceMethods {
 
 // skicka notis till högsta budgivare
         messagingTemplate.convertAndSendToUser(
-                // convertAndSendToUser riktar meddelandet till användarens privata kanal (/private)
-                // med information om att budet blev = success!
+
                 foundUser.getId(),
                 "/private",
                 "You have successfully placed a bid of " + newBid.getCurrentPrice() + " on auction: " + foundAuction.getTitle()
