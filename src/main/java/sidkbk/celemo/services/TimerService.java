@@ -2,11 +2,14 @@ package sidkbk.celemo.services;
 
 
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import sidkbk.celemo.Mail.EmailHandler;
 import sidkbk.celemo.dto.order.OrderCreationDTO;
 import sidkbk.celemo.helper.LoggedInUsers;
+import sidkbk.celemo.helper.ObjectFinder;
 import sidkbk.celemo.models.Auction;
+import sidkbk.celemo.models.Bids;
 import sidkbk.celemo.models.User;
 import sidkbk.celemo.repositories.AuctionRepository;
 import sidkbk.celemo.repositories.UserRepository;
@@ -26,20 +29,22 @@ public class TimerService {
 
     private final SimpMessagingTemplate messagingTemplate;
 
+    private final ObjectFinder objectFinder;
 
-    public TimerService(AuctionRepository auctionRepository, OrderService orderService, UserRepository userRepository, EmailHandler emailHandler, SimpMessagingTemplate messagingTemplate) {
+
+    public TimerService(AuctionRepository auctionRepository, OrderService orderService, UserRepository userRepository, EmailHandler emailHandler, SimpMessagingTemplate messagingTemplate, ObjectFinder objectFinder) {
         this.auctionRepository = auctionRepository;
         this.orderService = orderService;
         this.userRepository = userRepository;
         this.emailHandler = emailHandler;
         this.messagingTemplate = messagingTemplate;
+        this.objectFinder = objectFinder;
     }
 
 
     // Scheduled method to check if an auctions end time has passed, then set the auction to finished.
 
-    //@Scheduled(fixedDelay = 20 * 1000, initialDelay = 20 * 1000)
-
+    @Scheduled(fixedDelay = 20 * 1000, initialDelay = 20 * 1000)
     public void checkAuctionEndTime() {
 
 
@@ -69,6 +74,13 @@ public class TimerService {
                                 auction.getSeller(),
                                 "/private",
                                 "Your auction has ended. Title: " + auction.getTitle()
+                        );
+                        Bids bid = objectFinder.findBidById(auction.getBid());
+                        messagingTemplate.convertAndSendToUser(
+                                //foundAuction.getSeller()
+                                bid.getUser(),
+                                "/private",
+                                auction.getTitle() + " has finished and you won!"
                         );
                     } else {
                         Optional<User> seller = userRepository.findById(auction.getSeller());

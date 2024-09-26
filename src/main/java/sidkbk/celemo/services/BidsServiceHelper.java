@@ -121,7 +121,7 @@ public class BidsServiceHelper {
 
                 auctionCurrentBid.getUser(),
                 "/private",
-                "You've been outbid with " + newBid.getCurrentPrice() + " on auction: " + foundAuction.getTitle()
+                "You've been outbid with " + newBid.getMaxPrice() + " on auction: " + foundAuction.getTitle()
         );
 
 
@@ -131,6 +131,7 @@ public class BidsServiceHelper {
 
 
     public ResponseEntity<?> userWins(Bids newBid, Bids auctionCurrentBid, Optional<User> currentBidUser, Auction foundAuction, User foundUser) {
+        String preUser = foundAuction.getBid();
         // Method for telling the user that his bid won, and his balance is changed.
         // This checks that everything in the bid has a value
         if (auctionCurrentBid.getMaxPrice() + 10 < newBid.getMaxPrice()) {
@@ -189,7 +190,7 @@ public class BidsServiceHelper {
             );
             messagingTemplate.convertAndSendToUser(
 
-                    currentBidUser.get().getId(),
+                    preUser,
                     "/private",
                     "You've been outbid with " + newBid.getCurrentPrice() + " on auction: " + foundAuction.getTitle()
             );
@@ -210,6 +211,7 @@ public class BidsServiceHelper {
     }
 
     public ResponseEntity<?> noPreviousBidsWin(User foundUser, Bids newBid, Auction foundAuction) {
+
         // Method for telling the user that his bid won because no previous bids were on the auction, and his balance is changed.
         foundUser.setBalance(foundUser.getBalance() - newBid.getMaxPrice());
         newBid.setCurrentPrice(foundAuction.getCurrentPrice() + 10);
