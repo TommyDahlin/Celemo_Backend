@@ -59,6 +59,7 @@ public class UserService {
 
     }
 
+
     //find user variable with filter. For example : grade
     public String getUserFilter(String userId, String filter) { //userId and filter, filter can be grade, username, firstName, lastName
         User user = userRepository.findById(userId).get();
@@ -66,8 +67,8 @@ public class UserService {
 
     }
 
-        // Ban user function
-    public ResponseEntity<String> banUser(BanUserDTO banUserDTO){
+    // Ban user function
+    public ResponseEntity<String> banUser(BanUserDTO banUserDTO) {
 
         // Gets user from DTO
         Optional<User> user = userRepository.findById(banUserDTO.getUserId());
@@ -76,11 +77,11 @@ public class UserService {
         String msg;
         // If statement to check if user is banned or User, and sets to the opposite (Banned -> user, user -> banned)
         // Removes all current roles
-            user.get().setRoles(null);
-            Role userRole = roleRepository.findByName(ERole.ROLE_BANNED)
-                    .orElseThrow(() -> new RuntimeException("Error: role is not found"));
-            roles.add(userRole);
-            msg = "User was banned.";
+        user.get().setRoles(null);
+        Role userRole = roleRepository.findByName(ERole.ROLE_BANNED)
+                .orElseThrow(() -> new RuntimeException("Error: role is not found"));
+        roles.add(userRole);
+        msg = "User was banned.";
         // Sets the role that it got and saves.
         user.get().setRoles(roles);
         userRepository.save(user.get());
@@ -88,7 +89,7 @@ public class UserService {
     }
 
     // Unban user function
-    public ResponseEntity<String> unBanUser(BanUserDTO banUserDTO){
+    public ResponseEntity<String> unBanUser(BanUserDTO banUserDTO) {
         // Gets user from DTO
         Optional<User> user = userRepository.findById(banUserDTO.getUserId());
         // Makes new Set for roles
@@ -132,9 +133,9 @@ public class UserService {
         Set<Role> roles = new HashSet<>();
         Set<String> strRoles = updateUserDTO.getUsersRoles();
 
-        if (updateUserDTO.getPassword() != null){
-        String encodedPassword = encoder.encode(updateUserDTO.getPassword());
-        updateUserDTO.setPassword(encodedPassword);
+        if (updateUserDTO.getPassword() != null) {
+            String encodedPassword = encoder.encode(updateUserDTO.getPassword());
+            updateUserDTO.setPassword(encodedPassword);
         }
         return userRepository.findById(updateUserDTO.getUserId())
                 .map(existingUser -> {

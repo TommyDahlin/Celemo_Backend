@@ -2,6 +2,7 @@ package sidkbk.celemo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import sidkbk.celemo.dto.Bids.BidsDTO;
 import sidkbk.celemo.dto.Bids.FindBidIdDTO;
@@ -26,11 +27,18 @@ public class BidsServices {
     AuctionRepository auctionRepository;
     @Autowired
     UserRepository userRepository;
+
     @Autowired
     BidsServiceHelper bidsServiceHelper;
 
-// Find all bids
-    public List<Bids>findAllBids(){
+    private final SimpMessagingTemplate messagingTemplate;
+
+    public BidsServices(SimpMessagingTemplate messagingTemplate) {
+        this.messagingTemplate = messagingTemplate;
+    }
+
+    // Find all bids
+    public List<Bids> findAllBids() {
         return bidsRepository.findAll();
     }
 
@@ -84,28 +92,30 @@ public class BidsServices {
                         case 2:
                             bidsServiceHelper.userWins(newBid, auctionCurrentBid, currentBidUser, foundAuction, foundUser);
                             break;
-                        }
+                    }
                 }
             }
         }
-            // There are no previous bidders and the user has put a valid bid, wins automatically.
-            bidsServiceHelper.noPreviousBidsWin(foundUser, newBid, foundAuction);
-            return ResponseEntity.ok("finished");
+
+        // There are no previous bidders and the user has put a valid bid, wins automatically.
+        bidsServiceHelper.noPreviousBidsWin(foundUser, newBid, foundAuction);
+        return ResponseEntity.ok("finished");
+
     }
 
 
-//Find a bids by id
-    public Bids findOne(String bidId){
+    //Find a bids by id
+    public Bids findOne(String bidId) {
         return bidsRepository.findById(bidId).get();
     }
 
-// delete a bids
-    public String deleteBids(FindBidIdDTO findBidIdDTO){
+    // delete a bids
+    public String deleteBids(FindBidIdDTO findBidIdDTO) {
         bidsRepository.deleteById(findBidIdDTO.getbidId());
         return "Deleted successfully!";
     }
 
-// update a bid
+    // update a bid
     public Bids updateBids(BidsDTO bidsDTO) {
         User foundUser = userRepository.findById(bidsDTO.getUserId())
                 .orElseThrow(() -> new RuntimeException("User does not exist!"));
@@ -117,16 +127,16 @@ public class BidsServices {
         return bidsRepository.save(newUpdate);
     }
 
-    public List<Bids> findAllBidsForUser(String userId){
+    public List<Bids> findAllBidsForUser(String userId) {
         // Find user
         userRepository.findById(userId)
-                .orElseThrow(()->new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException("User not found"));
         // Skapa en tom lista för hittade bids
         List<Bids> foundBids = new ArrayList<>();
         // Spara alla bids i en lista
         List<Bids> allBids = bidsRepository.findAll();
         // For loop igenom alla bids och kolla efter bids som matchar med userid
-        for (Bids bids : allBids){
+        for (Bids bids : allBids) {
             if (bids.getUser() != null && bids.getUser().equals(userId)) {
                 foundBids.add(bids);
             }

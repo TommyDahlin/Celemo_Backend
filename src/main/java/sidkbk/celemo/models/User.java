@@ -56,7 +56,6 @@ public class User {
     private String adress_city;
 
 
-
     @DBRef
     private List<Auction> favouriteAuctions = new ArrayList<>();
 
@@ -119,9 +118,7 @@ public class User {
     }
 
 
-    // det här ingår i Security genom BCrypt, jättebra att ni tänker på det men kom ihåg
-    // att fundera över vad ni lägger er tid på nästa gång
-    public void isPasswordCorrect(User user){
+    public void isPasswordCorrect(User user) {
 
 
         Pattern UpperCasePattern = Pattern.compile("[A-Z ]");
@@ -135,7 +132,7 @@ public class User {
 
     }
 
-    public boolean userHasRole(Role role){
+    public boolean userHasRole(Role role) {
         return roles.contains(role);
     }
 
@@ -144,7 +141,7 @@ public class User {
         return username;
     }
 
-    public String getUsernameAndEmail(){
+    public String getUsernameAndEmail() {
 
         return getUsername() + " , " + getEmail();
     }

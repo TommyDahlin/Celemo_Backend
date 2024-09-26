@@ -2,8 +2,10 @@ package sidkbk.celemo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import sidkbk.celemo.dto.Bids.BidsDTO;
+import sidkbk.celemo.helper.ObjectFinder;
 import sidkbk.celemo.models.Auction;
 import sidkbk.celemo.models.Bids;
 import sidkbk.celemo.models.User;
@@ -24,6 +26,16 @@ public class BidsServiceHelper {
 
     @Autowired
     UserRepository userRepository;
+
+    private final ObjectFinder objectFinder;
+
+
+    private final SimpMessagingTemplate messagingTemplate;
+
+    public BidsServiceHelper(ObjectFinder objectFinder, SimpMessagingTemplate messagingTemplate) {
+        this.objectFinder = objectFinder;
+        this.messagingTemplate = messagingTemplate;
+    }
 
 
     public static Bids bidMaxPriceCheck(BidsDTO bidsDTO, Bids newBid) {
@@ -99,10 +111,24 @@ public class BidsServiceHelper {
         foundAuction.setCurrentPrice(updatedBid.getCurrentPrice());
         foundAuction.setBid(updatedBid.getId());
         foundAuction.setCounter(foundAuction.getCounter() + 1);
-        bidsRepository.save(newBid);
+
         auctionRepository.save(foundAuction);
-        return ResponseEntity.ok(newBid.getMaxPrice() + message + foundAuction.currentPrice);
+
+
+        // någon hade ett högre maxbud så därför har någon budat över dig
+
+        messagingTemplate.convertAndSendToUser(
+
+                auctionCurrentBid.getUser(),
+                "/private",
+                "You've been outbid with " + newBid.getCurrentPrice() + " on auction: " + foundAuction.getTitle()
+        );
+
+
+        return ResponseEntity.ok(newBid.getMaxPrice() + " is less than auctions current bids max price. New current bid is: " + foundAuction.currentPrice);
+
     }
+
 
     public ResponseEntity<?> userWins(Bids newBid, Bids auctionCurrentBid, Optional<User> currentBidUser, Auction foundAuction, User foundUser) {
         // Method for telling the user that his bid won, and his balance is changed.
@@ -110,28 +136,80 @@ public class BidsServiceHelper {
         if (auctionCurrentBid.getMaxPrice() + 10 < newBid.getMaxPrice()) {
             // Sets currentprice on the new bid to previous bid + 10
             newBid.setCurrentPrice(auctionCurrentBid.getMaxPrice() + 10);
+
+            // Sets auctions current price
+            foundAuction.setCurrentPrice(newBid.getCurrentPrice());
+            // Gives back balance from previous winning bid user
+            currentBidUser.get().setBalance(currentBidUser.get().getBalance() + auctionCurrentBid.getMaxPrice());
+            // sets auctions bid to newBids id
+            foundAuction.setBid(newBid.getId());
+            // increases counter by 1
+            foundAuction.setCounter(foundAuction.getCounter() + 1);
+            checkBidBeforeSave(newBid);
+            // Saves newBid
+            bidsRepository.save(newBid);
+            // Saves auction
+            auctionRepository.save(foundAuction);
+            // saves currentBidUser to save balance.
+            userRepository.save(currentBidUser.get());
+            // Changes balance from new winner of bid.
+            foundUser.setBalance(foundUser.getBalance() - newBid.getMaxPrice());
+            // Saves user that won.
+            userRepository.save(foundUser);
+
+            // your bid was placed successfully
+
+            return ResponseEntity.ok(newBid.getCurrentPrice() + " you have the current bid.");
+
         } else {
             // Your bid was higher but if you can't do +10 currency you still win and gets put to max price.
             newBid.setCurrentPrice(auctionCurrentBid.getMaxPrice());
+
+            foundAuction.setCurrentPrice(newBid.getMaxPrice());
+            currentBidUser.get().setBalance((currentBidUser.get().getBalance() + auctionCurrentBid.getMaxPrice()));
+            foundAuction.setBid(newBid.getId());
+            foundUser.setBalance(foundUser.getBalance() - newBid.getMaxPrice());
+
+            checkBidBeforeSave(newBid);
+
+            bidsRepository.save(newBid);
+            userRepository.save(currentBidUser.get());
+            userRepository.save(foundUser);
+            foundAuction.setCounter(foundAuction.getCounter() + 1);
+            auctionRepository.save(foundAuction);
+
+            // your bid was placed successfully
+            // skicka notis till ägare av auktion
+
+            messagingTemplate.convertAndSendToUser(
+
+                    foundAuction.getSeller(),
+                    "/private",
+                    "A new bid of " + newBid.getCurrentPrice() + " has been placed by: " + objectFinder.findUserById(newBid.getUser()).getUsername() + " on your auction: " + foundAuction.getTitle()
+            );
+            messagingTemplate.convertAndSendToUser(
+
+                    currentBidUser.get().getId(),
+                    "/private",
+                    "You've been outbid with " + newBid.getCurrentPrice() + " on auction: " + foundAuction.getTitle()
+            );
+
+
+            // skicka notis till högsta budgivare
+            messagingTemplate.convertAndSendToUser(
+
+                    foundUser.getId(),
+                    "/private",
+                    "You have successfully placed a bid of " + newBid.getCurrentPrice() + " on auction: " + foundAuction.getTitle()
+            );
+
+
+            return ResponseEntity.ok(newBid.getCurrentPrice() + " you have the current bid.");
+
         }
-        // Sets auctions current price
-        checkBidBeforeSave(newBid);
-        bidsRepository.save(newBid);
-        foundAuction.setCurrentPrice(newBid.getCurrentPrice());
-        // Gives back balance from previous winning bid user
-        currentBidUser.get().setBalance(currentBidUser.get().getBalance() + auctionCurrentBid.getMaxPrice());
-        // sets auctions bid to newBids id
-        foundAuction.setBid(newBid.getId());
-        // increases counter by 1
-        foundAuction.setCounter(foundAuction.getCounter() + 1);
-        // Changes balance from new winner of bid.
-        foundUser.setBalance(foundUser.getBalance() - newBid.getMaxPrice());
-        userRepository.save(currentBidUser.get());
-        userRepository.save(foundUser);
-        auctionRepository.save(foundAuction);
-        return ResponseEntity.ok(newBid.getCurrentPrice() + " you have the current bid.");
     }
-    public ResponseEntity<?> noPreviousBidsWin(User foundUser, Bids newBid, Auction foundAuction){
+
+    public ResponseEntity<?> noPreviousBidsWin(User foundUser, Bids newBid, Auction foundAuction) {
         // Method for telling the user that his bid won because no previous bids were on the auction, and his balance is changed.
         foundUser.setBalance(foundUser.getBalance() - newBid.getMaxPrice());
         newBid.setCurrentPrice(foundAuction.getCurrentPrice() + 10);
@@ -144,9 +222,32 @@ public class BidsServiceHelper {
         foundAuction.setCounter(foundAuction.getCounter() + 1);
         userRepository.save(foundUser);
         auctionRepository.save(foundAuction);
+
+
+        // your bid was placed successfully
+        // skicka notis till ägare av auktion
+        messagingTemplate.convertAndSendToUser(
+                //foundAuction.getSeller()
+                foundAuction.getSeller(),
+                "/private",
+                "A new bid of " + newBid.getCurrentPrice() + " has been placed by: " + objectFinder.findUserById(newBid.getUser()).getUsername() + " on your auction: " + foundAuction.getTitle()
+        );
+
+
+        // skicka notis till högsta budgivare
+        messagingTemplate.convertAndSendToUser(
+
+                foundUser.getId(),
+                "/private",
+                "You have successfully placed a bid of " + newBid.getCurrentPrice() + " on auction: " + foundAuction.getTitle()
+        );
+
+
         return ResponseEntity.ok("Current price is: " + foundAuction.currentPrice);
+
     }
-    public void checkBidBeforeSave(Bids newBid){
+
+    public void checkBidBeforeSave(Bids newBid) {
         if (newBid.getId() == null || newBid.getUser() == null || newBid.getAuctionId() == null || newBid.getStartPrice() == 0.0 || newBid.getMaxPrice() == 0.0 || newBid.getCurrentPrice() == 0.0) {
             ResponseEntity.ok("Something is null wrong. checkBidBeforeSave()");
         }
