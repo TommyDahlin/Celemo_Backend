@@ -78,6 +78,7 @@ public class TimerService {
                     }
                 } else {
                     System.out.println("Auction has no bids, order not created.");
+                    // här skickar vi meddelande till auktionens ägare att auktionen är avslutad men det fanns inga bud
                 }
 
 
