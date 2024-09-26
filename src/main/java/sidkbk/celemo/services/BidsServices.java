@@ -53,11 +53,9 @@ public class BidsServices {
         newBid.setAuctionId(bidsDTO.getAuctionId());
         // Checks if price is higher or lower than previous bid
         newBid = BidsServiceHelper.bidMaxPriceCheck(bidsDTO, newBid);
-        // Checks 3 things unfortunately,
-        // 1. Check if startBid and maxBid is higher than auction startPrice,
-        // 2. Checks if users balance is valid,
-        // 3. Checks if users balance is less than starting bid
+        //Checks if the maxprice is set else sets it to startprice.
         bidsServiceHelper.startPriceCheck(bidsDTO, foundAuction);
+        // Checks users balance to see if he actually can make the bid.
         bidsServiceHelper.checkUserBalance(foundUser, bidsDTO);
         // checks if auction has a bid
         if (foundAuction.isHasBids() && foundAuction.getBid() != null) {
